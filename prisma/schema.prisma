@@ -576,6 +576,8 @@ model ReportShareLink {
   organizationId String?
   subjectUserId  String?
   tokenHash      String    @unique
+  /// "team" (full report) or "candidate" (the candidate's own copy).
+  audience       String    @default("team")
   expiresAt      DateTime
   createdById    String
   revokedAt      DateTime?

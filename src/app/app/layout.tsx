@@ -4,10 +4,9 @@ import { AppShell, type ShellNavItem } from "@/components/app/app-shell";
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const viewer = await requireViewer();
 
-  const workspace: ShellNavItem[] = [
-    { href: "/app", labelKey: "home", icon: "home" },
-    { href: "/app/framework", labelKey: "framework", icon: "framework" },
-  ];
+  const workspace: ShellNavItem[] = [{ href: "/app", labelKey: "home", icon: "home" }];
+  if (viewer.activeOrganization && viewerCan(viewer, "assessment.view")) workspace.push({ href: "/app/assessments", labelKey: "assessments", icon: "assessments" });
+  workspace.push({ href: "/app/framework", labelKey: "framework", icon: "framework" });
   const organization: ShellNavItem[] = [];
   if (viewer.activeOrganization) {
     organization.push({ href: "/app/org/members", labelKey: "members", icon: "members" });

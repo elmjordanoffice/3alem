@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { ArrowRight, Layers, Palette, Users, ClipboardList } from "lucide-react";
 import { requireViewer, viewerCan, tenantOf } from "@/lib/auth/session";
+import { listAssessments } from "@/lib/hire/recruiter";
+import { FormattedNumber } from "@/components/app/formatted";
 import { withTenant } from "@/lib/db";
 import { PageContainer, PageHeader } from "@/components/app/page-header";
 import { Card, CardContent } from "@/components/ui/card";
@@ -30,6 +32,8 @@ export default async function AppHome({ searchParams }: { searchParams: Promise<
   }));
 
   const firstName = viewer.user.name.split(" ")[0] ?? viewer.user.name;
+  const roles = org && viewerCan(viewer, "assessment.view") ? await listAssessments(viewer as Parameters<typeof listAssessments>[0]) : [];
+  const review = roles.reduce((a, r) => a + r.counts.awaitingReview, 0);
 
   return (
     <PageContainer>
@@ -56,18 +60,54 @@ export default async function AppHome({ searchParams }: { searchParams: Promise<
         <h2 id="assessments-heading" className="mb-3 text-base font-semibold text-text">
           {org ? t("assessments.title") : t("growTitle")}
         </h2>
-        {counts.templates === 0 ? (
+        {roles.length > 0 ? (
+          <div className="flex flex-col gap-3">
+            {review > 0 ? (
+              <Alert tone="success" title={t("assessments.reviewTitle", { count: review })}>
+                {t("assessments.reviewBody")}
+              </Alert>
+            ) : null}
+            <ul className="grid gap-3 sm:grid-cols-2">
+              {roles.slice(0, 4).map((r) => (
+                <li key={r.id}>
+                  <Link href={r.status === "DRAFT" ? `/app/assessments/${r.id}/setup` : `/app/assessments/${r.id}`} className="group block rounded-card focus-visible:outline-2 focus-visible:outline-focus">
+                    <Card className="transition-colors group-hover:border-border-strong">
+                      <CardContent className="flex flex-col gap-2">
+                        <span className="flex items-center justify-between gap-2">
+                          <span className="font-semibold text-text">{r.title}</span>
+                          <Badge tone={r.status === "PUBLISHED" ? "success" : "neutral"}>{t(`assessments.status.${r.status}`)}</Badge>
+                        </span>
+                        <span className="text-sm text-secondary">
+                          <FormattedNumber value={r.counts.completed} /> / <FormattedNumber value={r.counts.invited} /> {t("assessments.completedOf")}
+                        </span>
+                      </CardContent>
+                    </Card>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            <Button asChild variant="secondary" className="self-start">
+              <Link href="/app/assessments">{t("assessments.all")}</Link>
+            </Button>
+          </div>
+        ) : counts.templates === 0 ? (
           <EmptyState
             icon={ClipboardList}
             title={org ? t("assessments.emptyTitle") : t("growEmptyTitle")}
             description={org ? t("assessments.emptyBody") : t("growEmptyBody")}
             action={
-              <Button asChild variant="secondary">
-                <Link href="/app/framework">
-                  {t("assessments.emptyAction")}
-                  <ArrowRight className="flip-rtl" aria-hidden />
-                </Link>
-              </Button>
+              org && viewerCan(viewer, "assessment.create") ? (
+                <Button asChild>
+                  <Link href="/app/assessments/new">{t("assessments.create")}</Link>
+                </Button>
+              ) : (
+                <Button asChild variant="secondary">
+                  <Link href="/app/framework">
+                    {t("assessments.emptyAction")}
+                    <ArrowRight className="flip-rtl" aria-hidden />
+                  </Link>
+                </Button>
+              )
             }
           />
         ) : null}

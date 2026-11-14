@@ -7,6 +7,7 @@ import { Dialog as DialogPrimitive } from "radix-ui";
 import {
   Building2,
   Check,
+  ClipboardList,
   ChevronsUpDown,
   Home,
   Layers,
@@ -38,7 +39,7 @@ import { LanguageToggle, ThemeMenu } from "./preference-controls";
 export interface ShellNavItem {
   href: string;
   labelKey: string;
-  icon: "home" | "framework" | "members" | "orgSettings" | "settings" | "admin" | "design";
+  icon: "home" | "assessments" | "framework" | "members" | "orgSettings" | "settings" | "admin" | "design";
 }
 
 export interface ShellProps {
@@ -51,6 +52,7 @@ export interface ShellProps {
 
 const ICONS: Record<ShellNavItem["icon"], LucideIcon> = {
   home: Home,
+  assessments: ClipboardList,
   framework: Layers,
   members: Users,
   orgSettings: Building2,

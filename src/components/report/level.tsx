@@ -21,10 +21,10 @@ export function levelClasses(estimate: number) {
 }
 
 /** "Advanced (3.8–4.3)". Levels always come with a range, never a percentage. */
-export function LevelLabel({ estimate, confidence, className }: { estimate: number; confidence: number; className?: string }) {
+export function LevelLabel({ estimate, confidence, range, className }: { estimate: number; confidence: number; range?: [number, number]; className?: string }) {
   const t = useTranslations("levels");
   const n = useNumbers();
-  const [lo, hi] = levelRange(estimate, confidence);
+  const [lo, hi] = range ?? levelRange(estimate, confidence);
   return (
     <span className={cn("text-sm", className)}>
       <span className="font-medium text-text">{t(String(levelBand(estimate)))}</span>{" "}
@@ -41,19 +41,22 @@ export function LevelMeter({
   estimate,
   confidence,
   label,
+  range,
   showLabel = true,
   className,
 }: {
   estimate: number;
   confidence: number;
   label: string;
+  /** Explicit range (e.g. from a report's posterior); otherwise derived from confidence. */
+  range?: [number, number];
   showLabel?: boolean;
   className?: string;
 }) {
   const t = useTranslations("levels");
   const tc = useTranslations("components.level");
   const n = useNumbers();
-  const [lo, hi] = levelRange(estimate, confidence);
+  const [lo, hi] = range ?? levelRange(estimate, confidence);
   const pct = (v: number) => ((v - 1) / 4) * 100;
   const band = levelBand(estimate);
   return (
@@ -61,7 +64,7 @@ export function LevelMeter({
       {showLabel ? (
         <div className="flex items-baseline justify-between gap-3">
           <span className="truncate text-sm text-text">{label}</span>
-          <LevelLabel estimate={estimate} confidence={confidence} className="shrink-0" />
+          <LevelLabel estimate={estimate} confidence={confidence} range={[lo, hi]} className="shrink-0" />
         </div>
       ) : null}
       <div

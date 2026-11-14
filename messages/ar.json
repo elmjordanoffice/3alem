@@ -176,7 +176,8 @@
       "members": "الأعضاء",
       "orgSettings": "إعدادات المؤسسة",
       "settings": "الإعدادات",
-      "admin": "إدارة المنصة"
+      "admin": "إدارة المنصة",
+      "assessments": "Assessments"
     }
   },
   "home": {
@@ -191,7 +192,17 @@
       "title": "التقييمات",
       "emptyTitle": "لا توجد تقييمات بعد",
       "emptyBody": "تُبنى التقييمات من الوصف الوظيفي وإطار الكفاءات. ابدأ بمراجعة الإطار الذي ستعتمد عليه تقييماتك.",
-      "emptyAction": "راجع الإطار"
+      "emptyAction": "راجع الإطار",
+      "reviewTitle": "{count, plural, one {# report is} other {# reports are}} ready to review",
+      "reviewBody": "Open a role to see its candidates.",
+      "completedOf": "completed",
+      "all": "All assessments",
+      "create": "Create an assessment",
+      "status": {
+        "DRAFT": "Draft",
+        "PUBLISHED": "Open",
+        "ARCHIVED": "Archived"
+      }
     },
     "growTitle": "تطوّرك",
     "growEmptyTitle": "يبدأ ملفك بتقييم مرجعي",
@@ -767,6 +778,360 @@
       "comment": "Anything we should change? (optional)",
       "send": "Send feedback",
       "thanks": "Thank you for your feedback."
+    }
+  },
+  "assessments": {
+    "title": "Assessments",
+    "description": "Each assessment is built from a job description. Open one to invite candidates and read their reports.",
+    "new": "New assessment",
+    "minutes": "{n} min",
+    "emptyTitle": "No assessments yet",
+    "emptyBody": "Paste a job description and Aalim drafts the skills to assess. You review everything before candidates see it.",
+    "stats": {
+      "open": "Open roles",
+      "invited": "Invited",
+      "inProgress": "In progress",
+      "completed": "Completed",
+      "review": "Ready to review"
+    },
+    "col": {
+      "role": "Role",
+      "status": "Status"
+    },
+    "status": {
+      "DRAFT": "Draft",
+      "PUBLISHED": "Open",
+      "ARCHIVED": "Archived"
+    },
+    "domain": {
+      "technical": "Technical expertise",
+      "critical-thinking": "Critical thinking",
+      "judgment": "Decision-making",
+      "leadership": "Leadership",
+      "management": "Management",
+      "communication": "Communication",
+      "product-thinking": "Product thinking",
+      "collaboration": "Collaboration",
+      "adaptability": "Adaptability"
+    },
+    "newPage": {
+      "title": "New assessment",
+      "description": "Paste the job description. Aalim drafts the role summary, the technical skills and how much each area matters. You review and edit it all before publishing.",
+      "jdLabel": "Job description",
+      "jdHint": "Include responsibilities and requirements. Aalim also flags requirements that may be discriminatory or irrelevant.",
+      "jdPlaceholder": "Senior Data Analyst\n\nWe're looking for…",
+      "chars": "{n} characters",
+      "modeAi": "Analysed with Claude",
+      "modeOffline": "Analysed with Aalim's built-in role templates",
+      "analysingTitle": "Reading the job description…",
+      "analysingBody": "This usually takes a few seconds.",
+      "submit": "Analyse job description",
+      "errors": {
+        "jdLength": "Paste the full job description (at least 80 characters).",
+        "generic": "That didn't work. Try again."
+      }
+    }
+  },
+  "setup": {
+    "title": "Review the assessment",
+    "description": "Check what Aalim drafted. Candidates see none of this; it decides what the assessment measures.",
+    "locked": "Candidates have already started. You can rename the role and change accommodations, but not what is measured, so reports stay comparable.",
+    "role": "Role",
+    "roleHint": "The fictional company in the candidate's story is set in a matching industry.",
+    "drafted": {
+      "ai": "Drafted with Claude",
+      "offline": "Drafted from a role template"
+    },
+    "roleTitle": "Role title",
+    "seniority": "Seniority",
+    "seniorityLevel": {
+      "entry": "Entry level",
+      "mid": "Mid level",
+      "senior": "Senior",
+      "lead": "Lead / manager",
+      "executive": "Executive"
+    },
+    "storySetIn": "Story set in: {industry}",
+    "flagsTitle": "{n, plural, one {# requirement to review} other {# requirements to review}}",
+    "flagsHint": "These requirements may be discriminatory or not job-relevant. Remove or reword them in your job advert. The assessment never measures them.",
+    "suggestion": "Instead:",
+    "acknowledge": "I've reviewed these and will update the job advert where needed.",
+    "technical": "Technical skills for this role",
+    "technicalHint": "Role-specific sub-skills, each with five level descriptions. Edit names, descriptions and levels, or add your own.",
+    "skillName": "Skill name",
+    "skillDescription": "What it is",
+    "importanceOf": "Importance of {name}",
+    "editAnchors": "Edit the level descriptions for {name}",
+    "remove": "Remove {name}",
+    "newSkill": "New skill",
+    "addSkill": "Add a skill",
+    "anchorTemplate": {
+      "1": "Does not yet apply this skill to the task.",
+      "2": "Applies it partly, with gaps or errors.",
+      "3": "Applies it correctly to a standard case.",
+      "4": "Applies it well to a new or messy case and explains why.",
+      "5": "Applies it expertly, anticipates problems others would miss."
+    },
+    "domains": "How much each area matters",
+    "domainsHint": "Must-haves get more questions and count double in role fit. Every area still gets a baseline.",
+    "tooManyMustHaves": "With more than five must-haves, a 50-minute assessment can't measure each one well. Consider making some nice-to-have.",
+    "importance": {
+      "MUST_HAVE": "Must-have",
+      "NICE_TO_HAVE": "Nice-to-have",
+      "BASELINE": "Baseline"
+    },
+    "settings": "Settings",
+    "duration": "Length",
+    "minutes": "{n} minutes",
+    "durationHint": "Between 25 and 90 minutes. The assessment never runs over; with less time, confidence is lower.",
+    "language": "Language",
+    "accommodations": "Accommodations candidates can choose",
+    "acc": {
+      "extraTimeAllowed": "Extra time (25% or 50%)",
+      "untimedAllowed": "Untimed mode",
+      "largerTextAllowed": "Larger text"
+    },
+    "preview": "Preview as candidate",
+    "save": "Save",
+    "saved": "Saved.",
+    "publish": "Publish",
+    "published": "Published. You can now invite candidates.",
+    "toCandidates": "Go to candidates",
+    "errors": {
+      "save": "Couldn't save. Check the fields and try again.",
+      "publish": "Couldn't publish. Try again.",
+      "flags": "Review the flagged requirements first."
+    }
+  },
+  "role": {
+    "description": "{minutes}-minute adaptive assessment.",
+    "setup": "Setup",
+    "mustHaves": "Must-haves:",
+    "candidates": "Candidates",
+    "emptyTitle": "No candidates yet",
+    "emptyBody": "Invite candidates by email, CSV or a link. You'll see their progress here.",
+    "emptyBodyDraft": "Publish the assessment to invite candidates.",
+    "filter": "Filter candidates",
+    "filters": {
+      "all": "All ({n})",
+      "ready": "Ready to review ({n})",
+      "active": "Not finished"
+    },
+    "sort": {
+      "fit": "Sort by role fit",
+      "recent": "Sort by most recent",
+      "name": "Sort by name"
+    },
+    "compare": "Compare {n}",
+    "compareHint": "Select 2–4 to compare",
+    "select": "Select",
+    "selectFor": "Select {name} to compare",
+    "col": {
+      "candidate": "Candidate",
+      "status": "Status",
+      "fit": "Role fit",
+      "strengths": "Top strengths",
+      "context": "Context"
+    },
+    "status": {
+      "invited": "Invited",
+      "opened": "Opened",
+      "in_progress": "In progress",
+      "paused": "Paused",
+      "completed": "Scoring",
+      "report_ready": "Report ready",
+      "expired": "Link expired",
+      "revoked": "Revoked"
+    },
+    "fit": {
+      "STRONG": "Strong",
+      "GOOD": "Good",
+      "PARTIAL": "Partial",
+      "WEAK": "Weak"
+    },
+    "confidence": {
+      "high": "High confidence",
+      "moderate": "Moderate confidence",
+      "low": "Low confidence"
+    },
+    "minutes": "{n} min",
+    "integrityTip": "{n, plural, one {# integrity note} other {# integrity notes}}: context only, never a verdict",
+    "actions": "Actions",
+    "actionsFor": "Actions for {name}",
+    "viewReport": "View report",
+    "copyNewLink": "Copy a new link",
+    "linkCopied": "New link copied. The old link no longer works.",
+    "resend": "Resend invitation",
+    "resent": "Invitation sent again.",
+    "revoke": "Revoke invitation",
+    "revoked": "Invitation revoked.",
+    "decisionNote": "Reports inform your decision. Aalim never rejects anyone automatically."
+  },
+  "invite": {
+    "button": "Invite candidates",
+    "title": "Invite candidates",
+    "description": "Each candidate gets a personal link that expires in 14 days.",
+    "tabs": {
+      "email": "Email",
+      "csv": "CSV",
+      "link": "Links only"
+    },
+    "emailsLabel": "Email addresses",
+    "emailsPlaceholder": "lina@example.com\nName, kofi@example.com",
+    "emailsHint": "One per line. Add a name before the email if you like: Name, email.",
+    "csvHint": "A file with an email column, and optionally a name column.",
+    "csvChoose": "Choose a CSV file",
+    "csvPreview": "Candidates from the file",
+    "linkLabel": "Email addresses (no emails are sent)",
+    "linkHint": "Creates personal links you can share yourself.",
+    "send": "Send invitations",
+    "createLinks": "Create links",
+    "linksReady": "Links created. Each one works for one candidate.",
+    "copyFor": "Copy link for {email}",
+    "sent": "{count, plural, one {# invitation sent} other {# invitations sent}}",
+    "skipped": "{count, plural, one {# person was already invited} other {# people were already invited}}",
+    "errors": {
+      "noEmails": "Add at least one valid email address.",
+      "tooMany": "Invite at most 500 people at a time.",
+      "notPublished": "Publish the assessment first.",
+      "notFound": "This assessment no longer exists.",
+      "invalid": "Check the list and try again."
+    }
+  },
+  "compare": {
+    "title": "Compare candidates",
+    "description": "Side by side on the same assessment. Levels show ranges; small differences inside a range aren't meaningful.",
+    "back": "Back to candidates",
+    "table": "Levels by domain",
+    "domain": "Domain",
+    "emptyTitle": "Choose at least two candidates",
+    "emptyBody": "Select 2–4 candidates with a ready report on the role page.",
+    "note": "Use comparison alongside interviews. People decide."
+  },
+  "preview": {
+    "banner": "Preview: this is what candidates see first. Nothing is saved."
+  },
+  "report": {
+    "contents": "Report sections",
+    "yourReport": "Your report",
+    "candidateReport": "Candidate report",
+    "generated": "Generated {date}",
+    "earlyTitle": "Early version: use alongside interviews",
+    "earlyBody": "Aalim's scores are not yet calibrated against on-the-job performance. Treat them as structured evidence for your conversation, not as a verdict.",
+    "toc": {
+      "summary": "Summary",
+      "profile": "Skill profile",
+      "strengths": "Strengths",
+      "potential": "Hidden potential",
+      "development": "Development areas",
+      "style": "Work style",
+      "decisions": "How they decide",
+      "interview": "Interview questions",
+      "integrity": "Confidence and integrity",
+      "method": "How these scores were produced"
+    },
+    "roleFit": "Role fit",
+    "fit": {
+      "STRONG": "Strong fit",
+      "GOOD": "Good fit",
+      "PARTIAL": "Partial fit",
+      "WEAK": "Weak fit"
+    },
+    "confidence": {
+      "high": "High confidence",
+      "moderate": "Moderate confidence",
+      "low": "Low confidence"
+    },
+    "gaps": "Below the expected level on:",
+    "fitNote": "A consideration for your decision, never a decision.",
+    "profileNote": "Levels with ranges. Wider ranges mean less evidence. Open a domain to see sub-skills and the quotes behind each score.",
+    "chartView": "Chart view",
+    "bars": "Bars",
+    "radar": "Radar",
+    "mustHave": "Must-have",
+    "evidenceCount": "{count, plural, one {{n} quote} other {{n} quotes}}",
+    "inferred": "Inferred",
+    "noEvidence": "No direct evidence; inferred from related answers.",
+    "domainBaselineOnly": "Baseline only.",
+    "evidenceContext": "Chapter {chapter} · {title} · {stage}",
+    "stage": {
+      "MAIN": "answer",
+      "PROBE": "follow-up",
+      "TWIST": "after a change",
+      "ROLE_PLAY_TURN": "conversation"
+    },
+    "potentialNote": "Strengths beyond what this role asks for.",
+    "developmentNote": "Phrased as what to build next, each with evidence.",
+    "conditional": "Some patterns appeared only under certain conditions, such as time pressure. They may not show in calmer settings.",
+    "styleNote": "Tendencies, not scores. Neither end is better.",
+    "followUp": "Follow-up:",
+    "interviewNote": "Questions that probe where the assessment is least certain.",
+    "integrityNote": "Context for the reviewer. These never change a score.",
+    "integrity": {
+      "time": "Time used",
+      "timeValue": "{used} of {budget} min",
+      "items": "Scenes completed",
+      "paste": "Paste events",
+      "tabs": "Tab switches",
+      "style": "Writing-style shifts",
+      "consistency": "Consistency",
+      "consistent": "Consistent across scenes"
+    },
+    "none": {
+      "strengths": "No clear strengths stood out with enough evidence.",
+      "potential": "Nothing beyond the role stood out.",
+      "development": "No clear development areas with enough evidence.",
+      "style": "Work style wasn't measured in this session."
+    },
+    "method": {
+      "p1": "The candidate worked through one continuous story at a fictional company. The assessment adapted as they answered: it formed hypotheses about their strengths and gaps, tested each in different-looking situations, and raised the difficulty to find their ceiling.",
+      "p2": "Each answer was scored against written descriptions of five levels for each sub-skill. Every score quotes the candidate's own words. Length, grammar, accent and fluency are not scored.",
+      "ai": "Scenarios and scoring used Claude. Important answers were scored twice independently; where the passes disagreed by more than a level, a third pass decided ({n} answers were double-scored).",
+      "offline": "This session used Aalim's curated, human-reviewed scenarios and its built-in scorer. Confidence is deliberately conservative.",
+      "p3": "Levels are estimates with ranges. They become more certain as the same skill shows up consistently across different situations.",
+      "versions": "Versions: {versions}"
+    },
+    "domainShort": {
+      "technical": "Tech",
+      "critical-thinking": "Think",
+      "judgment": "Judge",
+      "leadership": "Lead",
+      "management": "Manage",
+      "communication": "Comms",
+      "product-thinking": "Product",
+      "collaboration": "Collab",
+      "adaptability": "Adapt"
+    },
+    "pendingTitle": "The report is being written",
+    "pendingBody": "Scoring and the report usually take less than a minute after the candidate finishes. This page updates by itself.",
+    "linkInvalidTitle": "This link has expired",
+    "linkInvalidBody": "Shared reports are available for a limited time. Ask the person who shared it for a new link.",
+    "actions": {
+      "pdf": "Export PDF",
+      "pdfError": "The PDF couldn't be created. Try again.",
+      "share": "Share",
+      "shareTitle": "Share with your team",
+      "shareBody": "Anyone with the link can read this report until it expires. You can revoke it at any time.",
+      "candidateTitle": "Send the candidate their report",
+      "candidateBody": "The candidate receives an email with a link to their own report. It doesn't include interview questions or integrity notes.",
+      "candidateNote": "Candidates value seeing their results. Share only what your process allows.",
+      "expires": "Link expires after",
+      "days": "{n} days",
+      "createLink": "Create link",
+      "sendToCandidate": "Send to candidate",
+      "sentToCandidate": "Sent to the candidate.",
+      "copy": "Copy link",
+      "active": "Active links",
+      "audience": {
+        "team": "Team link",
+        "candidate": "Candidate link"
+      },
+      "until": "until {date}",
+      "revoke": "Revoke",
+      "revoked": "Link revoked.",
+      "shareError": "Couldn't create the link. Try again.",
+      "toCandidate": "Send to candidate",
+      "resendCandidate": "Send to candidate again"
     }
   }
 }

@@ -116,13 +116,14 @@ export function SkillBars({
   label,
   className,
 }: {
-  data: { key: string; label: string; estimate: number; confidence: number }[];
+  data: { key: string; label: string; estimate: number; confidence: number; range?: [number, number] }[];
   label: string;
   className?: string;
 }) {
   const t = useTranslations("levels");
   const n = useNumbers();
-  const pct = (v: number) => (v / 5) * 100;
+  // The axis runs from level 1 (start) to level 5 (end).
+  const pct = (v: number) => ((Math.min(5, Math.max(1, v)) - 1) / 4) * 100;
   return (
     <figure className={cn("flex flex-col", className)}>
       <figcaption className="sr-only">{label}</figcaption>
@@ -136,7 +137,7 @@ export function SkillBars({
       </div>
       <ul className="flex flex-col">
         {data.map((d) => {
-          const [lo, hi] = levelRange(d.estimate, d.confidence);
+          const [lo, hi] = d.range ?? levelRange(d.estimate, d.confidence);
           return (
             <li key={d.key} className="grid grid-cols-[minmax(7rem,12rem)_1fr] items-center gap-3 py-1.5 sm:grid-cols-[12rem_1fr]">
               <span className="truncate text-sm text-text">{d.label}</span>
@@ -144,7 +145,7 @@ export function SkillBars({
                 <span className="absolute inset-y-[9px] inset-x-0 rounded-full bg-level-empty" />
                 <span
                   className={cn("absolute inset-y-[7px] start-0 rounded-full", levelClasses(d.estimate))}
-                  style={{ width: `${pct(d.estimate)}%` }}
+                  style={{ width: `max(8px, ${pct(d.estimate)}%)` }}
                 />
                 <span
                   className="absolute top-1 h-4 border-x-2 border-secondary/60"
