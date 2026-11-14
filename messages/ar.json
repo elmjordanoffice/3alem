@@ -587,5 +587,186 @@
       "heatmap": "الخريطة الحرارية للفريق",
       "heatmapNote": "الأعضاء × المجالات. تعني الشَّرطة أن العضو لم يُقيَّم بعد."
     }
+  },
+  "candidate": {
+    "preparing": "Preparing your first scene…",
+    "invalid": {
+      "title": "This link doesn't work",
+      "body": "Check that you copied the whole link from your invitation email. If it still doesn't work, reply to the email you received."
+    },
+    "expired": {
+      "title": "This invitation has expired",
+      "body": "Contact {org} to ask for a new link."
+    },
+    "revoked": {
+      "title": "This invitation is no longer active",
+      "body": "{org} has withdrawn this invitation. Contact them if you think this is a mistake."
+    },
+    "landing": {
+      "eyebrow": "Invitation from {org}",
+      "title": "An assessment for the {role} role",
+      "titleNamed": "{name}, you're invited to an assessment for the {role} role",
+      "intro": "You'll spend about {minutes} minutes in realistic work situations at a fictional company: reading messages, making decisions and writing replies. There are no trick questions and no right answers to memorise.",
+      "expect": {
+        "story": {
+          "title": "One continuous story",
+          "body": "A week at a fictional company, in four short chapters. Earlier decisions shape what happens later."
+        },
+        "noTricks": {
+          "title": "Everything you need is provided",
+          "body": "Read the materials carefully. Say what you would actually do and why."
+        },
+        "pause": {
+          "title": "Pause between chapters",
+          "body": "Your answers save as you go, even if your connection drops."
+        },
+        "people": {
+          "title": "People decide",
+          "body": "The assessment gives the hiring team evidence. It never rejects anyone automatically."
+        }
+      },
+      "data": {
+        "title": "How your data is used",
+        "who": "{org} sees a report of your skills, with quotes from your own answers as evidence.",
+        "how": "Answers are scored against written descriptions of each skill level. Length, grammar and accent are not scored.",
+        "ai": "Some scenarios and scoring use AI. People at {org} review the results and make every decision.",
+        "keep": "Your data is kept for a limited time set by {org} (usually 12 months), then deleted.",
+        "rights": "You can ask {org} for a copy of your data or for it to be deleted."
+      },
+      "language": "Assessment language",
+      "accommodations": "Accommodations",
+      "extraTime": "Time",
+      "extraTimeOption": {
+        "1": "Standard time",
+        "1_25": "25% extra time",
+        "1_5": "50% extra time"
+      },
+      "untimed": "Untimed mode: no countdown on any task",
+      "largerText": "Larger text",
+      "consent": "I have read how my data is used and agree to take this assessment for {org}.",
+      "continue": "Continue",
+      "minutesNote": "About {minutes} minutes. You can pause between chapters.",
+      "startError": "We couldn't start the assessment. Check your connection and try again."
+    },
+    "briefing": {
+      "beforeTitle": "Before you begin",
+      "before": {
+        "quiet": {
+          "title": "Find a quiet place",
+          "body": "You'll read emails and data and write replies. A laptop works best; a phone works too."
+        },
+        "time": {
+          "title": "About {minutes} minutes",
+          "body": "Only one task, the inbox, has a visible timer. Everywhere else, take the time you need."
+        },
+        "pause": {
+          "title": "Pause between chapters",
+          "body": "At the end of each chapter you can stop and come back later with the same link."
+        },
+        "offline": {
+          "title": "Nothing gets lost",
+          "body": "Answers save on this device as you type and sync when you're online."
+        }
+      },
+      "ready": "I'm ready",
+      "eyebrow": "Your week begins",
+      "title": "A week at {company}",
+      "yourRole": "Your role",
+      "people": "The people you'll work with",
+      "week": "Your week",
+      "howItWorks": "Each scene shows the situation and any materials on one side and your task on the other. After some answers you'll get a short follow-up question, or one detail of the situation will change.",
+      "start": "Start chapter 1"
+    },
+    "item": {
+      "yourTask": "Your task",
+      "followUp": "Follow-up",
+      "changed": "Something has changed",
+      "materials": "Materials",
+      "you": "You",
+      "continue": "Continue",
+      "submit": "Submit answer",
+      "readyHint": "You can change your answer until you submit it.",
+      "incompleteHint": "Complete your answer to continue.",
+      "submitError": "Your answer is saved on this device but didn't reach us. Try again.",
+      "offline": "You're offline. Your answer is saved on this device and will be sent when you reconnect.",
+      "retry": "Try again",
+      "timeUp": "Time is up for the inbox. Submit what you have; unfinished parts won't count against you.",
+      "showScenario": "Show the scenario again",
+      "hideScenario": "Hide the scenario"
+    },
+    "tasks": {
+      "justificationLabel": "Why this option?",
+      "justificationHint": "What would you do first, and what would make you change your mind?",
+      "rankingReasonLabel": "What made the top two the top two?",
+      "rankingReasonHint": "A few sentences are enough.",
+      "allocationReasonLabel": "Why this split?",
+      "allocationReasonHint": "Say what you're giving up.",
+      "writtenLabel": {
+        "email": "Write your email",
+        "memo": "Write your memo",
+        "message": "Write your message",
+        "plan": "Write your plan",
+        "free": "Your answer"
+      },
+      "writtenHint": "Write it as you would at work. Length doesn't earn points; clear thinking does.",
+      "followUpHint": "A few sentences are enough.",
+      "inbox": {
+        "progress": "{triaged} of {total} messages triaged · {replies} marked to reply (reply to at least {needed})",
+        "listLabel": "Inbox, in your order of priority",
+        "moveUp": "Move \"{subject}\" up",
+        "moveDown": "Move \"{subject}\" down",
+        "decide": "What will you do with this message?",
+        "triage": {
+          "reply": "Reply now",
+          "delegate": "Delegate",
+          "later": "Later",
+          "ignore": "No action"
+        },
+        "replyLabel": "Your reply to {name}",
+        "pick": "Choose a message to read it."
+      },
+      "roleplay": {
+        "error": "Your message didn't send. Check your connection and send it again.",
+        "hint": "Talk as you would in real life. End the conversation when you're done, then continue."
+      },
+      "chain": {
+        "rounds": "Rounds",
+        "roundOf": "Round {n} of {total}",
+        "whatHappened": "What happened",
+        "reason": "Why? (optional)",
+        "back": "Previous round",
+        "next": "Next round"
+      },
+      "forced": {
+        "pair": "Which is more like you? ({n} of {total})"
+      }
+    },
+    "transition": {
+      "eyebrow": "What happened next",
+      "soFar": "Your decisions so far",
+      "carryForward": "They carry into the next chapter.",
+      "pause": "Pause here",
+      "start": "Start chapter {n}"
+    },
+    "paused": {
+      "title": "Paused",
+      "body": "Your answers are saved. About {minutes} minutes remain. Use the same link when you're ready.",
+      "resume": "Continue with chapter {n}"
+    },
+    "complete": {
+      "title": "Thank you, you're done",
+      "body": "Your answers have been sent to {org} for the {role} role.",
+      "nextTitle": "What happens next",
+      "next1": "{org}'s hiring team reviews a report of your skills, with your own words as evidence.",
+      "next2": "No decision is made automatically. A person reviews everything.",
+      "next3": "If {org} chooses to share your report with you, you'll receive an email.",
+      "feedbackTitle": "How was this experience?",
+      "feedbackHint": "Optional and anonymous to the hiring team. It helps us improve.",
+      "low": "Not good",
+      "high": "Very good",
+      "comment": "Anything we should change? (optional)",
+      "send": "Send feedback",
+      "thanks": "Thank you for your feedback."
+    }
   }
 }

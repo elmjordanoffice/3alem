@@ -410,6 +410,8 @@ model Item {
   content              Json
   /// Never sent to the candidate.
   rubric               Json
+  /// Engine metadata, never sent to the candidate: purpose, hypothesis, timing, source.
+  meta                 Json               @default("{}")
   embeddedDetail       Json?
   guessabilityStatus   GuessabilityStatus @default(NOT_REQUIRED)
   guessabilityResult   Json?

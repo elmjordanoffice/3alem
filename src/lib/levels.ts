@@ -26,3 +26,14 @@ export function levelRange(estimate: number, confidence: number): [number, numbe
   const hi = Math.min(5, Math.round((estimate + half) * 10) / 10);
   return [lo, hi];
 }
+
+/**
+ * Display range from the model's posterior: estimate ± one standard deviation,
+ * at least ±0.15, clamped to 1–5, one decimal. Used by reports.
+ */
+export function levelRangeFromVariance(mean: number, variance: number): [number, number] {
+  const half = Math.max(0.15, Math.sqrt(Math.max(0, variance)));
+  const lo = Math.max(1, Math.round((mean - half) * 10) / 10);
+  const hi = Math.min(5, Math.round((mean + half) * 10) / 10);
+  return [lo, hi];
+}

@@ -10,7 +10,7 @@ export default defineConfig({
   retries: process.env.CI ? 1 : 0,
   reporter: [["list"]],
   timeout: 60_000,
-  use: { baseURL: `http://localhost:${PORT}`, trace: "off" },
+  use: { baseURL: `http://localhost:${PORT}`, trace: "off", actionTimeout: 15_000 },
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
   webServer: {
     command: `npm run start -- -p ${PORT}`,
