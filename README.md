@@ -2,20 +2,20 @@
 
 Adaptive, AI-driven skills assessment and training. One engine, three modes:
 
-- **Hire**: assess candidates against a job description, with evidence for every score.
-- **Grow**: individuals find their level and practise with honest feedback. Their data stays theirs.
-- **Team**: with consent, managers see strengths, gaps and leadership readiness.
+- **Hire**: assess candidates against a job description through a realistic "week at a fictional company", with verbatim evidence for every score.
+- **Grow**: individuals find their level, practise with honest feedback, follow tracks and talk to a coach. Their data stays theirs.
+- **Team**: with each member's consent, managers see strengths, gaps, leadership readiness and pairing suggestions.
 
 People make hiring decisions. Aalim informs them and never rejects anyone automatically.
 
-> **Status: Phase 0 (Foundations).** Design system, auth, organisations and roles, English/Arabic with RTL, the full database schema with row-level security, and the built-in competency framework. The assessment engine is Phase 1. See [docs/architecture.md](docs/architecture.md#build-phases).
+> **Status: complete product.** All phases of the brief are built: foundations, the adaptive engine, full Hire (role-play, inbox, design and technical tasks, hypotheses and stress tests, report, PDF, sharing, comparison), Grow, Team, and hardening (fairness monitoring, outcome validity, audit log, competency library, item-bank review, ATS webhooks, data export and deletion, retention, security headers, spoken role-play). See [docs/architecture.md](docs/architecture.md).
 
 ## Quick start
 
-Requirements: Node 22+, PostgreSQL 16.
+Requirements: Node 22+, PostgreSQL 16. Redis is optional.
 
 ```bash
-cp .env.example .env            # then set BETTER_AUTH_SECRET
+cp .env.example .env            # then set BETTER_AUTH_SECRET (and ANTHROPIC_API_KEY for real AI)
 ```
 
 Create the two database roles (owner for migrations, non-owner runtime role so row-level security applies):
@@ -29,26 +29,54 @@ psql -U postgres -c "CREATE ROLE aalim LOGIN PASSWORD 'aalim' CREATEDB" \
 ```bash
 npm install
 npm run db:deploy && npm run db:generate && npm run db:seed
+npm run db:seed:demo             # optional: 18 simulated candidates and a 6-person team, run through the real pipeline
 npm run dev                      # http://localhost:3000
 ```
 
-Demo accounts (password `aalim-demo-2026`): `orgadmin@aalim.dev`, `recruiter@aalim.dev`, `manager@aalim.dev`, `team@aalim.dev`, `candidate@aalim.dev`, and the platform admin `admin@aalim.dev`. Development email (password resets) is written to `.mail/`.
+Demo accounts (password `aalim-demo-2026`):
 
-The component gallery is at **/design**. Switch theme, language and numerals from its header.
+| Account | Sees |
+|---|---|
+| `orgadmin@aalim.dev` | Everything in Northwind Logistics: assessments, reports, fairness, audit log, integrations, library |
+| `recruiter@aalim.dev` | Assessments, candidates, reports, sharing |
+| `manager@aalim.dev` | Candidates and reports (hiring manager) |
+| `team@aalim.dev` | The "Regional Operations" team |
+| `candidate@aalim.dev` | Grow (personal development) |
+| `admin@aalim.dev` | Platform admin and item-bank review |
+
+A ready candidate link: `/a/demo-candidate-token-0001`. Development email is written to `.mail/`. The component gallery is at **/design**.
+
+### AI
+
+With `ANTHROPIC_API_KEY` set, Claude generates worlds, items and role-play replies, scores answers and writes reports. Without a key (or with `AI_PROVIDER=offline`), Aalim runs fully offline: a curated bank of 58 items, a deterministic rubric-based scorer and template-written reports. Offline scoring is coarser (scores cluster in the middle of the scale), so use a key for real assessments.
+
+## Configuration
+
+| Variable | Purpose |
+|---|---|
+| `DATABASE_URL` / `DATABASE_APP_URL` | Owner and runtime (RLS) connections |
+| `BETTER_AUTH_SECRET` / `BETTER_AUTH_URL` | Auth; the secret also derives the key that encrypts webhook secrets at rest |
+| `BETTER_AUTH_TRUSTED_ORIGINS` | Extra allowed origins (comma-separated) |
+| `APP_URL` | Public base URL used in emails, webhooks and CSV exports (defaults to `BETTER_AUTH_URL`) |
+| `ANTHROPIC_API_KEY` | Enables Claude. `AI_PROVIDER=offline` forces offline mode; `AALIM_MODEL` overrides the model |
+| `REDIS_URL` | Moves background jobs to BullMQ; run `npm run worker` alongside the web server |
+| `CRON_SECRET` | Lets an external scheduler `POST /api/cron/retention` |
+| `CHROMIUM_PATH` | Chromium for PDF export, if not the Playwright default |
 
 ## Scripts
 
 | Command | What it does |
 |---|---|
 | `npm run dev` / `build` / `start` | Next.js |
+| `npm run worker` | BullMQ worker (scoring, item preparation, reports, nightly retention) when `REDIS_URL` is set |
 | `npm run lint` / `typecheck` | ESLint, TypeScript |
-| `npm test` | Unit tests + row-level security integration tests (uses `aalim_test`) |
-| `npm run test:e2e` | Playwright end-to-end tests (needs `npm run build` first) |
-| `npm run screenshots` | Every screen × light/dark × English/Arabic × desktop/phone → `screenshots/out/` |
-| `npm run db:migrate` / `db:deploy` / `db:seed` | Prisma migrations and seed |
+| `npm test` | Unit tests, the 30-persona engine harness and row-level security integration tests (uses `aalim_test`) |
+| `npm run test:e2e` | Playwright end-to-end and accessibility tests (needs `npm run build` first) |
+| `npm run screenshots` | Every Phase 0 screen × light/dark × English/Arabic × desktop/phone → `screenshots/out/` |
+| `npm run db:migrate` / `db:deploy` / `db:seed` / `db:seed:demo` | Prisma migrations, base seed, demo data |
 
 ## Docs
 
-- [Architecture](docs/architecture.md): stack, tenancy and RLS, auth, i18n, design system, data model, build phases
+- [Architecture](docs/architecture.md): stack, engine, jobs, tenancy and RLS, privacy, security, i18n, design system
 - [Decisions log](docs/decisions.md): every choice the brief left open, and why
 - [Prompt catalogue](docs/prompt-catalogue.md): the AI agents, their contracts and versioning

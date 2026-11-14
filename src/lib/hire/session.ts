@@ -26,6 +26,7 @@ import { prepareItem, prepareFromBank, usedBankIds, type ItemMeta, type PrepareC
 import { loadRoleProfileForSession, latestModel, saveModel } from "./model-store";
 import { roleProfileFor, templateAnalysis, technicalSkills, type TemplateRow } from "./templates";
 import { withModelLock } from "./scoring";
+import { dispatchWebhook } from "@/lib/webhooks";
 
 export const CONSENT_TEXT_VERSION = "candidate-consent.v1";
 /** Longest time one stage can add to the clock (a tab left open doesn't eat the budget). */
@@ -121,6 +122,7 @@ export async function startSession(
     },
   });
   await audit({ organizationId: inv.organizationId, actorUserId: user.id, action: "assessment.started", targetType: "session", targetId: session.id });
+  void dispatchWebhook(inv.organizationId, "candidate.started", { sessionId: session.id, templateId: inv.templateId, email: inv.email }).catch(() => undefined);
   // Prepare the first scene while the candidate reads the briefing.
   void enqueue("pregenerate", { sessionId: session.id }, session.id);
   return session;
@@ -135,6 +137,8 @@ async function prepareContext(sessionId: string): Promise<PrepareContext> {
   const { session, template, locale } = await loadRoleProfileForSession(sessionId);
   const { world, decisions } = await loadWorld(sessionId);
   const items = await systemDb.item.findMany({ where: { sessionId }, select: { promptVersion: true } });
+  // Items retired in platform review are never selected again.
+  const retired = await systemDb.bankItemReview.findMany({ where: { status: "retired" }, select: { itemKey: true } });
   const analysis = template ? templateAnalysis(template) : null;
   const tech = template ? technicalSkills(template) : [];
   const chapterNo = chapterFor(await sessionBudget(session));
@@ -146,7 +150,7 @@ async function prepareContext(sessionId: string): Promise<PrepareContext> {
     roleSummary: analysis ? `${analysis.roleTitle}: ${analysis.summary}` : "",
     chapter: { number: chapterNo, title: ch.title, summary: ch.summary },
     history: decisions,
-    usedBankIds: usedBankIds(items),
+    usedBankIds: new Set([...usedBankIds(items), ...retired.map((r) => r.itemKey)]),
     technicalAnchors: Object.fromEntries(tech.map((t) => [t.key, { name: t.name, anchors: t.anchors }])),
     ctx: { organizationId: session.organizationId, sessionId },
   };
@@ -472,6 +476,7 @@ export async function completeSession(sessionId: string) {
     await systemDb.assessmentSession.update({ where: { id: sessionId }, data: { status: "COMPLETED", completedAt: new Date(), phase: "DONE" } });
     await systemDb.item.updateMany({ where: { sessionId, status: "PREGENERATED" }, data: { status: "DISCARDED" } });
     await audit({ organizationId: s.organizationId, actorUserId: s.subjectUserId, action: "assessment.completed", targetType: "session", targetId: sessionId });
+    if (s.mode === "HIRE") void dispatchWebhook(s.organizationId, "candidate.completed", { sessionId, templateId: s.templateId, minutes: Math.round(s.elapsedSeconds / 60) }).catch(() => undefined);
     void enqueue("build-report", { sessionId }, sessionId);
   }
   return null;

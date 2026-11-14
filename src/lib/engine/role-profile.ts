@@ -10,6 +10,8 @@ export interface RoleProfileInput {
   seniority: keyof typeof SENIORITY_LEVEL | string;
   /** Role-specific technical sub-skill keys (from the JD Analyst). Empty → generic technical sub-skills. */
   technicalSkills: string[];
+  /** Organisation library sub-skills, each placed in its framework domain. */
+  extraSkills?: { key: string; domain: string }[];
 }
 
 /** Turn a template's analysis and the recruiter's weights into the engine's RoleProfile. */
@@ -25,6 +27,12 @@ export function buildRoleProfile(input: RoleProfileInput): RoleProfile {
       domainOf[k] = d.key;
       skillKeys.push(k);
     }
+  }
+
+  for (const x of input.extraSkills ?? []) {
+    if (domainOf[x.key] || !DOMAINS.some((d) => d.key === x.domain)) continue;
+    domainOf[x.key] = x.domain;
+    skillKeys.push(x.key);
   }
 
   const domainWeights: Record<string, number> = {};

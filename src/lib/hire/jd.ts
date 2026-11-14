@@ -12,6 +12,8 @@ export interface TechnicalSkillDef {
   description: string;
   anchors: string[];
   importance: "MUST_HAVE" | "NICE_TO_HAVE" | "BASELINE";
+  /** Framework domain for organisation library skills (keys "org.*"); technical otherwise. */
+  domain?: string;
 }
 
 export interface TemplateAnalysis {

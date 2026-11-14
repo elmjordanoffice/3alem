@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
-import { requirePermission } from "@/lib/auth/session";
+import { requirePermission, tenantOf } from "@/lib/auth/session";
+import { withTenant } from "@/lib/db";
+import { libraryEntryAsSkill, listLibrary } from "@/lib/library";
 import { assessmentDetail } from "@/lib/hire/recruiter";
 import { DOMAINS } from "@/lib/framework/data";
 import { isLocale } from "@/i18n/config";
@@ -22,6 +24,9 @@ export default async function SetupPage({ params }: { params: Promise<{ id: stri
   const raw = await getLocale();
   const locale = isLocale(raw) ? raw : "en";
   const locked = detail.template.status === "PUBLISHED" && detail.candidates.length > 0;
+  const library = (await withTenant(tenantOf(viewer), (tx) => listLibrary(tx, viewer.activeOrganization.id)))
+    .filter((e) => e.isActive)
+    .map((e) => ({ ...libraryEntryAsSkill(e, locale), domainName: DOMAINS.find((d) => d.key === e.domain)?.name[locale] ?? e.domain }));
   return (
     <PageContainer className="max-w-4xl">
       <PageHeader title={t("title")} description={t("description")} />
@@ -29,6 +34,7 @@ export default async function SetupPage({ params }: { params: Promise<{ id: stri
         id={detail.template.id}
         status={detail.template.status}
         locked={locked}
+        library={library}
         initial={{
           title: detail.template.title,
           seniority: detail.analysis?.seniority ?? "mid",

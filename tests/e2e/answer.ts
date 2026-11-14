@@ -72,8 +72,10 @@ export async function answerCurrent(page: Page) {
 
 
 /** Answer every scene until the completion heading appears. */
-export async function runSession(page: Page, doneHeading: RegExp) {
+/** Runs a session to the end; returns how long each answer took to move to the next screen (ms). */
+export async function runSession(page: Page, doneHeading: RegExp): Promise<number[]> {
   const seenTypes = new Set<string>();
+  const transitions: number[] = [];
   for (let step = 0; step < 140; step++) {
     await page.waitForLoadState("networkidle");
     if (await page.getByRole("heading", { name: doneHeading }).isVisible()) break;
@@ -89,6 +91,7 @@ export async function runSession(page: Page, doneHeading: RegExp) {
     await answerCurrent(page);
     const submit = page.getByRole("button", { name: /^(Continue|Submit answer)$/ }).last();
     await expect(submit).toBeEnabled({ timeout: 10_000 });
+    const clicked = Date.now();
     await submit.click();
     // Wait until the screen moves on: a new stage, a new scene, a transition or the end.
     await expect
@@ -100,8 +103,10 @@ export async function runSession(page: Page, doneHeading: RegExp) {
           const l = await page.locator("#task-label").textContent({ timeout: 500 }).catch(() => "");
           return `${h}|${l}`;
         },
-        { timeout: 20_000 },
+        { timeout: 20_000, intervals: [50] },
       )
       .not.toBe(signature);
+    transitions.push(Date.now() - clicked);
   }
+  return transitions;
 }

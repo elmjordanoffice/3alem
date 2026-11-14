@@ -19,6 +19,7 @@ import { latestModel, loadRoleProfileForSession } from "./model-store";
 import { templateAnalysis } from "./templates";
 import { analyseIntegrity } from "./integrity";
 import { offlineNarrative } from "./report-offline";
+import { dispatchWebhook } from "@/lib/webhooks";
 import type { ReportContent, ReportDomain, ReportEvidence, ReportSkill } from "./report-types";
 
 /**
@@ -178,6 +179,16 @@ export async function buildReport(sessionId: string): Promise<void> {
     update: { status: "READY", roleFit: kind === "HIRE" ? fit.fit : null, content: content as unknown as Prisma.InputJsonValue, writerVersion: writer },
   });
   await systemDb.assessmentSession.update({ where: { id: sessionId }, data: { status: "REPORTED" } });
+  if (kind === "HIRE") {
+    await dispatchWebhook(session.organizationId, "report.ready", {
+      sessionId,
+      templateId: session.templateId,
+      candidate: content.candidate.name,
+      roleFit: fit.fit,
+      confidence: round2(fit.confidence),
+      reportUrl: `${(process.env.APP_URL ?? process.env.BETTER_AUTH_URL ?? "").replace(/\/$/, "")}/app/reports/${sessionId}`,
+    }).catch((e) => console.error("[webhooks]", e));
+  }
 
   // Grow: the plan becomes the person's development plan.
   if (kind === "GROW" && session.subjectUserId && narrative.plan?.length) {

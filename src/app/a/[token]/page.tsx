@@ -19,6 +19,7 @@ export default async function CandidatePage({ params }: { params: Promise<{ toke
     resume: actions.resumeAction.bind(null, token),
     refresh: actions.refreshAction.bind(null, token),
     feedback: actions.feedbackAction.bind(null, token),
+    fairness: actions.fairnessAction.bind(null, token),
   };
   return <CandidateApp token={token} initial={view} api={api} />;
 }

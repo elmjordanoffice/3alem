@@ -2,6 +2,7 @@
 import { z } from "zod";
 import { candidateContext, startSession, beginAssessment, submitResponse, roleplayTurn, acknowledgeChapter, pauseSession, resumeSession, recordFeedback, completeSession } from "@/lib/hire/session";
 import { candidateView, type CandidateView } from "@/lib/hire/candidate-state";
+import { saveFairnessResponse } from "@/lib/fairness";
 
 /**
  * Candidate actions. The token in the URL is the credential; every action
@@ -84,4 +85,22 @@ export async function feedbackAction(token: string, input: { rating: number; com
   if (!ctx.session) return;
   const p = z.object({ rating: z.number().int().min(1).max(5), comment: z.string().max(2000) }).parse(input);
   await recordFeedback(ctx.session.id, p);
+}
+
+const fairnessSchema = z.object({
+  gender: z.enum(["woman", "man", "another", "prefer_not"]).optional(),
+  ageBand: z.enum(["under25", "25_34", "35_44", "45_54", "55plus", "prefer_not"]).optional(),
+  disability: z.enum(["yes", "no", "prefer_not"]).optional(),
+  firstLanguage: z.enum(["arabic", "english", "other", "prefer_not"]).optional(),
+});
+
+/**
+ * Voluntary equal-opportunity answers. Stored apart from the assessment,
+ * never shown to reviewers, and used only for aggregate fairness monitoring.
+ */
+export async function fairnessAction(token: string, input: Record<string, string>) {
+  const ctx = await candidateContext(token);
+  if (ctx.state !== "valid" || !ctx.session) return;
+  const p = fairnessSchema.parse(input);
+  await saveFairnessResponse(ctx.session.id, ctx.inv.organizationId, p);
 }

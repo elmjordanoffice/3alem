@@ -3,7 +3,9 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { ArrowLeft, Loader2 } from "lucide-react";
-import { requirePermission, viewerCan } from "@/lib/auth/session";
+import { requirePermission, tenantOf, viewerCan } from "@/lib/auth/session";
+import { withTenant } from "@/lib/db";
+import { AfterHire } from "@/components/report/after-hire";
 import { reportForViewer } from "@/lib/hire/recruiter";
 import { audit } from "@/lib/audit";
 import { PageContainer } from "@/components/app/page-header";
@@ -24,6 +26,7 @@ export default async function ReportPage({ params }: { params: Promise<{ session
   const r = await reportForViewer(viewer, sessionId);
   if (!r) notFound();
   const t = await getTranslations("report");
+  const outcomes = await withTenant(tenantOf(viewer), (tx) => tx.outcomeRating.findMany({ where: { sessionId }, select: { period: true, rating: true } }));
   if (r.report?.content) await audit({ organizationId: viewer.activeOrganization.id, actorUserId: viewer.user.id, action: "report.viewed", targetType: "session", targetId: sessionId });
 
   return (
@@ -40,12 +43,16 @@ export default async function ReportPage({ params }: { params: Promise<{ session
           audience="team"
           actions={<ReportActions sessionId={sessionId} canShare={viewerCan(viewer, "report.share")} shareLinks={r.report.shareLinks} sharedWithCandidate={r.report.sharedWithCandidate} />}
         />
-      ) : (
+      ) : null}
+      {r.report?.content ? (
+        <AfterHire sessionId={sessionId} candidateName={r.candidate.name} outcomes={outcomes} canDelete={viewerCan(viewer, "org.settings")} />
+      ) : null}
+      {!r.report?.content ? (
         <>
           <AutoRefresh seconds={4} />
           <EmptyState icon={Loader2} title={t("pendingTitle")} description={t("pendingBody")} />
         </>
-      )}
+      ) : null}
     </PageContainer>
   );
 }

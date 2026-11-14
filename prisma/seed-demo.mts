@@ -26,6 +26,24 @@ const CANDIDATES = [
   { name: "Elif Demir", strengths: ["adaptability", "product-thinking", "communication"], weaknesses: ["technical"], attention: 0.6 },
 ];
 
+// More candidates so the fairness dashboard has groups large enough to show.
+const DOMAIN_KEYS = ["technical", "critical-thinking", "judgment", "communication", "collaboration", "leadership", "management", "adaptability", "product-thinking"];
+const MORE = ["Layla Mansour", "Yusuf Okafor", "Noor Al-Amin", "Chen Wei", "Fatima Zahra", "Lars Eriksson", "Amara Nwosu", "Tariq Hussein", "Sofia Rossi", "Kenji Sato", "Mariam Saleh", "Diego Alvarez", "Grace Mensah"];
+function rng(seed: number) {
+  let x = seed;
+  return () => ((x = (x * 1103515245 + 12345) % 2147483648) / 2147483648);
+}
+for (const [i, name] of MORE.entries()) {
+  const r = rng(77 + i);
+  const pick = (n: number) => [...DOMAIN_KEYS].sort(() => r() - 0.5).slice(0, n);
+  const strengths = pick(Math.floor(r() * 3));
+  CANDIDATES.push({ name, strengths, weaknesses: pick(Math.floor(r() * 3)).filter((d) => !strengths.includes(d)), attention: Math.round((0.3 + r() * 0.6) * 10) / 10 });
+}
+// Voluntary answers, assigned independently of profile (no planted pattern).
+const GENDER = ["woman", "man", "woman", "man", "another", "man", "woman", "man", "woman", "man", "woman", "prefer_not", "man", "woman", "man", "woman", "man", "another"];
+const AGE = ["25_34", "35_44", "25_34", "45_54", "under25", "35_44", "25_34", "35_44", "55plus", "25_34", "35_44", "25_34", "45_54", "35_44", "25_34", "35_44", "under25", "25_34"];
+const LANG = ["arabic", "english", "other", "english", "other", "arabic", "arabic", "english", "other", "arabic", "english", "arabic", "other", "arabic", "english", "arabic", "english", "other"];
+
 const TEAM = [
   { name: "Rania Aziz", email: "rania@aalim.dev", strengths: ["leadership", "management"], weaknesses: ["product-thinking"], attention: 0.7 },
   { name: "Jonas Weber", email: "jonas@aalim.dev", strengths: ["technical", "critical-thinking"], weaknesses: ["communication", "leadership"], attention: 0.8 },
@@ -47,15 +65,50 @@ const org = await db.organization.findUniqueOrThrow({ where: { slug: "northwind-
 const template = await db.assessmentTemplate.findFirstOrThrow({ where: { organizationId: org.id, title: "Operations Team Lead" } });
 const admin = await db.user.findUniqueOrThrow({ where: { email: "orgadmin@aalim.dev" } });
 
-// Hire: five candidates with different profiles.
+// Hire: candidates with different profiles.
+const { saveFairnessResponse } = await import("../src/lib/fairness");
 for (const [i, c] of CANDIDATES.entries()) {
   const email = `${c.name.split(" ")[0]!.toLowerCase()}.demo@aalim.dev`;
-  if (await db.invitation.findFirst({ where: { templateId: template.id, email } })) continue;
-  const token = `demo-hire-${i}-${randomUUID()}`;
-  await db.invitation.create({ data: { organizationId: org.id, templateId: template.id, invitedById: admin.id, email, name: c.name, tokenHash: hashToken(token), expiresAt: new Date(Date.now() + 30 * 86400_000) } });
-  const session = await startSession(token, { locale: "en", accommodations: { extraTime: 1, untimed: false, largerText: false }, consent: true });
-  await simulateSession(session.id, { ...c, seed: 1000 + i });
+  const existing = await db.invitation.findFirst({ where: { templateId: template.id, email }, include: { session: { select: { id: true } } } });
+  let sessionId = existing?.session?.id;
+  if (!existing) {
+    const token = `demo-hire-${i}-${randomUUID()}`;
+    await db.invitation.create({ data: { organizationId: org.id, templateId: template.id, invitedById: admin.id, email, name: c.name, tokenHash: hashToken(token), expiresAt: new Date(Date.now() + 30 * 86400_000) } });
+    const session = await startSession(token, { locale: "en", accommodations: { extraTime: 1, untimed: false, largerText: false }, consent: true });
+    await simulateSession(session.id, { ...c, seed: 1000 + i });
+    sessionId = session.id;
+  }
+  if (!sessionId) continue;
+  await saveFairnessResponse(sessionId, org.id, { gender: GENDER[i], ageBand: AGE[i], firstLanguage: LANG[i], disability: i % 6 === 2 ? "yes" : i % 6 === 5 ? "prefer_not" : "no" });
+  // The first few were "hired" months ago: their managers recorded performance.
+  if (i < 4) {
+    const rating = [4, 3, 4, 2][i]!;
+    await db.outcomeRating.upsert({ where: { sessionId_period: { sessionId, period: 6 } }, create: { organizationId: org.id, sessionId, ratedById: admin.id, period: 6, rating }, update: {} });
+  }
+  if (existing) continue;
   console.info(`hire: ${c.name} done`);
+}
+
+// Competency library: one organisation-specific skill.
+const leadershipDomain = await db.competencyDomain.findFirstOrThrow({ where: { key: "leadership", organizationId: null } });
+if (!(await db.competency.findFirst({ where: { organizationId: org.id, key: "org.safety-leadership" } }))) {
+  await db.competency.create({
+    data: {
+      organizationId: org.id,
+      domainId: leadershipDomain.id,
+      key: "org.safety-leadership",
+      order: 100,
+      name: { en: "Safety leadership", ar: "القيادة في السلامة" },
+      description: { en: "Makes safety part of every operational decision, especially under time pressure.", ar: "يجعل السلامة جزءًا من كل قرار تشغيلي، خاصة تحت ضغط الوقت." },
+      anchors: {
+        "1": { en: "Treats safety as someone else's job; accepts shortcuts when targets are at risk.", ar: "يعدّ السلامة مسؤولية غيره، ويقبل الاختصارات حين تكون الأهداف مهددة." },
+        "2": { en: "Follows safety rules when reminded; raises obvious hazards but rarely follows up.", ar: "يتبع قواعد السلامة حين يُذكَّر بها، ويبلّغ عن المخاطر الواضحة لكنه نادرًا ما يتابعها." },
+        "3": { en: "Builds safety checks into plans and stops work when a hazard is real, even at a cost to output.", ar: "يُدرج فحوص السلامة في الخطط ويوقف العمل حين يكون الخطر حقيقيًا، ولو على حساب الإنتاج." },
+        "4": { en: "Anticipates where pressure will create risk and changes the process before incidents happen.", ar: "يتوقع أين سيُنتج الضغطُ مخاطر، ويغيّر طريقة العمل قبل وقوع الحوادث." },
+        "5": { en: "Makes speaking up about safety normal across sites; others copy their practices.", ar: "يجعل الحديث عن السلامة أمرًا طبيعيًا في كل المواقع، ويقتدي الآخرون بممارساته." },
+      },
+    },
+  });
 }
 
 // Team: six members, all consented, assessed and seen.

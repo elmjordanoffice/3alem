@@ -1,6 +1,7 @@
 "use client";
 import * as React from "react";
-import { SendHorizontal } from "lucide-react";
+import { Mic, MicOff, SendHorizontal, Volume2, VolumeX } from "lucide-react";
+import { useDictation, useReadAloud } from "./speech";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import { Avatar } from "@/components/ui/avatar";
@@ -40,9 +41,19 @@ export function RoleplayChat({ stakeholder, messages, onSend, onEnd, pending, en
     listRef.current?.scrollTo({ top: listRef.current.scrollHeight, behavior: "smooth" });
   }, [messages.length, pending]);
 
+  const dictation = useDictation((text) => setDraft((d) => (d ? `${d.trimEnd()} ${text}` : text)));
+  const voice = useReadAloud();
+  const lastSpoken = React.useRef(messages.length);
+  React.useEffect(() => {
+    const last = messages[messages.length - 1];
+    if (messages.length > lastSpoken.current && last?.from === "stakeholder") voice.speak(last.text);
+    lastSpoken.current = messages.length;
+  }, [messages, voice]);
+
   const send = () => {
     const text = draft.trim();
     if (!text || pending || ended) return;
+    if (dictation.listening) dictation.stop();
     onSend(text);
     setDraft("");
   };
@@ -56,6 +67,11 @@ export function RoleplayChat({ stakeholder, messages, onSend, onEnd, pending, en
           <p className="text-xs text-secondary">{stakeholder.role}</p>
           <p className="mt-2 text-sm text-secondary">{stakeholder.context}</p>
         </div>
+        {voice.supported ? (
+          <Button variant="ghost" size="icon-sm" onClick={voice.toggle} aria-pressed={voice.enabled} aria-label={voice.enabled ? t("readAloudOff") : t("readAloudOn")} title={voice.enabled ? t("readAloudOff") : t("readAloudOn")}>
+            {voice.enabled ? <Volume2 aria-hidden /> : <VolumeX aria-hidden />}
+          </Button>
+        ) : null}
         <Button variant="secondary" size="sm" onClick={onEnd} disabled={ended}>
           {t("end")}
         </Button>
@@ -103,6 +119,11 @@ export function RoleplayChat({ stakeholder, messages, onSend, onEnd, pending, en
         {ended ? <p className="self-center text-xs text-tertiary">{t("ended")}</p> : null}
       </div>
 
+      {dictation.listening || dictation.error ? (
+        <p className="border-t border-border px-4 py-2 text-xs text-secondary" role="status" dir="auto">
+          {dictation.error ? t("dictationError") : dictation.interim ? <span className="italic">{dictation.interim}</span> : t("listening")}
+        </p>
+      ) : null}
       <form
         className="flex items-end gap-2 border-t border-border p-3"
         onSubmit={(e) => {
@@ -129,6 +150,20 @@ export function RoleplayChat({ stakeholder, messages, onSend, onEnd, pending, en
           placeholder={t("placeholder", { name: stakeholder.name })}
           className="max-h-40 min-h-11 flex-1 resize-none rounded-control border border-border-strong bg-surface px-3 py-2.5 text-base placeholder:text-tertiary focus-visible:border-accent focus-visible:outline-2 focus-visible:-outline-offset-1 focus-visible:outline-focus disabled:opacity-60 sm:text-sm"
         />
+        {dictation.supported ? (
+          <Button
+            type="button"
+            size="icon"
+            variant={dictation.listening ? "primary" : "secondary"}
+            disabled={ended}
+            onClick={dictation.listening ? dictation.stop : dictation.start}
+            aria-pressed={dictation.listening}
+            aria-label={dictation.listening ? t("stopDictation") : t("startDictation")}
+            title={t("dictationHint")}
+          >
+            {dictation.listening ? <MicOff aria-hidden /> : <Mic aria-hidden />}
+          </Button>
+        ) : null}
         <Button type="submit" size="icon" disabled={!draft.trim() || pending || ended} aria-label={t("send")}>
           <SendHorizontal className="flip-rtl" aria-hidden />
         </Button>

@@ -2,7 +2,8 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { Settings2 } from "lucide-react";
+import { Download, Settings2 } from "lucide-react";
+import { Alert } from "@/components/ui/alert";
 import { requirePermission, viewerCan } from "@/lib/auth/session";
 import { assessmentDetail } from "@/lib/hire/recruiter";
 import { PageContainer, PageHeader } from "@/components/app/page-header";
@@ -18,9 +19,10 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   return { title: d?.template.title ?? "Assessment" };
 }
 
-export default async function AssessmentPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function AssessmentPage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ deleted?: string }> }) {
   const viewer = await requirePermission("assessment.view");
   const { id } = await params;
+  const { deleted } = await searchParams;
   const detail = await assessmentDetail(viewer, id);
   if (!detail) notFound();
   const t = await getTranslations("role");
@@ -41,6 +43,14 @@ export default async function AssessmentPage({ params }: { params: Promise<{ id:
         description={t("description", { minutes: detail.template.durationMinutes })}
         actions={
           <>
+            {viewerCan(viewer, "candidate.view") && detail.candidates.length ? (
+              <Button variant="ghost" asChild>
+                <a href={`/api/assessments/${id}/export`} download>
+                  <Download aria-hidden />
+                  {t("exportCsv")}
+                </a>
+              </Button>
+            ) : null}
             {viewerCan(viewer, "assessment.create") ? (
               <Button variant="secondary" asChild>
                 <Link href={`/app/assessments/${id}/setup`}>
@@ -53,6 +63,7 @@ export default async function AssessmentPage({ params }: { params: Promise<{ id:
           </>
         }
       />
+      {deleted ? <Alert tone="success" className="mb-6">{t("candidateDeleted")}</Alert> : null}
       <div className="mb-6 flex flex-wrap items-center gap-2">
         <span className="text-sm text-secondary">{t("mustHaves")}</span>
         {mustHaves.map((w) => (

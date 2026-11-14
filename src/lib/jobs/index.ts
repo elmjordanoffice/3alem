@@ -71,6 +71,17 @@ export async function enqueue<N extends JobName>(name: N, payload: JobPayloads[N
   chains.set(k, next);
 }
 
+/**
+ * Daily housekeeping. With BullMQ the worker registers a job scheduler; in
+ * inline mode the server process keeps a timer (production only).
+ */
+const DAY = 24 * 60 * 60 * 1000;
+const g = globalThis as unknown as { aalimHousekeeping?: ReturnType<typeof setInterval> };
+if (process.env.NODE_ENV === "production" && !process.env.REDIS_URL && process.env.JOBS_MODE !== "sync" && !g.aalimHousekeeping) {
+  g.aalimHousekeeping = setInterval(() => void enqueue("retention-sweep", {}), DAY);
+  g.aalimHousekeeping.unref?.();
+}
+
 /** Wait (up to `ms`) for this key's in-process jobs to finish. BullMQ mode returns immediately. */
 export async function settle(key: string, ms: number): Promise<boolean> {
   const chain = chains.get(key);

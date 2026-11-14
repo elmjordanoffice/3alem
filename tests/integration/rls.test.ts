@@ -103,4 +103,27 @@ describe.skipIf(!ready)("row-level security", () => {
     expect(rows).toHaveLength(0);
     await system.aiCallLog.deleteMany({ where: { agent: "test" } });
   });
+
+  it("keeps fairness answers and platform review data away from the app role", async () => {
+    await system.fairnessResponse.create({ data: { sessionRef: `fr-${run}`, organizationId: ids.orgA, gender: "woman" } });
+    await system.bankItemReview.upsert({ where: { itemKey: `test-${run}` }, create: { itemKey: `test-${run}`, status: "retired" }, update: {} });
+    const seen = await withTenant({ userId: ids.userA, organizationId: ids.orgA }, async (tx) => ({
+      fairness: await tx.fairnessResponse.count(),
+      review: await tx.bankItemReview.count(),
+    }));
+    expect(seen).toEqual({ fairness: 0, review: 0 });
+    await system.fairnessResponse.deleteMany({ where: { sessionRef: `fr-${run}` } });
+    await system.bankItemReview.deleteMany({ where: { itemKey: `test-${run}` } });
+  });
+
+  it("isolates webhooks and outcome ratings by organisation", async () => {
+    await system.webhook.create({ data: { organizationId: ids.orgB, url: "https://b.example.com", secretEncrypted: "x", events: ["report.ready"] } });
+    const fromA = await withTenant({ userId: ids.userA, organizationId: ids.orgA }, (tx) => tx.webhook.count());
+    const fromB = await withTenant({ userId: ids.userB, organizationId: ids.orgB }, (tx) => tx.webhook.count());
+    expect(fromA).toBe(0);
+    expect(fromB).toBe(1);
+    await expect(
+      withTenant({ userId: ids.userA, organizationId: ids.orgA }, (tx) => tx.outcomeRating.create({ data: { organizationId: ids.orgB, sessionId: "x", ratedById: ids.userA, period: 6, rating: 3 } })),
+    ).rejects.toThrow();
+  });
 });

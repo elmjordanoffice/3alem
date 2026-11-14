@@ -328,7 +328,59 @@ export function Paused({ v, onResume }: { v: View<"paused">; onResume: () => Pro
   );
 }
 
-export function Complete({ v, onFeedback }: { v: View<"complete">; onFeedback: (f: { rating: number; comment: string }) => Promise<void> }) {
+const FAIRNESS_OPTIONS: Record<string, string[]> = {
+  gender: ["woman", "man", "another", "prefer_not"],
+  ageBand: ["under25", "25_34", "35_44", "45_54", "55plus", "prefer_not"],
+  disability: ["yes", "no", "prefer_not"],
+  firstLanguage: ["arabic", "english", "other", "prefer_not"],
+};
+
+/** Voluntary, separate from the assessment, skippable as a whole. */
+function FairnessQuestions({ onSubmit }: { onSubmit: (a: Record<string, string>) => Promise<void> }) {
+  const t = useTranslations("candidate.fairness");
+  const [answers, setAnswers] = React.useState<Record<string, string>>({});
+  const [state, setState] = React.useState<"open" | "sent" | "skipped">("open");
+  if (state !== "open") return <p className="text-sm text-secondary" role="status">{state === "sent" ? t("thanks") : t("skipped")}</p>;
+  return (
+    <form
+      className="flex flex-col gap-4"
+      onSubmit={async (e) => {
+        e.preventDefault();
+        await onSubmit(answers);
+        setState("sent");
+      }}
+    >
+      <div>
+        <h2 className="text-sm font-semibold text-text">{t("title")}</h2>
+        <p className="mt-1 text-sm text-secondary">{t("body")}</p>
+      </div>
+      <div className="grid gap-4 sm:grid-cols-2">
+        {Object.entries(FAIRNESS_OPTIONS).map(([field, options]) => (
+          <div key={field} className="flex flex-col gap-1.5">
+            <label htmlFor={`fair-${field}`} className="text-sm font-medium text-text">{t(`fields.${field}` as "fields.gender")}</label>
+            <select
+              id={`fair-${field}`}
+              className="h-10 rounded-control border border-border-strong bg-surface px-3 text-sm text-text focus-visible:outline-2 focus-visible:outline-focus"
+              value={answers[field] ?? ""}
+              onChange={(e) => setAnswers((a) => ({ ...a, [field]: e.target.value }))}
+            >
+              <option value="">{t("choose")}</option>
+              {options.map((o) => (
+                <option key={o} value={o}>{t(`values.${field}.${o}` as "values.gender.woman")}</option>
+              ))}
+            </select>
+          </div>
+        ))}
+      </div>
+      <div className="flex flex-wrap gap-2">
+        <Button type="submit" variant="secondary" disabled={Object.values(answers).every((v) => !v)}>{t("send")}</Button>
+        <Button type="button" variant="ghost" onClick={() => setState("skipped")}>{t("skip")}</Button>
+      </div>
+    </form>
+  );
+}
+
+export function Complete({ v, onFeedback, onFairness }: { v: View<"complete">; onFeedback: (f: { rating: number; comment: string }) => Promise<void>; onFairness?: (a: Record<string, string>) => Promise<void> }) {
   const t = useTranslations("candidate.complete");
   const n = useNumbers();
   const [rating, setRating] = React.useState(0);
@@ -346,7 +398,7 @@ export function Complete({ v, onFeedback }: { v: View<"complete">; onFeedback: (
           <ul className="flex list-disc flex-col gap-1.5 ps-5 text-sm text-secondary">
             <li>{t("next1", { org: v.branding.orgName })}</li>
             <li>{t("next2")}</li>
-            <li>{t("next3")}</li>
+            <li>{t("next3", { org: v.branding.orgName })}</li>
           </ul>
         </section>
         <section className="rounded-card border border-border bg-surface p-5">
@@ -386,6 +438,11 @@ export function Complete({ v, onFeedback }: { v: View<"complete">; onFeedback: (
             </form>
           )}
         </section>
+        {onFairness ? (
+          <section className="rounded-card border border-border bg-surface p-5">
+            <FairnessQuestions onSubmit={onFairness} />
+          </section>
+        ) : null}
       </div>
     </CandidateShell>
   );

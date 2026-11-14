@@ -11,12 +11,21 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   if (viewer.activeOrganization) {
     if (viewerCan(viewer, "team.view")) organization.push({ href: "/app/teams", labelKey: "teams", icon: "teams" });
     organization.push({ href: "/app/org/members", labelKey: "members", icon: "members" });
+    if (viewerCan(viewer, "framework.edit")) organization.push({ href: "/app/org/library", labelKey: "library", icon: "library" });
+    if (viewerCan(viewer, "fairness.view")) organization.push({ href: "/app/org/fairness", labelKey: "fairness", icon: "fairness" });
+    if (viewerCan(viewer, "org.settings")) {
+      organization.push({ href: "/app/org/integrations", labelKey: "integrations", icon: "integrations" });
+    }
+    if (viewerCan(viewer, "audit.view")) organization.push({ href: "/app/org/audit", labelKey: "audit", icon: "audit" });
     if (viewerCan(viewer, "org.settings")) {
       organization.push({ href: "/app/org/settings", labelKey: "orgSettings", icon: "orgSettings" });
     }
   }
   const account: ShellNavItem[] = [{ href: "/app/settings", labelKey: "settings", icon: "settings" }];
-  if (viewer.user.isPlatformAdmin) account.push({ href: "/app/admin", labelKey: "admin", icon: "admin" });
+  if (viewer.user.isPlatformAdmin) {
+    account.push({ href: "/app/admin", labelKey: "admin", icon: "admin" });
+    account.push({ href: "/app/admin/items", labelKey: "items", icon: "items" });
+  }
 
   const grow: ShellNavItem[] = [
     { href: "/app/grow", labelKey: "grow", icon: "grow" },

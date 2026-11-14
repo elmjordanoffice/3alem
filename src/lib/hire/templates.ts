@@ -47,7 +47,8 @@ export function roleProfileFor(t: TemplateRow): RoleProfile {
     domainWeights,
     importance: t.skillWeights.map((w) => ({ key: w.skillKey, importance: w.importance })),
     seniority: analysis?.seniority ?? "mid",
-    technicalSkills: technicalSkills(t).map((s) => s.key),
+    technicalSkills: technicalSkills(t).filter((s) => !s.domain || s.domain === "technical").map((s) => s.key),
+    extraSkills: technicalSkills(t).filter((s) => s.domain && s.domain !== "technical").map((s) => ({ key: s.key, domain: s.domain! })),
   });
 }
 
@@ -67,7 +68,7 @@ export function skillCatalog(tech: TechnicalSkillDef[], locale: "en" | "ar") {
       out[s.key] = { name: s.name[locale], description: s.description[locale], anchors: [1, 2, 3, 4, 5].map((l) => s.anchors[l as 1][locale]), domain: d.key };
     }
   }
-  for (const t of tech) out[t.key] = { name: t.name, description: t.description, anchors: t.anchors, domain: "technical" };
+  for (const t of tech) out[t.key] = { name: t.name, description: t.description, anchors: t.anchors, domain: t.domain ?? "technical" };
   return out;
 }
 

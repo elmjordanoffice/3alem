@@ -211,7 +211,7 @@ export async function teamAnalytics(viewer: OrgViewer, teamId: string, locale: "
           })
           .filter((p) => p.leadership >= 3.25)
           .sort((a, b) => b.score - a.score)
-          .map(({ score: _s, ...p }) => p)
+          .map((p) => ({ memberId: p.memberId, name: p.name, leadership: p.leadership, management: p.management, evidence: p.evidence, readiness: p.readiness }))
       : [];
 
     const pairings: TeamAnalytics["pairings"] = [];

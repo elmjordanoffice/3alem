@@ -19,7 +19,8 @@
     "db:seed": "node --conditions=react-server --import tsx prisma/seed.ts",
     "db:reset": "prisma migrate reset --force",
     "format": "prettier --write .",
-    "db:seed:demo": "node --conditions=react-server --import tsx prisma/seed-demo.mts"
+    "db:seed:demo": "node --conditions=react-server --import tsx prisma/seed-demo.mts",
+    "worker": "node --conditions=react-server --import tsx scripts/worker.mts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^1.8.0",

@@ -42,6 +42,7 @@ export default async function FrameworkPage() {
         name: localized(c.name, locale),
         description: localized(c.description, locale),
         anchors: [1, 2, 3, 4, 5].map((l) => localized(anchors[String(l)], locale)),
+        custom: c.organizationId !== null,
       };
     }),
   }));

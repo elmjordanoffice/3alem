@@ -1,26 +1,27 @@
 # Prompt catalogue
 
-Every AI agent has one narrow job, a strict JSON output schema (validated with Zod), a versioned prompt file and logged inputs and outputs (`ai_call_log`: tokens, cost, latency). Deterministic, tested code decides *what* to test next; the model only generates scenarios and scores answers.
+Every AI agent has one narrow job, a strict output schema (Zod, sent as a structured-output format and validated on return), a versioned prompt file, and logged inputs and outputs (`ai_call_log`: tokens, cost, latency, version). Deterministic, tested code decides *what* to test next; the model only generates content and scores answers.
 
-Status: **Phase 0 defines the contracts below. The prompts are implemented in Phase 1** (JD Analyst, World Builder, Item Generator, Guessability Checker, Scorer, Report Writer) and later phases (Role-play Actor in 2, Coach in 3).
+All agents run through `runAgent()` (`src/lib/ai/run.ts`), which picks the provider, retries once on a schema failure and logs the call. Model: Claude Opus 5.5 (`AALIM_MODEL` overrides), with server-side fallback enabled. Effort replaces temperature (D-023).
 
-| Agent | Job | Temperature | Output (summary) | Phase |
+| Agent | File | Effort | Job | Offline fallback |
 |---|---|---|---|---|
-| JD Analyst | Job description → role summary, seniority, technical sub-skill map, 9-domain weights, industry for the fictional company. Flags discriminatory or irrelevant requirements (age, gender, nationality, appearance). | 0.2 | `{ summary, seniority, industry, technicalSkills[], domainWeights{}, flags[] }` | 1 |
-| World Builder | Fictional company, cast of 5–8 characters, storyline hooks. Names from many cultures; consistent across the session. | 0.8 | `{ companyName, industry, premise, cast[], chapters[], hooks[] }` | 1 |
-| Item Generator | One item for a target sub-skill set, difficulty and type, using the world and earlier decisions. Follows every design rule; includes hidden rubric, strong indicators, red flags, embedded detail, probe and twist. | 0.8 | `{ scenario, materials[], task, options[]?, probe, twist, rubric{}, strong_indicators[], red_flags[], embedded_detail }` (`materials` uses `src/lib/assessment/materials.ts`) | 1 |
-| Guessability Checker | Acts as a savvy non-expert test-taker and tries to pick the best option. High-confidence identification → regenerate. | 0 | `{ picked, confidence, reasoning }` | 1 |
-| Scorer | Scores one response against its rubric. Verbatim evidence or no score. Ignores length, tone, grammar and fluency except for communication sub-skills. Sees only item + response (no halo). High-impact items scored twice; a gap of more than one level triggers a third pass. | 0–0.2 | `[{ sub_skill, level, confidence, evidence_quote, rationale }], embedded_detail_noticed` | 1 |
-| Report Writer | Candidate Model → report. Every claim cites evidence; specific, constructive, never judgmental. | 0.3 | Hire / Grow report sections | 1–2 |
-| Role-play Actor | Stakeholder with hidden goals and a mood that reacts to how the person communicates. Never breaks character; ends at resolution or turn limit. | 0.7 | `{ reply, mood, goal_progress, should_end }` | 2 |
-| Coach | Discusses the report and plans practice. Honest and direct; never flatters. | 0.5 | chat | 3 |
+| JD Analyst | `jd-analyst.ts` | medium | Job description → role summary, seniority, role family, technical sub-skills with anchors, 9-domain weights and importance, industry. Flags discriminatory or irrelevant requirements (age, gender, nationality, native-speaker, appearance), and publishing is blocked until they're reviewed. | Keyword analysis + role-family library |
+| World Builder | `world-builder.ts` | low | Fictional company, cast of 5–8 people with names from many cultures, three chapters, storyline hooks. Kept consistent across the session. | One of 6 curated worlds |
+| Item Generator | `item-generator.ts` | medium | One item for target sub-skills, type, difficulty and purpose (calibrate, explore, validate, stress), set in the world and aware of earlier decisions. Follows the 10 design rules and includes a hidden rubric, strong indicators, red flags, embedded detail, probe and twist. | Best-matching curated bank item |
+| Guessability Checker | `guessability.ts` | low | Plays a savvy non-expert and tries to pick the "right" option. High confidence → the item is regenerated. | Not needed for curated items |
+| Scorer | `scorer.ts` | high | Scores one answer against its rubric. Verbatim evidence or no score. Ignores length, tone and fluency except for communication sub-skills. Sees only the item and answer (no halo). High-impact items are scored twice, with a third pass on gaps of more than a level. | Rubric-and-signal scorer |
+| Role-play Actor | `roleplay-actor.ts` | low | A stakeholder with hidden goals and a mood that reacts to how the person communicates. Never breaks character; ends at resolution or the turn limit. | Scripted actor driven by signals |
+| Report Writer | `report-writer.ts` | medium | Candidate model → narrative for the Hire report (summary, strengths, development areas, interview questions) or the Grow report and plan. Every claim cites evidence ids; specific, constructive, never judgemental. Role fit is computed in code, not by the writer. | Template narrative from the model |
+| Practice Feedback | `practice-feedback.ts` | medium | Grow practice: what the answer did well, what an expert would also consider, and a twist to try. | Rubric-based feedback |
+| Coach | `coach.ts` | medium | Talks through the person's report and practice and plans next steps. Honest, direct, never flattering, never diagnostic. | Template replies grounded in the profile |
 
 ## Versioning rules
 
-- Each prompt lives in `src/lib/ai/prompts/<agent>.v<N>.ts` with its Zod schema. Changing the wording bumps `N`.
-- `Item.promptVersion`, `ItemScore.scorerVersion`, `ScenarioWorld.promptVersion` and `Report.writerVersion` record what produced each row.
-- Every prompt change runs the 30 simulated personas; profiles must be recovered within one level on at least 80% of sub-skills (Phase 1 acceptance).
+- Each agent's `version` string (e.g. `scorer.v1`) is recorded on what it produced: `Item.promptVersion` (or `bank:<id>` for curated items), `ItemScore.scorerVersion`, `ScenarioWorld.promptVersion`, `Report.writerVersion`.
+- Changing a prompt's wording bumps its version.
+- Every engine or scorer change runs the 30 simulated personas (`npm test`): profiles must be recovered within one level on at least 80% of sub-skills.
 
 ## Templates
 
-The Item Generator and Scorer templates from the product brief are the starting point for v1 and are reproduced verbatim in the Phase 1 prompt files.
+The Item Generator and Scorer prompts start from the templates in the product brief, extended with the world context, the embedded-detail rule and the verbatim-evidence contract.

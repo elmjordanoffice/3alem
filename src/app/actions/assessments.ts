@@ -53,7 +53,7 @@ const setupSchema = z.object({
   accommodations: z.object({ extraTimeAllowed: z.boolean(), untimedAllowed: z.boolean(), largerTextAllowed: z.boolean() }),
   domains: z.array(z.object({ key: z.string(), importance })).length(9),
   technical: z
-    .array(z.object({ key: z.string().optional(), name: z.string().trim().min(2).max(80), description: z.string().trim().max(300), anchors: z.array(z.string()).length(5), importance }))
+    .array(z.object({ key: z.string().optional(), name: z.string().trim().min(2).max(80), description: z.string().trim().max(300), anchors: z.array(z.string()).length(5), importance, domain: z.string().max(40).optional() }))
     .min(1)
     .max(8),
   acknowledgedFlags: z.boolean(),
@@ -76,11 +76,12 @@ export async function saveSetup(input: z.input<typeof setupSchema>): Promise<Res
     const analysis = { ...((t.analysis as object) ?? {}), seniority: d.seniority, roleTitle: d.title, flagsAcknowledged: d.acknowledgedFlags };
     const family = (t.analysis as { roleFamily?: string } | null)?.roleFamily?.split("-")[0] ?? "role";
     const tech = d.technical.map((s) => ({
-      key: s.key && s.key.startsWith("technical.") ? s.key : `technical.${family}.${s.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 40) || "skill"}`,
+      key: s.key && (s.key.startsWith("technical.") || s.key.startsWith("org.")) ? s.key : `technical.${family}.${s.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 40) || "skill"}`,
       name: s.name,
       description: s.description,
       anchors: s.anchors,
       importance: s.importance,
+      ...(s.key?.startsWith("org.") && s.domain ? { domain: s.domain } : {}),
     }));
     await tx.templateSkillWeight.deleteMany({ where: { templateId: t.id } });
     const domainWeight = (k: string) => (t.analysis as { domainWeights?: { domain: string; weight: number }[] } | null)?.domainWeights?.find((w) => w.domain === k)?.weight ?? 0.3;

@@ -4,6 +4,7 @@ import { getTranslations } from "next-intl/server";
 import { requireViewer } from "@/lib/auth/session";
 import { PageContainer, PageHeader } from "@/components/app/page-header";
 import { AccountSettings } from "@/components/app/account-settings";
+import { DataRights } from "@/components/app/data-rights";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("settings");
@@ -24,6 +25,9 @@ export default async function SettingsPage() {
         numerals={viewer.user.numerals}
         textSize={textSize}
       />
+      <div className="mt-6">
+        <DataRights email={viewer.user.email} />
+      </div>
     </PageContainer>
   );
 }

@@ -4,6 +4,7 @@ import { requirePermission, tenantOf } from "@/lib/auth/session";
 import { withTenant } from "@/lib/db";
 import { PageContainer, PageHeader } from "@/components/app/page-header";
 import { OrgSettingsForm } from "@/components/app/org-settings-form";
+import { RetentionCard } from "@/components/app/retention-card";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("orgSettings");
@@ -20,6 +21,9 @@ export default async function OrgSettingsPage() {
     <PageContainer className="max-w-3xl">
       <PageHeader title={t("title")} description={t("description")} />
       <OrgSettingsForm name={org.name} brandColor={org.brandColor} dataRetentionMonths={org.dataRetentionMonths} />
+      <div className="mt-6">
+        <RetentionCard months={org.dataRetentionMonths} />
+      </div>
     </PageContainer>
   );
 }

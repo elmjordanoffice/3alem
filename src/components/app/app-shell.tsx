@@ -14,6 +14,11 @@ import {
   LineChart,
   MessagesSquare,
   UsersRound,
+  Scale,
+  Plug,
+  ScrollText,
+  Library,
+  ListChecks,
   ChevronsUpDown,
   Home,
   Layers,
@@ -45,7 +50,7 @@ import { LanguageToggle, ThemeMenu } from "./preference-controls";
 export interface ShellNavItem {
   href: string;
   labelKey: string;
-  icon: "home" | "assessments" | "framework" | "members" | "orgSettings" | "settings" | "admin" | "design" | "grow" | "practice" | "tracks" | "progress" | "coach" | "teams";
+  icon: "home" | "assessments" | "framework" | "members" | "orgSettings" | "settings" | "admin" | "design" | "grow" | "practice" | "tracks" | "progress" | "coach" | "teams" | "fairness" | "integrations" | "audit" | "library" | "items";
 }
 
 export interface ShellProps {
@@ -71,6 +76,11 @@ const ICONS: Record<ShellNavItem["icon"], LucideIcon> = {
   progress: LineChart,
   coach: MessagesSquare,
   teams: UsersRound,
+  fairness: Scale,
+  integrations: Plug,
+  audit: ScrollText,
+  library: Library,
+  items: ListChecks,
 };
 
 export function AppShell({ user, organizations, activeOrganizationId, nav, children }: ShellProps) {
@@ -143,6 +153,11 @@ function SidebarContent({ user, organizations, activeOrganizationId, nav }: Omit
   const pathname = usePathname();
   const router = useRouter();
   const active = organizations.find((o) => o.id === activeOrganizationId);
+  // The most specific nav entry that contains the current path is the current page.
+  const currentHref = nav
+    .flatMap((s) => s.items.map((i) => i.href))
+    .filter((h) => pathname === h || (h !== "/app" && pathname.startsWith(`${h}/`)))
+    .sort((a, b) => b.length - a.length)[0];
 
   return (
     <div className="flex h-full flex-col">
@@ -200,7 +215,7 @@ function SidebarContent({ user, organizations, activeOrganizationId, nav }: Omit
             <ul className="flex flex-col gap-0.5">
               {section.items.map((item) => {
                 const Icon = ICONS[item.icon];
-                const current = item.href === "/app" || item.href === "/app/grow" ? pathname === item.href : pathname.startsWith(item.href);
+                const current = item.href === currentHref;
                 return (
                   <li key={item.href}>
                     <Link

@@ -15,7 +15,7 @@ export interface FrameworkDomainView {
   highLevel: string;
   generated: boolean;
   custom: boolean;
-  subSkills: { key: string; name: string; description: string; anchors: string[] }[];
+  subSkills: { key: string; name: string; description: string; anchors: string[]; custom?: boolean }[];
 }
 
 const LEVEL_DOT = ["bg-level-1", "bg-level-2", "bg-level-3", "bg-level-4", "bg-level-5"];
@@ -77,7 +77,7 @@ export function FrameworkBrowser({ domains }: { domains: FrameworkDomainView[] }
               <Collapsible.Root defaultOpen={i === 0} className="group rounded-card border border-border bg-surface">
                 <Collapsible.Trigger className="flex w-full items-start gap-3 p-4 text-start focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus">
                   <span className="min-w-0 flex-1">
-                    <span className="block text-sm font-semibold text-text">{s.name}</span>
+                    <span className="flex flex-wrap items-center gap-2 text-sm font-semibold text-text">{s.name}{s.custom ? <Badge tone="accent">{t("customBadge")}</Badge> : null}</span>
                     <span className="mt-0.5 block text-sm text-secondary">{s.description}</span>
                   </span>
                   <ChevronDown className="mt-0.5 size-4 shrink-0 text-tertiary transition-transform duration-200 group-data-[state=open]:rotate-180" aria-hidden />

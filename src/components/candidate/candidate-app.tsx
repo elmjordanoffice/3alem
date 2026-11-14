@@ -20,6 +20,8 @@ export interface CandidateApi {
   resume: () => Promise<CandidateView>;
   refresh: () => Promise<CandidateView>;
   feedback: (f: { rating: number; comment: string }) => Promise<void>;
+  /** Voluntary equal-opportunity questions (Hire only). */
+  fairness?: (a: Record<string, string>) => Promise<void>;
 }
 
 /** The candidate experience: one client app driven by server actions. */
@@ -74,7 +76,7 @@ export function CandidateApp({ token, initial, api, completeSlot }: { token: str
     case "paused":
       return <Paused v={view} onResume={async () => setView(await api.resume())} />;
     case "complete":
-      return completeSlot ?? <Complete v={view} onFeedback={api.feedback} />;
+      return completeSlot ?? <Complete v={view} onFeedback={api.feedback} onFairness={api.fairness} />;
     case "item":
       return (
         <ItemScreen

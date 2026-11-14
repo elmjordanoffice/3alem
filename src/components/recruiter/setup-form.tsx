@@ -15,6 +15,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Checkbox, Switch } from "@/components/ui/checkbox";
 import { Alert } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/menu";
 import { useNumbers } from "@/components/providers";
 import { cn } from "@/lib/utils";
 
@@ -33,8 +34,10 @@ interface Initial {
   language: "en" | "ar";
   accommodations: { extraTimeAllowed: boolean; untimedAllowed: boolean; largerTextAllowed: boolean };
   domains: { key: string; name: string; description: string; importance: Importance; rationale: string }[];
-  technical: { key: string; name: string; description: string; anchors: string[]; importance: Importance }[];
+  technical: { key: string; name: string; description: string; anchors: string[]; importance: Importance; domain?: string }[];
 }
+
+export interface LibrarySkill { key: string; domain: string; domainName: string; name: string; description: string; anchors: string[] }
 
 function ImportancePicker({ value, onChange, label, disabled }: { value: Importance; onChange: (v: Importance) => void; label: string; disabled?: boolean }) {
   const t = useTranslations("setup");
@@ -57,7 +60,7 @@ function ImportancePicker({ value, onChange, label, disabled }: { value: Importa
   );
 }
 
-export function SetupForm({ id, status, locked, initial }: { id: string; status: string; locked: boolean; initial: Initial }) {
+export function SetupForm({ id, status, locked, initial, library = [] }: { id: string; status: string; locked: boolean; initial: Initial; library?: LibrarySkill[] }) {
   const t = useTranslations("setup");
   const tl = useTranslations("levels");
   const n = useNumbers();
@@ -174,7 +177,8 @@ export function SetupForm({ id, status, locked, initial }: { id: string; status:
           {s.technical.map((tech, i) => (
             <Collapsible.Root key={tech.key || i} className="group rounded-control border border-border bg-surface">
               <div className="flex flex-wrap items-center gap-3 p-3">
-                <Input aria-label={t("skillName")} value={tech.name} onChange={(e) => setTech(i, { name: e.target.value })} className="h-9 min-w-48 flex-1" disabled={locked} />
+                <Input aria-label={t("skillName")} value={tech.name} onChange={(e) => setTech(i, { name: e.target.value })} className="h-9 min-w-48 flex-1" disabled={locked || tech.key.startsWith("org.")} />
+                {tech.key.startsWith("org.") ? <Badge tone="accent">{t("fromLibrary", { domain: library.find((l) => l.key === tech.key)?.domainName ?? tech.domain ?? "" })}</Badge> : null}
                 <ImportancePicker value={tech.importance} onChange={(v) => setTech(i, { importance: v })} label={t("importanceOf", { name: tech.name })} disabled={locked} />
                 <Collapsible.Trigger className="inline-flex size-8 items-center justify-center rounded-control text-tertiary hover:bg-surface-subtle" aria-label={t("editAnchors", { name: tech.name })}>
                   <ChevronDown className="size-4 transition-transform group-data-[state=open]:rotate-180" aria-hidden />
@@ -203,6 +207,26 @@ export function SetupForm({ id, status, locked, initial }: { id: string; status:
             <Plus aria-hidden />
             {t("addSkill")}
           </Button>
+          {library.some((l) => !s.technical.some((x) => x.key === l.key)) ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="sm" className="self-start" disabled={locked || s.technical.length >= 8}>
+                  <Plus aria-hidden />
+                  {t("addFromLibrary")}
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="max-w-80">
+                {library.filter((l) => !s.technical.some((x) => x.key === l.key)).map((l) => (
+                  <DropdownMenuItem key={l.key} onSelect={() => setS((x) => ({ ...x, technical: [...x.technical, { key: l.key, domain: l.domain, name: l.name, description: l.description, anchors: l.anchors, importance: "NICE_TO_HAVE" }] }))}>
+                    <span className="flex flex-col">
+                      <span>{l.name}</span>
+                      <span className="text-xs text-tertiary">{l.domainName}</span>
+                    </span>
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : null}
         </CardContent>
       </Card>
 

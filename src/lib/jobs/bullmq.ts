@@ -21,6 +21,8 @@ export function getQueue(): Queue {
 export async function startWorker(concurrency = 4) {
   await import("./handlers");
   const { runHandler } = await import("./run-handler");
+  // Retention sweep every night at 03:17 UTC.
+  await getQueue().upsertJobScheduler("retention-daily", { pattern: "17 3 * * *" }, { name: "retention-sweep", data: {} });
   return new Worker(
     QUEUE,
     async (job) => runHandler(job.name as JobName, job.data as JobPayloads[JobName]),

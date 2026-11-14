@@ -22,13 +22,13 @@ Choices the brief left open, or where I departed from it, with the reason. Newes
 
 **D-010: Role model.** Candidate/Individual is implicit for every account. Org roles are an array on `Membership`, so one person can be Recruiter and Team manager. Platform admin is a server-only flag. Every org must keep at least one admin (enforced in code and tested). *(0)*
 
-**D-011: Voluntary demographic data is deferred to Phase 5** and will live in a separate Postgres schema with its own role, never joined to assessment data in application queries. The fairness dashboard needs it only in aggregate. *(5)*
+**D-011: Voluntary demographic data is deferred to Phase 5.** *(Superseded by D-026.)* *(5)*
 
 **D-012: Mail transport.** Development and tests write messages to `.mail/` and the console. A production provider (SMTP / Postmark / SES) is chosen at deployment; the interface is `sendMail({to, subject, text})`. *(0)*
 
 **D-013: Level ranges widen with uncertainty.** Displayed range = estimate ± (0.15 + 0.85 × (1 − confidence)), clamped to 1–5 and rounded to one decimal. Confidence is shown as low / moderate / high (thresholds 0.5 and 0.75), never as a percentage. Phase 1 will replace this with the Candidate Model's posterior interval and keep the same display contract. *(0)*
 
-**D-014: Redis/BullMQ arrives in Phase 1** with the first background jobs (scoring, report writing). Phase 0 has none, and an idle queue would be untested infrastructure. *(1)*
+**D-014: Jobs run in-process by default, BullMQ when `REDIS_URL` is set.** A per-key promise chain keeps one candidate's jobs in order with no extra infrastructure for small deployments; BullMQ adds durability, retries and a separate worker for larger ones. Handlers are identical in both modes. *(1)*
 
 **D-015: Phase 0 adds existing accounts to an organisation; email invitations for colleagues come in Phase 2** with the recruiter settings screen. Candidate invitations (`Invitation` model) are a separate flow in Phase 1. *(0)*
 
@@ -47,4 +47,28 @@ Choices the brief left open, or where I departed from it, with the reason. Newes
 
 **D-021: Arabic initials are joined with a zero-width non-joiner** so they render as separate letters (ل‌ح), not as a two-letter word. *(0)*
 
-**D-022: AI provider.** Claude by default, behind a `ModelProvider` interface with a deterministic `mock` provider for tests and personas. Prompts are versioned files in `src/lib/ai/prompts/` (Phase 1). *(1)*
+**D-022: AI provider.** Claude when `ANTHROPIC_API_KEY` is set, behind a provider interface. Without a key the product still works end to end: a curated item bank, a rubric-and-signal offline scorer, an offline role-play actor and template-written reports. Tests, personas and the demo seed use offline mode, so they are deterministic and free. Prompts are versioned files in `src/lib/ai/prompts/`. *(1)*
+
+**D-023: Reasoning effort instead of temperature.** Current Claude models do not take a sampling temperature. Each agent sets an effort level instead (low for the actor, world builder and guessability check; medium for generation, writing and coaching; high for the scorer) and relies on structured outputs for consistency. Requests opt into server-side model fallback, so a capacity problem doesn't stop a live assessment. *(1)*
+
+**D-024: The candidate path uses the system connection, scoped by the token.** Candidates have no organisation membership, so RLS org context doesn't apply. Every candidate action re-resolves the token, loads only that invitation's session, and never takes an id from the client without checking it belongs to that session. Signed-in Grow and Team sessions use the owner check instead. *(1)*
+
+**D-025: Time budget floor.** The engine plans against the larger of measured time and 60% of each finished scene's expected minutes. Without this, someone clicking through instantly would never run out of time and the session would not end. *(1)*
+
+**D-026: Fairness answers live in one table with RLS on and no policy** (`fairness_response`), keyed by session reference without a foreign key. A separate schema (D-011) would add operational cost for the same guarantee: the runtime role cannot read the table at all, so no product screen can show an individual's answers. Only the owner connection reads it, to compute aggregates. Answers are deleted with the session (retention and erasure). *(5)*
+
+**D-027: Four-fifths rule with a selectable cutoff.** Adverse impact depends on which result counts as "selected". The dashboard defaults to Good fit or better and offers Partial or better, because organisations use the report differently. Groups under five people are suppressed so nobody can be singled out. A flag is a prompt to review, not a finding of bias, and the screen says so. *(5)*
+
+**D-028: Outcome correlation appears from 20 ratings,** marked as an early version. Below that, a correlation is mostly noise and would be over-read. *(5)*
+
+**D-029: Organisation library skills sit inside framework domains** (keys `org.*`) and are added to an assessment from its setup. Claude can write scenarios and score against the organisation's anchors. The curated offline bank only covers the built-in framework, so library skills need a key to be measured; the library page says this. Editing bumps a version number. *(5)*
+
+**D-030: Item-bank review uses live statistics:** uses, mean, spread and the third-pass rate. Flags appear after eight uses: little spread (doesn't discriminate), too easy, too hard, or scorers often disagree. Retiring an item excludes it from selection without touching past scores. *(5)*
+
+**D-031: Webhook security.** HTTPS only. Private, loopback, link-local and unique-local addresses are refused, both when saved and after DNS resolution at delivery, and redirects are not followed. Secrets are shown once, stored AES-256-GCM encrypted with a key derived from the app secret, and used for HMAC-SHA256 signatures. *(5)*
+
+**D-032: CSP without nonces.** Pages are rendered per request and load nothing from third parties, so a strict origin policy with `'unsafe-inline'` scripts (Next's own bootstrap) is the pragmatic choice. A nonce-based policy is a later option. *(5)*
+
+**D-033: Spoken role-play is a progressive enhancement.** Dictation uses the browser's Web Speech API where available and fills the reply box, which the candidate can edit before sending. Read-aloud uses speech synthesis and is off by default. Typing always works, and the scored text is what was sent. Some browsers send dictation audio to their own speech service; the hint says dictation uses the browser's speech recognition. *(5)*
+
+**D-034: Account deletion needs a hand-over** if the person is the only admin of an organisation that has other members, so no organisation is left without an admin. *(5)*

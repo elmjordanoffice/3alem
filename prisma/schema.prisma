@@ -827,3 +827,84 @@ model AiCallLog {
   @@index([sessionId])
   @@map("ai_call_log")
 }
+
+// ───────────────────────── Fairness, outcomes, integrations ─────────────────────────
+
+/// Voluntary, self-reported demographics. Stored apart from assessment data:
+/// no foreign keys, no RLS policies (the app role cannot read it), read only
+/// in aggregate by the fairness report, with small groups suppressed.
+model FairnessResponse {
+  id             String   @id @default(cuid())
+  organizationId String?
+  /// Links to an assessment session for aggregation only; never joined in app queries.
+  sessionRef     String   @unique
+  gender         String?
+  ageBand        String?
+  disability     String?
+  firstLanguage  String?
+  createdAt      DateTime @default(now())
+
+  @@index([organizationId])
+  @@map("fairness_response")
+}
+
+/// Later job performance for hired candidates (with consent), used to check
+/// and recalibrate scores.
+model OutcomeRating {
+  id             String   @id @default(cuid())
+  organizationId String
+  sessionId      String
+  ratedById      String
+  /// Months after hire: 6 or 12.
+  period         Int
+  /// 1–5 performance rating from the employer's own process.
+  rating         Int
+  createdAt      DateTime @default(now())
+
+  @@unique([sessionId, period])
+  @@index([organizationId])
+  @@map("outcome_rating")
+}
+
+/// Outbound webhooks for applicant-tracking systems.
+model Webhook {
+  id              String   @id @default(cuid())
+  organizationId  String
+  url             String
+  /// Signing secret, encrypted with the app key.
+  secretEncrypted String
+  events          String[]
+  active          Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  deliveries      WebhookDelivery[]
+
+  @@index([organizationId])
+  @@map("webhook")
+}
+
+model WebhookDelivery {
+  id             String   @id @default(cuid())
+  webhookId      String
+  organizationId String
+  event          String
+  payload        Json
+  status         String
+  responseCode   Int?
+  error          String?
+  createdAt      DateTime @default(now())
+  webhook        Webhook  @relation(fields: [webhookId], references: [id], onDelete: Cascade)
+
+  @@index([webhookId, createdAt])
+  @@map("webhook_delivery")
+}
+
+/// Platform review state for curated bank items. Retired items are never selected.
+model BankItemReview {
+  itemKey      String   @id
+  status       String   @default("active")
+  note         String?
+  reviewedById String?
+  reviewedAt   DateTime @default(now())
+
+  @@map("bank_item_review")
+}

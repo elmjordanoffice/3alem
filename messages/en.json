@@ -184,7 +184,12 @@
       "tracks": "Tracks",
       "progress": "Progress",
       "coach": "Coach",
-      "teams": "Teams"
+      "teams": "Teams",
+      "library": "Competency library",
+      "fairness": "Fairness",
+      "integrations": "Integrations",
+      "audit": "Audit log",
+      "items": "Item bank review"
     }
   },
   "home": {
@@ -319,7 +324,12 @@
     "retention": "Keep candidate data for (months)",
     "retentionHint": "Default 12. Data older than this is deleted.",
     "saved": "Settings saved.",
-    "invalid": "Check the fields: the name needs 2–80 characters, the colour a #RRGGBB value, retention 1–60 months."
+    "invalid": "Check the fields: the name needs 2–80 characters, the colour a #RRGGBB value, retention 1–60 months.",
+    "dataTitle": "Candidate data",
+    "dataDescription": "Assessments older than {months, plural, one {# month} other {# months}} are deleted automatically every night.",
+    "runNowHint": "Apply the retention period now instead of waiting for tonight's sweep.",
+    "runNow": "Run retention now",
+    "runNowDone": "{n, plural, =0 {Nothing was old enough to delete.} one {Deleted # assessment.} other {Deleted # assessments.}}"
   },
   "admin": {
     "title": "Platform admin",
@@ -374,7 +384,14 @@
       "ended": "Conversation ended",
       "reply": "Reply to {name}",
       "placeholder": "Reply to {name}…",
-      "send": "Send"
+      "send": "Send",
+      "readAloudOn": "Read replies aloud",
+      "readAloudOff": "Stop reading replies aloud",
+      "startDictation": "Speak your reply",
+      "stopDictation": "Stop dictation",
+      "dictationHint": "Dictation uses your browser's speech recognition. You can edit the text before sending.",
+      "dictationError": "Dictation stopped. Check microphone permission, or type instead.",
+      "listening": "Listening… speak your reply, then press send."
     },
     "documents": {
       "to": "To",
@@ -792,6 +809,48 @@
       "comment": "Anything we should change? (optional)",
       "send": "Send feedback",
       "thanks": "Thank you for your feedback."
+    },
+    "fairness": {
+      "title": "Help us check that our assessments are fair (optional)",
+      "body": "Your answers are stored separately from your assessment and are never seen by the people reviewing it. They're only used, in groups of five or more, to check that people of every background are scored fairly.",
+      "fields": {
+        "gender": "Gender",
+        "ageBand": "Age",
+        "disability": "Do you consider yourself disabled?",
+        "firstLanguage": "First language"
+      },
+      "values": {
+        "gender": {
+          "woman": "Woman",
+          "man": "Man",
+          "another": "Another identity",
+          "prefer_not": "Prefer not to say"
+        },
+        "ageBand": {
+          "under25": "Under 25",
+          "25_34": "25–34",
+          "35_44": "35–44",
+          "45_54": "45–54",
+          "55plus": "55 and over",
+          "prefer_not": "Prefer not to say"
+        },
+        "disability": {
+          "yes": "Yes",
+          "no": "No",
+          "prefer_not": "Prefer not to say"
+        },
+        "firstLanguage": {
+          "arabic": "Arabic",
+          "english": "English",
+          "other": "Another language",
+          "prefer_not": "Prefer not to say"
+        }
+      },
+      "choose": "Choose…",
+      "send": "Send answers",
+      "skip": "Skip",
+      "thanks": "Thank you. Your answers are stored separately from your assessment.",
+      "skipped": "Skipped. Nothing was stored."
     }
   },
   "assessments": {
@@ -915,7 +974,9 @@
       "save": "Couldn't save. Check the fields and try again.",
       "publish": "Couldn't publish. Try again.",
       "flags": "Review the flagged requirements first."
-    }
+    },
+    "fromLibrary": "Library · {domain}",
+    "addFromLibrary": "Add from your library"
   },
   "role": {
     "description": "{minutes}-minute adaptive assessment.",
@@ -979,7 +1040,9 @@
     "resent": "Invitation sent again.",
     "revoke": "Revoke invitation",
     "revoked": "Invitation revoked.",
-    "decisionNote": "Reports inform your decision. Aalim never rejects anyone automatically."
+    "decisionNote": "Reports inform your decision. Aalim never rejects anyone automatically.",
+    "exportCsv": "Export CSV",
+    "candidateDeleted": "The candidate's data was deleted."
   },
   "invite": {
     "button": "Invite candidates",
@@ -1405,5 +1468,316 @@
     "reportPending": "Your report is being written",
     "reportPendingBody": "This usually takes less than a minute.",
     "youFirst": "You're seeing your report first. It counts in your team's view only from now on, and only as levels unless you chose to share your answers."
+  },
+  "integrations": {
+    "title": "Integrations",
+    "description": "Send assessment events to your applicant tracking system or any HTTPS endpoint. Every delivery is signed so you can verify it came from Aalim.",
+    "addTitle": "Add a webhook",
+    "addDescription": "We POST a JSON payload to this address when the events you choose happen.",
+    "secretTitle": "Copy your signing secret now",
+    "secretBody": "This is the only time it is shown. Store it with your ATS integration; use it to verify the X-Aalim-Signature header.",
+    "copy": "Copy",
+    "copied": "Secret copied",
+    "url": "Endpoint URL",
+    "urlHint": "Must be a public HTTPS address.",
+    "events": "Events",
+    "eventHelp": {
+      "candidate_started": "A candidate gave consent and started the assessment.",
+      "candidate_completed": "A candidate finished. The report is still being prepared.",
+      "report_ready": "The report is ready, with role fit and a link to it."
+    },
+    "add": "Add webhook",
+    "endpoints": "Endpoints",
+    "sendTest": "Send test event",
+    "testSent": "Test event sent. Check the delivery log below.",
+    "emptyTitle": "No webhooks yet",
+    "emptyBody": "Add an endpoint above to push results into your ATS.",
+    "activeFor": "Deliveries to {url}",
+    "active": "Active",
+    "paused": "Paused",
+    "deleteFor": "Delete webhook {url}",
+    "confirmDelete": "Delete this webhook? Deliveries stop immediately.",
+    "deliveries": "Recent deliveries",
+    "noDeliveries": "Nothing delivered yet.",
+    "event": "Event",
+    "result": "Result",
+    "when": "When",
+    "delivered": "Delivered",
+    "failed": "Failed",
+    "verifyTitle": "Verifying a delivery",
+    "verifyBody": "Compute an HMAC-SHA256 of the raw request body with your secret and compare it with the X-Aalim-Signature header.",
+    "errors": {
+      "invalid": "Choose at least one event and enter a URL.",
+      "invalidUrl": "That doesn't look like a valid URL.",
+      "httpsOnly": "Use an HTTPS address.",
+      "privateHost": "Private and internal addresses can't receive webhooks."
+    }
+  },
+  "fairness": {
+    "title": "Fairness",
+    "description": "Score outcomes by voluntary, self-reported group. Only aggregates are shown, and groups smaller than five are hidden.",
+    "filterLabel": "Role",
+    "allRoles": "All roles",
+    "responses": "Candidates who answered",
+    "minGroup": "Smallest group shown",
+    "flaggedGroups": "Groups to review",
+    "flaggedTitle": "Possible adverse impact",
+    "flaggedBody": "These groups reach the selected fit level at less than 80% of the rate of the highest group (the four-fifths rule). This is a signal to review, not proof of bias: check the role's requirements and the items involved.",
+    "flaggedItem": "{field}: <group></group> at {ratio}% of the highest rate",
+    "emptyTitle": "No answers yet",
+    "emptyBody": "Candidates can answer optional equal-opportunity questions after they finish. Results appear here once there are enough to show safely.",
+    "fields": {
+      "gender": "Gender",
+      "ageBand": "Age",
+      "disability": "Disability",
+      "firstLanguage": "First language"
+    },
+    "values": {
+      "gender": {
+        "woman": "Woman",
+        "man": "Man",
+        "another": "Another identity"
+      },
+      "ageBand": {
+        "under25": "Under 25",
+        "25_34": "25–34",
+        "35_44": "35–44",
+        "45_54": "45–54",
+        "55plus": "55 and over"
+      },
+      "disability": {
+        "yes": "Disabled",
+        "no": "Not disabled"
+      },
+      "firstLanguage": {
+        "arabic": "Arabic",
+        "english": "English",
+        "other": "Another language"
+      }
+    },
+    "allSuppressed": "Every group has fewer than {n} people, so nothing is shown yet.",
+    "group": "Group",
+    "n": "People",
+    "selectionRate": {
+      "GOOD": "Good or better",
+      "PARTIAL": "Partial or better"
+    },
+    "impactRatio": "Ratio to highest",
+    "suppressed": "{n, plural, one {# person} other {# people}} in groups smaller than {min} not shown.",
+    "validityTitle": "Does the assessment predict performance?",
+    "earlyVersion": "Early version",
+    "validityBody": "Compares role-fit scores with the 6- and 12-month performance ratings managers record on reports.",
+    "validityTooFew": "{n, plural, =0 {No ratings recorded yet.} one {# rating recorded.} other {# ratings recorded.}} We show a correlation from 20 ratings, so that it means something.",
+    "validityResult": "Correlation between role fit and later performance: r = {r} (from {n} ratings).",
+    "method": "Method: answers are voluntary and stored apart from assessments. Selection rate is the share of a group at or above the chosen fit level; impact ratio divides it by the highest group's rate. Ratios below 80% are flagged. Choose the level that matches how your team actually uses results.",
+    "cutoffLabel": "Counts as selected",
+    "cutoff": {
+      "GOOD": "Good fit or better",
+      "PARTIAL": "Partial fit or better"
+    },
+    "distribution": "Role fit"
+  },
+  "audit": {
+    "title": "Audit log",
+    "description": "Who did what in your organisation: report views, shares, exports, invitations, settings and data deletion.",
+    "filterLabel": "Show",
+    "categories": {
+      "all": "All activity",
+      "assessments": "Assessments and candidates",
+      "reports": "Reports",
+      "people": "People and settings",
+      "privacy": "Privacy and retention",
+      "integrations": "Integrations",
+      "framework": "Competency library",
+      "teams": "Teams",
+      "outcomes": "Outcomes"
+    },
+    "emptyTitle": "Nothing recorded",
+    "emptyBody": "Activity appears here as your team works.",
+    "when": "When",
+    "who": "Who",
+    "what": "What",
+    "target": "About",
+    "deletedUser": "Deleted account",
+    "system": "Aalim (automatic)",
+    "openReport": "Open report",
+    "targets": {
+      "session": "Assessment session",
+      "template": "Assessment",
+      "webhook": "Webhook",
+      "competency": "Library skill",
+      "user": "Person",
+      "organization": "Organisation",
+      "team": "Team",
+      "bank_item": "Bank item",
+      "invitation": "Invitation",
+      "membership": "Membership"
+    },
+    "newest": "Newest",
+    "older": "Older",
+    "retentionNote": "Audit records are kept for as long as the organisation exists. Deleting a candidate removes their data, but the fact that it was deleted stays here.",
+    "actions": {
+      "assessment_created": "Created an assessment",
+      "assessment_published": "Published an assessment",
+      "assessment_archived": "Archived an assessment",
+      "assessment_started": "Candidate started",
+      "assessment_completed": "Candidate finished",
+      "assessment_feedback": "Candidate left feedback",
+      "candidates_invited": "Invited candidates",
+      "candidates_exported_csv": "Exported candidates (CSV)",
+      "invitation_revoked": "Revoked an invitation",
+      "invitation_renewed": "Renewed an invitation link",
+      "report_viewed": "Viewed a report",
+      "report_shared": "Shared a report",
+      "report_share_viewed": "Shared report opened",
+      "report_share_revoked": "Revoked a share link",
+      "report_exported_pdf": "Exported a report (PDF)",
+      "organization_created": "Created the organisation",
+      "organization_settings_changed": "Changed organisation settings",
+      "membership_added": "Added a member",
+      "membership_removed": "Removed a member",
+      "membership_roles_changed": "Changed a member's roles",
+      "privacy_session_deleted": "Deleted a candidate's data",
+      "privacy_subject_deleted": "A person deleted their account",
+      "privacy_data_exported": "A person exported their data",
+      "retention_deleted_sessions": "Retention: deleted old assessments",
+      "retention_run_manually": "Ran the retention sweep",
+      "webhook_created": "Added a webhook",
+      "webhook_deleted": "Deleted a webhook",
+      "webhook_enabled": "Resumed a webhook",
+      "webhook_disabled": "Paused a webhook",
+      "library_created": "Added a library skill",
+      "library_updated": "Edited a library skill",
+      "library_retired": "Retired a library skill",
+      "library_restored": "Restored a library skill",
+      "team_created": "Created a team",
+      "team_members_invited": "Invited team members",
+      "team_member_viewed": "Viewed a member's profile",
+      "team_track_assigned": "Assigned a development track",
+      "grow_profile_shared": "Shared a development profile",
+      "outcome_recorded": "Recorded a performance outcome"
+    }
+  },
+  "library": {
+    "title": "Competency library",
+    "description": "Add the skills your organisation cares about beyond the built-in framework, with your own behavioural anchors.",
+    "explainer": "Library skills sit inside a framework domain and can be added to any assessment in its setup. Claude writes scenarios for them and scores against your anchors. The curated offline bank only covers the built-in framework, so library skills need AI generation turned on to be measured.",
+    "invalid": "Fill in the name, description and all five anchors in English.",
+    "saved": "Library saved",
+    "editTitle": "Edit skill",
+    "newTitle": "New skill",
+    "formHint": "Anchors describe what someone does at each level, in observable terms. Editing a skill creates a new version; existing reports keep the version they used.",
+    "domain": "Domain",
+    "languageLabel": "Language",
+    "arabicHint": "Optional. Anything left empty falls back to English.",
+    "name": "Name",
+    "skillDescription": "What it means",
+    "anchors": "Behavioural anchors",
+    "anchorPlaceholder": {
+      "1": "What does someone at this level actually do or miss?",
+      "2": "Gets the basics right with support…",
+      "3": "Does it reliably on their own…",
+      "4": "Handles hard cases and helps others…",
+      "5": "Sets the standard; anticipates…"
+    },
+    "cancel": "Cancel",
+    "save": "Save skill",
+    "add": "Add a skill",
+    "emptyTitle": "Your library is empty",
+    "emptyBody": "Start with one skill that's specific to how your organisation works.",
+    "retired": "Retired",
+    "version": "Version {v}",
+    "edit": "Edit",
+    "retire": "Retire",
+    "restore": "Restore",
+    "showAnchors": "Show anchors"
+  },
+  "itemReview": {
+    "title": "Item bank review",
+    "description": "How each curated item performs in live use. Flags appear once an item has been answered {n} times.",
+    "filterLabel": "Show",
+    "showAll": "All items",
+    "showFlagged": "Flagged",
+    "showRetired": "Retired",
+    "curated": "Curated items",
+    "flagged": "Flagged",
+    "generated30": "Generated (30 days)",
+    "guessable30": "Rejected as guessable (30 days)",
+    "item": "Item",
+    "measures": "Measures",
+    "uses": "Uses",
+    "mean": "Mean",
+    "spread": "Spread",
+    "tieBreaks": "Third passes",
+    "flags": "Flags",
+    "actions": "Actions",
+    "types": {
+      "TRADE_OFF_DILEMMA": "Dilemma",
+      "RANKING_ALLOCATION": "Ranking",
+      "INBOX": "Inbox",
+      "ROLE_PLAY": "Role-play",
+      "CASE_ANALYSIS": "Case",
+      "DESIGN_CHALLENGE": "Design",
+      "WRITTEN_WORK_SAMPLE": "Written",
+      "TECHNICAL_TASK": "Technical",
+      "CONSEQUENCE_CHAIN": "Consequence chain",
+      "REFLECTION": "Reflection",
+      "FORCED_CHOICE_WORK_STYLE": "Work style"
+    },
+    "difficulty": "Difficulty {d}",
+    "retired": "Retired",
+    "flag": {
+      "notDiscriminating": "Everyone scores alike",
+      "tooEasy": "Too easy",
+      "tooHard": "Too hard",
+      "scorersDisagree": "Scorers disagree"
+    },
+    "restore": "Restore",
+    "restored": "Item restored",
+    "retire": "Retire",
+    "retireTitle": "Retire {id}?",
+    "retireBody": "Retired items are never selected again. Sessions that already used it keep their scores.",
+    "note": "Reason",
+    "notePlaceholder": "What's wrong with it, for the next reviewer",
+    "retiredToast": "Item retired"
+  },
+  "dataRights": {
+    "title": "Your data",
+    "description": "Take a copy of everything Aalim holds about you, or delete it.",
+    "exportTitle": "Download your data",
+    "exportBody": "Your profile, assessments, answers, reports, practice and coach conversations, as a JSON file.",
+    "exportAction": "Download",
+    "deleteTitle": "Delete your account",
+    "deleteBody": "Removes your account and every assessment, answer, report and development record. This can't be undone.",
+    "deleteAction": "Delete account",
+    "confirmTitle": "Delete your account and all your data?",
+    "confirmBody": "Organisations you were assessed by will see that a deletion happened, but not what was deleted. You'll be signed out.",
+    "confirmLabel": "Type {email} to confirm",
+    "confirmAction": "Delete everything",
+    "errors": {
+      "confirmMismatch": "That doesn't match your email address.",
+      "lastAdmin": "You're the only admin of an organisation with other members. Make someone else an admin first."
+    }
+  },
+  "outcomes": {
+    "title": "After the hire",
+    "description": "If you hired this person, rate their performance later. Aalim compares these ratings with assessment results to check it predicts what matters.",
+    "period": "{months} months in",
+    "saved": "Rating saved",
+    "scale": {
+      "1": "Well below",
+      "2": "Below",
+      "3": "Meets expectations",
+      "4": "Above",
+      "5": "Well above"
+    },
+    "privacy": "Ratings are used only in aggregate, to validate the assessment. They never change the report.",
+    "deleteTitle": "Delete this candidate's data",
+    "deleteBody": "Permanently removes the assessment, answers, scores and report.",
+    "deleteAction": "Delete data",
+    "confirmTitle": "Delete everything about {name}?",
+    "confirmBody": "The assessment, every answer, score and report will be removed. The audit log keeps a record that it was deleted. This can't be undone.",
+    "confirmLabel": "Type the candidate's name to confirm",
+    "confirmAction": "Delete permanently"
   }
 }

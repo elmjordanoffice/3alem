@@ -29,6 +29,7 @@ if (process.env.NODE_ENV !== "production") globalForDb.aalimDb = clients;
 export const systemDb: Db = clients.system;
 export const withTenant = clients.withTenant;
 export type { Db, TenantContext };
+export type { TenantTx as Tx } from "./db-core";
 
 function requireEnv(name: string): string {
   const value = process.env[name];
