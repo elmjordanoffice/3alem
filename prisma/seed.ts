@@ -19,6 +19,7 @@ import { hashPassword } from "better-auth/crypto";
 import { PrismaClient } from "../src/generated/prisma/client";
 import type { OrgRole } from "../src/generated/prisma/enums";
 import { DOMAINS } from "../src/lib/framework/data";
+import { TRACKS } from "../src/lib/grow/tracks";
 import { offlineAnalysis } from "../src/lib/hire/jd";
 import { initialSkillWeights } from "../src/lib/hire/templates";
 import { hashToken } from "../src/lib/hire/tokens";
@@ -64,6 +65,12 @@ async function seedFramework() {
       if (found) await db.competency.update({ where: { id: found.id }, data: cdata });
       else await db.competency.create({ data: { ...cdata, key: s.key } });
     }
+  }
+  for (const t of TRACKS) {
+    const found = await db.track.findFirst({ where: { organizationId: null, key: t.key } });
+    const data = { name: t.name, description: t.description, sessions: t.sessions as unknown as object };
+    if (found) await db.track.update({ where: { id: found.id }, data });
+    else await db.track.create({ data: { ...data, key: t.key } });
   }
   const count = await db.competency.count({ where: { organizationId: null } });
   console.info(`framework: ${DOMAINS.length} domains, ${count} sub-skills`);

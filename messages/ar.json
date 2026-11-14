@@ -168,7 +168,8 @@
     "sections": {
       "workspace": "مساحة العمل",
       "organization": "المؤسسة",
-      "account": "الحساب"
+      "account": "الحساب",
+      "grow": "Grow"
     },
     "nav": {
       "home": "الرئيسية",
@@ -177,7 +178,12 @@
       "orgSettings": "إعدادات المؤسسة",
       "settings": "الإعدادات",
       "admin": "إدارة المنصة",
-      "assessments": "Assessments"
+      "assessments": "التقييمات",
+      "grow": "My development",
+      "practice": "Practice",
+      "tracks": "Tracks",
+      "progress": "Progress",
+      "coach": "Coach"
     }
   },
   "home": {
@@ -193,15 +199,15 @@
       "emptyTitle": "لا توجد تقييمات بعد",
       "emptyBody": "تُبنى التقييمات من الوصف الوظيفي وإطار الكفاءات. ابدأ بمراجعة الإطار الذي ستعتمد عليه تقييماتك.",
       "emptyAction": "راجع الإطار",
-      "reviewTitle": "{count, plural, one {# report is} other {# reports are}} ready to review",
-      "reviewBody": "Open a role to see its candidates.",
-      "completedOf": "completed",
-      "all": "All assessments",
-      "create": "Create an assessment",
+      "reviewTitle": "{count, plural, zero {لا توجد تقارير بانتظار المراجعة} one {تقرير واحد بانتظار المراجعة} two {تقريران بانتظار المراجعة} few {# تقارير بانتظار المراجعة} many {# تقريرًا بانتظار المراجعة} other {# تقرير بانتظار المراجعة}}",
+      "reviewBody": "افتح أحد الأدوار للاطّلاع على مرشحيه.",
+      "completedOf": "أكملوا",
+      "all": "جميع التقييمات",
+      "create": "أنشئ تقييمًا",
       "status": {
-        "DRAFT": "Draft",
-        "PUBLISHED": "Open",
-        "ARCHIVED": "Archived"
+        "DRAFT": "مسودة",
+        "PUBLISHED": "مفتوح",
+        "ARCHIVED": "مؤرشف"
       }
     },
     "growTitle": "تطوّرك",
@@ -600,538 +606,685 @@
     }
   },
   "candidate": {
-    "preparing": "Preparing your first scene…",
+    "preparing": "جارٍ تجهيز الموقف الأول…",
     "invalid": {
-      "title": "This link doesn't work",
-      "body": "Check that you copied the whole link from your invitation email. If it still doesn't work, reply to the email you received."
+      "title": "هذا الرابط لا يعمل",
+      "body": "تأكّد من أنك نسخت الرابط كاملًا من رسالة الدعوة. وإن ظل لا يعمل، فردّ على الرسالة التي وصلتك."
     },
     "expired": {
-      "title": "This invitation has expired",
-      "body": "Contact {org} to ask for a new link."
+      "title": "انتهت صلاحية هذه الدعوة",
+      "body": "تواصل مع {org} لطلب رابط جديد."
     },
     "revoked": {
-      "title": "This invitation is no longer active",
-      "body": "{org} has withdrawn this invitation. Contact them if you think this is a mistake."
+      "title": "لم تعد هذه الدعوة سارية",
+      "body": "سُحبت هذه الدعوة. وإن كنت تعتقد أن ذلك حدث عن طريق الخطأ، فتواصل مع {org}."
     },
     "landing": {
-      "eyebrow": "Invitation from {org}",
-      "title": "An assessment for the {role} role",
-      "titleNamed": "{name}, you're invited to an assessment for the {role} role",
-      "intro": "You'll spend about {minutes} minutes in realistic work situations at a fictional company: reading messages, making decisions and writing replies. There are no trick questions and no right answers to memorise.",
+      "eyebrow": "دعوة من {org}",
+      "title": "تقييم لوظيفة {role}",
+      "titleNamed": "{name}، هذه دعوتك إلى تقييم لوظيفة {role}",
+      "intro": "ستقضي نحو {minutes} دقيقة في مواقف عمل واقعية داخل شركة خيالية: تقرأ الرسائل، وتتخذ القرارات، وتكتب الردود. لا توجد أسئلة خادعة، ولا إجابات صحيحة عليك حفظها.",
       "expect": {
         "story": {
-          "title": "One continuous story",
-          "body": "A week at a fictional company, in four short chapters. Earlier decisions shape what happens later."
+          "title": "قصة واحدة متصلة",
+          "body": "أسبوع في شركة خيالية، في أربعة فصول قصيرة. وتؤثر قراراتك الأولى فيما يحدث لاحقًا."
         },
         "noTricks": {
-          "title": "Everything you need is provided",
-          "body": "Read the materials carefully. Say what you would actually do and why."
+          "title": "كل ما تحتاج إليه بين يديك",
+          "body": "اقرأ المواد بعناية، واذكر ما ستفعله فعلًا ولماذا."
         },
         "pause": {
-          "title": "Pause between chapters",
-          "body": "Your answers save as you go, even if your connection drops."
+          "title": "يمكنك التوقف بين الفصول",
+          "body": "تُحفظ إجاباتك أولًا بأول، حتى لو انقطع اتصالك."
         },
         "people": {
-          "title": "People decide",
-          "body": "The assessment gives the hiring team evidence. It never rejects anyone automatically."
+          "title": "القرار للبشر",
+          "body": "يقدّم التقييم الأدلة لفريق التوظيف، ولا يرفض أي شخص تلقائيًا أبدًا."
         }
       },
       "data": {
-        "title": "How your data is used",
-        "who": "{org} sees a report of your skills, with quotes from your own answers as evidence.",
-        "how": "Answers are scored against written descriptions of each skill level. Length, grammar and accent are not scored.",
-        "ai": "Some scenarios and scoring use AI. People at {org} review the results and make every decision.",
-        "keep": "Your data is kept for a limited time set by {org} (usually 12 months), then deleted.",
-        "rights": "You can ask {org} for a copy of your data or for it to be deleted."
+        "title": "كيف تُستخدم بياناتك",
+        "who": "يطّلع فريق {org} على تقرير بمهاراتك، مع اقتباسات من إجاباتك أنت دليلًا عليها.",
+        "how": "تُقيَّم الإجابات وفق أوصاف مكتوبة لكل مستوى من مستويات المهارة. ولا يُحتسب طول الإجابة ولا قواعد اللغة ولا اللكنة.",
+        "ai": "يُستعان بالذكاء الاصطناعي في بعض المواقف وفي احتساب الدرجات. ويراجع العاملون في {org} النتائج، وهم من يتخذون كل القرارات.",
+        "keep": "تُحفظ بياناتك مدة محدودة وفق سياسة {org} (عادةً 12 شهرًا)، ثم تُحذف.",
+        "rights": "يحق لك أن تطلب من {org} نسخة من بياناتك أو حذفها."
       },
-      "language": "Assessment language",
-      "accommodations": "Accommodations",
-      "extraTime": "Time",
+      "language": "لغة التقييم",
+      "accommodations": "التسهيلات",
+      "extraTime": "الوقت",
       "extraTimeOption": {
-        "1": "Standard time",
-        "1_25": "25% extra time",
-        "1_5": "50% extra time"
+        "1": "الوقت المعتاد",
+        "1_25": "وقت إضافي بنسبة 25%",
+        "1_5": "وقت إضافي بنسبة 50%"
       },
-      "untimed": "Untimed mode: no countdown on any task",
-      "largerText": "Larger text",
-      "consent": "I have read how my data is used and agree to take this assessment for {org}.",
-      "continue": "Continue",
-      "minutesNote": "About {minutes} minutes. You can pause between chapters.",
-      "startError": "We couldn't start the assessment. Check your connection and try again."
+      "untimed": "وضع دون توقيت: لا عدّ تنازليًا في أي مهمة",
+      "largerText": "نص أكبر",
+      "consent": "قرأت كيف تُستخدم بياناتي، وأوافق على أداء هذا التقييم لصالح {org}.",
+      "continue": "متابعة",
+      "minutesNote": "نحو {minutes} دقيقة. ويمكنك التوقف بين الفصول.",
+      "startError": "تعذّر بدء التقييم. تحقّق من اتصالك وحاول مرة أخرى."
     },
     "briefing": {
-      "beforeTitle": "Before you begin",
+      "beforeTitle": "قبل أن تبدأ",
       "before": {
         "quiet": {
-          "title": "Find a quiet place",
-          "body": "You'll read emails and data and write replies. A laptop works best; a phone works too."
+          "title": "اختر مكانًا هادئًا",
+          "body": "ستقرأ رسائل بريد إلكتروني وبيانات، وتكتب ردودًا. الحاسوب المحمول هو الأنسب، ويصلح الهاتف أيضًا."
         },
         "time": {
-          "title": "About {minutes} minutes",
-          "body": "Only one task, the inbox, has a visible timer. Everywhere else, take the time you need."
+          "title": "نحو {minutes} دقيقة",
+          "body": "مهمة واحدة فقط فيها مؤقّت ظاهر، هي صندوق الوارد. أما بقية المهام فخذ فيها الوقت الذي تحتاج إليه."
         },
         "pause": {
-          "title": "Pause between chapters",
-          "body": "At the end of each chapter you can stop and come back later with the same link."
+          "title": "يمكنك التوقف بين الفصول",
+          "body": "في نهاية كل فصل يمكنك التوقف ثم العودة لاحقًا بالرابط نفسه."
         },
         "offline": {
-          "title": "Nothing gets lost",
-          "body": "Answers save on this device as you type and sync when you're online."
+          "title": "لن يضيع شيء",
+          "body": "تُحفظ إجاباتك على هذا الجهاز أثناء الكتابة، وتُزامَن حين تتصل بالإنترنت."
         }
       },
-      "ready": "I'm ready",
-      "eyebrow": "Your week begins",
-      "title": "A week at {company}",
-      "yourRole": "Your role",
-      "people": "The people you'll work with",
-      "week": "Your week",
-      "howItWorks": "Each scene shows the situation and any materials on one side and your task on the other. After some answers you'll get a short follow-up question, or one detail of the situation will change.",
-      "start": "Start chapter 1"
+      "ready": "لنبدأ",
+      "eyebrow": "يبدأ أسبوعك",
+      "title": "أسبوع في {company}",
+      "yourRole": "دورك",
+      "people": "الأشخاص الذين ستعمل معهم",
+      "week": "أسبوعك",
+      "howItWorks": "يعرض كل موقف تفاصيله وما يتصل به من مواد في جانب، ومهمتك في الجانب الآخر. وبعد بعض الإجابات سيصلك سؤال متابعة قصير، أو يتغيّر أحد تفاصيل الموقف.",
+      "start": "ابدأ الفصل 1"
     },
     "item": {
-      "yourTask": "Your task",
-      "followUp": "Follow-up",
-      "changed": "Something has changed",
-      "materials": "Materials",
-      "you": "You",
-      "continue": "Continue",
-      "submit": "Submit answer",
-      "readyHint": "You can change your answer until you submit it.",
-      "incompleteHint": "Complete your answer to continue.",
-      "submitError": "Your answer is saved on this device but didn't reach us. Try again.",
-      "offline": "You're offline. Your answer is saved on this device and will be sent when you reconnect.",
-      "retry": "Try again",
-      "timeUp": "Time is up for the inbox. Submit what you have; unfinished parts won't count against you.",
-      "showScenario": "Show the scenario again",
-      "hideScenario": "Hide the scenario"
+      "yourTask": "مهمتك",
+      "followUp": "سؤال متابعة",
+      "changed": "طرأ تغيير",
+      "materials": "المواد",
+      "you": "أنت",
+      "continue": "متابعة",
+      "submit": "أرسل الإجابة",
+      "readyHint": "يمكنك تعديل إجابتك إلى أن ترسلها.",
+      "incompleteHint": "أكمل إجابتك للمتابعة.",
+      "submitError": "إجابتك محفوظة على هذا الجهاز لكنها لم تصلنا. حاول مرة أخرى.",
+      "offline": "أنت غير متصل بالإنترنت. إجابتك محفوظة على هذا الجهاز، وستُرسل حين يعود الاتصال.",
+      "retry": "حاول مرة أخرى",
+      "timeUp": "انتهى وقت صندوق الوارد. أرسل ما أنجزته؛ فالأجزاء غير المكتملة لن تُحتسب ضدك.",
+      "showScenario": "اعرض الموقف مرة أخرى",
+      "hideScenario": "أخفِ الموقف"
     },
     "tasks": {
-      "justificationLabel": "Why this option?",
-      "justificationHint": "What would you do first, and what would make you change your mind?",
-      "rankingReasonLabel": "What made the top two the top two?",
-      "rankingReasonHint": "A few sentences are enough.",
-      "allocationReasonLabel": "Why this split?",
-      "allocationReasonHint": "Say what you're giving up.",
+      "justificationLabel": "لماذا هذا الخيار؟",
+      "justificationHint": "ما أول ما ستفعله، وما الذي قد يدفعك إلى تغيير رأيك؟",
+      "rankingReasonLabel": "ما الذي جعل الخيارين الأولين في الصدارة؟",
+      "rankingReasonHint": "تكفي بضع جمل.",
+      "allocationReasonLabel": "لماذا هذا التوزيع؟",
+      "allocationReasonHint": "اذكر ما تتنازل عنه.",
       "writtenLabel": {
-        "email": "Write your email",
-        "memo": "Write your memo",
-        "message": "Write your message",
-        "plan": "Write your plan",
-        "free": "Your answer"
+        "email": "اكتب رسالة البريد الإلكتروني",
+        "memo": "اكتب المذكرة",
+        "message": "اكتب رسالتك",
+        "plan": "اكتب خطتك",
+        "free": "إجابتك"
       },
-      "writtenHint": "Write it as you would at work. Length doesn't earn points; clear thinking does.",
-      "followUpHint": "A few sentences are enough.",
+      "writtenHint": "اكتب كما تكتب في العمل. لا نقاط على الطول، بل على وضوح التفكير.",
+      "followUpHint": "تكفي بضع جمل.",
       "inbox": {
-        "progress": "{triaged} of {total} messages triaged · {replies} marked to reply (reply to at least {needed})",
-        "listLabel": "Inbox, in your order of priority",
-        "moveUp": "Move \"{subject}\" up",
-        "moveDown": "Move \"{subject}\" down",
-        "decide": "What will you do with this message?",
+        "progress": "الرسائل المفروزة: {triaged} من {total} · المحدّدة للرد: {replies} (ردّ على {needed} منها على الأقل)",
+        "listLabel": "صندوق الوارد، مرتّبًا بحسب أولوياتك",
+        "moveUp": "نقل «{subject}» إلى الأعلى",
+        "moveDown": "نقل «{subject}» إلى الأسفل",
+        "decide": "ماذا ستفعل بهذه الرسالة؟",
         "triage": {
-          "reply": "Reply now",
-          "delegate": "Delegate",
-          "later": "Later",
-          "ignore": "No action"
+          "reply": "الرد الآن",
+          "delegate": "التفويض",
+          "later": "لاحقًا",
+          "ignore": "دون إجراء"
         },
-        "replyLabel": "Your reply to {name}",
-        "pick": "Choose a message to read it."
+        "replyLabel": "ردك على {name}",
+        "pick": "اختر رسالة لقراءتها."
       },
       "roleplay": {
-        "error": "Your message didn't send. Check your connection and send it again.",
-        "hint": "Talk as you would in real life. End the conversation when you're done, then continue."
+        "error": "لم تُرسل رسالتك. تحقّق من اتصالك وأرسلها مرة أخرى.",
+        "hint": "تحدّث كما تتحدث في الواقع. وحين تنتهي، أنهِ المحادثة ثم تابع."
       },
       "chain": {
-        "rounds": "Rounds",
-        "roundOf": "Round {n} of {total}",
-        "whatHappened": "What happened",
-        "reason": "Why? (optional)",
-        "back": "Previous round",
-        "next": "Next round"
+        "rounds": "الجولات",
+        "roundOf": "الجولة {n} من {total}",
+        "whatHappened": "ما حدث",
+        "reason": "لماذا؟ (اختياري)",
+        "back": "الجولة السابقة",
+        "next": "الجولة التالية"
       },
       "forced": {
-        "pair": "Which is more like you? ({n} of {total})"
+        "pair": "أيهما أقرب إليك؟ ({n} من {total})"
       }
     },
     "transition": {
-      "eyebrow": "What happened next",
-      "soFar": "Your decisions so far",
-      "carryForward": "They carry into the next chapter.",
-      "pause": "Pause here",
-      "start": "Start chapter {n}"
+      "eyebrow": "ما حدث بعد ذلك",
+      "soFar": "قراراتك حتى الآن",
+      "carryForward": "وستمتد آثارها إلى الفصل التالي.",
+      "pause": "توقف هنا",
+      "start": "ابدأ الفصل {n}"
     },
     "paused": {
-      "title": "Paused",
-      "body": "Your answers are saved. About {minutes} minutes remain. Use the same link when you're ready.",
-      "resume": "Continue with chapter {n}"
+      "title": "متوقف مؤقتًا",
+      "body": "إجاباتك محفوظة، وبقي نحو {minutes} دقيقة. استخدم الرابط نفسه للعودة متى شئت.",
+      "resume": "تابع الفصل {n}"
     },
     "complete": {
-      "title": "Thank you, you're done",
-      "body": "Your answers have been sent to {org} for the {role} role.",
-      "nextTitle": "What happens next",
-      "next1": "{org}'s hiring team reviews a report of your skills, with your own words as evidence.",
-      "next2": "No decision is made automatically. A person reviews everything.",
-      "next3": "If {org} chooses to share your report with you, you'll receive an email.",
-      "feedbackTitle": "How was this experience?",
-      "feedbackHint": "Optional and anonymous to the hiring team. It helps us improve.",
-      "low": "Not good",
-      "high": "Very good",
-      "comment": "Anything we should change? (optional)",
-      "send": "Send feedback",
-      "thanks": "Thank you for your feedback."
+      "title": "شكرًا لك، لقد انتهيت",
+      "body": "أُرسلت إجاباتك إلى {org} لوظيفة {role}.",
+      "nextTitle": "ماذا بعد؟",
+      "next1": "يراجع فريق التوظيف في {org} تقريرًا بمهاراتك، تستند أدلته إلى كلماتك أنت.",
+      "next2": "لا يُتّخذ أي قرار تلقائيًا، ويراجع أحد أفراد الفريق كل شيء بنفسه.",
+      "next3": "إذا اختار فريق {org} مشاركة تقريرك معك، فستصلك رسالة بالبريد الإلكتروني.",
+      "feedbackTitle": "كيف كانت تجربتك؟",
+      "feedbackHint": "رأيك اختياري، ولن يعرف فريق التوظيف أنه منك. ويساعدنا على تحسين التجربة.",
+      "low": "ليست جيدة",
+      "high": "جيدة جدًا",
+      "comment": "هل هناك ما ينبغي أن نغيّره؟ (اختياري)",
+      "send": "أرسل ملاحظاتك",
+      "thanks": "شكرًا لك على ملاحظاتك."
     }
   },
   "assessments": {
-    "title": "Assessments",
-    "description": "Each assessment is built from a job description. Open one to invite candidates and read their reports.",
-    "new": "New assessment",
-    "minutes": "{n} min",
-    "emptyTitle": "No assessments yet",
-    "emptyBody": "Paste a job description and Aalim drafts the skills to assess. You review everything before candidates see it.",
+    "title": "التقييمات",
+    "description": "يُبنى كل تقييم من وصف وظيفي. افتح أيًّا منها لدعوة المرشحين وقراءة تقاريرهم.",
+    "new": "تقييم جديد",
+    "minutes": "{n} دقيقة",
+    "emptyTitle": "لا توجد تقييمات بعد",
+    "emptyBody": "الصق وصفًا وظيفيًا، وسيُعدّ عالم مسودة بالمهارات التي ينبغي تقييمها. وتراجع أنت كل شيء قبل أن يراه المرشحون.",
     "stats": {
-      "open": "Open roles",
-      "invited": "Invited",
-      "inProgress": "In progress",
-      "completed": "Completed",
-      "review": "Ready to review"
+      "open": "الأدوار المفتوحة",
+      "invited": "المدعوون",
+      "inProgress": "قيد التنفيذ",
+      "completed": "أكملوا",
+      "review": "بانتظار المراجعة"
     },
     "col": {
-      "role": "Role",
-      "status": "Status"
+      "role": "الدور",
+      "status": "الحالة"
     },
     "status": {
-      "DRAFT": "Draft",
-      "PUBLISHED": "Open",
-      "ARCHIVED": "Archived"
+      "DRAFT": "مسودة",
+      "PUBLISHED": "مفتوح",
+      "ARCHIVED": "مؤرشف"
     },
     "domain": {
-      "technical": "Technical expertise",
-      "critical-thinking": "Critical thinking",
-      "judgment": "Decision-making",
-      "leadership": "Leadership",
-      "management": "Management",
-      "communication": "Communication",
-      "product-thinking": "Product thinking",
-      "collaboration": "Collaboration",
-      "adaptability": "Adaptability"
+      "technical": "الخبرة الفنية",
+      "critical-thinking": "التفكير النقدي",
+      "judgment": "اتخاذ القرار",
+      "leadership": "القيادة",
+      "management": "الإدارة",
+      "communication": "التواصل",
+      "product-thinking": "التفكير في المنتج",
+      "collaboration": "التعاون",
+      "adaptability": "التكيّف"
     },
     "newPage": {
-      "title": "New assessment",
-      "description": "Paste the job description. Aalim drafts the role summary, the technical skills and how much each area matters. You review and edit it all before publishing.",
-      "jdLabel": "Job description",
-      "jdHint": "Include responsibilities and requirements. Aalim also flags requirements that may be discriminatory or irrelevant.",
-      "jdPlaceholder": "Senior Data Analyst\n\nWe're looking for…",
-      "chars": "{n} characters",
-      "modeAi": "Analysed with Claude",
-      "modeOffline": "Analysed with Aalim's built-in role templates",
-      "analysingTitle": "Reading the job description…",
-      "analysingBody": "This usually takes a few seconds.",
-      "submit": "Analyse job description",
+      "title": "تقييم جديد",
+      "description": "الصق الوصف الوظيفي، وسيُعدّ عالم مسودة بملخص الدور والمهارات الفنية ومدى أهمية كل مجال. وتراجع أنت ذلك كله وتعدّله قبل النشر.",
+      "jdLabel": "الوصف الوظيفي",
+      "jdHint": "اذكر المسؤوليات والمتطلبات. وينبّهك عالم أيضًا إلى المتطلبات التي قد تكون تمييزية أو لا صلة لها بالوظيفة.",
+      "jdPlaceholder": "محلل بيانات أول\n\nنبحث عن…",
+      "chars": "عدد الأحرف: {n}",
+      "modeAi": "حُلّل باستخدام Claude",
+      "modeOffline": "حُلّل باستخدام قوالب الأدوار المدمجة في عالم",
+      "analysingTitle": "جارٍ قراءة الوصف الوظيفي…",
+      "analysingBody": "يستغرق ذلك عادةً بضع ثوانٍ.",
+      "submit": "حلّل الوصف الوظيفي",
       "errors": {
-        "jdLength": "Paste the full job description (at least 80 characters).",
-        "generic": "That didn't work. Try again."
+        "jdLength": "الصق الوصف الوظيفي كاملًا (80 حرفًا على الأقل).",
+        "generic": "لم ينجح ذلك. حاول مرة أخرى."
       }
     }
   },
   "setup": {
-    "title": "Review the assessment",
-    "description": "Check what Aalim drafted. Candidates see none of this; it decides what the assessment measures.",
-    "locked": "Candidates have already started. You can rename the role and change accommodations, but not what is measured, so reports stay comparable.",
-    "role": "Role",
-    "roleHint": "The fictional company in the candidate's story is set in a matching industry.",
+    "title": "راجع التقييم",
+    "description": "تحقّق مما أعدّه عالم. لا يرى المرشحون شيئًا من هذا، لكنه يحدّد ما يقيسه التقييم.",
+    "locked": "بدأ بعض المرشحين التقييم بالفعل. يمكنك تغيير اسم الدور والتسهيلات، لكن لا يمكنك تغيير ما يُقاس، كي تبقى التقارير قابلة للمقارنة.",
+    "role": "الدور",
+    "roleHint": "تعمل الشركة الخيالية في قصة المرشح في قطاع يناسب هذا الدور.",
     "drafted": {
-      "ai": "Drafted with Claude",
-      "offline": "Drafted from a role template"
+      "ai": "أُعدّت المسودة باستخدام Claude",
+      "offline": "أُعدّت المسودة من قالب دور"
     },
-    "roleTitle": "Role title",
-    "seniority": "Seniority",
+    "roleTitle": "المسمّى الوظيفي",
+    "seniority": "المستوى الوظيفي",
     "seniorityLevel": {
-      "entry": "Entry level",
-      "mid": "Mid level",
-      "senior": "Senior",
-      "lead": "Lead / manager",
-      "executive": "Executive"
+      "entry": "مبتدئ",
+      "mid": "متوسط الخبرة",
+      "senior": "أقدم",
+      "lead": "قائد فريق / مدير",
+      "executive": "تنفيذي"
     },
-    "storySetIn": "Story set in: {industry}",
-    "flagsTitle": "{n, plural, one {# requirement to review} other {# requirements to review}}",
-    "flagsHint": "These requirements may be discriminatory or not job-relevant. Remove or reword them in your job advert. The assessment never measures them.",
-    "suggestion": "Instead:",
-    "acknowledge": "I've reviewed these and will update the job advert where needed.",
-    "technical": "Technical skills for this role",
-    "technicalHint": "Role-specific sub-skills, each with five level descriptions. Edit names, descriptions and levels, or add your own.",
-    "skillName": "Skill name",
-    "skillDescription": "What it is",
-    "importanceOf": "Importance of {name}",
-    "editAnchors": "Edit the level descriptions for {name}",
-    "remove": "Remove {name}",
-    "newSkill": "New skill",
-    "addSkill": "Add a skill",
+    "storySetIn": "قطاع القصة: {industry}",
+    "flagsTitle": "{n, plural, zero {لا توجد متطلبات للمراجعة} one {متطلب واحد للمراجعة} two {متطلبان للمراجعة} few {# متطلبات للمراجعة} many {# متطلبًا للمراجعة} other {# متطلب للمراجعة}}",
+    "flagsHint": "قد تكون هذه المتطلبات تمييزية أو لا صلة لها بالوظيفة. احذفها من إعلان الوظيفة أو أعد صياغتها. ولا يقيسها التقييم أبدًا.",
+    "suggestion": "البديل:",
+    "acknowledge": "راجعت هذه المتطلبات، وسأحدّث إعلان الوظيفة عند الحاجة.",
+    "technical": "المهارات الفنية لهذا الدور",
+    "technicalHint": "مهارات فرعية خاصة بالدور، لكل منها أوصاف لخمسة مستويات. عدّل الأسماء والأوصاف والمستويات، أو أضف مهارات من عندك.",
+    "skillName": "اسم المهارة",
+    "skillDescription": "تعريف المهارة",
+    "importanceOf": "أهمية {name}",
+    "editAnchors": "تعديل أوصاف مستويات {name}",
+    "remove": "إزالة {name}",
+    "newSkill": "مهارة جديدة",
+    "addSkill": "أضف مهارة",
     "anchorTemplate": {
-      "1": "Does not yet apply this skill to the task.",
-      "2": "Applies it partly, with gaps or errors.",
-      "3": "Applies it correctly to a standard case.",
-      "4": "Applies it well to a new or messy case and explains why.",
-      "5": "Applies it expertly, anticipates problems others would miss."
+      "1": "لا يطبّق هذه المهارة في المهمة بعد.",
+      "2": "يطبّقها جزئيًا، مع ثغرات أو أخطاء.",
+      "3": "يطبّقها تطبيقًا صحيحًا في حالة معتادة.",
+      "4": "يطبّقها جيدًا في حالة جديدة أو ملتبسة، ويوضّح السبب.",
+      "5": "يطبّقها ببراعة، ويتوقّع مشكلات قد تفوت غيره."
     },
-    "domains": "How much each area matters",
-    "domainsHint": "Must-haves get more questions and count double in role fit. Every area still gets a baseline.",
-    "tooManyMustHaves": "With more than five must-haves, a 50-minute assessment can't measure each one well. Consider making some nice-to-have.",
+    "domains": "مدى أهمية كل مجال",
+    "domainsHint": "تحظى المجالات الأساسية بأسئلة أكثر، ويُحتسب وزنها مضاعفًا في الملاءمة للدور. ومع ذلك يخضع كل مجال لتقييم مرجعي.",
+    "tooManyMustHaves": "مع أكثر من خمسة مجالات أساسية، لا يستطيع تقييم مدته 50 دقيقة أن يقيس كلًّا منها جيدًا. فكّر في جعل بعضها مرغوبًا.",
     "importance": {
-      "MUST_HAVE": "Must-have",
-      "NICE_TO_HAVE": "Nice-to-have",
-      "BASELINE": "Baseline"
+      "MUST_HAVE": "أساسية",
+      "NICE_TO_HAVE": "مرغوبة",
+      "BASELINE": "تقييم مرجعي"
     },
-    "settings": "Settings",
-    "duration": "Length",
-    "minutes": "{n} minutes",
-    "durationHint": "Between 25 and 90 minutes. The assessment never runs over; with less time, confidence is lower.",
-    "language": "Language",
-    "accommodations": "Accommodations candidates can choose",
+    "settings": "الإعدادات",
+    "duration": "المدة",
+    "minutes": "{n} دقيقة",
+    "durationHint": "بين 25 و90 دقيقة. لا يتجاوز التقييم مدته أبدًا، وكلما قصرت المدة انخفضت درجة الثقة.",
+    "language": "اللغة",
+    "accommodations": "التسهيلات المتاحة للمرشحين",
     "acc": {
-      "extraTimeAllowed": "Extra time (25% or 50%)",
-      "untimedAllowed": "Untimed mode",
-      "largerTextAllowed": "Larger text"
+      "extraTimeAllowed": "وقت إضافي (25% أو 50%)",
+      "untimedAllowed": "وضع دون توقيت",
+      "largerTextAllowed": "نص أكبر"
     },
-    "preview": "Preview as candidate",
-    "save": "Save",
-    "saved": "Saved.",
-    "publish": "Publish",
-    "published": "Published. You can now invite candidates.",
-    "toCandidates": "Go to candidates",
+    "preview": "معاينة كما يراها المرشح",
+    "save": "حفظ",
+    "saved": "حُفظت التغييرات.",
+    "publish": "نشر",
+    "published": "نُشر التقييم. يمكنك الآن دعوة المرشحين.",
+    "toCandidates": "انتقل إلى المرشحين",
     "errors": {
-      "save": "Couldn't save. Check the fields and try again.",
-      "publish": "Couldn't publish. Try again.",
-      "flags": "Review the flagged requirements first."
+      "save": "تعذّر الحفظ. تحقّق من الحقول وحاول مرة أخرى.",
+      "publish": "تعذّر النشر. حاول مرة أخرى.",
+      "flags": "راجع المتطلبات المُشار إليها أولًا."
     }
   },
   "role": {
-    "description": "{minutes}-minute adaptive assessment.",
-    "setup": "Setup",
-    "mustHaves": "Must-haves:",
-    "candidates": "Candidates",
-    "emptyTitle": "No candidates yet",
-    "emptyBody": "Invite candidates by email, CSV or a link. You'll see their progress here.",
-    "emptyBodyDraft": "Publish the assessment to invite candidates.",
-    "filter": "Filter candidates",
+    "description": "تقييم تكيّفي مدته {minutes} دقيقة.",
+    "setup": "الإعداد",
+    "mustHaves": "المجالات الأساسية:",
+    "candidates": "المرشحون",
+    "emptyTitle": "لا يوجد مرشحون بعد",
+    "emptyBody": "ادعُ المرشحين عبر البريد الإلكتروني أو ملف CSV أو رابط، وستتابع تقدّمهم هنا.",
+    "emptyBodyDraft": "انشر التقييم لتتمكّن من دعوة المرشحين.",
+    "filter": "تصفية المرشحين",
     "filters": {
-      "all": "All ({n})",
-      "ready": "Ready to review ({n})",
-      "active": "Not finished"
+      "all": "الكل ({n})",
+      "ready": "بانتظار المراجعة ({n})",
+      "active": "لم يكتمل بعد"
     },
     "sort": {
-      "fit": "Sort by role fit",
-      "recent": "Sort by most recent",
-      "name": "Sort by name"
+      "fit": "الترتيب بحسب الملاءمة للدور",
+      "recent": "الترتيب بحسب الأحدث",
+      "name": "الترتيب بحسب الاسم"
     },
-    "compare": "Compare {n}",
-    "compareHint": "Select 2–4 to compare",
-    "select": "Select",
-    "selectFor": "Select {name} to compare",
+    "compare": "قارن ({n})",
+    "compareHint": "اختر من 2 إلى 4 للمقارنة",
+    "select": "تحديد",
+    "selectFor": "تحديد {name} للمقارنة",
     "col": {
-      "candidate": "Candidate",
-      "status": "Status",
-      "fit": "Role fit",
-      "strengths": "Top strengths",
-      "context": "Context"
+      "candidate": "المرشح",
+      "status": "الحالة",
+      "fit": "الملاءمة للدور",
+      "strengths": "أبرز نقاط القوة",
+      "context": "السياق"
     },
     "status": {
-      "invited": "Invited",
-      "opened": "Opened",
-      "in_progress": "In progress",
-      "paused": "Paused",
-      "completed": "Scoring",
-      "report_ready": "Report ready",
-      "expired": "Link expired",
-      "revoked": "Revoked"
+      "invited": "أُرسلت الدعوة",
+      "opened": "فُتحت الدعوة",
+      "in_progress": "قيد التنفيذ",
+      "paused": "متوقف مؤقتًا",
+      "completed": "جارٍ احتساب الدرجات",
+      "report_ready": "التقرير جاهز",
+      "expired": "انتهت صلاحية الرابط",
+      "revoked": "أُلغيت الدعوة"
     },
     "fit": {
-      "STRONG": "Strong",
-      "GOOD": "Good",
-      "PARTIAL": "Partial",
-      "WEAK": "Weak"
+      "STRONG": "قوية",
+      "GOOD": "جيدة",
+      "PARTIAL": "جزئية",
+      "WEAK": "ضعيفة"
     },
     "confidence": {
-      "high": "High confidence",
-      "moderate": "Moderate confidence",
-      "low": "Low confidence"
+      "high": "درجة ثقة مرتفعة",
+      "moderate": "درجة ثقة متوسطة",
+      "low": "درجة ثقة منخفضة"
     },
-    "minutes": "{n} min",
-    "integrityTip": "{n, plural, one {# integrity note} other {# integrity notes}}: context only, never a verdict",
-    "actions": "Actions",
-    "actionsFor": "Actions for {name}",
-    "viewReport": "View report",
-    "copyNewLink": "Copy a new link",
-    "linkCopied": "New link copied. The old link no longer works.",
-    "resend": "Resend invitation",
-    "resent": "Invitation sent again.",
-    "revoke": "Revoke invitation",
-    "revoked": "Invitation revoked.",
-    "decisionNote": "Reports inform your decision. Aalim never rejects anyone automatically."
+    "minutes": "{n} دقيقة",
+    "integrityTip": "{n, plural, zero {لا توجد ملاحظات حول النزاهة} one {ملاحظة واحدة حول النزاهة} two {ملاحظتان حول النزاهة} few {# ملاحظات حول النزاهة} many {# ملاحظة حول النزاهة} other {# ملاحظة حول النزاهة}}: للاطّلاع على السياق فقط، وليست حكمًا أبدًا",
+    "actions": "الإجراءات",
+    "actionsFor": "إجراءات {name}",
+    "viewReport": "اعرض التقرير",
+    "copyNewLink": "انسخ رابطًا جديدًا",
+    "linkCopied": "نُسخ الرابط الجديد، ولم يعد الرابط القديم يعمل.",
+    "resend": "أعد إرسال الدعوة",
+    "resent": "أُرسلت الدعوة مرة أخرى.",
+    "revoke": "ألغِ الدعوة",
+    "revoked": "أُلغيت الدعوة.",
+    "decisionNote": "تساعدك التقارير على اتخاذ قرارك، ولا يرفض عالم أي شخص تلقائيًا أبدًا."
   },
   "invite": {
-    "button": "Invite candidates",
-    "title": "Invite candidates",
-    "description": "Each candidate gets a personal link that expires in 14 days.",
+    "button": "ادعُ المرشحين",
+    "title": "دعوة المرشحين",
+    "description": "يحصل كل مرشح على رابط شخصي تنتهي صلاحيته بعد 14 يومًا.",
     "tabs": {
-      "email": "Email",
+      "email": "البريد الإلكتروني",
       "csv": "CSV",
-      "link": "Links only"
+      "link": "روابط فقط"
     },
-    "emailsLabel": "Email addresses",
-    "emailsPlaceholder": "lina@example.com\nName, kofi@example.com",
-    "emailsHint": "One per line. Add a name before the email if you like: Name, email.",
-    "csvHint": "A file with an email column, and optionally a name column.",
-    "csvChoose": "Choose a CSV file",
-    "csvPreview": "Candidates from the file",
-    "linkLabel": "Email addresses (no emails are sent)",
-    "linkHint": "Creates personal links you can share yourself.",
-    "send": "Send invitations",
-    "createLinks": "Create links",
-    "linksReady": "Links created. Each one works for one candidate.",
-    "copyFor": "Copy link for {email}",
-    "sent": "{count, plural, one {# invitation sent} other {# invitations sent}}",
-    "skipped": "{count, plural, one {# person was already invited} other {# people were already invited}}",
+    "emailsLabel": "عناوين البريد الإلكتروني",
+    "emailsPlaceholder": "lina@example.com\nالاسم, kofi@example.com",
+    "emailsHint": "عنوان واحد في كل سطر. ويمكنك إضافة اسم قبل العنوان إن شئت، مع الفصل بينهما بفاصلة لاتينية: الاسم, البريد الإلكتروني.",
+    "csvHint": "ملف يحتوي على عمود للبريد الإلكتروني، وعمود للاسم إن شئت.",
+    "csvChoose": "اختر ملف CSV",
+    "csvPreview": "المرشحون الواردون في الملف",
+    "linkLabel": "عناوين البريد الإلكتروني (لن تُرسل أي رسائل)",
+    "linkHint": "يُنشئ روابط شخصية يمكنك مشاركتها بنفسك.",
+    "send": "أرسل الدعوات",
+    "createLinks": "أنشئ الروابط",
+    "linksReady": "أُنشئت الروابط. ويعمل كل رابط لمرشح واحد فقط.",
+    "copyFor": "نسخ رابط {email}",
+    "sent": "{count, plural, zero {لم تُرسل أي دعوة} one {أُرسلت دعوة واحدة} two {أُرسلت دعوتان} few {أُرسلت # دعوات} many {أُرسلت # دعوة} other {أُرسلت # دعوة}}",
+    "skipped": "{count, plural, zero {لا يوجد من سبقت دعوته} one {شخص واحد سبقت دعوته} two {شخصان سبقت دعوتهما} few {# أشخاص سبقت دعوتهم} many {# شخصًا سبقت دعوتهم} other {# شخص سبقت دعوتهم}}",
     "errors": {
-      "noEmails": "Add at least one valid email address.",
-      "tooMany": "Invite at most 500 people at a time.",
-      "notPublished": "Publish the assessment first.",
-      "notFound": "This assessment no longer exists.",
-      "invalid": "Check the list and try again."
+      "noEmails": "أضف عنوان بريد إلكتروني صالحًا واحدًا على الأقل.",
+      "tooMany": "ادعُ 500 شخص على الأكثر في المرة الواحدة.",
+      "notPublished": "انشر التقييم أولًا.",
+      "notFound": "لم يعد هذا التقييم موجودًا.",
+      "invalid": "تحقّق من القائمة وحاول مرة أخرى."
     }
   },
   "compare": {
-    "title": "Compare candidates",
-    "description": "Side by side on the same assessment. Levels show ranges; small differences inside a range aren't meaningful.",
-    "back": "Back to candidates",
-    "table": "Levels by domain",
-    "domain": "Domain",
-    "emptyTitle": "Choose at least two candidates",
-    "emptyBody": "Select 2–4 candidates with a ready report on the role page.",
-    "note": "Use comparison alongside interviews. People decide."
+    "title": "مقارنة المرشحين",
+    "description": "جنبًا إلى جنب في التقييم نفسه. تظهر المستويات في نطاقات، ولا دلالة للفروق الصغيرة داخل النطاق الواحد.",
+    "back": "العودة إلى المرشحين",
+    "table": "المستويات بحسب المجال",
+    "domain": "المجال",
+    "emptyTitle": "اختر مرشحَين اثنين على الأقل",
+    "emptyBody": "حدّد في صفحة الدور من 2 إلى 4 مرشحين لديهم تقارير جاهزة.",
+    "note": "استخدم المقارنة إلى جانب المقابلات. القرار للبشر."
   },
   "preview": {
-    "banner": "Preview: this is what candidates see first. Nothing is saved."
+    "banner": "معاينة: هذا ما يراه المرشحون أولًا. لا يُحفظ أي شيء."
   },
   "report": {
-    "contents": "Report sections",
-    "yourReport": "Your report",
-    "candidateReport": "Candidate report",
-    "generated": "Generated {date}",
-    "earlyTitle": "Early version: use alongside interviews",
-    "earlyBody": "Aalim's scores are not yet calibrated against on-the-job performance. Treat them as structured evidence for your conversation, not as a verdict.",
+    "contents": "أقسام التقرير",
+    "yourReport": "تقريرك",
+    "candidateReport": "تقرير المرشح",
+    "generated": "أُنشئ في {date}",
+    "earlyTitle": "إصدار مبكر: استخدمه إلى جانب المقابلات",
+    "earlyBody": "لم تُعايَر درجات عالم بعدُ في ضوء الأداء الفعلي في العمل. تعامل معها على أنها أدلة منظّمة تستند إليها في حوارك، لا على أنها حكم نهائي.",
     "toc": {
-      "summary": "Summary",
-      "profile": "Skill profile",
-      "strengths": "Strengths",
-      "potential": "Hidden potential",
-      "development": "Development areas",
-      "style": "Work style",
-      "decisions": "How they decide",
-      "interview": "Interview questions",
-      "integrity": "Confidence and integrity",
-      "method": "How these scores were produced"
+      "summary": "الملخص",
+      "profile": "ملف المهارات",
+      "strengths": "نقاط القوة",
+      "potential": "إمكانات خفية",
+      "development": "مجالات التطوير",
+      "style": "أسلوب العمل",
+      "decisions": "أسلوب اتخاذ القرار",
+      "interview": "أسئلة المقابلة",
+      "integrity": "الثقة والنزاهة",
+      "method": "كيف احتُسبت هذه الدرجات"
     },
-    "roleFit": "Role fit",
+    "roleFit": "الملاءمة للدور",
     "fit": {
-      "STRONG": "Strong fit",
-      "GOOD": "Good fit",
-      "PARTIAL": "Partial fit",
-      "WEAK": "Weak fit"
+      "STRONG": "ملاءمة قوية",
+      "GOOD": "ملاءمة جيدة",
+      "PARTIAL": "ملاءمة جزئية",
+      "WEAK": "ملاءمة ضعيفة"
     },
     "confidence": {
-      "high": "High confidence",
-      "moderate": "Moderate confidence",
-      "low": "Low confidence"
+      "high": "درجة ثقة مرتفعة",
+      "moderate": "درجة ثقة متوسطة",
+      "low": "درجة ثقة منخفضة"
     },
-    "gaps": "Below the expected level on:",
-    "fitNote": "A consideration for your decision, never a decision.",
-    "profileNote": "Levels with ranges. Wider ranges mean less evidence. Open a domain to see sub-skills and the quotes behind each score.",
-    "chartView": "Chart view",
-    "bars": "Bars",
-    "radar": "Radar",
-    "mustHave": "Must-have",
-    "evidenceCount": "{count, plural, one {{n} quote} other {{n} quotes}}",
-    "inferred": "Inferred",
-    "noEvidence": "No direct evidence; inferred from related answers.",
-    "domainBaselineOnly": "Baseline only.",
-    "evidenceContext": "Chapter {chapter} · {title} · {stage}",
+    "gaps": "دون المستوى المتوقع في:",
+    "fitNote": "عامل تأخذه في الحسبان عند اتخاذ قرارك، ولا يحلّ محلّه أبدًا.",
+    "profileNote": "مستويات بنطاقات، وكلما اتسع النطاق قلّت الأدلة. افتح أي مجال لترى مهاراته الفرعية والاقتباسات التي تستند إليها كل درجة.",
+    "chartView": "طريقة عرض المخطط",
+    "bars": "أعمدة",
+    "radar": "رادار",
+    "mustHave": "أساسية",
+    "evidenceCount": "{count, plural, zero {{n} اقتباس} one {{n} اقتباس} two {{n} اقتباسان} few {{n} اقتباسات} many {{n} اقتباسًا} other {{n} اقتباس}}",
+    "inferred": "مستنتَج",
+    "noEvidence": "لا توجد أدلة مباشرة؛ استُنتج من إجابات ذات صلة.",
+    "domainBaselineOnly": "تقييم مرجعي فقط.",
+    "evidenceContext": "الفصل {chapter} · {title} · {stage}",
     "stage": {
-      "MAIN": "answer",
-      "PROBE": "follow-up",
-      "TWIST": "after a change",
-      "ROLE_PLAY_TURN": "conversation"
+      "MAIN": "إجابة",
+      "PROBE": "سؤال متابعة",
+      "TWIST": "بعد تغيّر في الموقف",
+      "ROLE_PLAY_TURN": "محادثة"
     },
-    "potentialNote": "Strengths beyond what this role asks for.",
-    "developmentNote": "Phrased as what to build next, each with evidence.",
-    "conditional": "Some patterns appeared only under certain conditions, such as time pressure. They may not show in calmer settings.",
-    "styleNote": "Tendencies, not scores. Neither end is better.",
-    "followUp": "Follow-up:",
-    "interviewNote": "Questions that probe where the assessment is least certain.",
-    "integrityNote": "Context for the reviewer. These never change a score.",
+    "potentialNote": "نقاط قوة تتجاوز ما يتطلبه هذا الدور.",
+    "developmentNote": "مصاغة على هيئة ما ينبغي بناؤه تاليًا، ولكل منها أدلتها.",
+    "conditional": "ظهرت بعض الأنماط في ظروف معيّنة فقط، مثل ضغط الوقت، وقد لا تظهر في ظروف أهدأ.",
+    "styleNote": "ميول لا درجات، ولا يُفضَّل أي طرف على الآخر.",
+    "followUp": "سؤال متابعة:",
+    "interviewNote": "أسئلة تتعمّق في المواضع التي يكون فيها التقييم أقل يقينًا.",
+    "integrityNote": "سياق للمراجع، ولا تغيّر هذه المعلومات أي درجة أبدًا.",
     "integrity": {
-      "time": "Time used",
-      "timeValue": "{used} of {budget} min",
-      "items": "Scenes completed",
-      "paste": "Paste events",
-      "tabs": "Tab switches",
-      "style": "Writing-style shifts",
-      "consistency": "Consistency",
-      "consistent": "Consistent across scenes"
+      "time": "الوقت المستغرق",
+      "timeValue": "{used} من {budget} دقيقة",
+      "items": "المواقف المكتملة",
+      "paste": "مرات اللصق",
+      "tabs": "مرات التبديل بين علامات التبويب",
+      "style": "تحوّلات في أسلوب الكتابة",
+      "consistency": "الاتساق",
+      "consistent": "متّسق عبر المواقف"
     },
     "none": {
-      "strengths": "No clear strengths stood out with enough evidence.",
-      "potential": "Nothing beyond the role stood out.",
-      "development": "No clear development areas with enough evidence.",
-      "style": "Work style wasn't measured in this session."
+      "strengths": "لم تبرز نقاط قوة واضحة بأدلة كافية.",
+      "potential": "لم يبرز ما يتجاوز متطلبات الدور.",
+      "development": "لا توجد مجالات تطوير واضحة بأدلة كافية.",
+      "style": "لم يُقَس أسلوب العمل في هذه الجلسة."
     },
     "method": {
-      "p1": "The candidate worked through one continuous story at a fictional company. The assessment adapted as they answered: it formed hypotheses about their strengths and gaps, tested each in different-looking situations, and raised the difficulty to find their ceiling.",
-      "p2": "Each answer was scored against written descriptions of five levels for each sub-skill. Every score quotes the candidate's own words. Length, grammar, accent and fluency are not scored.",
-      "ai": "Scenarios and scoring used Claude. Important answers were scored twice independently; where the passes disagreed by more than a level, a third pass decided ({n} answers were double-scored).",
-      "offline": "This session used Aalim's curated, human-reviewed scenarios and its built-in scorer. Confidence is deliberately conservative.",
-      "p3": "Levels are estimates with ranges. They become more certain as the same skill shows up consistently across different situations.",
-      "versions": "Versions: {versions}"
+      "p1": "خاض المرشح قصة واحدة متصلة في شركة خيالية، وتكيّف التقييم مع إجاباته أولًا بأول: فكوّن فرضيات عن نقاط قوته وفجواته، واختبر كل فرضية في مواقف مختلفة الطابع، ورفع مستوى الصعوبة ليكتشف أقصى ما يبلغه.",
+      "p2": "قُيّمت كل إجابة وفق أوصاف مكتوبة لخمسة مستويات لكل مهارة فرعية، وتستشهد كل درجة بكلمات المرشح نفسه. ولا يُحتسب الطول ولا قواعد اللغة ولا اللكنة ولا الطلاقة.",
+      "ai": "استُخدم Claude في إعداد المواقف واحتساب الدرجات. وقُيّمت الإجابات المهمة مرتين تقييمًا مستقلًا، وحين اختلفت الجولتان بأكثر من مستوى واحد حسمت جولة ثالثة النتيجة (عدد الإجابات التي قُيّمت مرتين: {n}).",
+      "offline": "اعتمدت هذه الجلسة على مواقف منتقاة راجعها بشر، وعلى أداة التقييم المدمجة في عالم. ودرجات الثقة متحفّظة عن قصد.",
+      "p3": "المستويات تقديرات ضمن نطاقات، ويزداد يقينها كلما ظهرت المهارة نفسها باتساق في مواقف مختلفة.",
+      "versions": "الإصدارات: {versions}"
     },
     "domainShort": {
-      "technical": "Tech",
-      "critical-thinking": "Think",
-      "judgment": "Judge",
-      "leadership": "Lead",
-      "management": "Manage",
-      "communication": "Comms",
-      "product-thinking": "Product",
-      "collaboration": "Collab",
-      "adaptability": "Adapt"
+      "technical": "تقني",
+      "critical-thinking": "تفكير",
+      "judgment": "تقدير",
+      "leadership": "قيادة",
+      "management": "إدارة",
+      "communication": "تواصل",
+      "product-thinking": "منتج",
+      "collaboration": "تعاون",
+      "adaptability": "تكيّف"
     },
-    "pendingTitle": "The report is being written",
-    "pendingBody": "Scoring and the report usually take less than a minute after the candidate finishes. This page updates by itself.",
-    "linkInvalidTitle": "This link has expired",
-    "linkInvalidBody": "Shared reports are available for a limited time. Ask the person who shared it for a new link.",
+    "pendingTitle": "جارٍ إعداد التقرير",
+    "pendingBody": "يستغرق احتساب الدرجات وإعداد التقرير عادةً أقل من دقيقة بعد أن ينهي المرشح التقييم. وتُحدَّث هذه الصفحة تلقائيًا.",
+    "linkInvalidTitle": "انتهت صلاحية هذا الرابط",
+    "linkInvalidBody": "تُتاح التقارير المشتركة لفترة محدودة. اطلب رابطًا جديدًا من الشخص الذي شاركه معك.",
     "actions": {
-      "pdf": "Export PDF",
-      "pdfError": "The PDF couldn't be created. Try again.",
-      "share": "Share",
-      "shareTitle": "Share with your team",
-      "shareBody": "Anyone with the link can read this report until it expires. You can revoke it at any time.",
-      "candidateTitle": "Send the candidate their report",
-      "candidateBody": "The candidate receives an email with a link to their own report. It doesn't include interview questions or integrity notes.",
-      "candidateNote": "Candidates value seeing their results. Share only what your process allows.",
-      "expires": "Link expires after",
-      "days": "{n} days",
-      "createLink": "Create link",
-      "sendToCandidate": "Send to candidate",
-      "sentToCandidate": "Sent to the candidate.",
-      "copy": "Copy link",
-      "active": "Active links",
+      "pdf": "صدّر بصيغة PDF",
+      "pdfError": "تعذّر إنشاء ملف PDF. حاول مرة أخرى.",
+      "share": "مشاركة",
+      "shareTitle": "شارك التقرير مع فريقك",
+      "shareBody": "يستطيع أي شخص لديه الرابط قراءة هذا التقرير إلى أن تنتهي صلاحية الرابط. ويمكنك إلغاؤه في أي وقت.",
+      "candidateTitle": "أرسل إلى المرشح تقريره",
+      "candidateBody": "تصل إلى المرشح رسالة بريد إلكتروني فيها رابط إلى تقريره. ولا يتضمن التقرير أسئلة المقابلة ولا الملاحظات حول النزاهة.",
+      "candidateNote": "يقدّر المرشحون الاطّلاع على نتائجهم. شارك فقط ما تسمح به إجراءات التوظيف لديكم.",
+      "expires": "تنتهي صلاحية الرابط بعد",
+      "days": "{n, plural, zero {{n} يوم} one {يوم واحد} two {يومان} few {{n} أيام} many {{n} يومًا} other {{n} يوم}}",
+      "createLink": "أنشئ رابطًا",
+      "sendToCandidate": "أرسل إلى المرشح",
+      "sentToCandidate": "أُرسل إلى المرشح.",
+      "copy": "انسخ الرابط",
+      "active": "الروابط السارية",
       "audience": {
-        "team": "Team link",
-        "candidate": "Candidate link"
+        "team": "رابط الفريق",
+        "candidate": "رابط المرشح"
       },
-      "until": "until {date}",
-      "revoke": "Revoke",
-      "revoked": "Link revoked.",
-      "shareError": "Couldn't create the link. Try again.",
-      "toCandidate": "Send to candidate",
-      "resendCandidate": "Send to candidate again"
+      "until": "حتى {date}",
+      "revoke": "ألغِ الرابط",
+      "revoked": "أُلغي الرابط.",
+      "shareError": "تعذّر إنشاء الرابط. حاول مرة أخرى.",
+      "toCandidate": "أرسل إلى المرشح",
+      "resendCandidate": "أرسل إلى المرشح مرة أخرى"
+    }
+  },
+  "grow": {
+    "title": "My development",
+    "homeTitle": "Your development, {name}",
+    "homeSubtitle": "Goal: {goal}",
+    "private": "Everything here is private to you. No employer sees it unless you choose to share a verified profile link.",
+    "profileTitle": "My profile",
+    "profileEmptyTitle": "Your profile starts with a baseline",
+    "profileEmptyBody": "A 30-minute assessment maps your strengths across nine areas and builds your development plan.",
+    "profilePending": "Building your profile…",
+    "profilePendingBody": "This usually takes less than a minute. The page updates by itself.",
+    "nav": {
+      "progress": "See your progress",
+      "coach": "Talk to your coach"
+    },
+    "baseline": {
+      "title": "Start with a 30-minute baseline",
+      "resumeTitle": "Your baseline is in progress",
+      "body": "Realistic work scenarios that adapt as you answer. You get an honest profile with evidence from your own answers, and a plan for what to practise.",
+      "start": "Start the baseline",
+      "resume": "Continue the baseline"
+    },
+    "today": {
+      "title": "Today's practice",
+      "body": "A scenario on {skill}, from your plan, a little above your current level.",
+      "bodyNoReport": "Practise any skill while you wait for your baseline, or start with decision-making.",
+      "start": "Start practising",
+      "choose": "Choose another skill"
+    },
+    "focus": {
+      "title": "Your current focus",
+      "body": "From your latest assessment. These change when you re-assess.",
+      "thirty": "Next 30 days:"
+    },
+    "tracks": {
+      "title": "Tracks",
+      "description": "Guided paths of 8–10 practice sessions on one theme. Go at your own pace.",
+      "completed": "Completed",
+      "inProgress": "In progress",
+      "progress": "{done} of {total} sessions",
+      "sessions": "{n} sessions",
+      "start": "Start",
+      "again": "Practise again",
+      "stretch": "Stretch session"
+    },
+    "snapshot": {
+      "title": "Your profile",
+      "when": "{days, plural, =0 {Assessed today} one {Assessed # day ago} other {Assessed # days ago}}",
+      "open": "Open your profile",
+      "reassess": "Re-assess now",
+      "nextIn": "{days, plural, one {Re-assessment recommended in # day} other {Re-assessment recommended in # days}}"
+    },
+    "complete": {
+      "title": "Done. Your profile is on its way",
+      "body": "Your answers are being scored against the level descriptions. In a minute you'll see your strengths, what to work on next, and a plan, with your own words as evidence.",
+      "cta": "See my profile"
+    },
+    "onboarding": {
+      "title": "Set up your development",
+      "description": "A few questions so practice and feedback fit where you are and where you want to go.",
+      "currentRole": "Your current role",
+      "currentRoleHint": "Your job title is enough.",
+      "currentRolePlaceholder": "Software engineer",
+      "experience": "Years of work experience",
+      "goal": "Your goal",
+      "goalHint": "For example: move from engineer to team lead, or get better at presenting to executives.",
+      "goalPlaceholder": "Become a team lead within a year",
+      "hours": "Time you can practise each week",
+      "hoursOption": "{n, plural, one {# hour} other {# hours}}",
+      "privacy": "Your Grow data is private. You decide if anyone else ever sees it.",
+      "submit": "Save and continue",
+      "error": "Check the fields and try again."
+    },
+    "plan": {
+      "title": "Your development plan",
+      "focus": "Focus {n}",
+      "practise": "Practise this",
+      "d30": "Next 30 days",
+      "d60": "By 60 days",
+      "d90": "By 90 days",
+      "scenarios": "Practice:",
+      "resources": "Resources:"
+    },
+    "share": {
+      "button": "Share verified profile",
+      "title": "Share a verified profile",
+      "body": "Creates a read-only link to your latest profile for an employer or mentor. It shows your levels with evidence but not your practice or coach conversations, and expires in 14 days.",
+      "create": "Create link",
+      "copy": "Copy link"
+    },
+    "practice": {
+      "title": "Practice Gym",
+      "description": "Unlimited scenarios on any skill, pitched a little above your current level. Feedback after each one.",
+      "recent": "Recent practice",
+      "done": "Feedback ready",
+      "unfinished": "Not finished",
+      "practised": "Practised",
+      "start": "Practise",
+      "back": "Practice Gym",
+      "scenario": "Practice scenario",
+      "twistRound": "Try again with a twist",
+      "roleplayAsWritten": "Write what you would say to {name} first, and how you would handle their likely reaction.",
+      "getFeedback": "Get feedback",
+      "feedbackTitle": "Feedback",
+      "didWell": "What you did well",
+      "didWellNone": "Nothing stood out clearly this time. The points on the right are where to start.",
+      "expert": "What an expert would also consider",
+      "approach": "One strong approach",
+      "approachNote": "One way to handle it, not the only right answer.",
+      "thisTime": "This attempt:",
+      "scoresNote": "Practice scores show how this attempt went. Your profile levels change only when you re-assess.",
+      "tryTwist": "Try again with a twist",
+      "another": "Another scenario on this skill",
+      "reflectionTitle": "Reflection note",
+      "reflectionHint": "What will you do differently next time? Your coach can refer to it later.",
+      "saveNote": "Save note",
+      "noteSaved": "Saved",
+      "offlineNote": "This feedback comes from Aalim's built-in coach. With an AI model configured, feedback is more specific to your answer.",
+      "yourAnswer": "Your answer"
+    },
+    "progress": {
+      "title": "Progress",
+      "description": "Real level changes, confirmed by re-assessment every 4–6 weeks. No streaks, no points.",
+      "emptyTitle": "Nothing to show yet",
+      "emptyBody": "Complete your baseline and some practice; your progress appears here.",
+      "oneAssessment": "One assessment so far. Re-assess after 4–6 weeks of practice to see real change.",
+      "levels": "Assessed levels",
+      "levelsNote": "A change counts as real only when the new range doesn't overlap the old one.",
+      "withinRange": "(within range)",
+      "practice": "Practice sessions per week",
+      "practiceNote": "How often you practised. Consistency matters more than volume.",
+      "sessions": "Sessions"
+    },
+    "coach": {
+      "title": "Coach",
+      "description": "Talk about your profile, plan your week, or think through a situation. Honest and direct, never flattering.",
+      "empty": "Ask anything about your profile or your plan.",
+      "suggest": {
+        "s1": "Plan my practice for this week",
+        "s2": "Why is my lowest area low?",
+        "s3": "What should I focus on first?"
+      },
+      "placeholder": "Ask your coach…",
+      "send": "Send",
+      "thinking": "Thinking…",
+      "error": "That didn't go through. Try again."
     }
   }
 }

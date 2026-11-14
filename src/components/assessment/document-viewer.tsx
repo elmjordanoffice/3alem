@@ -129,8 +129,8 @@ function TableView({ table }: { table: TableMaterial }) {
   const cell = (v: string | number | null | undefined) => (typeof v === "number" ? n.number(v) : (v ?? ""));
   return (
     <figure className="flex flex-col gap-2">
-      <div className="overflow-x-auto rounded-card border border-border bg-surface">
-        <table className="w-full border-collapse text-sm" dir="ltr">
+      <div className="overflow-x-auto rounded-card border border-border bg-surface" dir="ltr">
+        <table className="w-full border-collapse text-sm">
           <caption className="sr-only">{table.title}</caption>
           <thead>
             <tr className="bg-surface-subtle text-[11px] text-tertiary">

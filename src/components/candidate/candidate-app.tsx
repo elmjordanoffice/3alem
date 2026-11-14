@@ -4,23 +4,26 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Clock, Link2Off, Loader2 } from "lucide-react";
 import type { CandidateView } from "@/lib/hire/candidate-state";
-import {
-  beginAction,
-  continueChapterAction,
-  feedbackAction,
-  pauseAction,
-  refreshAction,
-  resumeAction,
-  roleplayAction,
-  startAction,
-  submitAction,
-} from "@/app/a/[token]/actions";
+import type { SubmitPayload } from "./item-screen";
 import { Briefing, Complete, Landing, Paused, StateScreen, Transition } from "./screens";
 import { ItemScreen } from "./item-screen";
 import { CandidateShell } from "./shell";
 
+/** Server actions the app drives, already bound to a candidate token or a Grow session. */
+export interface CandidateApi {
+  start?: (o: { locale: "en" | "ar"; extraTime: 1 | 1.25 | 1.5; untimed: boolean; largerText: boolean; consent: true }) => Promise<CandidateView>;
+  begin: () => Promise<CandidateView>;
+  submit: (p: SubmitPayload) => Promise<{ ok: boolean; error?: string; view: CandidateView }>;
+  roleplay: (input: { itemId: string; clientId: string; text: string }) => Promise<{ ok: boolean; reply?: string; ended?: boolean }>;
+  continueChapter: () => Promise<CandidateView>;
+  pause: () => Promise<CandidateView>;
+  resume: () => Promise<CandidateView>;
+  refresh: () => Promise<CandidateView>;
+  feedback: (f: { rating: number; comment: string }) => Promise<void>;
+}
+
 /** The candidate experience: one client app driven by server actions. */
-export function CandidateApp({ token, initial }: { token: string; initial: CandidateView }) {
+export function CandidateApp({ token, initial, api, completeSlot }: { token: string; initial: CandidateView; api: CandidateApi; completeSlot?: React.ReactNode }) {
   const t = useTranslations("candidate");
   const router = useRouter();
   const [view, setView] = React.useState<CandidateView>(initial);
@@ -34,9 +37,9 @@ export function CandidateApp({ token, initial }: { token: string; initial: Candi
   // While the first scene is being prepared, check back quietly.
   React.useEffect(() => {
     if (view.view !== "preparing") return;
-    const id = window.setInterval(async () => setView(await refreshAction(token)), 1500);
+    const id = window.setInterval(async () => setView(await api.refresh()), 1500);
     return () => window.clearInterval(id);
-  }, [view.view, token]);
+  }, [view.view, api]);
 
   switch (view.view) {
     case "invalid":
@@ -59,31 +62,31 @@ export function CandidateApp({ token, initial }: { token: string; initial: Candi
         <Landing
           v={view}
           onStart={async (o) => {
-            setView(await startAction(token, { ...o, consent: true }));
+            if (api.start) setView(await api.start({ ...o, consent: true }));
             router.refresh();
           }}
         />
       );
     case "briefing":
-      return <Briefing v={view} onBegin={async () => setView(await beginAction(token))} />;
+      return <Briefing v={view} onBegin={async () => setView(await api.begin())} />;
     case "transition":
-      return <Transition v={view} onContinue={async () => setView(await continueChapterAction(token))} onPause={async () => setView(await pauseAction(token))} />;
+      return <Transition v={view} onContinue={async () => setView(await api.continueChapter())} onPause={async () => setView(await api.pause())} />;
     case "paused":
-      return <Paused v={view} onResume={async () => setView(await resumeAction(token))} />;
+      return <Paused v={view} onResume={async () => setView(await api.resume())} />;
     case "complete":
-      return <Complete v={view} onFeedback={(f) => feedbackAction(token, f)} />;
+      return completeSlot ?? <Complete v={view} onFeedback={api.feedback} />;
     case "item":
       return (
         <ItemScreen
           v={view}
           token={token}
           submit={async (p) => {
-            const res = await submitAction(token, p);
+            const res = await api.submit(p);
             setView(res.view);
             return { ok: res.ok, error: res.error };
           }}
           sendTurn={async (text, clientId) => {
-            const r = await roleplayAction(token, { itemId: view.item.id, clientId, text });
+            const r = await api.roleplay({ itemId: view.item.id, clientId, text });
             return r.ok ? { ok: true, reply: r.reply, ended: r.ended } : { ok: false };
           }}
         />

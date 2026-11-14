@@ -681,6 +681,34 @@ model PracticeSession {
   @@map("practice_session")
 }
 
+/// The individual's Grow setup. Private to them.
+model GrowProfile {
+  id               String   @id @default(cuid())
+  userId           String   @unique
+  currentRole      String
+  experienceYears  Int
+  goal             String
+  /// Role family the goal points to (drives domain weights and technical skills).
+  targetFamily     String
+  hoursPerWeek     Int
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@map("grow_profile")
+}
+
+/// Conversation with the Grow coach. Private to the person.
+model CoachMessage {
+  id        String   @id @default(cuid())
+  userId    String
+  role      String
+  content   String
+  createdAt DateTime @default(now())
+
+  @@index([userId, createdAt])
+  @@map("coach_message")
+}
+
 // ───────────────────────── Team ─────────────────────────
 
 model Team {

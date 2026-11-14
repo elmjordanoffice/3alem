@@ -168,7 +168,8 @@
     "sections": {
       "workspace": "Workspace",
       "organization": "Organisation",
-      "account": "Account"
+      "account": "Account",
+      "grow": "Grow"
     },
     "nav": {
       "home": "Home",
@@ -177,7 +178,12 @@
       "orgSettings": "Organisation settings",
       "settings": "Settings",
       "admin": "Platform admin",
-      "assessments": "Assessments"
+      "assessments": "Assessments",
+      "grow": "My development",
+      "practice": "Practice",
+      "tracks": "Tracks",
+      "progress": "Progress",
+      "coach": "Coach"
     }
   },
   "home": {
@@ -1132,6 +1138,153 @@
       "shareError": "Couldn't create the link. Try again.",
       "toCandidate": "Send to candidate",
       "resendCandidate": "Send to candidate again"
+    }
+  },
+  "grow": {
+    "title": "My development",
+    "homeTitle": "Your development, {name}",
+    "homeSubtitle": "Goal: {goal}",
+    "private": "Everything here is private to you. No employer sees it unless you choose to share a verified profile link.",
+    "profileTitle": "My profile",
+    "profileEmptyTitle": "Your profile starts with a baseline",
+    "profileEmptyBody": "A 30-minute assessment maps your strengths across nine areas and builds your development plan.",
+    "profilePending": "Building your profile…",
+    "profilePendingBody": "This usually takes less than a minute. The page updates by itself.",
+    "nav": {
+      "progress": "See your progress",
+      "coach": "Talk to your coach"
+    },
+    "baseline": {
+      "title": "Start with a 30-minute baseline",
+      "resumeTitle": "Your baseline is in progress",
+      "body": "Realistic work scenarios that adapt as you answer. You get an honest profile with evidence from your own answers, and a plan for what to practise.",
+      "start": "Start the baseline",
+      "resume": "Continue the baseline"
+    },
+    "today": {
+      "title": "Today's practice",
+      "body": "A scenario on {skill}, from your plan, a little above your current level.",
+      "bodyNoReport": "Practise any skill while you wait for your baseline, or start with decision-making.",
+      "start": "Start practising",
+      "choose": "Choose another skill"
+    },
+    "focus": {
+      "title": "Your current focus",
+      "body": "From your latest assessment. These change when you re-assess.",
+      "thirty": "Next 30 days:"
+    },
+    "tracks": {
+      "title": "Tracks",
+      "description": "Guided paths of 8–10 practice sessions on one theme. Go at your own pace.",
+      "completed": "Completed",
+      "inProgress": "In progress",
+      "progress": "{done} of {total} sessions",
+      "sessions": "{n} sessions",
+      "start": "Start",
+      "again": "Practise again",
+      "stretch": "Stretch session"
+    },
+    "snapshot": {
+      "title": "Your profile",
+      "when": "{days, plural, =0 {Assessed today} one {Assessed # day ago} other {Assessed # days ago}}",
+      "open": "Open your profile",
+      "reassess": "Re-assess now",
+      "nextIn": "{days, plural, one {Re-assessment recommended in # day} other {Re-assessment recommended in # days}}"
+    },
+    "complete": {
+      "title": "Done. Your profile is on its way",
+      "body": "Your answers are being scored against the level descriptions. In a minute you'll see your strengths, what to work on next, and a plan, with your own words as evidence.",
+      "cta": "See my profile"
+    },
+    "onboarding": {
+      "title": "Set up your development",
+      "description": "A few questions so practice and feedback fit where you are and where you want to go.",
+      "currentRole": "Your current role",
+      "currentRoleHint": "Your job title is enough.",
+      "currentRolePlaceholder": "Software engineer",
+      "experience": "Years of work experience",
+      "goal": "Your goal",
+      "goalHint": "For example: move from engineer to team lead, or get better at presenting to executives.",
+      "goalPlaceholder": "Become a team lead within a year",
+      "hours": "Time you can practise each week",
+      "hoursOption": "{n, plural, one {# hour} other {# hours}}",
+      "privacy": "Your Grow data is private. You decide if anyone else ever sees it.",
+      "submit": "Save and continue",
+      "error": "Check the fields and try again."
+    },
+    "plan": {
+      "title": "Your development plan",
+      "focus": "Focus {n}",
+      "practise": "Practise this",
+      "d30": "Next 30 days",
+      "d60": "By 60 days",
+      "d90": "By 90 days",
+      "scenarios": "Practice:",
+      "resources": "Resources:"
+    },
+    "share": {
+      "button": "Share verified profile",
+      "title": "Share a verified profile",
+      "body": "Creates a read-only link to your latest profile for an employer or mentor. It shows your levels with evidence but not your practice or coach conversations, and expires in 14 days.",
+      "create": "Create link",
+      "copy": "Copy link"
+    },
+    "practice": {
+      "title": "Practice Gym",
+      "description": "Unlimited scenarios on any skill, pitched a little above your current level. Feedback after each one.",
+      "recent": "Recent practice",
+      "done": "Feedback ready",
+      "unfinished": "Not finished",
+      "practised": "Practised",
+      "start": "Practise",
+      "back": "Practice Gym",
+      "scenario": "Practice scenario",
+      "twistRound": "Try again with a twist",
+      "roleplayAsWritten": "Write what you would say to {name} first, and how you would handle their likely reaction.",
+      "getFeedback": "Get feedback",
+      "feedbackTitle": "Feedback",
+      "didWell": "What you did well",
+      "didWellNone": "Nothing stood out clearly this time. The points on the right are where to start.",
+      "expert": "What an expert would also consider",
+      "approach": "One strong approach",
+      "approachNote": "One way to handle it, not the only right answer.",
+      "thisTime": "This attempt:",
+      "scoresNote": "Practice scores show how this attempt went. Your profile levels change only when you re-assess.",
+      "tryTwist": "Try again with a twist",
+      "another": "Another scenario on this skill",
+      "reflectionTitle": "Reflection note",
+      "reflectionHint": "What will you do differently next time? Your coach can refer to it later.",
+      "saveNote": "Save note",
+      "noteSaved": "Saved",
+      "offlineNote": "This feedback comes from Aalim's built-in coach. With an AI model configured, feedback is more specific to your answer.",
+      "yourAnswer": "Your answer"
+    },
+    "progress": {
+      "title": "Progress",
+      "description": "Real level changes, confirmed by re-assessment every 4–6 weeks. No streaks, no points.",
+      "emptyTitle": "Nothing to show yet",
+      "emptyBody": "Complete your baseline and some practice; your progress appears here.",
+      "oneAssessment": "One assessment so far. Re-assess after 4–6 weeks of practice to see real change.",
+      "levels": "Assessed levels",
+      "levelsNote": "A change counts as real only when the new range doesn't overlap the old one.",
+      "withinRange": "(within range)",
+      "practice": "Practice sessions per week",
+      "practiceNote": "How often you practised. Consistency matters more than volume.",
+      "sessions": "Sessions"
+    },
+    "coach": {
+      "title": "Coach",
+      "description": "Talk about your profile, plan your week, or think through a situation. Honest and direct, never flattering.",
+      "empty": "Ask anything about your profile or your plan.",
+      "suggest": {
+        "s1": "Plan my practice for this week",
+        "s2": "Why is my lowest area low?",
+        "s3": "What should I focus on first?"
+      },
+      "placeholder": "Ask your coach…",
+      "send": "Send",
+      "thinking": "Thinking…",
+      "error": "That didn't go through. Try again."
     }
   }
 }

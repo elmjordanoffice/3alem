@@ -178,6 +178,18 @@ export async function buildReport(sessionId: string): Promise<void> {
     update: { status: "READY", roleFit: kind === "HIRE" ? fit.fit : null, content: content as unknown as Prisma.InputJsonValue, writerVersion: writer },
   });
   await systemDb.assessmentSession.update({ where: { id: sessionId }, data: { status: "REPORTED" } });
+
+  // Grow: the plan becomes the person's development plan.
+  if (kind === "GROW" && session.subjectUserId && narrative.plan?.length) {
+    await systemDb.developmentPlan.create({
+      data: {
+        userId: session.subjectUserId,
+        sessionId,
+        focusAreas: narrative.plan.map((p) => ({ skillKey: p.skillKey, why: p.why })) as unknown as Prisma.InputJsonValue,
+        actions: narrative.plan as unknown as Prisma.InputJsonValue,
+      },
+    });
+  }
 }
 
 /** Drop any claim whose evidence ids don't exist; every claim must cite evidence. */

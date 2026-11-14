@@ -83,7 +83,7 @@ export function parseCandidateList(text: string): { name: string | null; email: 
   for (const raw of text.split(/\r?\n/)) {
     const line = raw.trim();
     if (!line || /^name\s*[,;\t]\s*email/i.test(line) || /^email$/i.test(line)) continue;
-    const parts = line.split(/[,;\t]/).map((p) => p.trim().replace(/^"|"$/g, ""));
+    const parts = line.split(/[,;\t،؛]/).map((p) => p.trim().replace(/^"|"$/g, ""));
     const email = parts.find((p) => /^\S+@\S+\.\S+$/.test(p));
     if (!email) continue;
     const name = parts.find((p) => p !== email && p.length > 0) ?? null;

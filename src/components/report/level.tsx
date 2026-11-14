@@ -28,7 +28,8 @@ export function LevelLabel({ estimate, confidence, range, className }: { estimat
   return (
     <span className={cn("text-sm", className)}>
       <span className="font-medium text-text">{t(String(levelBand(estimate)))}</span>{" "}
-      <span className="text-secondary tabular">({n.range(lo, hi)})</span>
+      {/* Ranges read low→high in both directions. */}
+      <span className="text-secondary tabular">(<bdi dir="ltr">{n.range(lo, hi)}</bdi>)</span>
     </span>
   );
 }

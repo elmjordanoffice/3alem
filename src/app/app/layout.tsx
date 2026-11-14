@@ -17,8 +17,17 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   const account: ShellNavItem[] = [{ href: "/app/settings", labelKey: "settings", icon: "settings" }];
   if (viewer.user.isPlatformAdmin) account.push({ href: "/app/admin", labelKey: "admin", icon: "admin" });
 
+  const grow: ShellNavItem[] = [
+    { href: "/app/grow", labelKey: "grow", icon: "grow" },
+    { href: "/app/grow/practice", labelKey: "practice", icon: "practice" },
+    { href: "/app/grow/tracks", labelKey: "tracks", icon: "tracks" },
+    { href: "/app/grow/progress", labelKey: "progress", icon: "progress" },
+    { href: "/app/grow/coach", labelKey: "coach", icon: "coach" },
+  ];
+
   const nav = [
     { sectionKey: "workspace", items: workspace },
+    { sectionKey: "grow", items: grow },
     ...(organization.length ? [{ sectionKey: "organization", items: organization }] : []),
     { sectionKey: "account", items: account },
   ];

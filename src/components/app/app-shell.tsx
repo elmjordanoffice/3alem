@@ -8,6 +8,12 @@ import {
   Building2,
   Check,
   ClipboardList,
+  Sprout,
+  Dumbbell,
+  BookOpen,
+  LineChart,
+  MessagesSquare,
+  UsersRound,
   ChevronsUpDown,
   Home,
   Layers,
@@ -39,7 +45,7 @@ import { LanguageToggle, ThemeMenu } from "./preference-controls";
 export interface ShellNavItem {
   href: string;
   labelKey: string;
-  icon: "home" | "assessments" | "framework" | "members" | "orgSettings" | "settings" | "admin" | "design";
+  icon: "home" | "assessments" | "framework" | "members" | "orgSettings" | "settings" | "admin" | "design" | "grow" | "practice" | "tracks" | "progress" | "coach" | "teams";
 }
 
 export interface ShellProps {
@@ -59,6 +65,12 @@ const ICONS: Record<ShellNavItem["icon"], LucideIcon> = {
   settings: Settings,
   admin: Shield,
   design: Palette,
+  grow: Sprout,
+  practice: Dumbbell,
+  tracks: BookOpen,
+  progress: LineChart,
+  coach: MessagesSquare,
+  teams: UsersRound,
 };
 
 export function AppShell({ user, organizations, activeOrganizationId, nav, children }: ShellProps) {
@@ -188,7 +200,7 @@ function SidebarContent({ user, organizations, activeOrganizationId, nav }: Omit
             <ul className="flex flex-col gap-0.5">
               {section.items.map((item) => {
                 const Icon = ICONS[item.icon];
-                const current = item.href === "/app" ? pathname === "/app" : pathname.startsWith(item.href);
+                const current = item.href === "/app" || item.href === "/app/grow" ? pathname === item.href : pathname.startsWith(item.href);
                 return (
                   <li key={item.href}>
                     <Link

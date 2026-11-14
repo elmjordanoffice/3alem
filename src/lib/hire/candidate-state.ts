@@ -107,6 +107,13 @@ export async function candidateView(token: string): Promise<CandidateView> {
     };
   }
 
+  return viewForSession(session, brand, roleTitle);
+}
+
+type SessionLike = { id: string; status: string; currentChapter: number; timeBudgetMinutes: number; elapsedSeconds: number; accommodations: unknown };
+
+/** The view for an existing session (shared by Hire candidates and Grow). */
+export async function viewForSession(session: SessionLike, brand: Branding, roleTitle: string): Promise<CandidateView> {
   if (["COMPLETED", "SCORED", "REPORTED"].includes(session.status)) return { view: "complete", branding: brand, roleTitle };
 
   const worldRow = await systemDb.scenarioWorld.findUnique({ where: { sessionId: session.id } });
@@ -129,7 +136,7 @@ export async function candidateView(token: string): Promise<CandidateView> {
   const content = itemContentSchema.parse(item.content);
   const stage = await currentStage(item.id, content);
   const meta = item.meta as unknown as ItemMeta;
-  const acc = session.accommodations as { untimed?: boolean; extraTime?: number };
+  const acc = (session.accommodations ?? {}) as { untimed?: boolean; extraTime?: number };
   // Timed tasks get extra time with the accommodation; untimed mode removes the clock.
   if (content.timeLimitSeconds && acc.extraTime) content.timeLimitSeconds = Math.round(content.timeLimitSeconds * acc.extraTime);
   if (acc.untimed) delete content.timeLimitSeconds;
