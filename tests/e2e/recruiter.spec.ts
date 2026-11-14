@@ -52,7 +52,7 @@ test("create, review, publish and invite", async ({ page, browser, context, base
 
 test("share a report with an expiring link and export a PDF", async ({ page, context, baseURL }) => {
   await setPrefs(context, baseURL!, { locale: "en" });
-  const sessionId = await withDb(async (c) => (await c.query(`SELECT "sessionId" FROM report WHERE status='READY' ORDER BY "createdAt" DESC LIMIT 1`)).rows[0]?.sessionId as string | undefined);
+  const sessionId = await withDb(async (c) => (await c.query(`SELECT "sessionId" FROM report WHERE status='READY' AND kind='HIRE' ORDER BY "createdAt" DESC LIMIT 1`)).rows[0]?.sessionId as string | undefined);
   test.skip(!sessionId, "needs a completed session (run candidate-flow first)");
   await signIn(page, "orgadmin@aalim.dev");
   await page.goto(`/app/reports/${sessionId}`);
@@ -75,7 +75,7 @@ test("share a report with an expiring link and export a PDF", async ({ page, con
 
 test("hiring managers can read reports but not share them", async ({ page, context, baseURL }) => {
   await setPrefs(context, baseURL!, { locale: "en" });
-  const sessionId = await withDb(async (c) => (await c.query(`SELECT "sessionId" FROM report WHERE status='READY' LIMIT 1`)).rows[0]?.sessionId as string | undefined);
+  const sessionId = await withDb(async (c) => (await c.query(`SELECT "sessionId" FROM report WHERE status='READY' AND kind='HIRE' LIMIT 1`)).rows[0]?.sessionId as string | undefined);
   test.skip(!sessionId, "needs a completed session");
   await signIn(page, "manager@aalim.dev");
   await page.goto(`/app/reports/${sessionId}`);
