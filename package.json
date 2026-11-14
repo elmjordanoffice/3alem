@@ -2,7 +2,7 @@
   "name": "aalim",
   "version": "0.1.0",
   "private": true,
-  "description": "Aalim (عالم) — adaptive skills assessment and training",
+  "description": "Aalim (\u0639\u0627\u0644\u0645) \u2014 adaptive skills assessment and training",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -18,7 +18,8 @@
     "db:deploy": "prisma migrate deploy",
     "db:seed": "node --conditions=react-server --import tsx prisma/seed.ts",
     "db:reset": "prisma migrate reset --force",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "db:seed:demo": "node --conditions=react-server --import tsx prisma/seed-demo.mts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^1.8.0",

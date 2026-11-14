@@ -744,6 +744,11 @@ model TeamMember {
   sessionId       String?
   /// Managers never see raw answers unless the member agrees.
   shareRawAnswers Boolean          @default(false)
+  /// Hash of the invitation token (the raw token is only in the email).
+  inviteTokenHash String?          @unique
+  consentedAt     DateTime?
+  /// Members see their own report before anyone else does.
+  reportSeenAt    DateTime?
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
   team            Team             @relation(fields: [teamId], references: [id], onDelete: Cascade)

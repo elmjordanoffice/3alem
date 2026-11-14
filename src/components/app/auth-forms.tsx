@@ -88,6 +88,7 @@ export function SignInForm() {
 export function SignUpForm() {
   const t = useTranslations("auth");
   const router = useRouter();
+  const params = useSearchParams();
   const [errors, setErrors] = React.useState<Record<string, string>>({});
   const [formError, setFormError] = React.useState<string | null>(null);
   const [pending, setPending] = React.useState(false);
@@ -113,7 +114,8 @@ export function SignUpForm() {
       setFormError(error.status === 422 || error.code === "USER_ALREADY_EXISTS" ? t("errors.emailTaken") : t("errors.generic"));
       return;
     }
-    router.replace("/onboarding");
+    // An invitation link (e.g. to a team) brings people back to it after sign-up.
+    router.replace(params.get("next") ? safeNext(params.get("next")) : "/onboarding");
     router.refresh();
   }
 
@@ -144,7 +146,7 @@ export function SignUpForm() {
       </form>
       <p className="mt-8 text-center text-sm text-secondary">
         {t("signUp.haveAccount")}{" "}
-        <Link href="/sign-in" className="font-medium text-accent-text hover:underline">
+        <Link href={params.get("next") ? `/sign-in?next=${encodeURIComponent(params.get("next")!)}` : "/sign-in"} className="font-medium text-accent-text hover:underline">
           {t("signUp.signIn")}
         </Link>
       </p>

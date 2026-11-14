@@ -34,6 +34,7 @@ export default async function AppHome({ searchParams }: { searchParams: Promise<
   const firstName = viewer.user.name.split(" ")[0] ?? viewer.user.name;
   const roles = org && viewerCan(viewer, "assessment.view") ? await listAssessments(viewer as Parameters<typeof listAssessments>[0]) : [];
   const review = roles.reduce((a, r) => a + r.counts.awaitingReview, 0);
+  const teamMemberships = await withTenant({ userId: viewer.user.id }, (tx) => tx.teamMember.findMany({ where: { userId: viewer.user.id, status: { in: ["CONSENTED", "ASSESSED"] } }, include: { team: { select: { name: true } } } }));
 
   return (
     <PageContainer>
@@ -55,6 +56,18 @@ export default async function AppHome({ searchParams }: { searchParams: Promise<
           ))}
         </div>
       ) : null}
+
+      {teamMemberships.map((m) => (
+        <Alert key={m.id} tone="info" className="mb-6" title={t("teamCard.title", { team: m.team.name })} action={
+          m.sessionId ? (
+            <Button asChild size="sm" variant="secondary">
+              <Link href={m.status === "ASSESSED" || m.reportSeenAt ? `/app/me/reports/${m.sessionId}` : `/grow/session/${m.sessionId}`}>{m.status === "ASSESSED" ? t("teamCard.report") : t("teamCard.continue")}</Link>
+            </Button>
+          ) : null
+        }>
+          {m.status === "ASSESSED" ? t("teamCard.done") : t("teamCard.pending")}
+        </Alert>
+      ))}
 
       <section aria-labelledby="assessments-heading" className="mb-10">
         <h2 id="assessments-heading" className="mb-3 text-base font-semibold text-text">

@@ -183,7 +183,8 @@
       "practice": "Practice",
       "tracks": "Tracks",
       "progress": "Progress",
-      "coach": "Coach"
+      "coach": "Coach",
+      "teams": "Teams"
     }
   },
   "home": {
@@ -227,6 +228,13 @@
         "title": "Design system",
         "body": "Every component, in both themes and both languages."
       }
+    },
+    "teamCard": {
+      "title": "Team assessment: {team}",
+      "pending": "You agreed to take part. Continue when you have about 40 minutes.",
+      "done": "Your report is ready. You see it first.",
+      "continue": "Continue",
+      "report": "View my report"
     }
   },
   "framework": {
@@ -1286,5 +1294,116 @@
       "thinking": "Thinking…",
       "error": "That didn't go through. Try again."
     }
+  },
+  "team": {
+    "title": "Teams",
+    "description": "Build around your people's real strengths: see coverage, gaps and who is ready to grow.",
+    "devToolTitle": "A development tool, not a performance review",
+    "devTool": "Team mode helps you develop people and plan work. It must not be used for dismissals, ratings or pay decisions. Members consent, see their own report first, and you never see their answers unless they choose to share them.",
+    "emptyTitle": "No teams yet",
+    "emptyBody": "Create a team, invite its members, and see the team's strengths once they've taken part.",
+    "assessedOf": "{assessed} of {total} members assessed",
+    "overviewDescription": "Coverage, gaps and growth for this team.",
+    "heatmap": "Team heatmap",
+    "heatmapNamed": "Members × domains, coloured by level. Only members who consented, finished and saw their own report are included.",
+    "heatmapAnon": "With fewer than {min} members assessed ({n} so far), only anonymised team totals are shown.",
+    "anonNote": "Anonymised: the bar shows the range across members, the number the team average.",
+    "meanRange": "avg {mean} · {min}–{max}",
+    "noneAssessedTitle": "No results yet",
+    "noneAssessedBody": "Results appear once members have consented, finished and seen their own report.",
+    "gaps": "Coverage and gaps",
+    "gapsNote": "Where the team falls short of its goals, and where it depends on one person.",
+    "goal": "Team goal",
+    "gap": {
+      "no_one_strong": "No one is strong here yet (highest {level}).",
+      "single_point": "Only one person is strong here: a single point of failure.",
+      "low_team_level": "The team average is low ({level})."
+    },
+    "noGaps": "No clear gaps against the team's goals.",
+    "needData": "Gaps appear once members have taken part.",
+    "pipeline": "Leadership pipeline",
+    "pipelineNote": "Who shows readiness for a lead role, from leadership and management evidence.",
+    "pipelineLevels": "Leadership {lead} · Management {manage}",
+    "readiness": {
+      "ready": "Shows readiness",
+      "emerging": "Emerging"
+    },
+    "noPipeline": "No one shows clear leadership readiness yet.",
+    "namedOnly": "Shown only when at least five members are included.",
+    "pairings": "Pairing suggestions",
+    "pairingsNote": "Complementary strengths for mentoring and projects.",
+    "noPairings": "No strong mentoring pairs stand out.",
+    "plan": "Team development plan",
+    "planNote": "Grow tracks for the team's gaps. Members see assigned tracks in their own private Grow space.",
+    "forGap": "For: {domain}",
+    "assign": "Assign to team",
+    "isAssigned": "Assigned",
+    "assigned": "Assigned to {n} members.",
+    "planPrivacy": "You see that a track was assigned, not anyone's practice or feedback.",
+    "members": "Members",
+    "noMembers": "Invite members to get started.",
+    "sharesAnswers": "Shares answers",
+    "status": {
+      "INVITED": "Invited",
+      "CONSENTED": "Taking part",
+      "DECLINED": "Declined",
+      "ASSESSED": "Assessed",
+      "REMOVED": "Removed"
+    },
+    "footer": "Levels are estimates with ranges. Use them to start conversations, never to end them.",
+    "memberLockedTitle": "Individual results aren't available",
+    "memberLockedBody": "Individual levels are shown only when the member has finished and seen their own report, and at least {min} members are included.",
+    "memberSharesRaw": "This member chose to share their answers, so evidence quotes are shown.",
+    "memberNoRaw": "This member hasn't shared their answers, so you see levels and themes but no quotes.",
+    "create": {
+      "button": "New team",
+      "title": "Create a team",
+      "body": "Name the team and choose up to four areas it most needs. You can invite members next.",
+      "name": "Team name",
+      "purpose": "What the team is for",
+      "purposeHint": "One or two sentences. Members see it on their invitation.",
+      "goals": "Areas the team most needs",
+      "goalsHint": "These get more attention in members' assessments and in the gap analysis.",
+      "submit": "Create team"
+    },
+    "invite": {
+      "button": "Invite members",
+      "title": "Invite team members",
+      "body": "Each person gets an email explaining what taking part means. Nothing happens without their consent.",
+      "label": "Email addresses",
+      "consentNote": "Members decide whether to take part, and whether to share their answers with you.",
+      "send": "Send invitations",
+      "sent": "{count, plural, one {# invitation sent} other {# invitations sent}}",
+      "noEmails": "Add at least one valid email address."
+    }
+  },
+  "teamInvite": {
+    "title": "Team development: {team}",
+    "intro": "{manager} invited you to a team development assessment. It takes about 40 minutes of realistic work scenarios.",
+    "devToolTitle": "This is for development, not evaluation",
+    "devToolBody": "The goal is to understand the team's strengths and grow them. It isn't a performance review and must not be used for decisions about your job.",
+    "whoSees": "Who sees what",
+    "sees": {
+      "you": "You see your full report first, before anyone else.",
+      "small": "If fewer than five people in the team take part, your manager sees only anonymised team totals.",
+      "levels": "Otherwise {manager} sees your skill levels and themes.",
+      "raw": "No one sees your actual answers unless you tick the box below.",
+      "leave": "You can withdraw at any time from your settings."
+    },
+    "agree": "I agree to take part in this team assessment.",
+    "shareRaw": "Also share my answers (quotes) with {manager}. Optional.",
+    "accept": "Take part",
+    "decline": "No, thanks",
+    "alreadyIn": "You've already agreed to take part.",
+    "continue": "Continue my assessment",
+    "signInFirst": "{manager} invited you to a team development assessment. Sign in or create an account first: your results belong to you.",
+    "createAccount": "Create an account",
+    "signIn": "Sign in",
+    "ownData": "Your account keeps your report private to you.",
+    "invalidTitle": "This invitation doesn't work",
+    "invalidBody": "It may have been withdrawn. Ask the person who invited you for a new one.",
+    "reportPending": "Your report is being written",
+    "reportPendingBody": "This usually takes less than a minute.",
+    "youFirst": "You're seeing your report first. It counts in your team's view only from now on, and only as levels unless you chose to share your answers."
   }
 }

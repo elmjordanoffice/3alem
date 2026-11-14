@@ -5,10 +5,10 @@ import { systemDb } from "@/lib/db";
 import { viewForSession } from "@/lib/hire/candidate-state";
 import { beginAssessment, submitResponse, roleplayTurn, acknowledgeChapter, pauseSession, resumeSession } from "@/lib/hire/session";
 
-/** Grow session actions: the signed-in person may act only on their own Grow sessions. */
+/** Self-run sessions (Grow and Team): the signed-in person may act only on their own sessions. */
 async function own(sessionId: string) {
   const viewer = await requireViewer();
-  const s = await systemDb.assessmentSession.findFirst({ where: { id: sessionId, subjectUserId: viewer.user.id, mode: "GROW" } });
+  const s = await systemDb.assessmentSession.findFirst({ where: { id: sessionId, subjectUserId: viewer.user.id, mode: { in: ["GROW", "TEAM"] } } });
   if (!s) throw new Error("Not found");
   return s;
 }
@@ -16,6 +16,10 @@ async function own(sessionId: string) {
 export async function growView(sessionId: string) {
   const s = await own(sessionId);
   const fresh = await systemDb.assessmentSession.findUniqueOrThrow({ where: { id: s.id } });
+  if (fresh.mode === "TEAM" && fresh.organizationId) {
+    const org = await systemDb.organization.findUniqueOrThrow({ where: { id: fresh.organizationId } });
+    return viewForSession(fresh, { orgName: org.name, logoUrl: org.logoUrl, brandColor: org.brandColor }, "Team");
+  }
   return viewForSession(fresh, { orgName: "Aalim Grow", logoUrl: null, brandColor: null }, "Grow");
 }
 

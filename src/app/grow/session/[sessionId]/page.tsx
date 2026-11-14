@@ -10,7 +10,7 @@ export const dynamic = "force-dynamic";
 export default async function GrowSessionPage({ params }: { params: Promise<{ sessionId: string }> }) {
   const viewer = await requireViewer();
   const { sessionId } = await params;
-  const s = await systemDb.assessmentSession.findFirst({ where: { id: sessionId, subjectUserId: viewer.user.id, mode: "GROW" } });
+  const s = await systemDb.assessmentSession.findFirst({ where: { id: sessionId, subjectUserId: viewer.user.id, mode: { in: ["GROW", "TEAM"] } } });
   if (!s) notFound();
   const view = await a.growView(sessionId);
   const api = {
@@ -23,5 +23,5 @@ export default async function GrowSessionPage({ params }: { params: Promise<{ se
     refresh: a.growView.bind(null, sessionId),
     feedback: a.growFeedback,
   };
-  return <CandidateApp token={sessionId} initial={view} api={api} completeSlot={<GrowComplete />} />;
+  return <CandidateApp token={sessionId} initial={view} api={api} completeSlot={<GrowComplete href={s.mode === "TEAM" ? `/app/me/reports/${s.id}` : "/app/grow/profile"} />} />;
 }

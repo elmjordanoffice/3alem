@@ -5,7 +5,7 @@ import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CandidateShell } from "@/components/candidate/shell";
 
-export function GrowComplete() {
+export function GrowComplete({ href = "/app/grow/profile" }: { href?: string }) {
   const t = useTranslations("grow.complete");
   return (
     <CandidateShell>
@@ -13,7 +13,7 @@ export function GrowComplete() {
         <h1 className="text-2xl font-semibold text-text">{t("title")}</h1>
         <p className="text-lg leading-relaxed text-secondary">{t("body")}</p>
         <Button asChild size="lg" className="self-start">
-          <Link href="/app/grow/profile">
+          <Link href={href}>
             {t("cta")}
             <ArrowRight className="flip-rtl" aria-hidden />
           </Link>

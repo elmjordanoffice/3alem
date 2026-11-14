@@ -9,6 +9,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   workspace.push({ href: "/app/framework", labelKey: "framework", icon: "framework" });
   const organization: ShellNavItem[] = [];
   if (viewer.activeOrganization) {
+    if (viewerCan(viewer, "team.view")) organization.push({ href: "/app/teams", labelKey: "teams", icon: "teams" });
     organization.push({ href: "/app/org/members", labelKey: "members", icon: "members" });
     if (viewerCan(viewer, "org.settings")) {
       organization.push({ href: "/app/org/settings", labelKey: "orgSettings", icon: "orgSettings" });
