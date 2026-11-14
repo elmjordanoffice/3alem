@@ -1,0 +1,591 @@
+{
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "close": "Close",
+    "actions": "Actions",
+    "optional": "Optional"
+  },
+  "levels": {
+    "1": "Emerging",
+    "2": "Developing",
+    "3": "Proficient",
+    "4": "Advanced",
+    "5": "Expert"
+  },
+  "domainsShort": {
+    "technical": "Tech",
+    "critical-thinking": "Think",
+    "judgment": "Judge",
+    "leadership": "Lead",
+    "management": "Manage",
+    "communication": "Comms",
+    "product-thinking": "Product",
+    "collaboration": "Collab",
+    "adaptability": "Adapt"
+  },
+  "roles": {
+    "ORG_ADMIN": "Organisation admin",
+    "ORG_ADMIN_desc": "Manages members, settings, the competency library and audit logs.",
+    "RECRUITER": "Recruiter",
+    "RECRUITER_desc": "Creates assessments, invites candidates and shares reports.",
+    "HIRING_MANAGER": "Hiring manager",
+    "HIRING_MANAGER_desc": "Reviews candidates and reports for their roles.",
+    "TEAM_MANAGER": "Team manager",
+    "TEAM_MANAGER_desc": "Runs Team mode for the people they manage, with their consent."
+  },
+  "preferences": {
+    "switchLanguage": "Switch language",
+    "theme": "Theme",
+    "themeSystem": "Match system",
+    "themeLight": "Light",
+    "themeDark": "Dark"
+  },
+  "landing": {
+    "eyebrow": "Adaptive skills assessment and training",
+    "title": "See how people really think, decide and lead at work.",
+    "subtitle": "Aalim runs realistic work scenarios that adapt as people answer. Every score is backed by their own words. People make the decisions; Aalim gives them the evidence.",
+    "getStarted": "Create an account",
+    "signIn": "Sign in",
+    "openApp": "Open Aalim",
+    "seeDesign": "View the design system",
+    "modesTitle": "Three ways to use Aalim",
+    "modes": {
+      "hire": {
+        "title": "Hire",
+        "body": "Paste a job description. Candidates work through one continuous story, and you get role fit, hidden strengths, risks and interview questions, all with evidence."
+      },
+      "grow": {
+        "title": "Grow",
+        "body": "Find out where you stand, then practise judgment, communication and leadership in scenarios with honest, specific feedback. Your data stays yours."
+      },
+      "team": {
+        "title": "Team",
+        "body": "With each person's consent, see your team's strengths and gaps, who is ready to lead, and who would learn most from working together."
+      }
+    },
+    "principles": {
+      "evidence": {
+        "title": "Evidence, not guesses",
+        "body": "Each level comes with a range, a confidence and quotes from the person's own answers."
+      },
+      "adaptive": {
+        "title": "Questions you cannot game",
+        "body": "People write, rank, decide and talk. No option is the obviously right one."
+      },
+      "people": {
+        "title": "People decide",
+        "body": "Aalim informs hiring decisions. It never rejects anyone automatically."
+      }
+    },
+    "footer": "Early version: use alongside interviews."
+  },
+  "auth": {
+    "fields": {
+      "name": "Full name",
+      "email": "Email",
+      "workEmail": "Work email",
+      "password": "Password",
+      "newPassword": "New password",
+      "passwordHint": "At least 10 characters."
+    },
+    "signIn": {
+      "title": "Sign in",
+      "subtitle": "Welcome back.",
+      "forgot": "Forgot your password?",
+      "submit": "Sign in",
+      "noAccount": "New to Aalim?",
+      "createAccount": "Create an account"
+    },
+    "signUp": {
+      "title": "Create your account",
+      "subtitle": "Assess candidates, develop your team or train your own skills.",
+      "submit": "Create account",
+      "dataNote": "We use your email to sign you in and to send messages about your account. We never train models on your data.",
+      "haveAccount": "Already have an account?",
+      "signIn": "Sign in"
+    },
+    "forgot": {
+      "title": "Reset your password",
+      "subtitle": "Enter your email and we will send you a link to choose a new password.",
+      "submit": "Send reset link",
+      "sentTitle": "Check your email",
+      "sentBody": "If an account exists for that address, a reset link is on its way. It expires in one hour.",
+      "back": "Back to sign in"
+    },
+    "reset": {
+      "title": "Choose a new password",
+      "subtitle": "You will be signed out on other devices.",
+      "submit": "Save new password",
+      "requestNew": "Request a new link",
+      "done": "Your password has been changed. Sign in with your new password."
+    },
+    "errors": {
+      "invalidCredentials": "That email and password do not match. Check them and try again.",
+      "rateLimited": "Too many attempts. Wait a minute, then try again.",
+      "nameRequired": "Enter your name.",
+      "emailInvalid": "Enter an email address like name@company.com.",
+      "passwordShort": "Use at least 10 characters.",
+      "emailTaken": "An account with this email already exists. Sign in instead.",
+      "linkExpired": "This link has expired or was already used. Request a new one.",
+      "generic": "Something went wrong. Try again in a moment."
+    }
+  },
+  "onboarding": {
+    "title": "Get started",
+    "welcome": "Welcome, {name}",
+    "subtitle": "How will you use Aalim? You can do both later.",
+    "chooseLabel": "How will you use Aalim",
+    "org": {
+      "title": "For my organisation",
+      "body": "Assess candidates for roles, or develop a team. You can invite colleagues next.",
+      "nameLabel": "Organisation name",
+      "nameHint": "Candidates see this name on their invitation.",
+      "submit": "Create organisation"
+    },
+    "individual": {
+      "title": "For myself",
+      "body": "Understand your strengths and practise the skills you want to build. Private to you.",
+      "next": "Your personal space is ready. Practice scenarios and your development plan will appear here.",
+      "submit": "Go to my space"
+    },
+    "errors": {
+      "nameLength": "Use between 2 and 80 characters."
+    }
+  },
+  "shell": {
+    "skipToContent": "Skip to content",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "menu": "Menu",
+    "workspace": "Workspace",
+    "personal": "Personal",
+    "organizations": "Organisations",
+    "noOrganizations": "You are not in an organisation yet.",
+    "createOrganization": "Create organisation",
+    "primaryNav": "Main",
+    "signOut": "Sign out",
+    "sections": {
+      "workspace": "Workspace",
+      "organization": "Organisation",
+      "account": "Account"
+    },
+    "nav": {
+      "home": "Home",
+      "framework": "Competency framework",
+      "members": "Members",
+      "orgSettings": "Organisation settings",
+      "settings": "Settings",
+      "admin": "Platform admin"
+    }
+  },
+  "home": {
+    "title": "Home",
+    "greeting": "Good to see you, {name}",
+    "orgSubtitle": "You are working in {org}.",
+    "personalSubtitle": "Your personal space. Only you can see it.",
+    "yourRoles": "Your roles:",
+    "deniedTitle": "You do not have access to that page",
+    "deniedBody": "Ask an organisation admin if you need it.",
+    "assessments": {
+      "title": "Assessments",
+      "emptyTitle": "No assessments yet",
+      "emptyBody": "Assessments are built from a job description and the competency framework. Start by reviewing the framework your assessments will use.",
+      "emptyAction": "Review the framework"
+    },
+    "growTitle": "Your development",
+    "growEmptyTitle": "Your profile starts with a baseline",
+    "growEmptyBody": "A 30-minute baseline will map your strengths across nine skill areas. Until then, see what each level looks like.",
+    "workspaceTitle": "Your workspace",
+    "links": {
+      "framework": {
+        "title": "Competency framework",
+        "body": "{count} sub-skills across nine domains, each with written level anchors."
+      },
+      "members": {
+        "title": "Members",
+        "body": "{count, plural, one {# person} other {# people}} in this organisation."
+      },
+      "design": {
+        "title": "Design system",
+        "body": "Every component, in both themes and both languages."
+      }
+    }
+  },
+  "framework": {
+    "title": "Competency framework",
+    "description": "Nine domains, each split into sub-skills with five behavioural levels. Scorers match answers to these anchors, never to a hidden ideal.",
+    "domains": "Domains",
+    "highLevel": "At a high level:",
+    "generatedBadge": "Built from the job description",
+    "generatedNote": "For each role, Aalim drafts a role-specific sub-skill map, for example SQL and statistics for a data analyst. A recruiter reviews it before the assessment goes live. The sub-skills below are the general fallback.",
+    "customBadge": "Your organisation",
+    "emptyTitle": "The framework has not been loaded",
+    "emptyBody": "Run the database seed to load the built-in framework."
+  },
+  "members": {
+    "title": "Members",
+    "description": "People who work in {org} and what they can do.",
+    "add": "Add member",
+    "addTitle": "Add a member",
+    "addDescription": "They need an Aalim account already. Email invitations are coming.",
+    "emailLabel": "Their email",
+    "emptyTitle": "No members yet",
+    "emptyBody": "Add the people who will create assessments and review reports.",
+    "you": "You",
+    "columns": {
+      "person": "Person",
+      "roles": "Roles"
+    },
+    "actionsFor": "Actions for {name}",
+    "editRoles": "Change roles",
+    "editRolesFor": "Roles for {name}",
+    "remove": "Remove from organisation",
+    "removed": "{name} was removed.",
+    "rolesUpdated": "Roles updated.",
+    "added": "Member added.",
+    "errors": {
+      "rolesRequired": "Choose at least one role.",
+      "lastAdmin": "Every organisation needs at least one admin. Make someone else an admin first.",
+      "noAccount": "No Aalim account uses that email. Ask them to create one, then add them.",
+      "alreadyMember": "This person is already a member.",
+      "invalidEmail": "Enter an email address like name@company.com.",
+      "notMember": "That person is not a member of this organisation.",
+      "generic": "That did not work. Try again."
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "description": "Your profile and how Aalim looks to you.",
+    "profile": {
+      "title": "Profile",
+      "description": "Your name appears on reports you create and in your organisation.",
+      "name": "Name",
+      "email": "Email",
+      "emailHint": "Contact support to change the email you sign in with.",
+      "nameRequired": "Enter your name.",
+      "saved": "Profile saved."
+    },
+    "display": {
+      "title": "Display",
+      "description": "These settings follow you across devices.",
+      "language": "Language",
+      "numerals": "Numbers",
+      "numeralsHint": "How digits are written.",
+      "theme": "Theme",
+      "themeSystem": "Match system",
+      "themeLight": "Light",
+      "themeDark": "Dark",
+      "textSize": "Text size",
+      "textSizeHint": "Makes all text larger.",
+      "textDefault": "Default",
+      "textLarge": "Larger"
+    }
+  },
+  "orgSettings": {
+    "title": "Organisation settings",
+    "description": "Applies to everyone in your organisation and to the candidates you invite.",
+    "general": "General",
+    "generalDescription": "Name, brand colour and how long candidate data is kept.",
+    "name": "Organisation name",
+    "brandColor": "Brand colour",
+    "brandColorHint": "Used for primary buttons in the candidate experience. Leave empty to use the Aalim indigo.",
+    "lowContrast": "White text on this colour is hard to read (below 4.5:1). Choose a darker colour.",
+    "retention": "Keep candidate data for (months)",
+    "retentionHint": "Default 12. Data older than this is deleted.",
+    "saved": "Settings saved.",
+    "invalid": "Check the fields: the name needs 2–80 characters, the colour a #RRGGBB value, retention 1–60 months."
+  },
+  "admin": {
+    "title": "Platform admin",
+    "description": "Across all organisations. Every action here is logged.",
+    "organizations": "Organisations",
+    "people": "People",
+    "name": "Name",
+    "members": "Members",
+    "recentActivity": "Recent activity",
+    "noActivity": "Nothing yet."
+  },
+  "errors": {
+    "pageTitle": "This page could not load",
+    "pageBody": "Your work is saved. Try again, and if it keeps happening, contact support.",
+    "retry": "Try again",
+    "notFoundTitle": "Page not found",
+    "notFoundBody": "The link may be wrong or the page may have moved.",
+    "goHome": "Go to the home page"
+  },
+  "components": {
+    "editor": {
+      "placeholder": "Write your answer…",
+      "toolbar": "Formatting",
+      "bold": "Bold",
+      "italic": "Italic",
+      "bulletList": "Bulleted list",
+      "orderedList": "Numbered list",
+      "words": "{count, plural, one {{formatted} word} other {{formatted} words}}"
+    },
+    "ranking": {
+      "instructions": "To reorder, press Space or Enter on the handle, move with the arrow keys, then press Space or Enter again. Press Escape to cancel.",
+      "picked": "Picked up {item}, position {position}.",
+      "over": "{item} is over position {position}.",
+      "dropped": "{item} dropped at position {position}.",
+      "cancelled": "Move cancelled.",
+      "moved": "{item} moved to position {position} of {total}.",
+      "handle": "Reorder {item}",
+      "moveUp": "Move {item} up",
+      "moveDown": "Move {item} down"
+    },
+    "allocation": {
+      "total": "Split {total} points",
+      "allAllocated": "All points allocated",
+      "remaining": "{count, plural, one {{formatted} point left} other {{formatted} points left}}",
+      "points": "pts"
+    },
+    "roleplay": {
+      "end": "End conversation",
+      "conversationWith": "Conversation with {name}",
+      "you": "You",
+      "typing": "{name} is replying",
+      "ended": "Conversation ended",
+      "reply": "Reply to {name}",
+      "placeholder": "Reply to {name}…",
+      "send": "Send"
+    },
+    "documents": {
+      "to": "To",
+      "cc": "Cc",
+      "memo": "Memo"
+    },
+    "timer": {
+      "minutesLeft": "{count, plural, one {{formatted} minute left in this task} other {{formatted} minutes left in this task}}",
+      "hidden": "Timer hidden",
+      "remaining": "{time} remaining",
+      "lowLeft": "{time} left",
+      "show": "Show timer",
+      "hide": "Hide timer"
+    },
+    "chapters": {
+      "label": "Progress",
+      "chapterOf": "Chapter {current} of {total}",
+      "done": "completed",
+      "current": "current",
+      "upcoming": "not started"
+    },
+    "autosave": {
+      "saved": "Saved",
+      "saving": "Saving…",
+      "offline": "Offline. Saved on this device.",
+      "error": "Not saved yet. We will keep trying."
+    },
+    "level": {
+      "valueText": "{level}, range {low} to {high}, {confidence}",
+      "confidence": {
+        "low": "low confidence",
+        "moderate": "moderate confidence",
+        "high": "high confidence"
+      }
+    },
+    "skill": {
+      "mustHave": "Must-have",
+      "niceToHave": "Nice-to-have"
+    },
+    "evidence": {
+      "confidence": {
+        "low": "Low confidence",
+        "moderate": "Moderate confidence",
+        "high": "High confidence"
+      }
+    },
+    "heatmap": {
+      "member": "Member",
+      "notAssessed": "Not assessed"
+    }
+  },
+  "gallery": {
+    "title": "Design system",
+    "intro": "Every Aalim component, built on the design tokens. Switch theme, language and numerals in the header: every specimen should hold up in all of them.",
+    "contents": "Contents",
+    "numeralsToggle": "Switch numerals",
+    "sections": {
+      "foundations": "Foundations",
+      "controls": "Controls",
+      "navigation": "Navigation and overlays",
+      "feedback": "Feedback and states",
+      "assessment": "Assessment",
+      "report": "Reports"
+    },
+    "sectionNotes": {
+      "foundations": "Colour, type, space, shape, icons and motion.",
+      "controls": "Buttons are verbs. Errors say what to do next.",
+      "navigation": "One soft shadow, for floating layers only.",
+      "feedback": "Every screen has designed empty, loading and error states.",
+      "assessment": "The candidate's world: materials look real, nothing counts down loudly.",
+      "report": "Levels use one hue, never red and green. Every score carries a range."
+    },
+    "foundations": {
+      "colors": {
+        "neutrals": "Neutrals",
+        "accent": "Accent",
+        "semantic": "Semantic",
+        "levels": "Skill levels",
+        "charts": "Chart series"
+      },
+      "type": "Type scale",
+      "typeNote": "Inter for Latin, IBM Plex Sans Arabic for Arabic. Body line height 1.5, headings 1.2.",
+      "typeSample": "Decisions under pressure",
+      "spacing": "Spacing",
+      "spacingNote": "4 px base on an 8-point grid.",
+      "shape": "Shape",
+      "shapeNote": "Radius 8 for controls, 12 for cards. One shadow, for popovers.",
+      "popoverShadow": "Popover",
+      "icons": "Icons",
+      "iconsNote": "Lucide, 1.5 px stroke, 16 and 20 px.",
+      "motion": "Motion",
+      "motionNote": "150–250 ms, ease-out, only to explain a change. Off when reduced motion is set.",
+      "motionShow": "Show details",
+      "motionHide": "Hide details",
+      "motionPanel": "Panels fade and rise 4 px as they open. Nothing bounces."
+    },
+    "controls": {
+      "buttons": "Buttons",
+      "startChapter": "Start chapter 2",
+      "saveDraft": "Save draft",
+      "cancel": "Cancel",
+      "delete": "Delete",
+      "learnMore": "How scores are produced",
+      "small": "Small",
+      "medium": "Medium",
+      "continue": "Continue",
+      "add": "Add",
+      "submitAnswer": "Submit answer",
+      "disabled": "Disabled",
+      "inputs": "Text fields",
+      "roleTitle": "Role title",
+      "roleTitleHint": "Candidates see this on their invitation.",
+      "roleTitlePlaceholder": "Senior data analyst",
+      "email": "Candidate email",
+      "emailError": "Enter a full email address, like lina@northwind.com.",
+      "notes": "Notes for reviewers",
+      "notesPlaceholder": "Anything the hiring team should know",
+      "optional": "Optional",
+      "disabledInput": "Language",
+      "disabledValue": "Set by the template",
+      "choices": "Choices",
+      "duration": "Duration",
+      "minutes": "{count} minutes",
+      "accommodations": "Accommodations",
+      "extraTime": "Allow extra time",
+      "untimed": "Allow untimed mode",
+      "largerText": "Offer larger text",
+      "importance": "Importance",
+      "importance_must": "Must-have",
+      "importance_nice": "Nice-to-have",
+      "importance_baseline": "Baseline only",
+      "shareReport": "Let candidates receive their report"
+    },
+    "navigation": {
+      "tabs": "Tabs",
+      "overview": "Overview",
+      "evidence": "Evidence",
+      "interview": "Interview questions",
+      "overviewBody": "A three-sentence portrait and an overall role fit, with confidence.",
+      "evidenceBody": "Quotes from the candidate's own answers, linked to each score.",
+      "interviewBody": "Questions that probe the areas with the lowest confidence.",
+      "segmented": "Segmented control",
+      "radar": "Radar",
+      "bars": "Bars",
+      "overlays": "Overlays",
+      "openDialog": "Pause the assessment",
+      "dialogTitle": "Pause after this chapter?",
+      "dialogBody": "Your answers are saved. You can come back to this link at any time before it expires.",
+      "keepWorking": "Keep working",
+      "pause": "Pause",
+      "menu": "Report actions",
+      "report": "Report",
+      "exportPdf": "Export as PDF",
+      "copyLink": "Copy share link",
+      "revoke": "Revoke link",
+      "howScored": "How this was scored",
+      "howScoredBody": "Two independent scoring passes matched the answer to the written level anchors. Where they disagreed, a third pass decided.",
+      "tooltip": "About confidence",
+      "tooltipBody": "Confidence grows when the same skill shows up consistently in different situations.",
+      "showToast": "Show a toast",
+      "toastTitle": "Link copied",
+      "toastBody": "It expires in 14 days."
+    },
+    "feedback": {
+      "alerts": "Alerts",
+      "infoTitle": "Early version",
+      "infoBody": "Use this report alongside interviews.",
+      "successTitle": "Report ready",
+      "successBody": "Sara Mansour's report is ready to review.",
+      "warningTitle": "Lower confidence in two areas",
+      "warningBody": "The session ended before leadership and communication were fully tested.",
+      "criticalTitle": "The report could not be generated",
+      "criticalBody": "Your data is safe. Try again in a moment.",
+      "retry": "Try again",
+      "badges": "Badges",
+      "draft": "Draft",
+      "inProgress": "In progress",
+      "completed": "Completed",
+      "awaitingReview": "Awaiting review",
+      "expired": "Expired",
+      "earlyVersion": "Early version",
+      "loading": "Loading",
+      "preparing": "Preparing your next scenario…",
+      "autosave": "Autosave",
+      "empty": "Empty state",
+      "emptyTitle": "No candidates yet",
+      "emptyBody": "Invite candidates by email, link or CSV. You will see their progress here.",
+      "emptyAction": "Invite candidates",
+      "cards": "Cards and people",
+      "cardTitle": "Senior data analyst",
+      "cardBody": "12 invited · 7 completed · 3 awaiting review",
+      "open": "Open",
+      "personRole": "Senior engineer, Northwind Logistics"
+    },
+    "assessment": {
+      "progress": "Chapter progress",
+      "progressNote": "Shows chapters, never a question count, because the length adapts.",
+      "lowTime": "Timer near the end",
+      "lowTimeNote": "Still quiet: it says how much time is left and never turns red or flashes.",
+      "cast": "Scenario cast",
+      "documents": "Document viewer",
+      "documentsNote": "Emails, memos, spreadsheets and charts look like the real thing. One critical detail is hidden in the email footnote.",
+      "editor": "Answer editor",
+      "editorNote": "Light formatting only. Length is never rewarded.",
+      "editorLabel": "Your reply to Lina",
+      "editorHint": "Lina strongly disagrees with your choice and says she will escalate. Write your reply to her.",
+      "pasteLogged": "Paste noted for context ({count} characters). It never lowers a score.",
+      "ranking": "Ranking",
+      "rankingNote": "Drag, or use the keyboard or the arrow buttons.",
+      "allocation": "Allocation",
+      "allocationNote": "Split 100 points across four workstreams.",
+      "roleplay": "Role-play chat",
+      "roleplayNote": "The stakeholder has hidden goals and a mood that reacts to how you communicate.",
+      "roleplayReply": "Fine. But I need to know today what you are changing, not just that you are sorry.",
+      "transition": "Chapter transition",
+      "transitionNote": "Earlier decisions come back.",
+      "transitionEyebrow": "What happened next",
+      "transitionTitle": "Two days later",
+      "transitionBody": "You launched on time with manual reconciliation. On Wednesday, Yuki's support team catches two mismatched payments before the client does. Tomás asks you to explain the plan to the client's finance director.",
+      "pauseHere": "Pause here",
+      "startChapter3": "Start chapter 3"
+    },
+    "report": {
+      "chips": "Skill chips",
+      "legend": "Level legend",
+      "meters": "Level meters",
+      "metersNote": "The bar shows the level; the line under it shows the range. Lower confidence gives a wider range.",
+      "evidence": "Evidence quote",
+      "evidenceNote": "No quote, no score.",
+      "profile": "Skill profile",
+      "profileNote": "Radar for shape, bars for reading exact ranges, and comparison of up to four candidates.",
+      "radar": "Radar",
+      "bars": "Bars",
+      "compare": "Compare",
+      "heatmap": "Team heatmap",
+      "heatmapNote": "Members × domains. A dash means not assessed yet."
+    }
+  }
+}

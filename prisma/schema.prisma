@@ -1,0 +1,792 @@
+// Aalim data model.
+//
+// Conventions
+// - Tables are snake_case (@@map); columns stay camelCase.
+// - Every org-scoped row carries `organizationId`. Rows that belong to a person
+//   (a candidate's session, an individual's Grow data) carry `subjectUserId`
+//   or `userId`. Row-level security policies (see migrations) use these
+//   columns, so they are denormalised onto child tables on purpose.
+// - Localised framework text is stored as JSON: { "en": "...", "ar": "..." }.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ───────────────────────── Identity (Better Auth) ─────────────────────────
+
+model User {
+  id              String   @id
+  name            String
+  email           String   @unique
+  emailVerified   Boolean  @default(false)
+  image           String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  /// Preferred UI language: "en" | "ar".
+  locale          String   @default("en")
+  /// Digits to display: "latn" (0-9) or "arab" (٠-٩).
+  numerals        String   @default("latn")
+  /// Platform staff. Never settable from the client.
+  isPlatformAdmin Boolean  @default(false)
+
+  sessions            AuthSession[]
+  accounts            Account[]
+  memberships         Membership[]
+  assessmentSessions  AssessmentSession[]
+  developmentPlans    DevelopmentPlan[]
+  practiceSessions    PracticeSession[]
+  trackEnrollments    TrackEnrollment[]
+  teamMemberships     TeamMember[]
+  consents            Consent[]
+
+  @@map("user")
+}
+
+model AuthSession {
+  id        String   @id
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  /// The organisation the person is currently working in.
+  activeOrganizationId String?
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("auth_session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
+}
+
+// ───────────────────────── Tenancy ─────────────────────────
+
+/// Roles a person can hold inside an organisation. "Candidate / Individual"
+/// is not an org role: every signed-in person is one. "Platform admin" is
+/// User.isPlatformAdmin.
+enum OrgRole {
+  ORG_ADMIN
+  RECRUITER
+  HIRING_MANAGER
+  TEAM_MANAGER
+}
+
+model Organization {
+  id                  String   @id @default(cuid())
+  name                String
+  slug                String   @unique
+  logoUrl             String?
+  /// Brand accent as hex. Null means the Aalim default.
+  brandColor          String?
+  defaultLocale       String   @default("en")
+  /// Candidate data retention in months (default 12).
+  dataRetentionMonths Int      @default(12)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  memberships   Membership[]
+  domains       CompetencyDomain[]
+  competencies  Competency[]
+  templates     AssessmentTemplate[]
+  invitations   Invitation[]
+  sessions      AssessmentSession[]
+  teams         Team[]
+  tracks        Track[]
+  auditLogs     AuditLog[]
+
+  @@map("organization")
+}
+
+model Membership {
+  id             String       @id @default(cuid())
+  organizationId String
+  userId         String
+  roles          OrgRole[]
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, userId])
+  @@index([userId])
+  @@map("membership")
+}
+
+// ───────────────────────── Competency framework ─────────────────────────
+
+/// organizationId = null for the built-in Aalim framework.
+model CompetencyDomain {
+  id                         String        @id @default(cuid())
+  organizationId             String?
+  key                        String
+  order                      Int
+  name                       Json
+  description                Json
+  highLevel                  Json
+  generatedFromJobDescription Boolean      @default(false)
+  createdAt                  DateTime      @default(now())
+  updatedAt                  DateTime      @updatedAt
+  organization               Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  competencies               Competency[]
+
+  @@unique([organizationId, key])
+  @@map("competency_domain")
+}
+
+/// A sub-skill with behavioural anchors for levels 1-5.
+model Competency {
+  id             String           @id @default(cuid())
+  organizationId String?
+  domainId       String
+  key            String
+  /// Display order within the domain.
+  order          Int              @default(0)
+  name           Json
+  description    Json
+  /// { "1": {en, ar}, ..., "5": {en, ar} }
+  anchors        Json
+  isActive       Boolean          @default(true)
+  version        Int              @default(1)
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  organization   Organization?    @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  domain         CompetencyDomain @relation(fields: [domainId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, key])
+  @@index([domainId])
+  @@map("competency")
+}
+
+// ───────────────────────── Hire: templates and invitations ─────────────────────────
+
+enum TemplateStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum SkillImportance {
+  MUST_HAVE
+  NICE_TO_HAVE
+  BASELINE
+}
+
+model AssessmentTemplate {
+  id                String         @id @default(cuid())
+  organizationId    String
+  createdById       String
+  title             String
+  jobDescription    String
+  /// JD Analyst output: summary, seniority, industry, flags.
+  analysis          Json?
+  /// Role-specific technical sub-skill map, reviewed by the recruiter.
+  technicalSkillMap Json?
+  language          String         @default("en")
+  durationMinutes   Int            @default(50)
+  /// { extraTimeAllowed, untimedAllowed, ... }
+  accommodations    Json           @default("{}")
+  status            TemplateStatus @default(DRAFT)
+  publishedAt       DateTime?
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+  organization      Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  skillWeights      TemplateSkillWeight[]
+  invitations       Invitation[]
+  sessions          AssessmentSession[]
+
+  @@index([organizationId, status])
+  @@map("assessment_template")
+}
+
+model TemplateSkillWeight {
+  id             String             @id @default(cuid())
+  organizationId String
+  templateId     String
+  /// A domain key or a competency key.
+  skillKey       String
+  importance     SkillImportance    @default(BASELINE)
+  weight         Float              @default(1)
+  template       AssessmentTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+
+  @@unique([templateId, skillKey])
+  @@map("template_skill_weight")
+}
+
+enum InvitationStatus {
+  PENDING
+  OPENED
+  ACCEPTED
+  EXPIRED
+  REVOKED
+}
+
+model Invitation {
+  id             String             @id @default(cuid())
+  organizationId String
+  templateId     String
+  email          String
+  name           String?
+  /// Hash of the token sent to the candidate. The raw token is never stored.
+  tokenHash      String             @unique
+  status         InvitationStatus   @default(PENDING)
+  /// { extraTimeMultiplier, untimed, largerText }
+  accommodations Json               @default("{}")
+  expiresAt      DateTime
+  invitedById    String
+  candidateUserId String?
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+  organization   Organization       @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  template       AssessmentTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+  session        AssessmentSession?
+
+  @@index([organizationId, templateId])
+  @@index([email])
+  @@map("invitation")
+}
+
+// ───────────────────────── Assessment sessions ─────────────────────────
+
+enum AssessmentMode {
+  HIRE
+  GROW
+  TEAM
+}
+
+/// invited → started → in progress ⇄ paused → completed → scored → reported
+enum SessionStatus {
+  INVITED
+  STARTED
+  IN_PROGRESS
+  PAUSED
+  COMPLETED
+  SCORED
+  REPORTED
+}
+
+enum EnginePhase {
+  CALIBRATE
+  EXPLORE
+  VALIDATE
+  STRESS_TEST
+  DONE
+}
+
+model AssessmentSession {
+  id                String             @id @default(cuid())
+  organizationId    String?
+  /// The person being assessed.
+  subjectUserId     String?
+  mode              AssessmentMode
+  templateId        String?
+  invitationId      String?            @unique
+  status            SessionStatus      @default(INVITED)
+  phase             EnginePhase        @default(CALIBRATE)
+  timeBudgetMinutes Int                @default(50)
+  elapsedSeconds    Int                @default(0)
+  currentChapter    Int                @default(1)
+  locale            String             @default("en")
+  accommodations    Json               @default("{}")
+  engineVersion     String
+  startedAt         DateTime?
+  completedAt       DateTime?
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  organization      Organization?      @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  subject           User?              @relation(fields: [subjectUserId], references: [id], onDelete: SetNull)
+  template          AssessmentTemplate? @relation(fields: [templateId], references: [id], onDelete: SetNull)
+  invitation        Invitation?        @relation(fields: [invitationId], references: [id], onDelete: SetNull)
+  world             ScenarioWorld?
+  items             Item[]
+  responses         Response[]
+  scores            ItemScore[]
+  snapshots         CandidateModelSnapshot[]
+  hypotheses        Hypothesis[]
+  report            Report?
+  integrityEvents   IntegrityEvent[]
+
+  @@index([organizationId, status])
+  @@index([subjectUserId])
+  @@map("assessment_session")
+}
+
+/// The fictional company the session's story takes place in.
+model ScenarioWorld {
+  id               String            @id @default(cuid())
+  sessionId        String            @unique
+  organizationId   String?
+  subjectUserId    String?
+  companyName      String
+  industry         String
+  /// { premise, setting, chapters[] }
+  summary          Json
+  /// [{ id, name, role, personality, initials }]
+  cast             Json
+  /// Storyline hooks and carried-forward consequences.
+  hooks            Json
+  promptVersion    String
+  createdAt        DateTime          @default(now())
+  session          AssessmentSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@map("scenario_world")
+}
+
+enum ItemType {
+  TRADE_OFF_DILEMMA
+  RANKING_ALLOCATION
+  INBOX
+  ROLE_PLAY
+  CASE_ANALYSIS
+  DESIGN_CHALLENGE
+  WRITTEN_WORK_SAMPLE
+  TECHNICAL_TASK
+  CONSEQUENCE_CHAIN
+  REFLECTION
+  FORCED_CHOICE_WORK_STYLE
+}
+
+enum GuessabilityStatus {
+  NOT_REQUIRED
+  PENDING
+  PASSED
+  FAILED
+}
+
+enum ItemStatus {
+  PREGENERATED
+  PRESENTED
+  ANSWERED
+  DISCARDED
+}
+
+model Item {
+  id                   String             @id @default(cuid())
+  sessionId            String
+  organizationId       String?
+  subjectUserId        String?
+  chapter              Int
+  sequence             Int
+  type                 ItemType
+  difficulty           Int
+  targetCompetencyKeys String[]
+  /// Candidate-visible content: scenario, materials[], task, options[], probe, twist.
+  content              Json
+  /// Never sent to the candidate.
+  rubric               Json
+  embeddedDetail       Json?
+  guessabilityStatus   GuessabilityStatus @default(NOT_REQUIRED)
+  guessabilityResult   Json?
+  status               ItemStatus         @default(PREGENERATED)
+  promptVersion        String
+  presentedAt          DateTime?
+  createdAt            DateTime           @default(now())
+  session              AssessmentSession  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  responses            Response[]
+  scores               ItemScore[]
+
+  @@index([sessionId, sequence])
+  @@map("item")
+}
+
+enum ResponseStage {
+  MAIN
+  PROBE
+  TWIST
+  ROLE_PLAY_TURN
+}
+
+model Response {
+  id             String            @id @default(cuid())
+  /// Client-generated id so offline answers sync idempotently.
+  clientId       String            @unique
+  itemId         String
+  sessionId      String
+  organizationId String?
+  subjectUserId  String?
+  stage          ResponseStage     @default(MAIN)
+  content        Json
+  /// Paste counts, focus changes, keystroke timing summaries.
+  events         Json              @default("[]")
+  startedAt      DateTime?
+  submittedAt    DateTime          @default(now())
+  durationMs     Int?
+  item           Item              @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  session        AssessmentSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  scores         ItemScore[]
+
+  @@index([sessionId])
+  @@map("response")
+}
+
+model ItemScore {
+  id                    String            @id @default(cuid())
+  responseId            String
+  itemId                String
+  sessionId             String
+  organizationId        String?
+  subjectUserId         String?
+  competencyKey         String
+  level                 Float
+  confidence            Float
+  evidenceQuote         String
+  rationale             String
+  embeddedDetailNoticed Boolean?
+  /// 1, 2 for double scoring; 3 for the tie-break pass.
+  pass                  Int               @default(1)
+  isFinal               Boolean           @default(true)
+  scorerVersion         String
+  createdAt             DateTime          @default(now())
+  response              Response          @relation(fields: [responseId], references: [id], onDelete: Cascade)
+  item                  Item              @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  session               AssessmentSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId, competencyKey])
+  @@map("item_score")
+}
+
+model CandidateModelSnapshot {
+  id             String            @id @default(cuid())
+  sessionId      String
+  organizationId String?
+  subjectUserId  String?
+  sequence       Int
+  model          Json
+  createdAt      DateTime          @default(now())
+  session        AssessmentSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@unique([sessionId, sequence])
+  @@map("candidate_model_snapshot")
+}
+
+enum HypothesisDirection {
+  STRENGTH
+  WEAKNESS
+}
+
+enum HypothesisStatus {
+  OPEN
+  CONFIRMED
+  REJECTED
+}
+
+model Hypothesis {
+  id             String              @id @default(cuid())
+  sessionId      String
+  organizationId String?
+  subjectUserId  String?
+  competencyKey  String
+  direction      HypothesisDirection
+  status         HypothesisStatus    @default(OPEN)
+  confidence     Float
+  /// [{ itemScoreId, quote }]
+  evidence       Json
+  /// For weaknesses: conditions it appears under, e.g. ["time_pressure"].
+  conditions     Json?
+  ceilingLevel   Float?
+  openedAt       DateTime            @default(now())
+  resolvedAt     DateTime?
+  session        AssessmentSession   @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId])
+  @@map("hypothesis")
+}
+
+// ───────────────────────── Reports ─────────────────────────
+
+enum ReportKind {
+  HIRE
+  GROW
+  TEAM_MEMBER
+}
+
+enum ReportStatus {
+  PENDING
+  READY
+  FAILED
+}
+
+enum RoleFit {
+  STRONG
+  GOOD
+  PARTIAL
+  WEAK
+}
+
+model Report {
+  id                  String            @id @default(cuid())
+  sessionId           String            @unique
+  organizationId      String?
+  subjectUserId       String?
+  kind                ReportKind
+  status              ReportStatus      @default(PENDING)
+  roleFit             RoleFit?
+  content             Json?
+  writerVersion       String?
+  sharedWithCandidate Boolean           @default(false)
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @updatedAt
+  session             AssessmentSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  shareLinks          ReportShareLink[]
+
+  @@map("report")
+}
+
+model ReportShareLink {
+  id             String    @id @default(cuid())
+  reportId       String
+  organizationId String?
+  subjectUserId  String?
+  tokenHash      String    @unique
+  expiresAt      DateTime
+  createdById    String
+  revokedAt      DateTime?
+  createdAt      DateTime  @default(now())
+  report         Report    @relation(fields: [reportId], references: [id], onDelete: Cascade)
+
+  @@map("report_share_link")
+}
+
+enum IntegrityEventType {
+  PASTE
+  TAB_HIDDEN
+  FOCUS_LOST
+  STYLE_SHIFT
+  TIMING_ANOMALY
+  WEBCAM
+}
+
+/// Context for reviewers. Never lowers a score automatically.
+model IntegrityEvent {
+  id             String             @id @default(cuid())
+  sessionId      String
+  organizationId String?
+  subjectUserId  String?
+  itemId         String?
+  type           IntegrityEventType
+  payload        Json               @default("{}")
+  occurredAt     DateTime           @default(now())
+  session        AssessmentSession  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@index([sessionId])
+  @@map("integrity_event")
+}
+
+// ───────────────────────── Grow (private to the individual) ─────────────────────────
+
+model DevelopmentPlan {
+  id         String   @id @default(cuid())
+  userId     String
+  sessionId  String?
+  /// Top focus areas with reasons.
+  focusAreas Json
+  /// 30/60/90-day actions, practice scenarios, resources.
+  actions    Json
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("development_plan")
+}
+
+model Track {
+  id             String            @id @default(cuid())
+  /// null for built-in tracks.
+  organizationId String?
+  key            String
+  name           Json
+  description    Json
+  /// Ordered session definitions.
+  sessions       Json
+  createdAt      DateTime          @default(now())
+  organization   Organization?     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  enrollments    TrackEnrollment[]
+
+  @@unique([organizationId, key])
+  @@map("track")
+}
+
+model TrackEnrollment {
+  id             String    @id @default(cuid())
+  userId         String
+  trackId        String
+  /// Set when a manager assigned it through Team mode.
+  assignedByTeamId String?
+  completedSessions Int    @default(0)
+  startedAt      DateTime  @default(now())
+  completedAt    DateTime?
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  track          Track     @relation(fields: [trackId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, trackId])
+  @@map("track_enrollment")
+}
+
+model PracticeSession {
+  id              String   @id @default(cuid())
+  userId          String
+  competencyKeys  String[]
+  difficulty      Int
+  item            Json
+  response        Json?
+  /// Did well (quoted), expert would also consider, one strong approach.
+  feedback        Json?
+  reflectionNote  String?
+  createdAt       DateTime @default(now())
+  completedAt     DateTime?
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+  @@map("practice_session")
+}
+
+// ───────────────────────── Team ─────────────────────────
+
+model Team {
+  id             String       @id @default(cuid())
+  organizationId String
+  name           String
+  managerUserId  String
+  goals          Json         @default("[]")
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  members        TeamMember[]
+
+  @@index([organizationId])
+  @@map("team")
+}
+
+enum TeamMemberStatus {
+  INVITED
+  CONSENTED
+  DECLINED
+  ASSESSED
+  REMOVED
+}
+
+model TeamMember {
+  id              String           @id @default(cuid())
+  teamId          String
+  organizationId  String
+  userId          String?
+  email           String
+  status          TeamMemberStatus @default(INVITED)
+  sessionId       String?
+  /// Managers never see raw answers unless the member agrees.
+  shareRawAnswers Boolean          @default(false)
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  team            Team             @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  user            User?            @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@unique([teamId, email])
+  @@map("team_member")
+}
+
+// ───────────────────────── Trust ─────────────────────────
+
+enum ConsentKind {
+  ASSESSMENT_DATA_USE
+  TEAM_SHARING
+  PROFILE_SHARE
+  RAW_ANSWER_SHARING
+  DEMOGRAPHICS
+  PROCTORING
+  OUTCOME_TRACKING
+}
+
+model Consent {
+  id             String      @id @default(cuid())
+  userId         String?
+  email          String?
+  organizationId String?
+  kind           ConsentKind
+  /// What the consent applies to, e.g. "invitation:abc".
+  subject        String
+  granted        Boolean
+  /// Version of the consent text shown.
+  textVersion    String
+  createdAt      DateTime    @default(now())
+  revokedAt      DateTime?
+  user           User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@map("consent")
+}
+
+model AuditLog {
+  id             String        @id @default(cuid())
+  organizationId String?
+  actorUserId    String?
+  action         String
+  targetType     String?
+  targetId       String?
+  metadata       Json          @default("{}")
+  createdAt      DateTime      @default(now())
+  organization   Organization? @relation(fields: [organizationId], references: [id], onDelete: SetNull)
+
+  @@index([organizationId, createdAt])
+  @@map("audit_log")
+}
+
+/// Every language-model call, with tokens and cost.
+model AiCallLog {
+  id             String   @id @default(cuid())
+  organizationId String?
+  sessionId      String?
+  agent          String
+  promptVersion  String
+  provider       String
+  model          String
+  inputTokens    Int      @default(0)
+  outputTokens   Int      @default(0)
+  costUsd        Decimal  @default(0) @db.Decimal(10, 6)
+  latencyMs      Int
+  ok             Boolean
+  error          String?
+  input          Json
+  output         Json?
+  createdAt      DateTime @default(now())
+
+  @@index([agent, createdAt])
+  @@index([sessionId])
+  @@map("ai_call_log")
+}

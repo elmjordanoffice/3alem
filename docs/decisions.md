@@ -1,0 +1,50 @@
+# Decisions log
+
+Choices the brief left open, or where I departed from it, with the reason. Newest last. Format: **D-nnn: decision.** Why. *(Phase)*
+
+**D-001: Stack: Next.js 16 App Router, TypeScript, Tailwind 4, Radix-based shadcn pattern, Prisma 7.10.** As recommended. Prisma's `latest` npm tag is an 8.0 release candidate, so I pinned the latest stable 7.x. *(0)*
+
+**D-002: Better Auth instead of Supabase Auth or Clerk.** Self-hosted, no third-party identity vendor holding candidate data, sessions live in our own Postgres next to RLS, and roles stay in our own `Membership` model. It covers email/password, password reset and rate limiting, with SSO/social providers available later. *(0)*
+
+**D-003: Row-level security with two DB roles.** An owner role for migrations and trusted system work, and a non-owner runtime role on which policies are enforced. Context goes in through transaction-local `set_config`. App-level permission checks stay as well. Defence in depth: a missing `where` clause cannot leak another tenant's data. *(0)*
+
+**D-004: Tertiary text is `#736D68`, not `#A8A29E`.** `#A8A29E` on `#FAFAF9` is about 2.5:1 and fails the brief's own AA requirement. It is kept as `--mark-muted` for non-text marks (disabled icons, chart grid, drag handles). *(0)*
+
+**D-005: Dark-mode accent `#5B5FEF`, with darker hover/active states.** `#3B3FD8` is too dark to read as an accent on a near-black surface. Hover darkens rather than lightens because white text on a lighter indigo fell to 3.9:1. Accent-coloured *text* uses a separate lighter token (`--accent-text`). *(0)*
+
+**D-006: No locale prefix in URLs.** Locale comes from a cookie kept in sync with the profile, then `Accept-Language`. One invitation link works in either language, and a candidate can switch mid-session without changing URL. *(0)*
+
+**D-007: Latin digits by default, Arabic-Indic optional.** Latin digits are standard in Gulf and Levant business software and keep scores and tables consistent across languages. The setting is per person (Settings → Numbers). All numbers go through `Intl` with `-u-nu-`. *(0)*
+
+**D-008: Self-hosted fonts (Fontsource).** No requests to Google Fonts from the candidate's browser: better privacy and no third-party dependency during a timed assessment. *(0)*
+
+**D-009: `Session` → `AssessmentSession`; the auth session is `AuthSession`.** Avoids a name collision and makes queries self-explanatory. *(0)*
+
+**D-010: Role model.** Candidate/Individual is implicit for every account. Org roles are an array on `Membership`, so one person can be Recruiter and Team manager. Platform admin is a server-only flag. Every org must keep at least one admin (enforced in code and tested). *(0)*
+
+**D-011: Voluntary demographic data is deferred to Phase 5** and will live in a separate Postgres schema with its own role, never joined to assessment data in application queries. The fairness dashboard needs it only in aggregate. *(5)*
+
+**D-012: Mail transport.** Development and tests write messages to `.mail/` and the console. A production provider (SMTP / Postmark / SES) is chosen at deployment; the interface is `sendMail({to, subject, text})`. *(0)*
+
+**D-013: Level ranges widen with uncertainty.** Displayed range = estimate ± (0.15 + 0.85 × (1 − confidence)), clamped to 1–5 and rounded to one decimal. Confidence is shown as low / moderate / high (thresholds 0.5 and 0.75), never as a percentage. Phase 1 will replace this with the Candidate Model's posterior interval and keep the same display contract. *(0)*
+
+**D-014: Redis/BullMQ arrives in Phase 1** with the first background jobs (scoring, report writing). Phase 0 has none, and an idle queue would be untested infrastructure. *(1)*
+
+**D-015: Phase 0 adds existing accounts to an organisation; email invitations for colleagues come in Phase 2** with the recruiter settings screen. Candidate invitations (`Invitation` model) are a separate flow in Phase 1. *(0)*
+
+**D-016: The org brand colour is stored and validated in Phase 0 and applied in the candidate flow in Phase 1.** The settings screen warns when white text on the colour falls below 4.5:1. *(0)*
+
+**D-017: Built-in framework: 9 domains, 46 sub-skills, 230 behavioural anchors in English and Arabic.** Open points for a native-speaker and psychometrician review before launch:
+- The Arabic level names (ناشئ / في طور النمو / متمكّن / متقدّم / خبير). "Developing" has no clean one-word equivalent.
+- Arabic anchors use the conventional generic masculine verb forms. A gender-neutral rewrite (verbal nouns) is possible if wanted.
+- Deliberately adjacent sub-skills (`judgment.deciding-under-ambiguity` vs `adaptability.comfort-with-ambiguity`, `leadership.handling-conflict` vs `communication.difficult-conversations`): the first of each pair covers the decision or outcome, the second the behaviour or delivery. The Scorer prompt (Phase 1) will carry this guidance. *(0)*
+
+**D-018: Heatmap column headers use short domain labels** (Tech, Think, Judge…) with the full name in `<abbr title>` and the screen-reader table. *(0)*
+
+**D-019: `AUTH_RATE_LIMIT=off` exists only for the end-to-end suite**, which signs in many times a minute from one IP. Production always rate-limits. *(0)*
+
+**D-020: Disabled primary buttons turn neutral** (sunken surface, tertiary text) instead of a faded indigo. Faded accent reads as "slightly available" and has poor contrast in dark mode. *(0)*
+
+**D-021: Arabic initials are joined with a zero-width non-joiner** so they render as separate letters (ل‌ح), not as a two-letter word. *(0)*
+
+**D-022: AI provider.** Claude by default, behind a `ModelProvider` interface with a deterministic `mock` provider for tests and personas. Prompts are versioned files in `src/lib/ai/prompts/` (Phase 1). *(1)*

@@ -1,0 +1,120 @@
+/*
+ * Aalim design tokens.
+ *
+ * One source of truth for colour, type, space, shape and motion. Components
+ * use these through Tailwind utilities (bg-surface, text-secondary, ...).
+ * Every text/background pair is checked for WCAG AA in tests/unit/contrast.test.ts.
+ */
+
+:root {
+  color-scheme: light;
+
+  /* Neutrals (warm stone) */
+  --background: #fafaf9;
+  --surface: #ffffff;
+  --surface-subtle: #f5f5f4;
+  --surface-sunken: #f0efed;
+  --border: #e7e5e4;
+  --border-strong: #d6d3d1;
+  --text: #1c1917;
+  --text-secondary: #57534e;
+  /* Tertiary TEXT is darkened from #A8A29E to meet 4.5:1 (see D-004). */
+  --text-tertiary: #736d68;
+  /* #A8A29E is kept for non-text marks: disabled icons, dividers, chart grid. */
+  --mark-muted: #a8a29e;
+
+  /* Brand accent: primary actions, focus and current selection only. */
+  --accent: #3b3fd8;
+  --accent-hover: #3236c0;
+  --accent-active: #2a2ea6;
+  --accent-foreground: #ffffff;
+  --accent-subtle: #eef0fe;
+  --accent-text: #3236c0;
+  --focus-ring: #3b3fd8;
+
+  /* Semantic */
+  --success: #15803d;
+  --success-subtle: #ecfdf3;
+  --warning: #b45309;
+  --warning-subtle: #fff7ed;
+  --critical: #b91c1c;
+  --critical-subtle: #fef2f2;
+  --info: #1d4ed8;
+  --info-subtle: #eff4ff;
+
+  /* Skill levels: a single-hue ramp. Never red/green. */
+  --level-1: #e4e5fb;
+  --level-2: #c2c4f5;
+  --level-3: #9497ec;
+  --level-4: #5d61dd;
+  --level-5: #2f33ad;
+  --level-1-fg: #1c1917;
+  --level-2-fg: #1c1917;
+  --level-3-fg: #1c1917;
+  --level-4-fg: #ffffff;
+  --level-5-fg: #ffffff;
+  --level-empty: #f0efed;
+
+  /* Charts: categorical, for comparing up to 4 candidates. */
+  --chart-1: #3b3fd8;
+  --chart-2: #0f766e;
+  --chart-3: #b45309;
+  --chart-4: #9d2f7a;
+  --chart-grid: #e7e5e4;
+
+  --shadow-popover: 0 8px 24px -6px rgb(28 25 23 / 0.12), 0 2px 6px -2px rgb(28 25 23 / 0.08);
+  --overlay: rgb(28 25 23 / 0.4);
+}
+
+.dark {
+  color-scheme: dark;
+
+  --background: #0f0e0d;
+  --surface: #191716;
+  --surface-subtle: #211f1d;
+  --surface-sunken: #141312;
+  --border: #2e2b28;
+  --border-strong: #423e3a;
+  --text: #f5f5f4;
+  --text-secondary: #c9c5c1;
+  --text-tertiary: #a19b95;
+  --mark-muted: #6b655f;
+
+  --accent: #5b5fef;
+  --accent-hover: #4f53e3;
+  --accent-active: #4448d2;
+  --accent-foreground: #ffffff;
+  --accent-subtle: #22234a;
+  --accent-text: #a5a8fa;
+  --focus-ring: #8f92f7;
+
+  --success: #4ade80;
+  --success-subtle: #12261a;
+  --warning: #fbbf24;
+  --warning-subtle: #2b2010;
+  --critical: #f87171;
+  --critical-subtle: #2d1515;
+  --info: #7aa7fa;
+  --info-subtle: #141f36;
+
+  --level-1: #262849;
+  --level-2: #353a86;
+  --level-3: #4b50c2;
+  --level-4: #7a7ef0;
+  --level-5: #b4b6fa;
+  --level-1-fg: #f5f5f4;
+  --level-2-fg: #f5f5f4;
+  --level-3-fg: #ffffff;
+  --level-4-fg: #0f0e0d;
+  --level-5-fg: #0f0e0d;
+  --level-empty: #24211f;
+
+  --chart-1: #8286f5;
+  --chart-2: #2dd4bf;
+  --chart-3: #fbbf24;
+  --chart-4: #f0abfc;
+  --chart-grid: #2e2b28;
+
+  --shadow-popover: 0 8px 24px -6px rgb(0 0 0 / 0.5), 0 2px 6px -2px rgb(0 0 0 / 0.4);
+  --overlay: rgb(0 0 0 / 0.6);
+}
