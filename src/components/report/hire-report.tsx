@@ -7,17 +7,16 @@ import type { ReportContent, ReportDomain, ReportSkill } from "@/lib/hire/report
 import { WORK_STYLES } from "@/lib/framework/data";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
 import { Alert } from "@/components/ui/alert";
-import { Tabs, TabsContent, SegmentedList, SegmentedTrigger } from "@/components/ui/tabs";
-import { LevelLegend, LevelMeter, SkillChip } from "./level";
+import { LevelMeter, SkillChip } from "./level";
 import { EvidenceCard } from "./evidence-card";
-import { SkillBars, SkillRadar } from "./charts";
+import { SkillRadar } from "./charts";
 import { useLocaleSettings, useNumbers } from "@/components/providers";
+import { SENIORITY_LEVEL } from "@/lib/engine/config";
+import { levelBand } from "@/lib/levels";
+import { RangeScale } from "./range-scale";
 
 export type ReportAudience = "team" | "candidate" | "print";
-
-const FIT_TONE = { STRONG: "accent", GOOD: "accent", PARTIAL: "warning", WEAK: "neutral" } as const;
 
 /** Framework work-style keys → the style keys items record. */
 const STYLE_KEY: Record<string, string> = { "risk-appetite": "workstyle.risk", pace: "workstyle.pace", focus: "workstyle.focus", "working-mode": "workstyle.mode" };
@@ -80,13 +79,13 @@ function SkillRow({ s, content, skillNames, print }: { s: ReportSkill; content: 
 function DomainCard({ d, content, skillNames, print }: { d: ReportDomain; content: ReportContent; skillNames: Record<string, string>; print: boolean }) {
   const t = useTranslations("report");
   return (
-    <Collapsible.Root className="group rounded-card border border-border bg-surface" defaultOpen={print}>
-      <Collapsible.Trigger className="flex w-full items-center gap-4 p-4 text-start focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus">
+    <Collapsible.Root className="group" defaultOpen={print}>
+      <Collapsible.Trigger className="flex w-full items-center gap-4 px-4 py-3.5 text-start transition-colors hover:bg-surface-subtle focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus sm:px-5">
         <LevelMeter label={d.name} estimate={d.estimate} confidence={d.confidence} range={d.range} className="flex-1" />
         {d.importance === "MUST_HAVE" ? <Badge tone="accent" className="hidden sm:inline-flex">{t("mustHave")}</Badge> : null}
         <ChevronDown className="size-4 shrink-0 text-tertiary transition-transform group-data-[state=open]:rotate-180 print:hidden" aria-hidden />
       </Collapsible.Trigger>
-      <Collapsible.Content className="border-t border-border px-4">
+      <Collapsible.Content className="border-t border-border bg-surface-subtle/50 px-4 sm:px-5">
         {d.subSkills.length ? d.subSkills.map((s) => <SkillRow key={s.key} s={s} content={content} skillNames={skillNames} print={print} />) : <p className="py-3 text-sm text-tertiary">{t("domainBaselineOnly")}</p>}
       </Collapsible.Content>
     </Collapsible.Root>
@@ -110,6 +109,68 @@ function ClaimList({ claims, content, skillNames, empty }: { claims: ReportConte
   );
 }
 
+/** The report's opening: role fit, its confidence, and every must-have skill against the level the role needs. */
+function Verdict({ content }: { content: ReportContent }) {
+  const t = useTranslations("report");
+  const tl = useTranslations("levels");
+  const n = useNumbers();
+  const expected = SENIORITY_LEVEL[content.role.seniority] ?? 3;
+  const must = content.domains.filter((d) => d.importance === "MUST_HAVE");
+  const shown = (must.length ? must : [...content.domains].sort((a, b) => b.confidence - a.confidence).slice(0, 3)).slice(0, 5);
+  const conf = content.fit.confidence >= 0.75 ? "high" : content.fit.confidence >= 0.5 ? "moderate" : "low";
+  return (
+    <div className="overflow-hidden rounded-[20px] bg-ink text-ink-foreground shadow-raised print:shadow-none">
+      <div className="grid gap-10 p-6 sm:p-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:gap-12 lg:p-10">
+        <div className="flex flex-col">
+          <p className="text-sm text-ink-secondary">{t("roleFit")}</p>
+          <p className="mt-2 font-display text-[2.5rem] font-semibold leading-none tracking-[-0.02em] sm:text-5xl">{t(`fit.${content.fit.level}`)}</p>
+          <p className="mt-3 flex items-center gap-2 text-sm">
+            <span className="flex gap-0.5" aria-hidden>
+              {[0, 1, 2].map((i) => <span key={i} className={cn("h-1.5 w-4 rounded-full", i < (conf === "high" ? 3 : conf === "moderate" ? 2 : 1) ? "bg-saffron" : "bg-ink-foreground/15")} />)}
+            </span>
+            {t(`confidence.${conf}`)}
+          </p>
+          <p className="mt-8 text-[17px] leading-relaxed" dir="auto">{content.narrative.portrait}</p>
+          <p className="mt-auto pt-8 text-xs text-ink-secondary">{t("fitNote")}</p>
+        </div>
+        <div className="flex flex-col">
+          <div className="flex items-baseline justify-between gap-3">
+            <p className="text-sm text-ink-secondary">{must.length ? t("mustHaves") : t("bestEvidenced")}</p>
+            <p className="flex items-center gap-1.5 text-xs text-ink-secondary">
+              <span className="inline-block h-3 w-0.5 rounded-full bg-ink-foreground/70" aria-hidden />
+              {t("expectedLevel", { level: tl(String(levelBand(expected))) })}
+            </p>
+          </div>
+          <ul className="mt-5 flex flex-col gap-6">
+            {shown.map((d) => (
+              <li key={d.key}>
+                <div className="flex items-baseline justify-between gap-3">
+                  <span className="truncate text-[15px] font-medium">{d.name}</span>
+                  <span className="shrink-0 text-sm text-ink-secondary">
+                    {tl(String(levelBand(d.estimate)))} <bdi dir="ltr" className="tabular">{n.range(d.range[0], d.range[1])}</bdi>
+                  </span>
+                </div>
+                <RangeScale low={d.range[0]} high={d.range[1]} estimate={d.estimate} expected={expected} tone="ink" className="mt-2.5" />
+                <span className="sr-only">{t("rangeSr", { low: n.level(d.range[0]), high: n.level(d.range[1]), expected: n.level(expected) })}</span>
+              </li>
+            ))}
+          </ul>
+          {content.fit.gaps.length ? (
+            <div className="mt-8 border-t border-ink-foreground/15 pt-5">
+              <p className="text-sm text-ink-secondary">{t("gapsInterview")}</p>
+              <ul className="mt-2.5 flex flex-wrap gap-2">
+                {content.fit.gaps.slice(0, 4).map((g) => (
+                  <li key={g.key} className="rounded-full bg-ink-foreground/10 px-3 py-1 text-sm">{g.name}</li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function HireReport({ content, audience, actions }: { content: ReportContent; audience: ReportAudience; actions?: React.ReactNode }) {
   const t = useTranslations("report");
   const n = useNumbers();
@@ -118,7 +179,6 @@ export function HireReport({ content, audience, actions }: { content: ReportCont
   const forCandidate = audience === "candidate";
   const skillNames = React.useMemo(() => Object.fromEntries(content.domains.flatMap((d) => [[d.key, d.name], ...d.subSkills.map((s) => [s.key, s.name])])), [content]);
   const radar = content.domains.map((d) => ({ key: d.key, label: t(`domainShort.${d.key}`), values: { c: d.estimate } }));
-  const bars = content.domains.map((d) => ({ key: d.key, label: d.name, estimate: d.estimate, confidence: d.confidence, range: d.range }));
 
   const toc = [
     ["summary", t("toc.summary")],
@@ -147,11 +207,11 @@ export function HireReport({ content, audience, actions }: { content: ReportCont
       ) : null}
 
       <div className="flex min-w-0 flex-col gap-12">
-        <header className="flex flex-col gap-4">
-          <div className="flex flex-wrap items-start justify-between gap-4">
-            <div className="flex flex-col gap-1">
-              <p className="text-sm text-secondary">{forCandidate ? t("yourReport") : t("candidateReport")} · {content.role.title}</p>
-              <h1 className="text-2xl font-semibold text-text">{content.candidate.name}</h1>
+        <header className="flex flex-col gap-6">
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <div className="flex min-w-0 flex-col gap-2">
+              <p className="text-sm text-secondary">{forCandidate ? t("yourReportFor", { role: content.role.title }) : t("candidateReportFor", { role: content.role.title })}</p>
+              <h1 className="text-[2.25rem] font-semibold leading-[1.1] text-text sm:text-[2.75rem]">{content.candidate.name}</h1>
               <p className="text-sm text-tertiary">{t("generated", { date: new Date(content.generatedAt).toLocaleDateString(locale === "ar" ? "ar" : "en-GB", { year: "numeric", month: "long", day: "numeric" }) })}</p>
             </div>
             {actions ? <div className="flex flex-wrap gap-2 print:hidden">{actions}</div> : null}
@@ -159,50 +219,26 @@ export function HireReport({ content, audience, actions }: { content: ReportCont
           {content.earlyVersion ? <Alert tone="info" title={t("earlyTitle")}>{t("earlyBody")}</Alert> : null}
         </header>
 
-        <Section id="summary" title={t("toc.summary")}>
-          <div className={cn("grid gap-4", !forCandidate && "md:grid-cols-[minmax(0,1fr)_16rem]")}>
-            <p className="reading text-lg leading-relaxed text-text" dir="auto">{content.narrative.portrait}</p>
-            {!forCandidate && content.kind === "HIRE" ? (
-              <Card>
-                <CardContent className="flex flex-col gap-3">
-                  <span className="text-xs font-medium uppercase tracking-wide text-tertiary">{t("roleFit")}</span>
-                  <span className="text-xl font-semibold text-text">{t(`fit.${content.fit.level}`)}</span>
-                  <Badge tone={FIT_TONE[content.fit.level]} className="self-start">{t(`confidence.${content.fit.confidence >= 0.75 ? "high" : content.fit.confidence >= 0.5 ? "moderate" : "low"}`)}</Badge>
-                  {content.fit.gaps.length ? (
-                    <div className="flex flex-col gap-1 border-t border-border pt-3">
-                      <span className="text-xs text-secondary">{t("gaps")}</span>
-                      {content.fit.gaps.slice(0, 3).map((g) => (
-                        <span key={g.key} className="text-sm text-text">{g.name}</span>
-                      ))}
-                    </div>
-                  ) : null}
-                  <p className="text-xs text-tertiary">{t("fitNote")}</p>
-                </CardContent>
-              </Card>
-            ) : null}
-          </div>
-        </Section>
+        <section id="summary" aria-labelledby="summary-h" className="scroll-mt-24">
+          <h2 id="summary-h" className="sr-only">{t("toc.summary")}</h2>
+          {!forCandidate && content.kind === "HIRE" ? (
+            <Verdict content={content} />
+          ) : (
+            <p className="reading text-xl leading-relaxed text-text" dir="auto">{content.narrative.portrait}</p>
+          )}
+        </section>
 
         <Section id="profile" title={t("toc.profile")} note={t("profileNote")}>
-          <Tabs defaultValue="bars" className="flex flex-col gap-4">
-            <div className="flex flex-wrap items-center justify-between gap-3 print:hidden">
-              <SegmentedList aria-label={t("chartView")}>
-                <SegmentedTrigger value="bars">{t("bars")}</SegmentedTrigger>
-                <SegmentedTrigger value="radar">{t("radar")}</SegmentedTrigger>
-              </SegmentedList>
-              <LevelLegend />
+          <div className={cn("grid gap-6", !print && "xl:grid-cols-[minmax(0,1fr)_17rem]")}>
+            <div className="divide-y divide-border overflow-hidden rounded-card border border-border bg-surface">
+              {[...content.domains].sort((a, b) => (b.importance === "MUST_HAVE" ? 1 : 0) - (a.importance === "MUST_HAVE" ? 1 : 0)).map((d) => (
+                <DomainCard key={d.key} d={d} content={content} skillNames={skillNames} print={print} />
+              ))}
             </div>
-            <TabsContent value="bars" className="pt-0" forceMount={print ? true : undefined}>
-              <Card><CardContent><SkillBars data={bars} label={t("toc.profile")} /></CardContent></Card>
-            </TabsContent>
-            <TabsContent value="radar" className="pt-0">
-              <Card><CardContent><SkillRadar data={radar} series={[{ key: "c", label: content.candidate.name }]} label={t("toc.profile")} /></CardContent></Card>
-            </TabsContent>
-          </Tabs>
-          <div className="mt-4 flex flex-col gap-2">
-            {[...content.domains].sort((a, b) => (b.importance === "MUST_HAVE" ? 1 : 0) - (a.importance === "MUST_HAVE" ? 1 : 0)).map((d) => (
-              <DomainCard key={d.key} d={d} content={content} skillNames={skillNames} print={print} />
-            ))}
+            <figure className="self-start rounded-card border border-border bg-surface p-4 xl:sticky xl:top-24">
+              <SkillRadar data={radar} series={[{ key: "c", label: content.candidate.name }]} label={t("toc.profile")} />
+              <figcaption className="mt-2 text-xs leading-relaxed text-tertiary">{t("radarCaption")}</figcaption>
+            </figure>
           </div>
         </Section>
 

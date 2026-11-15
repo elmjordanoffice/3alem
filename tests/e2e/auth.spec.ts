@@ -24,9 +24,9 @@ test.describe("authentication and organisations", () => {
 
     await expect(page).toHaveURL(/\/app$/);
     await expect(page.getByRole("heading", { name: /Good to see you, Mariam/ })).toBeVisible();
-    await expect(page.getByText("You are working in Acme Freight.")).toBeVisible();
+    await expect(page.getByText(/, Acme Freight$/)).toBeVisible();
 
-    await page.getByRole("link", { name: "Members" }).first().click();
+    await page.getByRole("link", { name: "Organisation", exact: true }).click();
     await expect(page.getByRole("cell", { name: /Mariam Haddad/ }).first()).toBeVisible();
     await expect(page.getByRole("cell", { name: /Organisation admin/ }).first()).toBeVisible();
 

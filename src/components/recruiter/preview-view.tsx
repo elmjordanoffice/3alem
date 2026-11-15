@@ -42,7 +42,7 @@ export function PreviewView({ banner, orgName, world, item, minutes }: { banner:
               {item.materials.length ? <DocumentViewer materials={item.materials} label={ti("materials")} /> : null}
             </section>
             <section className="flex flex-col gap-3">
-              <p className="text-xs font-medium uppercase tracking-wide text-accent-text">{ti("yourTask")}</p>
+              <p className="text-[13px] font-medium text-accent-text">{ti("yourTask")}</p>
               <p className="text-[15px] font-medium text-text">{item.task.prompt}</p>
               {item.task.options ? (
                 <ul className="flex flex-col gap-2">

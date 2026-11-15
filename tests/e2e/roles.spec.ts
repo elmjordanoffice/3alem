@@ -6,7 +6,8 @@ test.describe("roles", () => {
 
   test("org admin can manage members and settings", async ({ page }) => {
     await signIn(page, "orgadmin@aalim.dev");
-    await expect(page.getByRole("link", { name: "Organisation settings" })).toBeVisible();
+    await page.getByRole("link", { name: "Organisation", exact: true }).click();
+    await expect(page.getByRole("navigation", { name: "Northwind Logistics" }).getByRole("link", { name: "Settings" })).toBeVisible();
     await page.goto("/app/org/members");
     await expect(page.getByRole("button", { name: "Add member" })).toBeVisible();
     await page.goto("/app/org/settings");
@@ -15,7 +16,8 @@ test.describe("roles", () => {
 
   test("hiring manager cannot open organisation settings", async ({ page }) => {
     await signIn(page, "manager@aalim.dev");
-    await expect(page.getByRole("link", { name: "Organisation settings" })).toHaveCount(0);
+    await page.goto("/app/org/members");
+    await expect(page.getByRole("navigation", { name: "Northwind Logistics" }).getByRole("link", { name: "Settings" })).toHaveCount(0);
     await page.goto("/app/org/settings");
     await expect(page).toHaveURL(/denied=1/);
     await expect(page.getByText("You do not have access to that page")).toBeVisible();

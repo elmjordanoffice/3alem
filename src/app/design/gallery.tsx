@@ -635,7 +635,7 @@ function Assessment({ samples }: { samples: Samples }) {
 
       <Specimen title={t("transition")} note={t("transitionNote")}>
         <div className="mx-auto flex max-w-[680px] flex-col gap-5 rounded-card border border-border bg-surface p-6 sm:p-10">
-          <p className="text-xs font-medium uppercase tracking-wide text-tertiary">{t("transitionEyebrow")}</p>
+          <p className="text-[13px] font-medium text-tertiary">{t("transitionEyebrow")}</p>
           <h3 className="text-xl font-semibold text-text">{t("transitionTitle")}</h3>
           <p className="leading-relaxed text-secondary">{t("transitionBody")}</p>
           <div className="flex items-center justify-between gap-3 pt-2">

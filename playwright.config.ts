@@ -9,6 +9,8 @@ export default defineConfig({
   workers: 1,
   retries: process.env.CI ? 1 : 0,
   reporter: [["list"]],
+  // Test data is removed afterwards so the demo organisation stays clean.
+  globalTeardown: "./tests/e2e/global-teardown.ts",
   timeout: 60_000,
   use: { baseURL: `http://localhost:${PORT}`, trace: "off", actionTimeout: 15_000 },
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],

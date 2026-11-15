@@ -1,53 +1,56 @@
+import { getTranslations } from "next-intl/server";
 import { requireViewer, viewerCan } from "@/lib/auth/session";
 import { AppShell, type ShellNavItem } from "@/components/app/app-shell";
+import type { CommandPage } from "@/components/app/command-menu";
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const viewer = await requireViewer();
+  const t = await getTranslations("shell");
+  const org = viewer.activeOrganization;
+  const can = (p: Parameters<typeof viewerCan>[1]) => Boolean(org) && viewerCan(viewer, p);
 
-  const workspace: ShellNavItem[] = [{ href: "/app", labelKey: "home", icon: "home" }];
-  if (viewer.activeOrganization && viewerCan(viewer, "assessment.view")) workspace.push({ href: "/app/assessments", labelKey: "assessments", icon: "assessments" });
-  workspace.push({ href: "/app/framework", labelKey: "framework", icon: "framework" });
-  const organization: ShellNavItem[] = [];
-  if (viewer.activeOrganization) {
-    if (viewerCan(viewer, "team.view")) organization.push({ href: "/app/teams", labelKey: "teams", icon: "teams" });
-    organization.push({ href: "/app/org/members", labelKey: "members", icon: "members" });
-    if (viewerCan(viewer, "framework.edit")) organization.push({ href: "/app/org/library", labelKey: "library", icon: "library" });
-    if (viewerCan(viewer, "fairness.view")) organization.push({ href: "/app/org/fairness", labelKey: "fairness", icon: "fairness" });
-    if (viewerCan(viewer, "org.settings")) {
-      organization.push({ href: "/app/org/integrations", labelKey: "integrations", icon: "integrations" });
-    }
-    if (viewerCan(viewer, "audit.view")) organization.push({ href: "/app/org/audit", labelKey: "audit", icon: "audit" });
-    if (viewerCan(viewer, "org.settings")) {
-      organization.push({ href: "/app/org/settings", labelKey: "orgSettings", icon: "orgSettings" });
-    }
-  }
-  const account: ShellNavItem[] = [{ href: "/app/settings", labelKey: "settings", icon: "settings" }];
-  if (viewer.user.isPlatformAdmin) {
-    account.push({ href: "/app/admin", labelKey: "admin", icon: "admin" });
-    account.push({ href: "/app/admin/items", labelKey: "items", icon: "items" });
-  }
+  // A short main list; Grow, Organisation and Platform admin have their own tabs.
+  const main: ShellNavItem[] = [{ href: "/app", labelKey: "home", icon: "home" }];
+  if (can("assessment.view")) main.push({ href: "/app/assessments", labelKey: "assessments", icon: "assessments" });
+  if (can("team.view")) main.push({ href: "/app/teams", labelKey: "teams", icon: "teams" });
+  main.push({ href: "/app/grow", labelKey: "grow", icon: "grow" });
+  main.push({ href: "/app/framework", labelKey: "framework", icon: "framework" });
 
-  const grow: ShellNavItem[] = [
-    { href: "/app/grow", labelKey: "grow", icon: "grow" },
-    { href: "/app/grow/practice", labelKey: "practice", icon: "practice" },
-    { href: "/app/grow/tracks", labelKey: "tracks", icon: "tracks" },
-    { href: "/app/grow/progress", labelKey: "progress", icon: "progress" },
-    { href: "/app/grow/coach", labelKey: "coach", icon: "coach" },
-  ];
+  const manage: ShellNavItem[] = [];
+  if (org) manage.push({ href: "/app/org", labelKey: "organization", icon: "orgSettings" });
+  if (viewer.user.isPlatformAdmin) manage.push({ href: "/app/admin", labelKey: "admin", icon: "admin" });
+  manage.push({ href: "/app/settings", labelKey: "settings", icon: "settings" });
 
   const nav = [
-    { sectionKey: "workspace", items: workspace },
-    { sectionKey: "grow", items: grow },
-    ...(organization.length ? [{ sectionKey: "organization", items: organization }] : []),
-    { sectionKey: "account", items: account },
+    { sectionKey: "main", items: main },
+    { sectionKey: "manage", items: manage },
+  ];
+
+  // Everything reachable, for the command menu.
+  const section = { grow: t("nav.grow"), org: org?.name ?? t("nav.organization"), admin: t("nav.admin") };
+  const pages: CommandPage[] = [
+    ...main.map((i) => ({ href: i.href, label: t(`nav.${i.labelKey}`) })),
+    { href: "/app/grow/practice", label: t("nav.practice"), section: section.grow },
+    { href: "/app/grow/tracks", label: t("nav.tracks"), section: section.grow },
+    { href: "/app/grow/progress", label: t("nav.progress"), section: section.grow },
+    { href: "/app/grow/coach", label: t("nav.coach"), section: section.grow },
+    ...(org ? [{ href: "/app/org/members", label: t("nav.members"), section: section.org }] : []),
+    ...(can("framework.edit") ? [{ href: "/app/org/library", label: t("nav.library"), section: section.org }] : []),
+    ...(can("fairness.view") ? [{ href: "/app/org/fairness", label: t("nav.fairness"), section: section.org }] : []),
+    ...(can("org.settings") ? [{ href: "/app/org/integrations", label: t("nav.integrations"), section: section.org }, { href: "/app/org/settings", label: t("nav.orgSettings"), section: section.org }] : []),
+    ...(can("audit.view") ? [{ href: "/app/org/audit", label: t("nav.audit"), section: section.org }] : []),
+    ...(viewer.user.isPlatformAdmin ? [{ href: "/app/admin", label: t("nav.admin") }, { href: "/app/admin/items", label: t("nav.items"), section: section.admin }] : []),
+    { href: "/app/settings", label: t("nav.settings") },
   ];
 
   return (
     <AppShell
       user={{ name: viewer.user.name, email: viewer.user.email }}
       organizations={viewer.memberships.map((m) => ({ id: m.organizationId, name: m.organizationName }))}
-      activeOrganizationId={viewer.activeOrganization?.id ?? null}
+      activeOrganizationId={org?.id ?? null}
       nav={nav}
+      commandPages={pages}
+      canCreateAssessment={can("assessment.create")}
     >
       {children}
     </AppShell>

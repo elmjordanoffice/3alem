@@ -72,3 +72,13 @@ Choices the brief left open, or where I departed from it, with the reason. Newes
 **D-033: Spoken role-play is a progressive enhancement.** Dictation uses the browser's Web Speech API where available and fills the reply box, which the candidate can edit before sending. Read-aloud uses speech synthesis and is off by default. Typing always works, and the scored text is what was sent. Some browsers send dictation audio to their own speech service; the hint says dictation uses the browser's speech recognition. *(5)*
 
 **D-034: Account deletion needs a hand-over** if the person is the only admin of an organisation that has other members, so no organisation is left without an admin. *(5)*
+
+**D-035: Visual identity: ink, saffron and the narrowing range.** The brief's warm neutrals and indigo stay. A deep ink-indigo carries brand surfaces, and saffron is reserved for evidence. The recurring device is the estimate band narrowing on the 1–5 scale, because that is what the engine does. A generic look (identical card grids, gradient washes, tracked capitals, arrows on every button) was removed. *(UI)*
+
+**D-036: Alexandria for display, IBM Plex for the interface,** replacing Inter. Alexandria is drawn for Latin and Arabic together, so English and Arabic titles share one voice. Plex Sans and Plex Sans Arabic are one family designed to pair, and read as precise without being cold. *(UI)*
+
+**D-037: Section tabs and a command menu instead of a long sidebar.** Seventeen sidebar items became eight. Sub-pages of Grow, Organisation and Platform admin are tabs, and anything can be reached with ⌘K. *(UI)*
+
+**D-038: The end-to-end suite cleans up after itself** (`tests/e2e/global-teardown.ts`): test data is recognisable (`@test.aalim` addresses, roles created from the test job description, "Pilot" teams) and removed after each run, so the demo organisation stays as the demo seed left it. `E2E_KEEP_DATA=1` keeps it for debugging. *(UI)*
+
+**D-039: Demo candidates write like people.** Simulated answers turn each rubric signal into a first-person sentence and add the specifics the scorer looks for, so demo reports quote readable evidence. Role-play turns vary between phrasings. *(UI)*

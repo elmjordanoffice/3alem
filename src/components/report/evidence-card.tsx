@@ -1,5 +1,4 @@
 "use client";
-import { Quote } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import { confidenceBand } from "@/lib/levels";
@@ -28,22 +27,15 @@ export function EvidenceCard({
   const t = useTranslations("components.evidence");
   const band = confidenceBand(confidence);
   return (
-    <figure className={cn("flex flex-col gap-3 rounded-card border border-border bg-surface p-4", className)}>
-      <div className="flex items-start gap-3">
-        <Quote className="mt-0.5 size-4 shrink-0 text-mark-muted flip-rtl" aria-hidden />
-        <blockquote className="text-[15px] leading-relaxed text-text" dir="auto">
-          {quote}
-        </blockquote>
-      </div>
-      {rationale ? <p className="ps-7 text-sm text-secondary">{rationale}</p> : null}
-      <figcaption className="flex flex-wrap items-center gap-2 ps-7 text-xs text-tertiary">
+    <figure className={cn("flex flex-col gap-3 rounded-card border border-border bg-surface p-4 sm:p-5", className)}>
+      {/* The candidate's own words, highlighted: this is what the score rests on. */}
+      <blockquote className="text-[15px] leading-[1.75] text-text" dir="auto">
+        <mark className="evidence-mark">{quote}</mark>
+      </blockquote>
+      {rationale ? <p className="text-sm text-secondary">{rationale}</p> : null}
+      <figcaption className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-tertiary">
         <span>{context}</span>
-        {skill ? (
-          <>
-            <span aria-hidden>·</span>
-            <span className="text-secondary">{skill}</span>
-          </>
-        ) : null}
+        {skill ? <span className="text-secondary">{skill}</span> : null}
         <Badge tone={band === "high" ? "accent" : "neutral"} className="ms-auto">
           {t(`confidence.${band}`)}
         </Badge>

@@ -3,6 +3,7 @@ import * as React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { FitPill } from "@/components/report/fit";
 import { ArrowDownUp, Columns3, Link2, MoreHorizontal, ShieldAlert, Users } from "lucide-react";
 import { toast } from "sonner";
 import type { CandidateRow } from "@/lib/hire/recruiter";
@@ -83,10 +84,10 @@ export function CandidatesTable({ templateId, rows, canInvite }: { templateId: s
                 {t("compare", { n: n.number(selected.length) })}
               </Link>
             ) : (
-              <span>
+              <>
                 <Columns3 aria-hidden />
                 {t("compareHint")}
-              </span>
+              </>
             )}
           </Button>
         </div>
@@ -128,15 +129,15 @@ export function CandidatesTable({ templateId, rows, canInvite }: { templateId: s
                 </td>
                 <td className="px-3 py-3">
                   {r.fit ? (
-                    <span className="flex flex-col">
-                      <span className="font-medium text-text">{t(`fit.${r.fit}`)}</span>
+                    <span className="flex flex-col items-start gap-1">
+                      <FitPill fit={r.fit} label={t(`fit.${r.fit}`)} />
                       <span className="text-xs text-tertiary">{t(`confidence.${(r.fitConfidence ?? 0) >= 0.75 ? "high" : (r.fitConfidence ?? 0) >= 0.5 ? "moderate" : "low"}`)}</span>
                     </span>
                   ) : (
                     <span className="text-tertiary">—</span>
                   )}
                 </td>
-                <td className="max-w-64 px-3 py-3 text-secondary">{r.topStrengths.length ? r.topStrengths.join(" · ") : <span className="text-tertiary">—</span>}</td>
+                <td className="max-w-64 px-3 py-3 text-secondary">{r.topStrengths.length ? <ul className="flex flex-col gap-0.5">{r.topStrengths.map((s) => <li key={s}>{s}</li>)}</ul> : <span className="text-tertiary">—</span>}</td>
                 <td className="px-3 py-3">
                   <span className="flex items-center gap-2 text-xs text-secondary">
                     {r.minutes !== null ? t("minutes", { n: n.number(r.minutes) }) : null}

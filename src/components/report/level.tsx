@@ -80,24 +80,20 @@ export function LevelMeter({
           high: n.level(hi),
           confidence: tc(`confidence.${confidenceBand(confidence)}`),
         })}
-        className="relative pb-2"
+        className="relative py-1"
       >
-        <div className="flex gap-0.5">
-          {LEVELS.map((l) => (
-            <span
-              key={l}
-              className={cn(
-                "h-2 flex-1 first:rounded-s-full last:rounded-e-full",
-                l <= band ? LEVEL_BG[l] : "bg-level-empty",
-              )}
-            />
+        {/* The narrowing range: track with level divisions, the plausible band, the estimate. */}
+        <div className="relative h-2 rounded-full bg-level-empty">
+          {[2, 3, 4].map((l) => (
+            <span key={l} aria-hidden className="absolute inset-y-0 w-px bg-surface" style={{ insetInlineStart: `${pct(l)}%` }} />
           ))}
+          <span aria-hidden className="absolute inset-y-0 rounded-full bg-accent/25" style={{ insetInlineStart: `${pct(lo)}%`, width: `${Math.max(3, pct(hi) - pct(lo))}%` }} />
+          <span
+            aria-hidden
+            className={cn("absolute top-1/2 size-3 -translate-y-1/2 rounded-full ring-2 ring-surface", LEVEL_BG[Math.max(3, band)])}
+            style={{ insetInlineStart: `calc(${pct(estimate)}% - 6px)` }}
+          />
         </div>
-        <span
-          aria-hidden
-          className="absolute bottom-0 h-1 rounded-full bg-secondary/50"
-          style={{ insetInlineStart: `${pct(lo)}%`, width: `${Math.max(2, pct(hi) - pct(lo))}%` }}
-        />
       </div>
     </div>
   );

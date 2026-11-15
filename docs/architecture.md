@@ -129,7 +129,26 @@ Organisation admins add HTTPS webhooks for `candidate.started`, `candidate.compl
 
 ## Design system
 
-Tokens in `src/styles/tokens.css` (light and dark), mapped to Tailwind utilities in `globals.css`. Warm stone neutrals and one indigo accent. Skill levels and role fit use a single-hue ramp, never red/green. Inter and IBM Plex Sans Arabic are self-hosted. Motion lasts 150–250 ms and is disabled under `prefers-reduced-motion`. Contrast for every text/background pair is asserted in `tests/unit/contrast.test.ts`, and axe runs on the gallery, candidate flow and admin pages.
+The identity rests on two signatures, both taken from how Aalim works:
+
+- **The narrowing range.** Every estimate is drawn as a band on the 1–5 scale that tightens as evidence comes in, with a dot for the estimate and a tick for the level the role expects (`RangeScale`, `LevelMeter`). It appears in the logo mark, the landing hero (the page's one animation), the report verdict and every skill row.
+- **The evidence highlighter.** The candidate's verbatim words are marked in saffron (`.evidence-mark`), like a reviewer's highlighter. Saffron is used for evidence and the brand mark only, never as decoration.
+
+Tokens live in `src/styles/tokens.css` (light and dark) and map to Tailwind utilities in `globals.css`:
+
+- **Colour:** warm stone neutrals; one indigo accent for actions, focus and selection; deep ink-indigo (`--ink`) for brand surfaces (verdict panel, chapter cards, auth panel); saffron (`--saffron`, `--highlight`) for evidence. Skill levels and role fit use a single-hue ramp, never red/green.
+- **Type:** Alexandria (display: page and section titles, verdicts, big numbers), designed for Latin and Arabic together so both languages share one voice; IBM Plex Sans and IBM Plex Sans Arabic for the interface. Both are self-hosted. Arabic headings get extra line height for marks above and below.
+- **Shape and depth:** radius 8 (controls), 12 (cards), 20 (brand panels). One raised shadow per page for the primary panel; borders elsewhere.
+- **Motion:** 150–250 ms ease-out for responses to actions; one orchestrated moment per page at most. Disabled under `prefers-reduced-motion`.
+- **Labels:** sentence case throughout; no tracked-out capitals.
+
+Contrast for every token pair (including ink and highlight) is asserted in `tests/unit/contrast.test.ts`. `tests/e2e/pages-a11y.spec.ts` runs axe on the landing, sign-in, Home and report in English light and Arabic dark; the gallery, candidate flow and admin pages have their own scans.
+
+## Navigation
+
+- A short sidebar (Home, Assessments, Teams, My development, Framework; Organisation, Platform admin, Settings). Grow, Organisation and Platform admin each have a sticky row of section tabs, so their sub-pages don't lengthen the sidebar.
+- **Command menu** (⌘K / Ctrl+K, or Search in the sidebar): jump to any page, run common actions (new assessment, theme, language), and search candidates, roles, teams and people. Search runs through RLS and the viewer's permissions (`src/app/actions/search.ts`).
+- **Home** answers "what needs me?": reports nobody has opened yet (from the audit log), people taking an assessment right now, each role's pipeline, and team progress.
 
 ## Build phases
 

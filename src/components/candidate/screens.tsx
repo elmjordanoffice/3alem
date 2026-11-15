@@ -2,7 +2,7 @@
 import * as React from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { ArrowRight, Clock, Coffee, Lock, PauseCircle, ShieldCheck, Wifi } from "lucide-react";
+import { Clock, Coffee, Lock, PauseCircle, ShieldCheck, Wifi } from "lucide-react";
 import type { Branding, CandidateView, PublicWorld } from "@/lib/hire/candidate-state";
 import { setLocale, setTextSize } from "@/app/actions/preferences";
 import { Button } from "@/components/ui/button";
@@ -11,7 +11,6 @@ import { Label } from "@/components/ui/field";
 import { Textarea } from "@/components/ui/input";
 import { Alert } from "@/components/ui/alert";
 import { Person } from "@/components/ui/avatar";
-import { ChapterList } from "@/components/assessment/chapter-progress";
 import { useLocaleSettings, useNumbers } from "@/components/providers";
 import { CandidateShell } from "./shell";
 import { cn } from "@/lib/utils";
@@ -55,15 +54,15 @@ export function Landing({ v, onStart }: { v: View<"landing">; onStart: (o: { loc
     <CandidateShell branding={v.branding}>
       <div className="mx-auto grid max-w-5xl gap-10 px-4 py-10 sm:px-6 sm:py-16 lg:grid-cols-[minmax(0,1fr)_22rem]">
         <section className="flex flex-col gap-6">
-          <p className="text-sm font-medium text-accent-text">{t("eyebrow", { org: v.branding.orgName })}</p>
-          <h1 className="text-2xl font-semibold leading-tight text-text sm:text-3xl">{v.candidateName ? t("titleNamed", { name: v.candidateName.split(" ")[0]!, role: v.roleTitle }) : t("title", { role: v.roleTitle })}</h1>
+          <p className="text-sm text-secondary">{t("eyebrow", { org: v.branding.orgName })}</p>
+          <h1 className="text-[2.25rem] font-semibold leading-[1.08] text-text sm:text-[2.75rem]">{v.candidateName ? t("titleNamed", { name: v.candidateName.split(" ")[0]!, role: v.roleTitle }) : t("title", { role: v.roleTitle })}</h1>
           <p className="reading text-lg leading-relaxed text-secondary">{t("intro", { minutes: n.number(v.minutes) })}</p>
 
-          <ul className="grid gap-4 sm:grid-cols-2">
+          <ul className="mt-2 grid gap-x-8 gap-y-6 sm:grid-cols-2">
             {(["story", "noTricks", "pause", "people"] as const).map((k) => (
-              <li key={k} className="flex flex-col gap-1 rounded-card border border-border bg-surface p-4">
-                <span className="text-sm font-semibold text-text">{t(`expect.${k}.title`)}</span>
-                <span className="text-sm text-secondary">{t(`expect.${k}.body`)}</span>
+              <li key={k} className="flex flex-col gap-1.5 border-t border-border pt-4">
+                <span className="font-semibold text-text">{t(`expect.${k}.title`)}</span>
+                <span className="text-sm leading-relaxed text-secondary">{t(`expect.${k}.body`)}</span>
               </li>
             ))}
           </ul>
@@ -81,7 +80,7 @@ export function Landing({ v, onStart }: { v: View<"landing">; onStart: (o: { loc
           </section>
         </section>
 
-        <aside className="flex flex-col gap-5 self-start rounded-card border border-border bg-surface p-5 lg:sticky lg:top-24">
+        <aside className="flex flex-col gap-5 self-start rounded-card border border-border bg-surface p-5 shadow-raised lg:sticky lg:top-24 sm:p-6">
           <div className="flex flex-col gap-2">
             <span className="text-sm font-medium text-text">{t("language")}</span>
             <div className="grid grid-cols-2 gap-1 rounded-control bg-surface-sunken p-0.5">
@@ -152,7 +151,6 @@ export function Landing({ v, onStart }: { v: View<"landing">; onStart: (o: { loc
             }}
           >
             {t("continue")}
-            <ArrowRight className="flip-rtl" aria-hidden />
           </Button>
           <p className="text-xs text-tertiary">{t("minutesNote", { minutes: n.number(v.minutes) })}</p>
         </aside>
@@ -170,8 +168,8 @@ export function Briefing({ v, onBegin }: { v: View<"briefing">; onBegin: () => P
   if (step === "before") {
     return (
       <CandidateShell branding={v.branding}>
-        <div className="mx-auto flex max-w-[680px] flex-col gap-8 px-4 py-12 sm:py-20">
-          <h1 className="text-2xl font-semibold text-text">{t("beforeTitle")}</h1>
+        <div className="mx-auto flex max-w-[680px] flex-col gap-10 px-4 py-12 sm:py-20">
+          <h1 className="text-[2.25rem] font-semibold leading-tight text-text">{t("beforeTitle")}</h1>
           <ul className="flex flex-col gap-5">
             {[
               { icon: Coffee, k: "quiet" },
@@ -180,11 +178,11 @@ export function Briefing({ v, onBegin }: { v: View<"briefing">; onBegin: () => P
               { icon: Wifi, k: "offline" },
             ].map(({ icon: Icon, k }) => (
               <li key={k} className="flex gap-4">
-                <span className="inline-flex size-9 shrink-0 items-center justify-center rounded-full bg-surface-subtle text-secondary">
+                <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-full bg-ink text-saffron">
                   <Icon className="size-4" strokeWidth={1.75} aria-hidden />
                 </span>
                 <span className="flex flex-col gap-0.5">
-                  <span className="font-medium text-text">{t(`before.${k}.title`)}</span>
+                  <span className="font-medium text-text">{t(`before.${k}.title`, { minutes: n.number(v.minutes) })}</span>
                   <span className="text-sm text-secondary">{t(`before.${k}.body`, { minutes: n.number(v.minutes) })}</span>
                 </span>
               </li>
@@ -192,7 +190,6 @@ export function Briefing({ v, onBegin }: { v: View<"briefing">; onBegin: () => P
           </ul>
           <Button size="lg" className="self-start" onClick={() => setStep("story")}>
             {t("ready")}
-            <ArrowRight className="flip-rtl" aria-hidden />
           </Button>
         </div>
       </CandidateShell>
@@ -201,45 +198,60 @@ export function Briefing({ v, onBegin }: { v: View<"briefing">; onBegin: () => P
 
   return (
     <CandidateShell branding={v.branding}>
-      <article className="mx-auto flex max-w-[680px] flex-col gap-10 px-4 py-12 sm:py-16 animate-slide-up">
-        <header className="flex flex-col gap-3">
-          <p className="text-sm font-medium text-accent-text">{t("eyebrow")}</p>
-          <h1 className="text-[1.75rem] font-semibold leading-tight text-text sm:text-2xl">{t("title", { company: v.world.companyName })}</h1>
-          <p className="text-lg leading-relaxed text-secondary" dir="auto">{v.world.premise}</p>
+      <article className="mx-auto flex max-w-[960px] flex-col gap-12 px-4 py-10 sm:py-14">
+        {/* The opening of the story: the company, the situation, and you in it. */}
+        <header className="animate-rise overflow-hidden rounded-[20px] bg-ink p-7 text-ink-foreground shadow-raised sm:p-12">
+          <p className="text-sm text-ink-secondary">{t("eyebrow")}</p>
+          <h1 className="mt-3 max-w-3xl text-[2.25rem] font-semibold leading-[1.08] sm:text-[3rem]">{t("title", { company: v.world.companyName })}</h1>
+          <p className="mt-5 max-w-2xl text-lg leading-relaxed text-ink-secondary" dir="auto">{v.world.premise}</p>
+          <div className="mt-8 max-w-2xl rounded-2xl bg-ink-raised p-5">
+            <h2 className="font-sans text-sm font-normal tracking-normal text-ink-secondary">{t("yourRole")}</h2>
+            <p className="mt-1.5 text-[15px] leading-relaxed" dir="auto">
+              <span className="font-semibold">{v.world.yourRole}.</span> {v.world.team}
+            </p>
+          </div>
         </header>
-        <section className="flex flex-col gap-2">
-          <h2 className="text-xs font-medium uppercase tracking-wide text-tertiary">{t("yourRole")}</h2>
-          <p className="text-[15px] text-text" dir="auto">
-            <span className="font-medium">{v.world.yourRole}.</span> {v.world.team}
-          </p>
-        </section>
-        <section className="flex flex-col gap-3">
-          <h2 className="text-xs font-medium uppercase tracking-wide text-tertiary">{t("people")}</h2>
-          <ul className="grid gap-3 sm:grid-cols-2">
+
+        <section aria-labelledby="cast-h">
+          <h2 id="cast-h" className="text-xl font-semibold text-text">{t("people")}</h2>
+          <ul className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {v.world.cast.map((c) => (
-              <li key={c.name}>
-                <Person name={c.name} role={c.role} />
+              <li key={c.name} className="rounded-card border border-border bg-surface p-4">
+                <Person name={c.name} role={c.role} size="lg" />
               </li>
             ))}
           </ul>
         </section>
-        <section className="flex flex-col gap-2">
-          <h2 className="text-xs font-medium uppercase tracking-wide text-tertiary">{t("week")}</h2>
-          <ChapterList chapters={v.world.chapters.map((c) => c.title)} current={0} />
+
+        <section aria-labelledby="week-h">
+          <h2 id="week-h" className="text-xl font-semibold text-text">{t("week")}</h2>
+          <ol className="relative mt-6 grid gap-6 sm:grid-cols-4 sm:gap-4">
+            <span aria-hidden className="absolute inset-x-0 top-[15px] hidden h-px bg-border sm:block" />
+            {v.world.chapters.map((c, i) => (
+              <li key={c.title} className="relative flex items-start gap-3 sm:flex-col">
+                <span className={cn("relative inline-flex size-8 shrink-0 items-center justify-center rounded-full border text-sm font-semibold tabular", i === 0 ? "border-ink bg-ink text-ink-foreground" : "border-border-strong bg-background text-secondary")}>
+                  {n.number(i + 1)}
+                </span>
+                <span className={cn("text-sm leading-snug", i === 0 ? "font-semibold text-text" : "text-secondary")} dir="auto">{c.title}</span>
+              </li>
+            ))}
+          </ol>
         </section>
-        <Alert tone="neutral">{t("howItWorks")}</Alert>
-        <Button
-          size="lg"
-          className="self-start"
-          loading={pending}
-          onClick={async () => {
-            setPending(true);
-            await onBegin();
-          }}
-        >
-          {t("start")}
-          <ArrowRight className="flip-rtl" aria-hidden />
-        </Button>
+
+        <div className="flex flex-col gap-6 border-t border-border pt-8 sm:flex-row sm:items-center sm:justify-between">
+          <p className="max-w-xl text-sm leading-relaxed text-secondary">{t("howItWorks")}</p>
+          <Button
+            size="lg"
+            className="shrink-0"
+            loading={pending}
+            onClick={async () => {
+              setPending(true);
+              await onBegin();
+            }}
+          >
+            {t("start")}
+          </Button>
+        </div>
       </article>
     </CandidateShell>
   );
@@ -251,19 +263,31 @@ export function Transition({ v, onContinue, onPause }: { v: View<"transition">; 
   const [pending, setPending] = React.useState<"go" | "pause" | null>(null);
   return (
     <CandidateShell branding={v.branding}>
-      <div className="mx-auto flex max-w-[680px] flex-col gap-6 px-4 py-16 sm:py-24 animate-slide-up">
-        <p className="text-xs font-medium uppercase tracking-wide text-tertiary">{t("eyebrow")}</p>
-        <h1 className="text-2xl font-semibold text-text">{ch?.title}</h1>
-        <p className="text-lg leading-relaxed text-secondary" dir="auto">{ch?.summary}</p>
+      <div className="mx-auto flex max-w-[760px] flex-col gap-8 px-4 py-12 sm:py-20">
+        <div className="animate-rise rounded-[20px] bg-ink p-7 text-ink-foreground shadow-raised sm:p-10">
+          <div className="flex items-center justify-between gap-4">
+            <p className="text-sm text-ink-secondary">{t("eyebrow")}</p>
+            <span className="flex gap-1" aria-hidden>
+              {v.world.chapters.map((_, i) => (
+                <span key={i} className={cn("h-1.5 w-6 rounded-full", i < v.chapterIndex ? "bg-saffron" : i === v.chapterIndex ? "bg-ink-foreground" : "bg-ink-foreground/15")} />
+              ))}
+            </span>
+          </div>
+          <h1 className="mt-4 text-[2rem] font-semibold leading-tight sm:text-[2.5rem]" dir="auto">{ch?.title}</h1>
+          <p className="mt-4 text-lg leading-relaxed text-ink-secondary" dir="auto">{ch?.summary}</p>
+        </div>
         {v.recap.length ? (
-          <section className="rounded-card border border-border bg-surface p-5">
-            <h2 className="text-sm font-semibold text-text">{t("soFar")}</h2>
-            <ul className="mt-2 flex list-disc flex-col gap-1 ps-5 text-sm text-secondary">
+          <section className="px-1">
+            <h2 className="text-base font-semibold text-text">{t("soFar")}</h2>
+            <ul className="mt-3 flex flex-col gap-2 text-[15px] text-secondary">
               {v.recap.map((r) => (
-                <li key={r} dir="auto">{r}</li>
+                <li key={r} className="flex gap-3" dir="auto">
+                  <span className="mt-2 size-1.5 shrink-0 rounded-full bg-saffron" aria-hidden />
+                  {r}
+                </li>
               ))}
             </ul>
-            <p className="mt-3 text-sm text-secondary">{t("carryForward")}</p>
+            <p className="mt-4 text-sm text-tertiary">{t("carryForward")}</p>
           </section>
         ) : null}
         <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
@@ -295,7 +319,6 @@ export function Transition({ v, onContinue, onPause }: { v: View<"transition">; 
             }}
           >
             {t("start", { n: v.chapterIndex + 1 })}
-            <ArrowRight className="flip-rtl" aria-hidden />
           </Button>
         </div>
       </div>

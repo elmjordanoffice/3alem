@@ -1,7 +1,7 @@
 "use client";
 import * as React from "react";
 import { useTranslations } from "next-intl";
-import { ArrowRight, ChevronDown, RotateCw } from "lucide-react";
+import { ChevronDown, RotateCw } from "lucide-react";
 import type { CandidateView } from "@/lib/hire/candidate-state";
 import type { ResponseContent } from "@/lib/assessment/response-schema";
 import { Button } from "@/components/ui/button";
@@ -137,7 +137,7 @@ function ItemStage({ v, token, submit, sendTurn }: ItemScreenProps) {
 
   const scenario = (
     <section aria-labelledby="scenario-title" className="flex min-w-0 flex-col gap-5">
-      <h1 id="scenario-title" tabIndex={-1} className="text-xl font-semibold text-text outline-none" dir="auto">
+      <h1 id="scenario-title" tabIndex={-1} className="text-[1.75rem] font-semibold leading-tight text-text outline-none" dir="auto">
         {content.title}
       </h1>
       <div className="reading whitespace-pre-line text-[15px] leading-relaxed text-text" dir="auto">
@@ -169,9 +169,9 @@ function ItemStage({ v, token, submit, sendTurn }: ItemScreenProps) {
         ) : null}
         <div className={cn("grid gap-10", wide ? "grid-cols-1" : "lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]")}>
           <div className={cn(stage !== "MAIN" && !showScenario && "hidden lg:block")}>{scenario}</div>
-          <section aria-labelledby="task-label" className="flex min-w-0 flex-col gap-5 lg:sticky lg:top-24 lg:self-start" key={`${item.id}-${stage}`}>
+          <section aria-labelledby="task-label" className="flex min-w-0 flex-col gap-5 rounded-[20px] border border-border bg-surface p-5 shadow-raised sm:p-7 lg:sticky lg:top-24 lg:self-start" key={`${item.id}-${stage}`}>
             <div className="flex flex-col gap-2 animate-slide-up">
-              <p id="task-label" className="text-xs font-medium uppercase tracking-wide text-accent-text">
+              <p id="task-label" className="text-[13px] font-medium text-accent-text">
                 {label}
               </p>
               {stage === "TWIST" && content.twist?.change ? (
@@ -180,7 +180,7 @@ function ItemStage({ v, token, submit, sendTurn }: ItemScreenProps) {
                 </div>
               ) : null}
               {stage === "MAIN" ? (
-                <p className="text-[15px] font-medium leading-relaxed text-text" dir="auto">
+                <p className="text-[17px] font-medium leading-relaxed text-text" dir="auto">
                   {content.task.prompt}
                 </p>
               ) : null}
@@ -204,7 +204,6 @@ function ItemStage({ v, token, submit, sendTurn }: ItemScreenProps) {
               <p className="text-xs text-tertiary">{value ? t("readyHint") : t("incompleteHint")}</p>
               <Button size="lg" onClick={doSubmit} disabled={!value} loading={submitting}>
                 {stage === "MAIN" && content.probe ? t("continue") : t("submit")}
-                <ArrowRight className="flip-rtl" aria-hidden />
               </Button>
             </div>
           </section>

@@ -52,6 +52,12 @@ const PAIRS: [string, string, number][] = [
   ["focus-ring", "background", AA_LARGE],
   ["focus-ring", "surface", AA_LARGE],
   ["border-strong", "surface", 1.3],
+  ["ink-foreground", "ink", AA],
+  ["ink-secondary", "ink", AA],
+  ["ink-foreground", "ink-raised", AA],
+  ["ink-secondary", "ink-raised", AA],
+  ["highlight-foreground", "highlight", AA],
+  ["saffron", "ink", AA_LARGE],
 ];
 
 describe("design token contrast (WCAG AA)", () => {

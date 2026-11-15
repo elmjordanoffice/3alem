@@ -29,7 +29,8 @@ test("org admin tools: fairness, audit, integrations, library", async ({ page, c
   const errors = trackErrors(page);
   await signIn(page, "orgadmin@aalim.dev");
 
-  // Fairness: aggregates only, small groups suppressed.
+  // Fairness: aggregates only, small groups suppressed. Organisation tools are tabs in the Organisation section.
+  await page.getByRole("link", { name: "Organisation", exact: true }).click();
   await page.getByRole("link", { name: "Fairness" }).click();
   await expect(page.getByRole("heading", { name: "Fairness", level: 1 })).toBeVisible();
   await expect(page.getByText(/in groups smaller than 5 not shown/).first()).toBeVisible();

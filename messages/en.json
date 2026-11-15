@@ -42,40 +42,87 @@
     "themeDark": "Dark"
   },
   "landing": {
-    "eyebrow": "Adaptive skills assessment and training",
-    "title": "See how people really think, decide and lead at work.",
-    "subtitle": "Aalim runs realistic work scenarios that adapt as people answer. Every score is backed by their own words. People make the decisions; Aalim gives them the evidence.",
     "getStarted": "Create an account",
     "signIn": "Sign in",
     "openApp": "Open Aalim",
-    "seeDesign": "View the design system",
-    "modesTitle": "Three ways to use Aalim",
+    "navLabel": "Site",
+    "nav": {
+      "how": "How it works",
+      "modes": "Hire, Grow, Team",
+      "trust": "Fairness and privacy"
+    },
+    "title": "Hire on evidence, not impressions.",
+    "subtitle": "Candidates spend a realistic week at a fictional company. The scenarios adapt to every answer, and each score is backed by the person’s own words. Your team makes the decision.",
+    "heroNote": "Also for personal development and for teams, with the same engine and the same standard of evidence.",
+    "demo": {
+      "label": "A scene from an assessment",
+      "chapter": "Chapter 2, Tuesday morning",
+      "live": "Adapting as they answer",
+      "fromInitials": "LH",
+      "from": "Layla Haddad",
+      "fromRole": "Head of Operations, Qamar Logistics",
+      "message": "Two of our three trucks are stuck at the port. The Henderson order is due at 4pm and they’ve already complained twice this month. What do you do first?",
+      "answerLabel": "Candidate’s answer",
+      "answerStart": "I’d call Henderson before ten and offer a split delivery:",
+      "answerEvidence": "half today from the Riyadh stock, the rest first thing tomorrow,",
+      "answerEnd": "then rebook the port slot. If they need it all today, I’ll know early enough to hire a third truck.",
+      "skill": "Prioritising under pressure",
+      "level": "Advanced",
+      "range": "3.6–4.2",
+      "scaleLow": "Emerging",
+      "scaleHigh": "Expert",
+      "note": "The band narrows as evidence comes in, and the tick is the level the role needs. The highlighted words are the evidence."
+    },
+    "how": {
+      "title": "From job description to evidence in three steps",
+      "jd": {
+        "title": "Paste a job description",
+        "body": "Aalim finds the skills the role needs, weighs what matters most, and flags requirements that could exclude people unfairly."
+      },
+      "week": {
+        "title": "Candidates live a week at a fictional company",
+        "body": "About 50 minutes of messages, decisions, documents and conversations. Each answer shapes the next scene, so the time goes where it tells you most."
+      },
+      "evidence": {
+        "title": "Read the evidence, then decide",
+        "body": "Role fit with a confidence, a range for every skill, quotes from the candidate’s own answers, and questions to ask in the interview."
+      }
+    },
+    "modesTitle": "One engine, three ways to use it",
+    "modesSubtitle": "The same scenarios and the same standard of evidence, whether you are hiring, growing yourself or developing a team.",
     "modes": {
       "hire": {
         "title": "Hire",
-        "body": "Paste a job description. Candidates work through one continuous story, and you get role fit, hidden strengths, risks and interview questions, all with evidence."
+        "body": "Compare candidates on what they did in the scenarios, not how well they write a CV."
       },
       "grow": {
         "title": "Grow",
-        "body": "Find out where you stand, then practise judgment, communication and leadership in scenarios with honest, specific feedback. Your data stays yours."
+        "body": "Find your level, practise where it matters and get feedback that names what to do next. Private to you.",
+        "wellLabel": "What you did well",
+        "well": "You named the trade-off before you decided, and said who would carry the cost.",
+        "expertLabel": "What an expert would add",
+        "expert": "Check who else the delay affects before you promise a new time."
       },
       "team": {
         "title": "Team",
-        "body": "With each person's consent, see your team's strengths and gaps, who is ready to lead, and who would learn most from working together."
+        "body": "With each person’s consent, see your team’s strengths, gaps and who is ready to lead.",
+        "heatLabel": "A team heatmap: six people across five skill areas",
+        "heatCaption": "Six people across five skill areas. Darker is stronger."
       }
     },
-    "principles": {
-      "evidence": {
-        "title": "Evidence, not guesses",
-        "body": "Each level comes with a range, a confidence and quotes from the person's own answers."
-      },
-      "adaptive": {
-        "title": "Questions you cannot game",
-        "body": "People write, rank, decide and talk. No option is the obviously right one."
-      },
+    "trust": {
+      "title": "Built to be fair, and to stay fair",
       "people": {
         "title": "People decide",
-        "body": "Aalim informs hiring decisions. It never rejects anyone automatically."
+        "body": "Aalim never rejects anyone automatically. It gives your team evidence and the questions to ask next."
+      },
+      "fairness": {
+        "title": "Checked for fairness",
+        "body": "Optional equal-opportunity answers show outcomes by group, with the four-fifths rule built in and small groups hidden."
+      },
+      "privacy": {
+        "title": "Data that belongs to people",
+        "body": "Personal development stays private. Anyone can download or delete their data, and old assessments are deleted on schedule."
       }
     },
     "footer": "Early version: use alongside interviews."
@@ -129,6 +176,17 @@
       "emailTaken": "An account with this email already exists. Sign in instead.",
       "linkExpired": "This link has expired or was already used. Request a new one.",
       "generic": "Something went wrong. Try again in a moment."
+    },
+    "brand": {
+      "label": "About Aalim",
+      "title": "Every score comes with the person’s own words.",
+      "quoteStart": "Before I answer the client, I’d check",
+      "quoteEvidence": "whether the delay affects the other two orders on the same route,",
+      "quoteEnd": "because promising a new time I can’t keep would cost us more than the delay itself.",
+      "skill": "Second-order thinking",
+      "level": "Proficient",
+      "range": "3.3–3.9",
+      "footer": "Aalim informs decisions. People make them."
     }
   },
   "onboarding": {
@@ -169,7 +227,8 @@
       "workspace": "Workspace",
       "organization": "Organisation",
       "account": "Account",
-      "grow": "Grow"
+      "grow": "Grow",
+      "manage": "Manage"
     },
     "nav": {
       "home": "Home",
@@ -189,7 +248,30 @@
       "fairness": "Fairness",
       "integrations": "Integrations",
       "audit": "Audit log",
-      "items": "Item bank review"
+      "items": "Item bank review",
+      "organization": "Organisation",
+      "overview": "Overview",
+      "itemBank": "Item bank"
+    },
+    "search": "Search",
+    "command": {
+      "label": "Search and jump",
+      "placeholder": "Search candidates, roles, teams or pages",
+      "searching": "Searching…",
+      "empty": "Nothing matches “{q}”.",
+      "navigate": "Move",
+      "open": "Open",
+      "newAssessment": "New assessment",
+      "lightTheme": "Use light theme",
+      "darkTheme": "Use dark theme",
+      "groups": {
+        "pages": "Pages",
+        "actions": "Actions",
+        "candidates": "Candidates",
+        "assessments": "Assessments",
+        "teams": "Teams",
+        "members": "People"
+      }
     }
   },
   "home": {
@@ -223,7 +305,8 @@
     "links": {
       "framework": {
         "title": "Competency framework",
-        "body": "{count} sub-skills across nine domains, each with written level anchors."
+        "body": "{count} sub-skills across nine domains, each with written level anchors.",
+        "cta": "Browse the framework"
       },
       "members": {
         "title": "Members",
@@ -240,6 +323,63 @@
       "done": "Your report is ready. You see it first.",
       "continue": "Continue",
       "report": "View my report"
+    },
+    "dateAt": "{date}, {org}",
+    "newAssessment": "New assessment",
+    "summary": {
+      "unviewed": "{count, plural, one {# report hasn’t been opened yet.} other {# reports haven’t been opened yet.}}",
+      "live": "{count, plural, one {# person is taking an assessment now.} other {# people are taking an assessment now.}}",
+      "clear": "You’re up to date. New reports appear here as candidates finish."
+    },
+    "review": {
+      "title": "Ready for review",
+      "unopened": "{n} not opened",
+      "all": "All assessments",
+      "new": "not opened yet",
+      "emptyTitle": "No reports yet",
+      "emptyBody": "Reports appear here as soon as candidates finish."
+    },
+    "roles": {
+      "title": "Roles",
+      "all": "All roles",
+      "completedOf": "{done} of {total} finished",
+      "completed": "{n} finished",
+      "inProgress": "{n} in progress",
+      "notStarted": "{n} not started",
+      "noCandidates": "No candidates invited yet."
+    },
+    "live": {
+      "title": "Taking an assessment now",
+      "empty": "Nobody is mid-assessment right now.",
+      "minutes": "{done}/{total} min"
+    },
+    "totals": {
+      "open": "Open roles",
+      "inProgress": "In progress",
+      "completed": "Finished"
+    },
+    "teams": {
+      "title": "Teams",
+      "all": "All teams",
+      "assessed": "{done} of {total} assessed"
+    },
+    "grow": {
+      "title": "Your own development",
+      "bodyNew": "Find your level with a 30-minute baseline, then practise where it matters. Private to you.",
+      "bodyActive": "Pick up today’s practice or check how your profile is moving. Private to you.",
+      "ctaNew": "Start your baseline",
+      "ctaActive": "Open my development"
+    },
+    "fit": {
+      "STRONG": "Strong fit",
+      "GOOD": "Good fit",
+      "PARTIAL": "Partial fit",
+      "WEAK": "Weak fit"
+    },
+    "confidence": {
+      "high": "High confidence",
+      "moderate": "Moderate confidence",
+      "low": "Low confidence"
     }
   },
   "framework": {
@@ -1130,7 +1270,7 @@
     "inferred": "Inferred",
     "noEvidence": "No direct evidence; inferred from related answers.",
     "domainBaselineOnly": "Baseline only.",
-    "evidenceContext": "Chapter {chapter} · {title} · {stage}",
+    "evidenceContext": "From “{title}” (chapter {chapter}), {stage}",
     "stage": {
       "MAIN": "answer",
       "PROBE": "follow-up",
@@ -1209,7 +1349,15 @@
       "shareError": "Couldn't create the link. Try again.",
       "toCandidate": "Send to candidate",
       "resendCandidate": "Send to candidate again"
-    }
+    },
+    "candidateReportFor": "Candidate report for {role}",
+    "yourReportFor": "Your report for {role}",
+    "mustHaves": "Must-have skills",
+    "bestEvidenced": "Best-evidenced areas",
+    "expectedLevel": "Role expects {level}",
+    "gapsInterview": "Explore in the interview",
+    "rangeSr": "Likely between {low} and {high}; the role expects {expected}.",
+    "radarCaption": "The overall shape across the nine areas. Each point is the estimate; the list shows the ranges."
   },
   "grow": {
     "title": "My development",
@@ -1281,7 +1429,22 @@
       "hoursOption": "{n, plural, one {# hour} other {# hours}}",
       "privacy": "Your Grow data is private. You decide if anyone else ever sees it.",
       "submit": "Save and continue",
-      "error": "Check the fields and try again."
+      "error": "Check the fields and try again.",
+      "next": {
+        "title": "What happens next",
+        "baseline": {
+          "title": "A 30-minute baseline",
+          "body": "Realistic scenarios across nine skill areas, adapting as you answer. Pause whenever you need."
+        },
+        "profile": {
+          "title": "Your profile",
+          "body": "Where you stand on each skill, with a range and your own answers as evidence."
+        },
+        "practice": {
+          "title": "Practice that fits",
+          "body": "Short scenarios aimed at your goal, with honest feedback and a twist to try."
+        }
+      }
     },
     "plan": {
       "title": "Your development plan",

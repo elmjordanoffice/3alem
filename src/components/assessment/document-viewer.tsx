@@ -96,7 +96,7 @@ function MemoView({ memo }: { memo: MemoMaterial }) {
   const t = useTranslations("components.documents");
   return (
     <article className="rounded-card border border-border bg-surface p-5 sm:p-8">
-      <p className="text-xs font-medium uppercase tracking-wide text-tertiary">{t("memo")}</p>
+      <p className="text-[13px] font-medium text-tertiary">{t("memo")}</p>
       <h3 className="mt-2 text-xl font-semibold text-text" dir="auto">
         {memo.title}
       </h3>

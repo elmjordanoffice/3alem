@@ -55,7 +55,7 @@ export function PracticeRunner({ id, item, feedback, reflection, answerText }: {
       </div>
       <div className="grid gap-10 lg:grid-cols-2">
         <section className="flex min-w-0 flex-col gap-5">
-          <p className="text-xs font-medium uppercase tracking-wide text-tertiary">{twist ? t("twistRound") : t("scenario")}</p>
+          <p className="text-[13px] font-medium text-tertiary">{twist ? t("twistRound") : t("scenario")}</p>
           <h1 className="text-xl font-semibold text-text" dir="auto">{c.title}</h1>
           <p className="reading whitespace-pre-line text-[15px] leading-relaxed text-text" dir="auto">{c.scenario}</p>
           {c.materials.length ? <DocumentViewer materials={c.materials} label={ti("materials")} /> : null}
@@ -64,7 +64,7 @@ export function PracticeRunner({ id, item, feedback, reflection, answerText }: {
           {twist ? <div className="rounded-card border border-warning/30 bg-warning-subtle p-4 text-[15px] text-text" dir="auto">{c.twist!.change}</div> : <p className="text-[15px] font-medium text-text" dir="auto">{c.task.prompt}</p>}
           {feedback && answerText ? (
             <div className="flex flex-col gap-2 rounded-card border border-border bg-surface-subtle p-4">
-              <span className="text-xs font-medium uppercase tracking-wide text-tertiary">{t("yourAnswer")}</span>
+              <span className="text-[13px] font-medium text-tertiary">{t("yourAnswer")}</span>
               <p className="whitespace-pre-line text-[15px] leading-relaxed text-text" dir="auto">{answerText}</p>
             </div>
           ) : (

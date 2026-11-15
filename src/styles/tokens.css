@@ -62,7 +62,19 @@
   --chart-4: #9d2f7a;
   --chart-grid: #e7e5e4;
 
+  /* Brand surfaces: deep ink-indigo for hero and brand panels. */
+  --ink: #17184a;
+  --ink-raised: #22246a;
+  --ink-foreground: #f5f4ff;
+  --ink-secondary: #bfc1f2;
+  /* Evidence: a saffron highlighter on the candidate's own words. Never decoration. */
+  --highlight: #fbe4a6;
+  --highlight-foreground: #1c1917;
+  --saffron: #f2b532;
+
   --shadow-popover: 0 8px 24px -6px rgb(28 25 23 / 0.12), 0 2px 6px -2px rgb(28 25 23 / 0.08);
+  /* The one raised surface on a page (a verdict, a hero panel). */
+  --shadow-raised: 0 1px 2px rgb(28 25 23 / 0.04), 0 12px 32px -12px rgb(23 24 74 / 0.18);
   --overlay: rgb(28 25 23 / 0.4);
 }
 
@@ -115,6 +127,15 @@
   --chart-4: #f0abfc;
   --chart-grid: #2e2b28;
 
+  --ink: #15163a;
+  --ink-raised: #1f2152;
+  --ink-foreground: #f5f4ff;
+  --ink-secondary: #b3b5ea;
+  --highlight: #4d3c10;
+  --highlight-foreground: #fdf3d6;
+  --saffron: #f2b532;
+
   --shadow-popover: 0 8px 24px -6px rgb(0 0 0 / 0.5), 0 2px 6px -2px rgb(0 0 0 / 0.4);
+  --shadow-raised: 0 1px 2px rgb(0 0 0 / 0.3), 0 16px 40px -16px rgb(0 0 0 / 0.6);
   --overlay: rgb(0 0 0 / 0.6);
 }

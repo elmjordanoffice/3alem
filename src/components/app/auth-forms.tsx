@@ -13,8 +13,8 @@ import { Alert } from "@/components/ui/alert";
 function Heading({ title, subtitle }: { title: string; subtitle?: React.ReactNode }) {
   return (
     <div className="mb-8 flex flex-col gap-2">
-      <h1 className="text-xl font-semibold text-text">{title}</h1>
-      {subtitle ? <p className="text-sm text-secondary">{subtitle}</p> : null}
+      <h1 className="text-[2rem] font-semibold leading-tight text-text">{title}</h1>
+      {subtitle ? <p className="text-[15px] leading-relaxed text-secondary">{subtitle}</p> : null}
     </div>
   );
 }
