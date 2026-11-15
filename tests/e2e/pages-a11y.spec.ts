@@ -20,7 +20,7 @@ for (const { locale, theme } of COMBOS) {
     const context = await browser.newContext({ colorScheme: theme });
     await setPrefs(context, baseURL!, { locale });
     const page = await context.newPage();
-    for (const path of ["/", "/sign-in"]) {
+    for (const path of ["/", "/sign-in", "/brand", "/missing-page"]) {
       await page.goto(path, { waitUntil: "networkidle" });
       await page.waitForTimeout(2200); // let the one hero animation finish
       expect(await serious(page), path).toEqual([]);

@@ -4,6 +4,7 @@ import { prismaAdapter } from "better-auth/adapters/prisma";
 import { nextCookies } from "better-auth/next-js";
 import { systemDb } from "@/lib/db";
 import { sendMail } from "@/lib/mail";
+import { brandedEmail } from "@/lib/mail/templates";
 
 export const auth = betterAuth({
   appName: "Aalim",
@@ -18,11 +19,8 @@ export const auth = betterAuth({
     autoSignIn: true,
     revokeSessionsOnPasswordReset: true,
     sendResetPassword: async ({ user, url }) => {
-      await sendMail({
-        to: user.email,
-        subject: "Reset your Aalim password",
-        text: `Use this link to choose a new password. It expires in one hour.\n\n${url}\n\nIf you did not ask for this, you can ignore this email.`,
-      });
+      const lang = (user as { locale?: string }).locale === "ar" ? "ar" : "en";
+      await sendMail({ to: user.email, ...brandedEmail("reset", lang, {}, { url }) });
     },
   },
   session: {

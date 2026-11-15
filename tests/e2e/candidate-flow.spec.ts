@@ -34,7 +34,7 @@ test("a candidate completes a full adaptive assessment and a report is produced"
   await page.getByLabel("Age", { exact: true }).selectOption("25_34");
   await page.getByLabel("Gender", { exact: true }).selectOption("prefer_not");
   await page.getByRole("button", { name: "Send answers" }).click();
-  await expect(page.getByText(/stored separately from your assessment/).last()).toBeVisible();
+  await expect(page.getByRole("status").filter({ hasText: /^Thank you\./ })).toBeVisible();
   const fair = await withDb(async (c) =>
     (await c.query(`SELECT f.gender, f."ageBand" FROM fairness_response f JOIN assessment_session s ON s.id = f."sessionRef" JOIN invitation i ON i.id = s."invitationId" WHERE i.email LIKE 'cand-%' ORDER BY f."createdAt" DESC LIMIT 1`)).rows[0],
   );

@@ -10,6 +10,7 @@ import { initialSkillWeights, templateAnalysis, type TemplateRow } from "@/lib/h
 import { createInvitation, parseCandidateList } from "@/lib/hire/invitations";
 import { generateToken, hashToken } from "@/lib/hire/tokens";
 import { sendMail } from "@/lib/mail";
+import { brandedEmail } from "@/lib/mail/templates";
 import { appUrl } from "@/lib/hire/invitations";
 
 type Result<T = object> = ({ ok: true } & T) | { ok: false; error: string };
@@ -161,6 +162,7 @@ export async function inviteCandidates(input: z.input<typeof inviteSchema>): Pro
       orgName: viewer.activeOrganization.name,
       roleTitle: analysis?.roleTitle ?? template.title,
       minutes: template.durationMinutes,
+      language: template.language === "ar" ? "ar" : "en",
     });
     created.push({ email: person.email, link: r.link });
   }
@@ -186,7 +188,8 @@ export async function renewInvitationLink(invitationId: string, send: boolean): 
   );
   const link = `${appUrl()}/a/${token}`;
   if (send) {
-    await sendMail({ to: inv.email, subject: `Your assessment link for ${inv.template.title}`, text: `Here is a new link to your assessment for ${inv.template.title}. It expires in 14 days.\n\n${link}` });
+    const lang = inv.template.language === "ar" ? "ar" : "en";
+    await sendMail({ to: inv.email, ...brandedEmail("renew", lang, { role: inv.template.title, org: viewer.activeOrganization.name, days: 14 }, { url: link, org: viewer.activeOrganization.name }) });
   }
   await audit({ organizationId: inv.organizationId, actorUserId: viewer.user.id, action: "invitation.renewed", targetType: "invitation", targetId: invitationId, metadata: { emailed: send } });
   return { ok: true, link };
@@ -213,10 +216,11 @@ export async function shareReport(input: z.input<typeof shareSchema>): Promise<R
   if (!result) return { ok: false, error: "notReady" };
   const link = `${appUrl()}/r/${token}`;
   if (p.data.audience === "candidate" && result.session.invitation?.email) {
+    const lang = (result.content as { language?: string } | null)?.language === "ar" ? "ar" : "en";
+    const date = new Intl.DateTimeFormat(lang === "ar" ? "ar" : "en-GB", { day: "numeric", month: "long", year: "numeric" }).format(expiresAt);
     await sendMail({
       to: result.session.invitation.email,
-      subject: `Your assessment report from ${viewer.activeOrganization.name}`,
-      text: `${viewer.activeOrganization.name} has shared your assessment report for ${result.session.template?.title ?? "the role"} with you.\n\nIt shows your strengths and areas to develop, with quotes from your own answers. The link expires on ${expiresAt.toISOString().slice(0, 10)}.\n\n${link}`,
+      ...brandedEmail("report", lang, { org: viewer.activeOrganization.name, role: result.session.template?.title ?? "", date }, { url: link, org: viewer.activeOrganization.name }),
     });
   }
   await audit({ organizationId: viewer.activeOrganization.id, actorUserId: viewer.user.id, action: "report.shared", targetType: "report", targetId: result.id, metadata: { audience: p.data.audience, days: p.data.days } });

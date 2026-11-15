@@ -149,7 +149,10 @@ export default async function Home() {
       <footer className="border-t border-border">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-8 text-sm text-tertiary sm:px-6">
           <Logo />
-          <p>{t("footer")}</p>
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+            <Link href="/brand" className="hover:text-text">{t("brandLink")}</Link>
+            <p>{t("footer")}</p>
+          </div>
         </div>
       </footer>
     </div>

@@ -74,9 +74,11 @@ With `ANTHROPIC_API_KEY` set, Claude generates worlds, items and role-play repli
 | `npm run test:e2e` | Playwright end-to-end and accessibility tests (needs `npm run build` first) |
 | `npm run screenshots` | Every Phase 0 screen × light/dark × English/Arabic × desktop/phone → `screenshots/out/` |
 | `npm run db:migrate` / `db:deploy` / `db:seed` / `db:seed:demo` | Prisma migrations, base seed, demo data |
+| `npm run brand:assets` | Regenerate the logo files, PNGs, social images and in-app wordmark paths from the brand fonts |
 
 ## Docs
 
+- [Brand](docs/brand.md): name, platform, voice, logo, colour, type and assets (the live, bilingual brand book is at **/brand**)
 - [Architecture](docs/architecture.md): stack, engine, jobs, tenancy and RLS, privacy, security, i18n, design system
 - [Decisions log](docs/decisions.md): every choice the brief left open, and why
 - [Prompt catalogue](docs/prompt-catalogue.md): the AI agents, their contracts and versioning

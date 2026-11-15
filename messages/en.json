@@ -125,7 +125,8 @@
         "body": "Personal development stays private. Anyone can download or delete their data, and old assessments are deleted on schedule."
       }
     },
-    "footer": "Early version: use alongside interviews."
+    "footer": "Early version: use alongside interviews.",
+    "brandLink": "Brand"
   },
   "auth": {
     "fields": {
@@ -487,7 +488,8 @@
     "retry": "Try again",
     "notFoundTitle": "Page not found",
     "notFoundBody": "The link may be wrong or the page may have moved.",
-    "goHome": "Go to the home page"
+    "goHome": "Go to the home page",
+    "goApp": "Go to your workspace"
   },
   "components": {
     "editor": {
@@ -1042,6 +1044,23 @@
       "errors": {
         "jdLength": "Paste the full job description (at least 80 characters).",
         "generic": "That didn't work. Try again."
+      },
+      "useExample": "Use an example",
+      "exampleJd": "Customer Success Team Lead\n\nWe're looking for a Customer Success Team Lead to run a team of six account managers looking after 300 business customers across the Gulf.\n\nWhat you'll do\n- Lead, coach and plan the work of six account managers\n- Own renewals and spot accounts at risk early, using usage data and customer conversations\n- Handle escalations with senior customer stakeholders\n- Work with product and support to fix the problems customers raise most\n- Report on retention and satisfaction to the Head of Customer Experience\n\nWhat you bring\n- 5+ years in customer success or account management, including 2 leading people\n- Comfortable with numbers: you can find the story in a renewal forecast\n- Calm, clear communication in difficult conversations\n- Arabic and English",
+      "steps": {
+        "title": "What happens next",
+        "analyse": {
+          "title": "Aalim reads the description",
+          "body": "It finds the skills the role needs, weighs what matters most, and flags requirements that could exclude people unfairly."
+        },
+        "review": {
+          "title": "You review and adjust",
+          "body": "Change what is a must-have, edit the technical skills and their level descriptions, and set the length."
+        },
+        "invite": {
+          "title": "Publish and invite",
+          "body": "Send personal links. Each candidate gets a week at a fictional company, adapted to their answers."
+        }
       }
     }
   },
@@ -1382,15 +1401,18 @@
     },
     "today": {
       "title": "Today's practice",
-      "body": "A scenario on {skill}, from your plan, a little above your current level.",
+      "body": "From your plan, pitched a little above where you are now.",
       "bodyNoReport": "Practise any skill while you wait for your baseline, or start with decision-making.",
       "start": "Start practising",
-      "choose": "Choose another skill"
+      "choose": "Choose another skill",
+      "fallbackSkill": "Decision-making",
+      "now": "Where you are now"
     },
     "focus": {
       "title": "Your current focus",
       "body": "From your latest assessment. These change when you re-assess.",
-      "thirty": "Next 30 days:"
+      "thirty": "Next 30 days:",
+      "range": "Your range"
     },
     "tracks": {
       "title": "Tracks",
@@ -1401,7 +1423,8 @@
       "sessions": "{n} sessions",
       "start": "Start",
       "again": "Practise again",
-      "stretch": "Stretch session"
+      "stretch": "Stretch session",
+      "all": "All tracks"
     },
     "snapshot": {
       "title": "Your profile",
@@ -1504,7 +1527,8 @@
       "withinRange": "(within range)",
       "practice": "Practice sessions per week",
       "practiceNote": "How often you practised. Consistency matters more than volume.",
-      "sessions": "Sessions"
+      "sessions": "Sessions",
+      "compareNote": "The faint band under each skill is your range on {date}."
     },
     "coach": {
       "title": "Coach",
@@ -1519,6 +1543,10 @@
       "send": "Send",
       "thinking": "Thinking…",
       "error": "That didn't go through. Try again."
+    },
+    "links": {
+      "progress": "How your levels have moved",
+      "coach": "Talk through your next step"
     }
   },
   "team": {
@@ -1942,5 +1970,302 @@
     "confirmBody": "The assessment, every answer, score and report will be removed. The audit log keeps a record that it was deleted. This can't be undone.",
     "confirmLabel": "Type the candidate's name to confirm",
     "confirmAction": "Delete permanently"
+  },
+  "brandbook": {
+    "title": "Aalim brand",
+    "metaDescription": "How Aalim looks, sounds and behaves: the brand platform, logo, colour, type, voice and assets.",
+    "nav": {
+      "story": "Story",
+      "platform": "Platform",
+      "voice": "Voice",
+      "logo": "Logo",
+      "colour": "Colour",
+      "type": "Type",
+      "signatures": "Signatures",
+      "imagery": "Imagery and motion",
+      "downloads": "Downloads"
+    },
+    "hero": {
+      "kicker": "Brand book",
+      "tagline": "Evidence, not impressions.",
+      "intro": "How Aalim looks, sounds and behaves, in English and Arabic. Everything here is built from the same components and tokens as the product, so it can’t drift."
+    },
+    "story": {
+      "title": "One word, two meanings",
+      "letters": "ع ا ل م",
+      "body1": "In Arabic, the same four letters spell ʿālim, someone who knows a subject deeply, and ʿālam, a world.",
+      "body2": "Aalim builds a world for each person, a realistic week at a fictional company, and finds out what they know in it. The name is the product.",
+      "usage": "Write Aalim in English text and عالم in Arabic. The lowercase “aalim” appears only in the wordmark.",
+      "alimLabel": "ʿālim",
+      "alimMeaning": "one who knows deeply",
+      "alamLabel": "ʿālam",
+      "alamMeaning": "a world"
+    },
+    "platform": {
+      "title": "What we stand for",
+      "positioningLabel": "Positioning",
+      "positioning": "For organisations that hire and develop people, Aalim is the skills assessment that shows its working: realistic scenarios that adapt to every answer, and every score backed by the person’s own words.",
+      "promiseLabel": "Promise",
+      "promise": "Evidence, not impressions.",
+      "valuesTitle": "What we hold to",
+      "values": {
+        "evidence": {
+          "title": "Show the evidence",
+          "body": "Every claim links to the person’s own words. If we can’t quote it, we don’t say it."
+        },
+        "certainty": {
+          "title": "Be honest about certainty",
+          "body": "Ranges, not verdicts. We say how sure we are, in plain words."
+        },
+        "people": {
+          "title": "People decide",
+          "body": "Aalim informs decisions about people. It never makes them, and it never rejects anyone."
+        },
+        "fair": {
+          "title": "Fair by design",
+          "body": "Checked for adverse impact, accessible to everyone, private by default."
+        },
+        "bilingual": {
+          "title": "Bilingual from the first line",
+          "body": "Arabic and English are equals. Neither is a translation added later."
+        }
+      },
+      "personalityTitle": "Personality",
+      "weAre": "We are",
+      "weAreNot": "never",
+      "traits": {
+        "rigorous": [
+          "Rigorous",
+          "cold"
+        ],
+        "warm": [
+          "Warm",
+          "cute"
+        ],
+        "direct": [
+          "Direct",
+          "blunt"
+        ],
+        "confident": [
+          "Confident",
+          "certain"
+        ],
+        "modern": [
+          "Modern",
+          "trendy"
+        ]
+      }
+    },
+    "voice": {
+      "title": "How we sound",
+      "principles": {
+        "plain": {
+          "title": "Plain words",
+          "body": "“Role fit”, not “candidate–role alignment index”."
+        },
+        "specific": {
+          "title": "Specific over impressive",
+          "body": "“Spotted that station 2 closes at noon” beats “strong analytical skills”."
+        },
+        "ranges": {
+          "title": "Numbers with ranges and reasons",
+          "body": "Give the level, the range and why. Never a bare percentage."
+        },
+        "calm": {
+          "title": "Calm",
+          "body": "No exclamation marks, no urgency tricks, no hype words like “revolutionary” or “AI-powered”."
+        },
+        "verbs": {
+          "title": "Verbs on buttons",
+          "body": "Sentence case and active voice. A button says what happens: “Publish”, then “Published”."
+        }
+      },
+      "toneTitle": "One voice, three tones",
+      "tones": {
+        "candidates": {
+          "title": "To candidates",
+          "body": "Calm and reassuring, clear about what happens to their data.",
+          "example": "Take the time you need. Your answers save as you type."
+        },
+        "teams": {
+          "title": "To hiring teams",
+          "body": "Precise and brief. Lead with what to do next.",
+          "example": "17 reports haven’t been opened yet."
+        },
+        "growth": {
+          "title": "To people growing",
+          "body": "Honest and encouraging, never flattering.",
+          "example": "You named the trade-off. An expert would also check who else the delay affects."
+        }
+      },
+      "examplesTitle": "Say this, not that",
+      "say": "Say",
+      "notThat": "Not",
+      "examples": [
+        [
+          "You were strongest at evaluating evidence.",
+          "Congratulations! You’re a top performer!"
+        ],
+        [
+          "Scenarios adapt as people answer. Every score quotes their own words.",
+          "Our AI-powered engine revolutionises hiring."
+        ],
+        [
+          "Partial fit. Below the expected level on management: explore it in the interview.",
+          "The candidate failed the assessment."
+        ]
+      ]
+    },
+    "logo": {
+      "title": "Logo",
+      "symbolTitle": "The symbol",
+      "symbolBody": "The narrowing range in miniature: a scale, the band where the person’s level probably lies, and the estimate inside it. The band is saffron because saffron always means evidence.",
+      "anatomy": {
+        "scale": "Scale",
+        "band": "Band of plausible levels",
+        "estimate": "Estimate"
+      },
+      "wordmarkTitle": "The wordmark",
+      "wordmarkBody": "“aalim” in Alexandria Semibold, with the dot of the i in saffron: the evidence, again. عالم is set in the same typeface, on the same baseline, separated by a hairline.",
+      "lockupsTitle": "Lockups",
+      "lockups": {
+        "primary": "Primary, bilingual",
+        "english": "English",
+        "arabic": "Arabic",
+        "reverse": "On ink"
+      },
+      "rulesTitle": "Using the logo",
+      "clearSpace": "Clear space: at least the height of the band on every side.",
+      "minSize": "Minimum size: symbol 16 px; bilingual lockup 120 px wide.",
+      "dontsTitle": "Don’t",
+      "donts": {
+        "recolour": "Recolour the dot or the band",
+        "stretch": "Stretch or condense it",
+        "busy": "Place it on saffron or busy images",
+        "redraw": "Retype the wordmark in another font"
+      }
+    },
+    "colour": {
+      "title": "Colour",
+      "body": "Mostly quiet stone, one deep ink for brand moments, indigo only for actions, saffron only for evidence.",
+      "ratio": "Roughly, on a typical screen",
+      "swatches": {
+        "ink": {
+          "name": "Ink",
+          "role": "Brand surfaces: verdicts, chapter cards, hero panels."
+        },
+        "indigo": {
+          "name": "Indigo",
+          "role": "Primary actions, focus and current selection. Nothing else."
+        },
+        "saffron": {
+          "name": "Saffron",
+          "role": "Evidence and the dot in the logo. Never decoration."
+        },
+        "stone": {
+          "name": "Stone",
+          "role": "Backgrounds, text and borders: most of every screen."
+        },
+        "levels": {
+          "name": "Level ramp",
+          "role": "Skill levels and role fit. One hue, never red and green."
+        }
+      },
+      "darkNote": "Every colour has a dark-mode pair, and every text pairing is tested for WCAG AA contrast."
+    },
+    "type": {
+      "title": "Type",
+      "displayTitle": "Alexandria, for display",
+      "displayBody": "Drawn for Latin and Arabic together, so both languages share one voice. Page titles, verdicts, big numbers.",
+      "textTitle": "IBM Plex Sans and Plex Sans Arabic, for text",
+      "textBody": "One family designed to pair across scripts. Precise without being cold. Everything else.",
+      "sampleDisplay": "See what people can do",
+      "sampleText": "Every score in Aalim comes with a range, a confidence and the person’s own words.",
+      "rules": "Arabic gets more line height (1.65 for text, 1.32 for display) and no letter spacing. Numbers use Latin digits by default; Arabic-Indic digits are a personal setting."
+    },
+    "signatures": {
+      "title": "Signatures",
+      "rangeTitle": "The narrowing range",
+      "rangeBody": "Every estimate is drawn as a band on the 1–5 scale. It narrows as evidence comes in, and a tick marks the level the role expects. It is the brand’s one moving idea.",
+      "evidenceTitle": "The evidence highlighter",
+      "evidenceBody": "The candidate’s verbatim words are marked in saffron, the way a careful reviewer marks a quote.",
+      "evidenceSample": "Before I answer the client, I’d check",
+      "evidenceMark": "whether the delay affects the other two orders on the same route.",
+      "fieldTitle": "The range field",
+      "fieldBody": "Rows of estimates narrowing from lavender (uncertain) to saffron (evidenced). A texture for brand surfaces and social images, never inside the product."
+    },
+    "imagery": {
+      "title": "Imagery, icons and motion",
+      "imageryTitle": "Imagery",
+      "imageryBody": "Show the product and the range field. If you show people, show real workplaces in the region, in natural light, doing work rather than posing. Never robots, brains or circuit boards for “AI”.",
+      "iconsTitle": "Icons",
+      "iconsBody": "Lucide, 1.75 stroke, 16 or 20 px, in text or secondary colour. Never multicolour.",
+      "motionTitle": "Motion",
+      "motionBody": "One orchestrated moment per page at most: the band narrowing. Everything else responds to the person in 150–250 ms, and all of it stops under reduced motion."
+    },
+    "downloads": {
+      "title": "Downloads",
+      "body": "Outlined vector files (no font needed) and PNG renders, generated from the brand fonts by npm run brand:assets.",
+      "items": {
+        "logo": "Bilingual logo",
+        "logoReverse": "Bilingual logo, on ink",
+        "logoEn": "English logo",
+        "logoAr": "Arabic logo",
+        "symbol": "Symbol (app icon)",
+        "wordmark": "Wordmark",
+        "wordmarkAr": "Arabic wordmark",
+        "field": "Range field",
+        "og": "Social image (English)",
+        "ogAr": "Social image (Arabic)"
+      }
+    }
+  },
+  "emails": {
+    "footer": {
+      "tagline": "Evidence, not impressions.",
+      "whyOrg": "You’re receiving this because {org} sent it through Aalim.",
+      "whyAccount": "You’re receiving this because of your Aalim account."
+    },
+    "invite": {
+      "subject": "{org} invites you to an assessment for {role}",
+      "preheader": "About {minutes} minutes of realistic work scenarios. You can pause between chapters.",
+      "headingNamed": "{name}, you’re invited to show what you can do",
+      "heading": "You’re invited to show what you can do",
+      "p1": "{org} has invited you to a work-scenario assessment for the {role} role. It takes about {minutes} minutes, and you can pause between chapters.",
+      "p2": "There are no trick questions. You’ll spend a week at a fictional company: reading messages, making decisions and writing replies. People at {org} make the hiring decision; the assessment gives them evidence.",
+      "cta": "Start the assessment",
+      "note": "This link is personal and expires in {days} days. You can choose extra time or larger text before you begin."
+    },
+    "renew": {
+      "subject": "Your new assessment link for {role}",
+      "preheader": "A fresh link to continue your assessment.",
+      "heading": "Here’s your new link",
+      "p1": "Here is a new link to your assessment for the {role} role at {org}. It expires in {days} days.",
+      "cta": "Continue the assessment"
+    },
+    "team": {
+      "subject": "{manager} invites you to a team development assessment",
+      "preheader": "A development tool, not a performance review. You see your report first.",
+      "heading": "Help {team} grow, on your terms",
+      "p1": "{manager} has invited you to a team development assessment for {team} at {org}.",
+      "p2": "This is a development tool, not a performance review. You see your own report first. With fewer than five people, your manager sees only anonymised team totals, and never your answers unless you choose to share them.",
+      "cta": "Read more and decide"
+    },
+    "reset": {
+      "subject": "Reset your Aalim password",
+      "preheader": "The link expires in one hour.",
+      "heading": "Choose a new password",
+      "p1": "Use the button below to choose a new password. The link expires in one hour.",
+      "cta": "Choose a new password",
+      "note": "If you didn’t ask for this, you can ignore this email. Your password won’t change."
+    },
+    "report": {
+      "subject": "Your assessment report from {org}",
+      "preheader": "Your strengths and what to develop, with quotes from your own answers.",
+      "heading": "Your report is ready",
+      "p1": "{org} has shared your assessment report for the {role} role with you. It shows your strengths and what to develop, with quotes from your own answers.",
+      "cta": "Open my report",
+      "note": "The link expires on {date}."
+    }
   }
 }

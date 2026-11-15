@@ -1,6 +1,7 @@
 import "server-only";
 import { systemDb } from "@/lib/db";
 import { sendMail } from "@/lib/mail";
+import { brandedEmail } from "@/lib/mail/templates";
 import { generateToken, hashToken } from "./tokens";
 
 export const INVITATION_DAYS = 14;
@@ -42,6 +43,8 @@ export async function createInvitation(opts: {
   orgName: string;
   roleTitle: string;
   minutes: number;
+  /** Language of the email (the assessment's language). */
+  language?: "en" | "ar";
 }) {
   const token = generateToken();
   const inv = await systemDb.invitation.create({
@@ -57,21 +60,8 @@ export async function createInvitation(opts: {
     },
   });
   if (opts.send) {
-    const greeting = opts.name ? `Hello ${opts.name},` : "Hello,";
-    await sendMail({
-      to: inv.email,
-      subject: `${opts.orgName} invites you to an assessment for ${opts.roleTitle}`,
-      text: `${greeting}
-
-${opts.orgName} has invited you to complete a work-scenario assessment for the ${opts.roleTitle} role. It takes about ${opts.minutes} minutes, and you can pause between chapters.
-
-There are no trick questions. You will work through realistic situations at a fictional company: reading messages, making decisions and writing replies. People at ${opts.orgName} make the hiring decision; the assessment gives them evidence.
-
-Start here (the link expires in ${INVITATION_DAYS} days):
-${candidateLink(token)}
-
-If you need extra time or larger text, you can choose that before you begin.`,
-    });
+    const mail = brandedEmail("invite", opts.language ?? "en", { org: opts.orgName, role: opts.roleTitle, minutes: opts.minutes, days: INVITATION_DAYS, name: opts.name?.trim().split(" ")[0] ?? "" }, { url: candidateLink(token), org: opts.orgName, named: Boolean(opts.name?.trim()) });
+    await sendMail({ to: inv.email, ...mail });
   }
   return { invitation: inv, token, link: candidateLink(token) };
 }

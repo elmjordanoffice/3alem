@@ -14,6 +14,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { FitPill } from "@/components/report/fit";
+import { RolePipelineList } from "@/components/recruiter/role-pipeline";
 import { cn } from "@/lib/utils";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -160,12 +161,12 @@ type T = Awaited<ReturnType<typeof getTranslations<"home">>>;
 function SectionTitle({ id, title, count, href, linkLabel }: { id: string; title: string; count?: string; href?: string; linkLabel?: string }) {
   return (
     <div className="mb-4 flex items-baseline justify-between gap-4">
-      <h2 id={id} className="flex items-baseline gap-2.5 text-lg font-semibold text-text">
-        {title}
-        {count ? <span className="font-sans text-sm font-normal text-tertiary tabular">{count}</span> : null}
+      <h2 id={id} className="flex min-w-0 flex-wrap items-baseline gap-x-2.5 text-lg font-semibold text-text">
+        <span className="whitespace-nowrap">{title}</span>
+        {count ? <span className="whitespace-nowrap font-sans text-sm font-normal text-tertiary tabular">{count}</span> : null}
       </h2>
       {href ? (
-        <Link href={href} className="text-sm text-secondary underline-offset-4 hover:text-text hover:underline">
+        <Link href={href} className="shrink-0 whitespace-nowrap text-sm text-secondary underline-offset-4 hover:text-text hover:underline">
           {linkLabel}
         </Link>
       ) : null}
@@ -223,47 +224,16 @@ function Roles({ overview, fmt, t, canCreate }: { overview: HomeOverview; fmt: F
           action={canCreate ? <Button asChild><Link href="/app/assessments/new">{t("assessments.create")}</Link></Button> : undefined}
         />
       ) : (
-        <ul className="flex flex-col gap-3">
-          {roles.map((r) => {
-            const notStarted = Math.max(0, r.counts.invited - r.counts.inProgress - r.counts.completed);
-            const total = Math.max(1, r.counts.invited);
-            const seg = [
-              { k: "completed", v: r.counts.completed, c: "bg-level-4" },
-              { k: "inProgress", v: r.counts.inProgress, c: "bg-level-2" },
-              { k: "notStarted", v: notStarted, c: "bg-level-empty" },
-            ];
-            return (
-              <li key={r.id}>
-                <Link href={r.status === "DRAFT" ? `/app/assessments/${r.id}/setup` : `/app/assessments/${r.id}`} className="block rounded-card border border-border bg-surface p-4 transition-colors hover:border-border-strong focus-visible:outline-2 focus-visible:outline-focus sm:p-5">
-                  <span className="flex flex-wrap items-center justify-between gap-3">
-                    <span className="flex min-w-0 items-center gap-2.5">
-                      <span className="truncate font-medium text-text">{r.title}</span>
-                      <Badge tone={r.status === "PUBLISHED" ? "success" : "neutral"}>{t(`assessments.status.${r.status}`)}</Badge>
-                    </span>
-                    <span className="text-sm text-secondary tabular">{t("roles.completedOf", { done: fmt.n(r.counts.completed), total: fmt.n(r.counts.invited) })}</span>
-                  </span>
-                  {r.counts.invited ? (
-                    <>
-                      <span className="mt-4 flex h-2 gap-0.5 overflow-hidden rounded-full" aria-hidden>
-                        {seg.filter((s) => s.v).map((s) => <span key={s.k} className={s.c} style={{ width: `${(s.v / total) * 100}%` }} />)}
-                      </span>
-                      <span className="mt-2.5 flex flex-wrap gap-x-5 gap-y-1 text-xs text-secondary">
-                        {seg.map((s) => (
-                          <span key={s.k} className="flex items-center gap-1.5">
-                            <span className={cn("size-2 rounded-full", s.c, s.k === "notStarted" && "ring-1 ring-inset ring-border-strong")} aria-hidden />
-                            {t(`roles.${s.k}` as "roles.completed", { n: fmt.n(s.v) })}
-                          </span>
-                        ))}
-                      </span>
-                    </>
-                  ) : (
-                    <span className="mt-2 block text-sm text-tertiary">{t("roles.noCandidates")}</span>
-                  )}
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
+        <RolePipelineList
+          roles={roles}
+          n={fmt.n}
+          labels={{
+            status: (st) => t(`assessments.status.${st}` as "assessments.status.DRAFT"),
+            completedOf: (done, total) => t("roles.completedOf", { done, total }),
+            segment: (k, v) => t(`roles.${k}`, { n: v }),
+            noCandidates: t("roles.noCandidates"),
+          }}
+        />
       )}
     </section>
   );

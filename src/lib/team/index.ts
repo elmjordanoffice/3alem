@@ -13,6 +13,7 @@ import { curatedWorld } from "@/lib/hire/world";
 import { generateToken, hashToken } from "@/lib/hire/tokens";
 import { appUrl } from "@/lib/hire/invitations";
 import { sendMail } from "@/lib/mail";
+import { brandedEmail } from "@/lib/mail/templates";
 import { audit } from "@/lib/audit";
 import { enqueue } from "@/lib/jobs";
 import { TRACKS } from "@/lib/grow/tracks";
@@ -50,18 +51,8 @@ export async function inviteMembers(viewer: OrgViewer, teamId: string, emails: {
     const data = { teamId, organizationId: team.organizationId, email, status: "INVITED" as const, inviteTokenHash: hashToken(token), consentedAt: null, userId: null, sessionId: null, reportSeenAt: null, shareRawAnswers: false };
     await withTenant(tenantOf(viewer), (tx) => (exists ? tx.teamMember.update({ where: { id: exists.id }, data }) : tx.teamMember.create({ data })));
     const link = `${appUrl()}/team-invite/${token}`;
-    await sendMail({
-      to: email,
-      subject: `${viewer.user.name} invites you to a team development assessment`,
-      text: `${name ? `Hello ${name},` : "Hello,"}
-
-${viewer.user.name} has invited you to take part in a team development assessment for ${team.name} at ${viewer.activeOrganization.name}.
-
-This is a development tool, not a performance review. You'll see your own report first. If the team has fewer than five people, your manager sees only anonymised team totals. Your manager never sees your actual answers unless you choose to share them.
-
-Read more and decide whether to take part:
-${link}`,
-    });
+    const lang = viewer.user.locale === "ar" ? "ar" : "en";
+    await sendMail({ to: email, ...brandedEmail("team", lang, { manager: viewer.user.name, team: team.name, org: viewer.activeOrganization.name }, { url: link, org: viewer.activeOrganization.name }) });
     created.push({ email, link });
   }
   await audit({ organizationId: team.organizationId, actorUserId: viewer.user.id, action: "team.members_invited", targetType: "team", targetId: teamId, metadata: { count: created.length } });

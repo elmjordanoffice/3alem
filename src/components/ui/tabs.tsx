@@ -29,7 +29,7 @@ export function TabsTrigger({ className, ...props }: React.ComponentProps<typeof
 export function TabsContent({ className, ...props }: React.ComponentProps<typeof TabsPrimitive.Content>) {
   return (
     <TabsPrimitive.Content
-      className={cn("pt-4 focus-visible:outline-none data-[state=active]:animate-fade-in", className)}
+      className={cn("pt-4 focus-visible:outline-none", className)}
       {...props}
     />
   );

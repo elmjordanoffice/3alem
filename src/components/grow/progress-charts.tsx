@@ -3,7 +3,7 @@ import { useTranslations } from "next-intl";
 import { Bar, BarChart, CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert } from "@/components/ui/alert";
-import { LevelLabel } from "@/components/report/level";
+import { LevelMeter } from "@/components/report/level";
 import { useLocaleSettings, useNumbers } from "@/components/providers";
 
 const COLORS = ["var(--chart-1)", "var(--chart-2)", "var(--chart-3)", "var(--chart-4)"];
@@ -46,22 +46,31 @@ export function ProgressCharts({
                 </ResponsiveContainer>
               </div>
             ) : null}
-            <ul className="mt-4 grid gap-x-8 gap-y-2 sm:grid-cols-2">
+            <ul className="mt-2 grid gap-x-10 gap-y-5 sm:grid-cols-2">
               {last.domains.map((d) => {
-                const before = first?.domains.find((x) => x.key === d.key);
-                const delta = before && assessments.length > 1 ? d.estimate - before.estimate : null;
-                const real = delta !== null && before && (d.range[0] > before.range[1] || d.range[1] < before.range[0]);
+                const before = assessments.length > 1 ? first?.domains.find((x) => x.key === d.key) : undefined;
+                const delta = before ? d.estimate - before.estimate : null;
+                // A change counts as real only when the new range no longer overlaps the old one.
+                const real = before ? d.range[0] > before.range[1] || d.range[1] < before.range[0] : false;
+                const pct = (v: number) => ((v - 1) / 4) * 100;
                 return (
-                  <li key={d.key} className="flex items-baseline justify-between gap-3 border-b border-border py-2 text-sm">
-                    <span className="text-text">{d.name}</span>
-                    <span className="flex items-baseline gap-2">
-                      <LevelLabel estimate={d.estimate} confidence={0.7} range={d.range} />
-                      {delta !== null ? <span className={real ? "text-accent-text tabular" : "text-tertiary tabular"}>{delta >= 0 ? "+" : ""}{n.number(Math.round(delta * 10) / 10)}{real ? "" : ` ${t("withinRange")}`}</span> : null}
-                    </span>
+                  <li key={d.key} className="flex flex-col gap-1.5">
+                    <LevelMeter label={d.name} estimate={d.estimate} confidence={0.7} range={d.range} />
+                    {before ? (
+                      <div className="flex items-center gap-3">
+                        <span className="relative h-1 flex-1 rounded-full bg-level-empty" aria-hidden>
+                          <span className="absolute inset-y-0 rounded-full bg-mark-muted/60" style={{ insetInlineStart: `${pct(before.range[0])}%`, width: `${Math.max(3, pct(before.range[1]) - pct(before.range[0]))}%` }} />
+                        </span>
+                        <span className={real ? "text-xs font-medium text-accent-text tabular" : "text-xs text-tertiary tabular"}>
+                          {delta! >= 0 ? "+" : ""}{n.number(Math.round(delta! * 10) / 10)}{real ? "" : ` ${t("withinRange")}`}
+                        </span>
+                      </div>
+                    ) : null}
                   </li>
                 );
               })}
             </ul>
+            {assessments.length > 1 ? <p className="mt-5 text-xs text-tertiary">{t("compareNote", { date: first!.date })}</p> : null}
           </CardContent>
         </Card>
       ) : null}

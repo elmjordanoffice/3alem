@@ -39,8 +39,15 @@ export function NewAssessmentForm({ aiMode }: { aiMode: "anthropic" | "offline" 
           <Textarea id={id} aria-describedby={describedBy} value={jd} onChange={(e) => setJd(e.target.value)} className="min-h-[22rem] font-normal" placeholder={t("jdPlaceholder")} disabled={pending} />
         )}
       </Field>
-      <div className="flex items-center justify-between text-xs text-tertiary">
-        <span className="tabular">{t("chars", { n: n.number(jd.length) })}</span>
+      <div className="flex flex-wrap items-center justify-between gap-3 text-xs text-tertiary">
+        <span className="flex items-center gap-3">
+          <span className="tabular">{t("chars", { n: n.number(jd.length) })}</span>
+          {!jd ? (
+            <button type="button" onClick={() => setJd(t("exampleJd"))} className="rounded-control text-sm font-medium text-accent-text underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-focus">
+              {t("useExample")}
+            </button>
+          ) : null}
+        </span>
         <span>{aiMode === "anthropic" ? t("modeAi") : t("modeOffline")}</span>
       </div>
       {error ? <Alert tone="critical">{error}</Alert> : null}

@@ -2,7 +2,8 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { getLocale, getTranslations } from "next-intl/server";
-import { ArrowRight, BookOpen, Dumbbell, LineChart, MessagesSquare, Target } from "lucide-react";
+import { LineChart, Lock, MessagesSquare, Target } from "lucide-react";
+import { RangeScale } from "@/components/report/range-scale";
 import { requireViewer } from "@/lib/auth/session";
 import { withTenant } from "@/lib/db";
 import { getGrowProfile, growSessions } from "@/lib/grow/profile";
@@ -11,10 +12,8 @@ import { DOMAINS } from "@/lib/framework/data";
 import { isLocale } from "@/i18n/config";
 import type { ReportContent } from "@/lib/hire/report-types";
 import { startBaselineAction } from "@/app/actions/grow";
-import { PageContainer, PageHeader } from "@/components/app/page-header";
+import { PageContainer } from "@/components/app/page-header";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Alert } from "@/components/ui/alert";
 import { SkillRadar } from "@/components/report/charts";
 import { PracticeLauncher } from "@/components/grow/practice-launcher";
 
@@ -30,6 +29,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function GrowHome() {
   const viewer = await requireViewer();
   const t = await getTranslations("grow");
+  const tr = await getTranslations("report");
   const raw = await getLocale();
   const locale = isLocale(raw) ? raw : "en";
   const profile = await getGrowProfile(viewer.user.id);
@@ -44,118 +44,150 @@ export default async function GrowHome() {
   const nameOf = (k: string) => DOMAINS.flatMap((d) => d.subSkills).find((s) => s.key === k)?.name[locale] ?? k;
   const today = plan[0]?.skillKey ?? "judgment.trade-off-reasoning";
 
+  // Every skill's estimate from the latest report, for the ranges below.
+  const skills = new Map((report?.domains ?? []).flatMap((d) => d.subSkills.map((x) => [x.key, x] as const)));
+  const todaySkill = skills.get(today);
+  const n1 = (v: number) => v.toFixed(1);
+
   return (
     <PageContainer className="max-w-6xl">
-      <PageHeader title={t("homeTitle", { name: viewer.user.name.split(" ")[0] ?? "" })} description={t("homeSubtitle", { goal: profile.goal })} />
-      <Alert tone="neutral" className="mb-8">{t("private")}</Alert>
+      <header className="mb-10">
+        <h1 className="text-[2.25rem] font-semibold leading-[1.1] text-text sm:text-[2.75rem]">{t("homeTitle", { name: viewer.user.name.split(" ")[0] ?? "" })}</h1>
+        <p className="mt-3 text-[15px] text-secondary">{t("homeSubtitle", { goal: profile.goal })}</p>
+        <p className="mt-2 flex items-center gap-1.5 text-sm text-tertiary">
+          <Lock className="size-3.5" aria-hidden />
+          {t("private")}
+        </p>
+      </header>
 
       {!report ? (
-        <Card className="mb-8">
-          <CardHeader>
-            <CardTitle>{inProgress ? t("baseline.resumeTitle") : t("baseline.title")}</CardTitle>
-            <CardDescription>{t("baseline.body")}</CardDescription>
-          </CardHeader>
-          <CardContent>
+        <section className="mb-10 rounded-[20px] bg-ink p-7 text-ink-foreground shadow-raised sm:p-10">
+          <h2 className="text-[2rem] font-semibold leading-tight">{inProgress ? t("baseline.resumeTitle") : t("baseline.title")}</h2>
+          <p className="mt-3 max-w-xl text-ink-secondary">{t("baseline.body")}</p>
+          <div className="mt-8">
             {inProgress ? (
-              <Button asChild size="lg">
+              <Button asChild size="lg" className="bg-ink-foreground text-ink hover:bg-white">
                 <Link href={`/grow/session/${inProgress.id}`}>{t("baseline.resume")}</Link>
               </Button>
             ) : (
               <form action={startBaselineAction}>
-                <Button size="lg" type="submit">
+                <Button size="lg" type="submit" className="bg-ink-foreground text-ink hover:bg-white">
                   <Target aria-hidden />
                   {t("baseline.start")}
                 </Button>
               </form>
             )}
-          </CardContent>
-        </Card>
+          </div>
+        </section>
       ) : null}
 
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_22rem]">
-        <div className="flex flex-col gap-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2"><Dumbbell className="size-4 text-accent-text" aria-hidden />{t("today.title")}</CardTitle>
-              <CardDescription>{report ? t("today.body", { skill: nameOf(today) }) : t("today.bodyNoReport")}</CardDescription>
-            </CardHeader>
-            <CardContent className="flex flex-wrap gap-2">
-              <PracticeLauncher skillKey={today} label={t("today.start")} />
-              <Button asChild variant="ghost">
-                <Link href="/app/grow/practice">{t("today.choose")}</Link>
-              </Button>
-            </CardContent>
-          </Card>
+      <div className="grid gap-x-10 gap-y-12 lg:grid-cols-[minmax(0,1fr)_20rem]">
+        <div className="flex min-w-0 flex-col gap-12">
+          {/* Today: one clear thing to do. */}
+          <section aria-labelledby="today-h" className="rounded-[20px] bg-ink p-7 text-ink-foreground shadow-raised sm:p-9">
+            <h2 id="today-h" className="font-sans text-sm font-normal tracking-normal text-ink-secondary">{t("today.title")}</h2>
+            <p className="mt-2 font-display text-[2rem] font-semibold leading-tight">{report ? nameOf(today) : t("today.fallbackSkill")}</p>
+            <p className="mt-2 max-w-xl text-[15px] leading-relaxed text-ink-secondary">{report ? t("today.body", { skill: nameOf(today) }) : t("today.bodyNoReport")}</p>
+            {todaySkill ? (
+              <div className="mt-6 max-w-md">
+                <div className="flex items-baseline justify-between text-sm">
+                  <span className="text-ink-secondary">{t("today.now")}</span>
+                  <bdi dir="ltr" className="tabular">{n1(todaySkill.range[0])}–{n1(todaySkill.range[1])}</bdi>
+                </div>
+                <RangeScale low={todaySkill.range[0]} high={todaySkill.range[1]} estimate={todaySkill.estimate} tone="ink" className="mt-2" />
+              </div>
+            ) : null}
+            <div className="mt-8 flex flex-wrap items-center gap-3">
+              <PracticeLauncher skillKey={today} label={t("today.start")} size="lg" className="bg-ink-foreground text-ink hover:bg-white" />
+              <Link href="/app/grow/practice" className="rounded-control px-3 py-2 text-sm font-medium text-ink-foreground underline-offset-4 hover:underline">{t("today.choose")}</Link>
+            </div>
+          </section>
 
           {plan.length ? (
-            <Card>
-              <CardHeader>
-                <CardTitle>{t("focus.title")}</CardTitle>
-                <CardDescription>{t("focus.body")}</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <ol className="flex flex-col gap-4">
-                  {plan.map((p, i) => (
-                    <li key={p.skillKey} className="flex gap-3">
-                      <span className="inline-flex size-6 shrink-0 items-center justify-center rounded-full bg-accent-subtle text-xs font-semibold text-accent-text tabular">{i + 1}</span>
-                      <span className="flex flex-col gap-1">
-                        <span className="font-medium text-text">{nameOf(p.skillKey)}</span>
-                        <span className="text-sm text-secondary" dir="auto">{p.why}</span>
-                        <span className="text-sm text-secondary" dir="auto"><span className="text-tertiary">{t("focus.thirty")} </span>{p.days30}</span>
-                      </span>
+            <section aria-labelledby="focus-h">
+              <h2 id="focus-h" className="text-xl font-semibold text-text">{t("focus.title")}</h2>
+              <p className="mt-1 text-sm text-secondary">{t("focus.body")}</p>
+              <ol className="mt-6 flex flex-col divide-y divide-border overflow-hidden rounded-card border border-border bg-surface">
+                {plan.map((p) => {
+                  const sk = skills.get(p.skillKey);
+                  return (
+                    <li key={p.skillKey} className="grid gap-4 p-5 sm:grid-cols-[minmax(0,1fr)_12rem] sm:items-start">
+                      <div className="min-w-0">
+                        <p className="font-semibold text-text">{nameOf(p.skillKey)}</p>
+                        <p className="mt-1 text-sm leading-relaxed text-secondary" dir="auto">{p.why}</p>
+                        <p className="mt-2 text-sm leading-relaxed text-text" dir="auto"><span className="text-tertiary">{t("focus.thirty")} </span>{p.days30}</p>
+                      </div>
+                      {sk ? (
+                        <div className="sm:pt-1">
+                          <div className="flex justify-between text-xs text-tertiary"><span>{t("focus.range")}</span><bdi dir="ltr" className="tabular">{n1(sk.range[0])}–{n1(sk.range[1])}</bdi></div>
+                          <RangeScale low={sk.range[0]} high={sk.range[1]} estimate={sk.estimate} size="sm" className="mt-2" />
+                        </div>
+                      ) : null}
                     </li>
-                  ))}
-                </ol>
-              </CardContent>
-            </Card>
+                  );
+                })}
+              </ol>
+            </section>
           ) : null}
 
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2"><BookOpen className="size-4 text-accent-text" aria-hidden />{t("tracks.title")}</CardTitle>
-            </CardHeader>
-            <CardContent className="grid gap-3 sm:grid-cols-2">
+          <section aria-labelledby="tracks-h">
+            <div className="flex items-baseline justify-between gap-4">
+              <h2 id="tracks-h" className="text-xl font-semibold text-text">{t("tracks.title")}</h2>
+              <Link href="/app/grow/tracks" className="text-sm text-secondary underline-offset-4 hover:text-text hover:underline">{t("tracks.all")}</Link>
+            </div>
+            <ul className="mt-5 grid gap-3 sm:grid-cols-2">
               {TRACKS.slice(0, 4).map((tr) => {
                 const e = enrollments.find((x) => x.track.key === tr.key);
                 return (
-                  <Link key={tr.key} href={`/app/grow/tracks/${tr.key}`} className="rounded-control border border-border p-3 hover:border-border-strong focus-visible:outline-2 focus-visible:outline-focus">
-                    <span className="block text-sm font-medium text-text">{tr.name[locale]}</span>
-                    <span className="block text-xs text-secondary">{e ? t("tracks.progress", { done: e.completedSessions, total: tr.sessions.length }) : t("tracks.sessions", { n: tr.sessions.length })}</span>
-                  </Link>
+                  <li key={tr.key}>
+                    <Link href={`/app/grow/tracks/${tr.key}`} className="block h-full rounded-card border border-border bg-surface p-4 transition-colors hover:border-border-strong focus-visible:outline-2 focus-visible:outline-focus">
+                      <span className="block font-medium text-text">{tr.name[locale]}</span>
+                      <span className="mt-1 block text-xs text-secondary">{e ? t("tracks.progress", { done: e.completedSessions, total: tr.sessions.length }) : t("tracks.sessions", { n: tr.sessions.length })}</span>
+                      <span className="mt-3 block h-1.5 overflow-hidden rounded-full bg-level-empty" aria-hidden>
+                        <span className="block h-full rounded-full bg-level-4" style={{ width: `${e ? (e.completedSessions / tr.sessions.length) * 100 : 0}%` }} />
+                      </span>
+                    </Link>
+                  </li>
                 );
               })}
-            </CardContent>
-          </Card>
+            </ul>
+          </section>
         </div>
 
-        <aside className="flex flex-col gap-6">
+        <aside className="flex flex-col gap-8">
           {report ? (
-            <Card>
-              <CardHeader>
-                <CardTitle>{t("snapshot.title")}</CardTitle>
-                <CardDescription>{daysSince !== null ? t("snapshot.when", { days: daysSince }) : null}</CardDescription>
-              </CardHeader>
-              <CardContent className="flex flex-col gap-3">
-                <SkillRadar data={report.domains.map((d) => ({ key: d.key, label: d.name.split(/[\s/]+/)[0]!, values: { c: d.estimate } }))} series={[{ key: "c", label: viewer.user.name }]} label={t("snapshot.title")} />
-                <Button asChild variant="secondary">
-                  <Link href="/app/grow/profile">{t("snapshot.open")}<ArrowRight className="flip-rtl" aria-hidden /></Link>
-                </Button>
-                {daysSince !== null && daysSince >= 28 ? (
-                  <form action={startBaselineAction}>
-                    <Button type="submit" variant="ghost" className="w-full">{t("snapshot.reassess")}</Button>
-                  </form>
-                ) : daysSince !== null ? (
-                  <p className="text-xs text-tertiary">{t("snapshot.nextIn", { days: 28 - daysSince })}</p>
-                ) : null}
-              </CardContent>
-            </Card>
+            <section aria-labelledby="snap-h" className="rounded-card border border-border bg-surface p-5">
+              <h2 id="snap-h" className="text-lg font-semibold text-text">{t("snapshot.title")}</h2>
+              <p className="text-sm text-secondary">{daysSince !== null ? t("snapshot.when", { days: daysSince }) : null}</p>
+              <SkillRadar data={report.domains.map((d) => ({ key: d.key, label: tr(`domainShort.${d.key}` as "domainShort.technical"), values: { c: d.estimate } }))} series={[{ key: "c", label: viewer.user.name }]} label={t("snapshot.title")} />
+              <Button asChild variant="secondary" className="mt-2 w-full">
+                <Link href="/app/grow/profile">{t("snapshot.open")}</Link>
+              </Button>
+              {daysSince !== null && daysSince >= 28 ? (
+                <form action={startBaselineAction} className="mt-2">
+                  <Button type="submit" variant="ghost" className="w-full">{t("snapshot.reassess")}</Button>
+                </form>
+              ) : daysSince !== null ? (
+                <p className="mt-3 text-center text-xs text-tertiary">{t("snapshot.nextIn", { days: 28 - daysSince })}</p>
+              ) : null}
+            </section>
           ) : null}
-          <Card>
-            <CardContent className="flex flex-col gap-2">
-              <Link href="/app/grow/progress" className="flex items-center gap-2 text-sm font-medium text-text hover:text-accent-text"><LineChart className="size-4" aria-hidden />{t("nav.progress")}</Link>
-              <Link href="/app/grow/coach" className="flex items-center gap-2 text-sm font-medium text-text hover:text-accent-text"><MessagesSquare className="size-4" aria-hidden />{t("nav.coach")}</Link>
-            </CardContent>
-          </Card>
+          <nav aria-label={t("title")} className="flex flex-col divide-y divide-border overflow-hidden rounded-card border border-border bg-surface">
+            <Link href="/app/grow/progress" className="flex items-center gap-3 px-5 py-4 text-sm text-text transition-colors hover:bg-surface-subtle">
+              <LineChart className="size-4 text-tertiary" aria-hidden />
+              <span className="flex-1">
+                <span className="block font-medium">{t("nav.progress")}</span>
+                <span className="block text-xs text-secondary">{t("links.progress")}</span>
+              </span>
+            </Link>
+            <Link href="/app/grow/coach" className="flex items-center gap-3 px-5 py-4 text-sm text-text transition-colors hover:bg-surface-subtle">
+              <MessagesSquare className="size-4 text-tertiary" aria-hidden />
+              <span className="flex-1">
+                <span className="block font-medium">{t("nav.coach")}</span>
+                <span className="block text-xs text-secondary">{t("links.coach")}</span>
+              </span>
+            </Link>
+          </nav>
         </aside>
       </div>
     </PageContainer>

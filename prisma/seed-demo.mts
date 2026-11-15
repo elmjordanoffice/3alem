@@ -125,5 +125,32 @@ for (const [i, m] of TEAM.entries()) {
   await markReportSeen(s.id, u.id);
   console.info(`team: ${m.name} done`);
 }
+// Grow: the individual demo account has a profile, a baseline, practice and a coach conversation.
+{
+  const { saveGrowProfile, startGrowSession, getGrowProfile } = await import("../src/lib/grow/profile");
+  const { startPractice, submitPractice } = await import("../src/lib/grow/practice");
+  const { askCoach } = await import("../src/lib/grow/coach");
+  const { simulatedAnswer } = await import("../src/lib/demo/simulated-candidate");
+  const sara = await db.user.findUniqueOrThrow({ where: { email: "candidate@aalim.dev" } });
+  if (!(await getGrowProfile(sara.id))) {
+    await saveGrowProfile(sara.id, { currentRole: "Operations coordinator", experienceYears: 4, goal: "Become a team lead within a year", hoursPerWeek: 2 });
+    const persona = { strengths: ["judgment", "collaboration", "critical-thinking"], weaknesses: ["leadership", "management"], attention: 0.7, seed: 3101 };
+    const baseline = await startGrowSession(sara.id, "en");
+    await simulateSession(baseline.id, persona);
+    const runs: { skillKey?: string; track?: { key: string; index: number } }[] = [
+      { track: { key: "first-time-manager", index: 0 } },
+      { track: { key: "first-time-manager", index: 1 } },
+      { skillKey: "communication.difficult-conversations" },
+      { skillKey: "judgment.trade-off-reasoning" },
+    ];
+    for (const [i, opts] of runs.entries()) {
+      const ps = await startPractice(sara.id, "en", opts);
+      const item = ps.item as { content: never; hidden: never; targets: string[] };
+      await submitPractice(sara.id, "en", ps.id, simulatedAnswer(item.content, item.hidden, item.targets, { ...persona, seed: 4100 + i }));
+    }
+    await askCoach(sara.id, "Sara", "en", "What should I focus on this month to get closer to a team lead role?");
+    console.info("grow: Sara Mansour done");
+  }
+}
 console.info("demo data ready");
 process.exit(0);

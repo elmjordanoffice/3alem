@@ -105,6 +105,12 @@ function mainContent(content: ItemContent, text: string, r: () => number): Respo
   }
 }
 
+/** A persona's answer to one item (used for demo Grow practice). */
+export function simulatedAnswer(content: ItemContent, hidden: ItemHidden, targets: string[], persona: SimPersona, lang: "en" | "ar" = "en"): ResponseContent {
+  const r = rng(persona.seed);
+  return mainContent(content, answerText(hidden, targets, persona, r, lang), r);
+}
+
 export async function simulateSession(sessionId: string, persona: SimPersona) {
   const r = rng(persona.seed);
   const session = await systemDb.assessmentSession.findUniqueOrThrow({ where: { id: sessionId } });

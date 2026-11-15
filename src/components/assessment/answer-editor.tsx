@@ -54,32 +54,61 @@ export function AnswerEditor({
     onPasteRef.current = onPaste;
   });
 
-  const editor = useEditor({
-    immediatelyRender: false,
-    editable: !disabled,
-    extensions: [
+  // Options that don't change while the editor is mounted: the first document,
+  // and attributes that only change with their inputs. Re-creating them on
+  // every keystroke made Tiptap reapply options after each render.
+  const [initialDoc] = React.useState(() => initialValue?.doc);
+  const attributes = React.useMemo(
+    () => ({
+      ...(id ? { id } : {}),
+      role: "textbox",
+      "aria-multiline": "true",
+      "aria-label": label,
+      ...(describedBy ? { "aria-describedby": describedBy } : {}),
+      ...(invalid ? { "aria-invalid": "true" } : {}),
+      dir: "auto",
+      class: "text-base sm:text-[15px]",
+    }),
+    [id, label, describedBy, invalid],
+  );
+
+  // Tiptap compares extensions by identity and reapplies options when they
+  // differ. Recreating them on every render made it reapply options after each
+  // keystroke, which could flush pending input into a new transaction, update
+  // state, re-render, and loop (React error 185 under fast typing).
+  const placeholderText = placeholder ?? t("placeholder");
+  const extensions = React.useMemo(
+    () => [
       StarterKit.configure({ heading: false, codeBlock: false, blockquote: false, horizontalRule: false, link: false }),
-      Placeholder.configure({ placeholder: placeholder ?? t("placeholder") }),
+      Placeholder.configure({ placeholder: placeholderText }),
     ],
-    content: (initialValue?.doc as object) ?? "",
-    editorProps: {
-      attributes: {
-        ...(id ? { id } : {}),
-        role: "textbox",
-        "aria-multiline": "true",
-        "aria-label": label,
-        ...(describedBy ? { "aria-describedby": describedBy } : {}),
-        ...(invalid ? { "aria-invalid": "true" } : {}),
-        dir: "auto",
-        class: "text-base sm:text-[15px]",
-      },
-      handlePaste: (_view, event) => {
+    [placeholderText],
+  );
+  const editorProps = React.useMemo(
+    () => ({
+      attributes,
+      handlePaste: (_view: unknown, event: ClipboardEvent) => {
         const text = event.clipboardData?.getData("text/plain") ?? "";
         if (text.length > 0) onPasteRef.current?.(text.length);
         return false;
       },
+    }),
+    [attributes],
+  );
+
+  const editor = useEditor({
+    immediatelyRender: false,
+    editable: !disabled,
+    extensions,
+    content: (initialDoc as object) ?? "",
+    editorProps,
+    // The editor draws the text itself; the React copy only drives autosave and
+    // the submit button, so it updates as a transition. A burst of keystrokes
+    // can then never stack synchronous updates into a render loop.
+    onUpdate: ({ editor }) => {
+      const value = { doc: editor.getJSON(), text: editor.getText() };
+      React.startTransition(() => onChangeRef.current?.(value));
     },
-    onUpdate: ({ editor }) => onChangeRef.current?.({ doc: editor.getJSON(), text: editor.getText() }),
   });
 
   const state = useEditorState({
@@ -94,7 +123,8 @@ export function AnswerEditor({
   });
 
   React.useEffect(() => {
-    editor?.setEditable(!disabled);
+    // Locking the editor during submission is not an edit: don't emit an update.
+    if (editor && editor.isEditable === disabled) editor.setEditable(!disabled, false);
   }, [editor, disabled]);
 
   const tools = [
