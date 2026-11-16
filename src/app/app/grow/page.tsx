@@ -107,7 +107,7 @@ export default async function GrowHome() {
             <section aria-labelledby="focus-h">
               <h2 id="focus-h" className="text-xl font-semibold text-text">{t("focus.title")}</h2>
               <p className="mt-1 text-sm text-secondary">{t("focus.body")}</p>
-              <ol className="mt-6 flex flex-col divide-y divide-border overflow-hidden rounded-card border border-border bg-surface">
+              <ol className="mt-6 flex flex-col divide-y divide-border overflow-hidden rounded-card bg-surface shadow-card">
                 {plan.map((p) => {
                   const sk = skills.get(p.skillKey);
                   return (
@@ -140,7 +140,7 @@ export default async function GrowHome() {
                 const e = enrollments.find((x) => x.track.key === tr.key);
                 return (
                   <li key={tr.key}>
-                    <Link href={`/app/grow/tracks/${tr.key}`} className="block h-full rounded-card border border-border bg-surface p-4 transition-colors hover:border-border-strong focus-visible:outline-2 focus-visible:outline-focus">
+                    <Link href={`/app/grow/tracks/${tr.key}`} className="block h-full rounded-card bg-surface shadow-card p-4 transition-[box-shadow,background-color,color] hover:shadow-card-hover focus-visible:outline-2 focus-visible:outline-focus">
                       <span className="block font-medium text-text">{tr.name[locale]}</span>
                       <span className="mt-1 block text-xs text-secondary">{e ? t("tracks.progress", { done: e.completedSessions, total: tr.sessions.length }) : t("tracks.sessions", { n: tr.sessions.length })}</span>
                       <span className="mt-3 block h-1.5 overflow-hidden rounded-full bg-level-empty" aria-hidden>
@@ -156,7 +156,7 @@ export default async function GrowHome() {
 
         <aside className="flex flex-col gap-8">
           {report ? (
-            <section aria-labelledby="snap-h" className="rounded-card border border-border bg-surface p-5">
+            <section aria-labelledby="snap-h" className="rounded-card bg-surface shadow-card p-5">
               <h2 id="snap-h" className="text-lg font-semibold text-text">{t("snapshot.title")}</h2>
               <p className="text-sm text-secondary">{daysSince !== null ? t("snapshot.when", { days: daysSince }) : null}</p>
               <SkillRadar data={report.domains.map((d) => ({ key: d.key, label: tr(`domainShort.${d.key}` as "domainShort.technical"), values: { c: d.estimate } }))} series={[{ key: "c", label: viewer.user.name }]} label={t("snapshot.title")} />
@@ -172,7 +172,7 @@ export default async function GrowHome() {
               ) : null}
             </section>
           ) : null}
-          <nav aria-label={t("title")} className="flex flex-col divide-y divide-border overflow-hidden rounded-card border border-border bg-surface">
+          <nav aria-label={t("title")} className="flex flex-col divide-y divide-border overflow-hidden rounded-card bg-surface shadow-card">
             <Link href="/app/grow/progress" className="flex items-center gap-3 px-5 py-4 text-sm text-text transition-colors hover:bg-surface-subtle">
               <LineChart className="size-4 text-tertiary" aria-hidden />
               <span className="flex-1">

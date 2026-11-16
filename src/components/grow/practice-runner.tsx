@@ -63,7 +63,7 @@ export function PracticeRunner({ id, item, feedback, reflection, answerText }: {
         <section className="flex min-w-0 flex-col gap-5">
           {twist ? <div className="rounded-card border border-warning/30 bg-warning-subtle p-4 text-[15px] text-text" dir="auto">{c.twist!.change}</div> : <p className="text-[15px] font-medium text-text" dir="auto">{c.task.prompt}</p>}
           {feedback && answerText ? (
-            <div className="flex flex-col gap-2 rounded-card border border-border bg-surface-subtle p-4">
+            <div className="flex flex-col gap-2 rounded-card bg-surface shadow-card-subtle p-4">
               <span className="text-[13px] font-medium text-tertiary">{t("yourAnswer")}</span>
               <p className="whitespace-pre-line text-[15px] leading-relaxed text-text" dir="auto">{answerText}</p>
             </div>
@@ -102,7 +102,7 @@ export function PracticeRunner({ id, item, feedback, reflection, answerText }: {
               <h3 className="flex items-center gap-2 text-sm font-semibold text-text"><Lightbulb className="size-4 text-warning" aria-hidden />{t("expert")}</h3>
               <ul className="flex flex-col gap-2">
                 {feedback.expertWouldConsider.map((x, i) => (
-                  <li key={i} className="rounded-card border border-border bg-surface p-3 text-sm text-text" dir="auto">{x}</li>
+                  <li key={i} className="rounded-card bg-surface shadow-card p-3 text-sm text-text" dir="auto">{x}</li>
                 ))}
               </ul>
             </div>
@@ -129,7 +129,7 @@ export function PracticeRunner({ id, item, feedback, reflection, answerText }: {
             {!item.twistOf && c.twist ? <PracticeLauncher twistOf={id} label={t("tryTwist")} /> : null}
             <PracticeLauncher skillKey={item.targets[0]} label={t("another")} variant="secondary" />
           </div>
-          <div className="flex flex-col gap-2 rounded-card border border-border bg-surface p-5">
+          <div className="flex flex-col gap-2 rounded-card bg-surface shadow-card p-5">
             <label htmlFor="reflection" className="text-sm font-semibold text-text">{t("reflectionTitle")}</label>
             <p className="text-sm text-secondary">{t("reflectionHint")}</p>
             <Textarea id="reflection" value={note} onChange={(e) => (setNote(e.target.value), setNoteSaved(false))} className="min-h-24" />

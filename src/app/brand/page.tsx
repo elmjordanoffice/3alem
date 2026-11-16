@@ -137,7 +137,7 @@ export default async function BrandPage() {
             <h3 className="mt-14 text-xl font-semibold text-text">{t("voice.toneTitle")}</h3>
             <ul className="mt-6 grid gap-4 md:grid-cols-3">
               {(["candidates", "teams", "growth"] as const).map((k) => (
-                <li key={k} className="flex flex-col rounded-card border border-border bg-surface p-5">
+                <li key={k} className="flex flex-col rounded-card bg-surface shadow-card p-5">
                   <p className="font-semibold text-text">{t(`voice.tones.${k}.title`)}</p>
                   <p className="mt-1 text-sm text-secondary">{t(`voice.tones.${k}.body`)}</p>
                   <p className="mt-5 border-s-2 border-saffron ps-3 text-[15px] leading-relaxed text-text">{t(`voice.tones.${k}.example`)}</p>
@@ -215,7 +215,7 @@ export default async function BrandPage() {
           <Section id="colour" title={t("colour.title")} intro={t("colour.body")}>
             <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {SWATCHES.map((s) => (
-                <li key={s.key} className="overflow-hidden rounded-card border border-border bg-surface">
+                <li key={s.key} className="overflow-hidden rounded-card bg-surface shadow-card">
                   <div className={cn("flex h-36 items-end p-4", s.className)}>
                     <span className="font-display text-xl font-semibold">{t(`colour.swatches.${s.key}.name`)}</span>
                   </div>
@@ -247,13 +247,13 @@ export default async function BrandPage() {
           {/* Type */}
           <Section id="type" title={t("type.title")}>
             <div className="grid gap-6 lg:grid-cols-2">
-              <div className="rounded-card border border-border bg-surface p-6">
+              <div className="rounded-card bg-surface shadow-card p-6">
                 <p className="text-sm text-secondary">{t("type.displayTitle")}</p>
                 <p className="mt-4 font-display text-5xl font-semibold leading-[1.05] text-text">Aa عع</p>
                 <p className="mt-4 font-display text-2xl font-semibold text-text">{t("type.sampleDisplay")}</p>
                 <p className="mt-3 text-sm leading-relaxed text-secondary">{t("type.displayBody")}</p>
               </div>
-              <div className="rounded-card border border-border bg-surface p-6">
+              <div className="rounded-card bg-surface shadow-card p-6">
                 <p className="text-sm text-secondary">{t("type.textTitle")}</p>
                 <p className="mt-4 text-5xl font-medium leading-[1.05] text-text">Aa عع</p>
                 <p className="mt-4 text-lg leading-relaxed text-text">{t("type.sampleText")}</p>
@@ -331,7 +331,7 @@ export default async function BrandPage() {
                 ["ogAr", "/brand/og-ar.png", true],
               ] as const).map(([k, href, ink]) => (
                 <li key={k}>
-                  <a href={href} download className="group flex h-full flex-col overflow-hidden rounded-card border border-border bg-surface transition-colors hover:border-border-strong focus-visible:outline-2 focus-visible:outline-focus">
+                  <a href={href} download className="group flex h-full flex-col overflow-hidden rounded-card bg-surface shadow-card transition-[box-shadow,background-color,color] hover:shadow-card-hover focus-visible:outline-2 focus-visible:outline-focus">
                     <span className={cn("flex h-28 items-center justify-center p-5", ink ? "bg-ink" : "bg-white")}>
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img src={href} alt="" className={cn("max-h-full max-w-full object-contain", k === "symbol" && "size-16")} />

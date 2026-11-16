@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/menu";
 
 /** Switches between English and Arabic. Labels each language in its own script. */
-export function LanguageToggle({ variant = "ghost" }: { variant?: "ghost" | "secondary" }) {
+export function LanguageToggle({ variant = "ghost", className }: { variant?: "ghost" | "secondary"; className?: string }) {
   const t = useTranslations("preferences");
   const { locale } = useLocaleSettings();
   const router = useRouter();
@@ -29,6 +29,7 @@ export function LanguageToggle({ variant = "ghost" }: { variant?: "ghost" | "sec
     <Button
       variant={variant}
       size="sm"
+      className={className}
       loading={pending}
       onClick={() =>
         start(async () => {
@@ -44,7 +45,7 @@ export function LanguageToggle({ variant = "ghost" }: { variant?: "ghost" | "sec
   );
 }
 
-export function ThemeMenu() {
+export function ThemeMenu({ className }: { className?: string }) {
   const t = useTranslations("preferences");
   const { theme, setTheme } = useTheme();
   const mounted = useMounted();
@@ -52,7 +53,7 @@ export function ThemeMenu() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon-sm" aria-label={t("theme")}>
+        <Button variant="ghost" size="icon-sm" className={className} aria-label={t("theme")}>
           <Icon aria-hidden />
         </Button>
       </DropdownMenuTrigger>

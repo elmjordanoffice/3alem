@@ -22,7 +22,7 @@ export function ItemReviewTable({ items }: { items: BankItemStats[] }) {
 
   return (
     <>
-      <div className="overflow-x-auto rounded-card border border-border bg-surface">
+      <div className="overflow-x-auto rounded-card bg-surface shadow-card">
         <table className="w-full text-sm">
           <thead className="bg-surface-subtle text-xs text-secondary">
             <tr>

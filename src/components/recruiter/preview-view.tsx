@@ -47,7 +47,7 @@ export function PreviewView({ banner, orgName, world, item, minutes }: { banner:
               {item.task.options ? (
                 <ul className="flex flex-col gap-2">
                   {item.task.options.map((o, i) => (
-                    <li key={o.id} className="rounded-card border border-border bg-surface p-4 text-[15px] text-text">
+                    <li key={o.id} className="rounded-card bg-surface shadow-card p-4 text-[15px] text-text">
                       <span className="me-2 font-semibold text-secondary">{String.fromCharCode(65 + i)}.</span>
                       {o.label}
                     </li>

@@ -35,7 +35,7 @@ export function RolePipelineList({ roles, labels, n }: { roles: PipelineRole[]; 
         ];
         return (
           <li key={r.id}>
-            <Link href={r.status === "DRAFT" ? `/app/assessments/${r.id}/setup` : `/app/assessments/${r.id}`} className="block rounded-card border border-border bg-surface p-4 transition-colors hover:border-border-strong focus-visible:outline-2 focus-visible:outline-focus sm:p-5">
+            <Link href={r.status === "DRAFT" ? `/app/assessments/${r.id}/setup` : `/app/assessments/${r.id}`} className="block rounded-card bg-surface shadow-card p-4 transition-[box-shadow,background-color,color] hover:shadow-card-hover focus-visible:outline-2 focus-visible:outline-focus sm:p-5">
               <span className="flex flex-wrap items-center justify-between gap-3">
                 <span className="flex min-w-0 flex-wrap items-center gap-x-2.5 gap-y-1">
                   <span className="truncate font-medium text-text">{r.title}</span>

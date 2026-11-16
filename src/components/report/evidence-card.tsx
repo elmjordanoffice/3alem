@@ -27,7 +27,7 @@ export function EvidenceCard({
   const t = useTranslations("components.evidence");
   const band = confidenceBand(confidence);
   return (
-    <figure className={cn("flex flex-col gap-3 rounded-card border border-border bg-surface p-4 sm:p-5", className)}>
+    <figure className={cn("flex flex-col gap-3 rounded-card bg-surface shadow-card p-4 sm:p-5", className)}>
       {/* The candidate's own words, highlighted: this is what the score rests on. */}
       <blockquote className="text-[15px] leading-[1.75] text-text" dir="auto">
         <mark className="evidence-mark">{quote}</mark>

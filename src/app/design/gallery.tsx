@@ -207,7 +207,7 @@ function Foundations() {
         </Specimen>
       ))}
 
-      <Specimen title={t("type")} note={t("typeNote")} className="flex flex-col divide-y divide-border rounded-card border border-border bg-surface">
+      <Specimen title={t("type")} note={t("typeNote")} className="flex flex-col divide-y divide-border rounded-card bg-surface shadow-card">
         {sizes.map((s) => (
           <div key={s.px} className="flex items-baseline gap-4 px-4 py-3">
             <span className="w-10 shrink-0 text-xs text-tertiary tabular">{n.number(s.px)}</span>
@@ -227,7 +227,7 @@ function Foundations() {
         </Specimen>
         <Specimen title={t("shape")} note={t("shapeNote")} className="flex flex-wrap gap-4">
           <div className="flex h-14 w-24 items-center justify-center rounded-control border border-border-strong bg-surface text-xs text-secondary">8px</div>
-          <div className="flex h-14 w-24 items-center justify-center rounded-card border border-border bg-surface text-xs text-secondary">12px</div>
+          <div className="flex h-14 w-24 items-center justify-center rounded-card bg-surface shadow-card text-xs text-secondary">12px</div>
           <div className="flex h-14 w-24 items-center justify-center rounded-control border border-border bg-surface text-xs text-secondary shadow-popover">{t("popoverShadow")}</div>
         </Specimen>
       </div>
@@ -256,7 +256,7 @@ function MotionSpecimen() {
         {open ? t("motionHide") : t("motionShow")}
       </Button>
       {open ? (
-        <div className="w-full animate-slide-up rounded-card border border-border bg-surface p-4 text-sm text-secondary">{t("motionPanel")}</div>
+        <div className="w-full animate-slide-up rounded-card bg-surface shadow-card p-4 text-sm text-secondary">{t("motionPanel")}</div>
       ) : null}
     </Specimen>
   );
@@ -501,7 +501,7 @@ function Feedback() {
           </Card>
           <Spinner label={t("preparing")} />
         </Specimen>
-        <Specimen title={t("autosave")} className="flex flex-col gap-3 rounded-card border border-border bg-surface p-4">
+        <Specimen title={t("autosave")} className="flex flex-col gap-3 rounded-card bg-surface shadow-card p-4">
           <AutosaveIndicator state="saved" />
           <AutosaveIndicator state="saving" />
           <AutosaveIndicator state="offline" />
@@ -567,27 +567,27 @@ function Assessment({ samples }: { samples: Samples }) {
   return (
     <Section id="assessment">
       <Specimen title={t("progress")} note={t("progressNote")} className="grid gap-6 md:grid-cols-2">
-        <div className="rounded-card border border-border bg-surface p-4">
+        <div className="rounded-card bg-surface shadow-card p-4">
           <ChapterProgress chapters={samples.chapters} current={1} />
           <div className="mt-4 flex items-center justify-between">
             <AutosaveIndicator state="saved" />
             <QuietTimer deadline={deadline} />
           </div>
         </div>
-        <div className="rounded-card border border-border bg-surface p-4">
+        <div className="rounded-card bg-surface shadow-card p-4">
           <ChapterList chapters={samples.chapters} current={1} />
         </div>
       </Specimen>
 
       <Specimen title={t("lowTime")} note={t("lowTimeNote")}>
-        <div className="inline-flex rounded-card border border-border bg-surface px-4 py-2">
+        <div className="inline-flex rounded-card bg-surface shadow-card px-4 py-2">
           <QuietTimer deadline={frozenNow + 95 * 1000} now={frozenNow} />
         </div>
       </Specimen>
 
       <Specimen title={t("cast")} className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-4">
         {samples.cast.map((c) => (
-          <div key={c.name} className="rounded-card border border-border bg-surface p-3">
+          <div key={c.name} className="rounded-card bg-surface shadow-card p-3">
             <Person name={c.name} role={c.role} />
           </div>
         ))}
@@ -634,7 +634,7 @@ function Assessment({ samples }: { samples: Samples }) {
       </Specimen>
 
       <Specimen title={t("transition")} note={t("transitionNote")}>
-        <div className="mx-auto flex max-w-[680px] flex-col gap-5 rounded-card border border-border bg-surface p-6 sm:p-10">
+        <div className="mx-auto flex max-w-[680px] flex-col gap-5 rounded-card bg-surface shadow-card p-6 sm:p-10">
           <p className="text-[13px] font-medium text-tertiary">{t("transitionEyebrow")}</p>
           <h3 className="text-xl font-semibold text-text">{t("transitionTitle")}</h3>
           <p className="leading-relaxed text-secondary">{t("transitionBody")}</p>
@@ -693,7 +693,7 @@ function Report({ samples, domains }: { samples: Samples; domains: { key: string
         </Specimen>
       </div>
 
-      <Specimen title={t("meters")} note={t("metersNote")} className="grid gap-5 rounded-card border border-border bg-surface p-5 md:grid-cols-2">
+      <Specimen title={t("meters")} note={t("metersNote")} className="grid gap-5 rounded-card bg-surface shadow-card p-5 md:grid-cols-2">
         <LevelMeter label={domains[2]?.label ?? ""} estimate={4.3} confidence={0.86} />
         <LevelMeter label={domains[6]?.label ?? ""} estimate={4.0} confidence={0.52} />
         <LevelMeter label={domains[5]?.label ?? ""} estimate={2.7} confidence={0.78} />
@@ -744,7 +744,7 @@ function Report({ samples, domains }: { samples: Samples; domains: { key: string
       </Specimen>
 
       <Specimen title={t("heatmap")} note={t("heatmapNote")}>
-        <div className="rounded-card border border-border bg-surface p-4">
+        <div className="rounded-card bg-surface shadow-card p-4">
           <SkillHeatmap label={t("heatmap")} rows={heatRows} columns={domains.map((d) => ({ key: d.key, label: d.label, short: d.short }))} />
           <LevelLegend className="mt-4 border-t border-border pt-3" />
         </div>

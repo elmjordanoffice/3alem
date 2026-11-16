@@ -74,7 +74,7 @@ export function FrameworkBrowser({ domains }: { domains: FrameworkDomainView[] }
         <ul className="flex flex-col gap-2">
           {domain.subSkills.map((s, i) => (
             <li key={s.key}>
-              <Collapsible.Root defaultOpen={i === 0} className="group rounded-card border border-border bg-surface">
+              <Collapsible.Root defaultOpen={i === 0} className="group rounded-card bg-surface shadow-card">
                 <Collapsible.Trigger className="flex w-full items-start gap-3 p-4 text-start focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus">
                   <span className="min-w-0 flex-1">
                     <span className="flex flex-wrap items-center gap-2 text-sm font-semibold text-text">{s.name}{s.custom ? <Badge tone="accent">{t("customBadge")}</Badge> : null}</span>

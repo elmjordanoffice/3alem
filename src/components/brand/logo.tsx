@@ -5,13 +5,16 @@ import { ARABIC, LATIN } from "./wordmark-paths";
  * The Aalim mark: the narrowing range. A scale, the band of plausible levels
  * in saffron (the evidence colour) and the estimate. See /brand.
  */
-export function LogoMark({ className }: { className?: string }) {
+export function LogoMark({ className, reverse = false }: { className?: string; reverse?: boolean }) {
+  // Reversed (on ink): the square turns light and the scale turns ink, as in public/brand/logo-reverse.svg.
+  const square = reverse ? "var(--ink-foreground)" : "var(--ink)";
+  const track = reverse ? "var(--ink)" : "var(--ink-foreground)";
   return (
     <svg viewBox="0 0 32 32" className={cn("size-7 shrink-0", className)} aria-hidden>
-      <rect width="32" height="32" rx="9" fill="var(--ink)" />
-      <rect x="5" y="15.2" width="22" height="1.6" rx="0.8" fill="var(--ink-foreground)" opacity="0.38" />
+      <rect width="32" height="32" rx="9" fill={square} />
+      <rect x="5" y="15.2" width="22" height="1.6" rx="0.8" fill={track} opacity="0.38" />
       <rect x="11.5" y="12.4" width="13" height="7.2" rx="3.6" fill="var(--saffron)" />
-      <circle cx="18.6" cy="16" r="1.9" fill="var(--ink)" />
+      <circle cx="18.6" cy="16" r="1.9" fill={reverse ? "var(--ink-foreground)" : "var(--ink)"} />
     </svg>
   );
 }
@@ -43,10 +46,10 @@ export function Wordmark({ showArabic = true, className }: { showArabic?: boolea
   );
 }
 
-export function Logo({ className, showArabic = true }: { className?: string; showArabic?: boolean }) {
+export function Logo({ className, showArabic = true, reverse = false }: { className?: string; showArabic?: boolean; reverse?: boolean }) {
   return (
-    <span className={cn("inline-flex items-center gap-2.5 text-[19px] text-text", className)}>
-      <LogoMark />
+    <span className={cn("inline-flex items-center gap-2.5 text-[19px]", reverse ? "text-ink-foreground" : "text-text", className)}>
+      <LogoMark reverse={reverse} />
       <Wordmark showArabic={showArabic} />
     </span>
   );

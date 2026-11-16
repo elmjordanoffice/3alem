@@ -44,7 +44,7 @@ export function OnboardingChoice() {
 
       {choice === "org" ? (
         <form
-          className="flex animate-slide-up flex-col gap-4 rounded-card border border-border bg-surface p-5"
+          className="flex animate-slide-up flex-col gap-4 rounded-card bg-surface shadow-card p-5"
           onSubmit={async (e) => {
             e.preventDefault();
             const name = String(new FormData(e.currentTarget).get("name") ?? "");
@@ -68,7 +68,7 @@ export function OnboardingChoice() {
       ) : null}
 
       {choice === "individual" ? (
-        <div className="flex animate-slide-up flex-col gap-4 rounded-card border border-border bg-surface p-5">
+        <div className="flex animate-slide-up flex-col gap-4 rounded-card bg-surface shadow-card p-5">
           <p className="text-sm text-secondary">{t("individual.next")}</p>
           <Button asChild className="self-start">
             <Link href="/app">

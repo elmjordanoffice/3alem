@@ -52,7 +52,7 @@ function EmailView({ email }: { email: EmailMaterial }) {
   const t = useTranslations("components.documents");
   const names = (list: { name: string }[]) => list.map((p) => p.name).join(", ");
   return (
-    <article className="overflow-hidden rounded-card border border-border bg-surface">
+    <article className="overflow-hidden rounded-card bg-surface shadow-card">
       <header className="flex flex-col gap-3 border-b border-border p-4 sm:p-5">
         <h3 className="text-lg font-semibold text-text" dir="auto">
           {email.subject}
@@ -95,7 +95,7 @@ function EmailView({ email }: { email: EmailMaterial }) {
 function MemoView({ memo }: { memo: MemoMaterial }) {
   const t = useTranslations("components.documents");
   return (
-    <article className="rounded-card border border-border bg-surface p-5 sm:p-8">
+    <article className="rounded-card bg-surface shadow-card p-5 sm:p-8">
       <p className="text-[13px] font-medium text-tertiary">{t("memo")}</p>
       <h3 className="mt-2 text-xl font-semibold text-text" dir="auto">
         {memo.title}
@@ -129,7 +129,7 @@ function TableView({ table }: { table: TableMaterial }) {
   const cell = (v: string | number | null | undefined) => (typeof v === "number" ? n.number(v) : (v ?? ""));
   return (
     <figure className="flex flex-col gap-2">
-      <div className="overflow-x-auto rounded-card border border-border bg-surface" dir="ltr">
+      <div className="overflow-x-auto rounded-card bg-surface shadow-card" dir="ltr">
         <table className="w-full border-collapse text-sm">
           <caption className="sr-only">{table.title}</caption>
           <thead>
@@ -187,7 +187,7 @@ function ChartView({ chart }: { chart: ChartMaterial }) {
   const { dir } = useLocaleSettings();
   const Chart = chart.chartType === "bar" ? BarChart : LineChart;
   return (
-    <figure className="flex flex-col gap-3 rounded-card border border-border bg-surface p-4 sm:p-5">
+    <figure className="flex flex-col gap-3 rounded-card bg-surface shadow-card p-4 sm:p-5">
       <figcaption className="flex flex-col gap-0.5">
         <span className="text-sm font-semibold text-text">{chart.title}</span>
         {chart.caption ? <span className="text-xs text-secondary">{chart.caption}</span> : null}

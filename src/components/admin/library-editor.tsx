@@ -111,7 +111,7 @@ export function LibraryEditor({ entries, domains }: { entries: LibraryEntry[]; d
             draft?.id === e.id ? (
               <li key={e.id}>{form}</li>
             ) : (
-              <li key={e.id} className="rounded-card border border-border bg-surface p-4">
+              <li key={e.id} className="rounded-card bg-surface shadow-card p-4">
                 <div className="flex flex-wrap items-start gap-3">
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-2">

@@ -79,6 +79,7 @@ With `ANTHROPIC_API_KEY` set, Claude generates worlds, items and role-play repli
 ## Docs
 
 - [Brand](docs/brand.md): name, platform, voice, logo, colour, type and assets (the live, bilingual brand book is at **/brand**)
+- [Design references](docs/design-references.md): the eleven products studied for the current design, what each teaches, and the direction taken
 - [Architecture](docs/architecture.md): stack, engine, jobs, tenancy and RLS, privacy, security, i18n, design system
 - [Decisions log](docs/decisions.md): every choice the brief left open, and why
 - [Prompt catalogue](docs/prompt-catalogue.md): the AI agents, their contracts and versioning

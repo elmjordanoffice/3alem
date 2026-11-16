@@ -18,7 +18,7 @@ export function GrowPlan({ plan }: { plan: NonNullable<ReportContent["narrative"
       </h2>
       <ol className="flex flex-col gap-4">
         {plan.map((p, i) => (
-          <li key={p.skillKey} className="rounded-card border border-border bg-surface p-5">
+          <li key={p.skillKey} className="rounded-card bg-surface shadow-card p-5">
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div className="flex flex-col gap-1">
                 <span className="text-xs font-medium text-tertiary">{t("focus", { n: i + 1 })}</span>

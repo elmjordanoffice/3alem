@@ -30,7 +30,7 @@ export default async function AdminPage() {
         <Card><CardContent><p className="text-sm text-secondary">{t("people")}</p><p className="mt-1 text-2xl font-semibold tabular"><FormattedNumber value={users} /></p></CardContent></Card>
       </div>
       <h2 className="mb-3 text-base font-semibold">{t("organizations")}</h2>
-      <div className="mb-10 overflow-hidden rounded-card border border-border bg-surface">
+      <div className="mb-10 overflow-hidden rounded-card bg-surface shadow-card">
         <table className="w-full text-sm">
           <thead className="bg-surface-subtle text-xs text-secondary">
             <tr><th className="px-4 py-2.5 text-start font-medium">{t("name")}</th><th className="px-4 py-2.5 text-end font-medium">{t("members")}</th></tr>
@@ -43,7 +43,7 @@ export default async function AdminPage() {
         </table>
       </div>
       <h2 className="mb-3 text-base font-semibold">{t("recentActivity")}</h2>
-      <ul className="flex flex-col divide-y divide-border rounded-card border border-border bg-surface text-sm">
+      <ul className="flex flex-col divide-y divide-border rounded-card bg-surface shadow-card text-sm">
         {audits.length === 0 ? <li className="px-4 py-3 text-secondary">{t("noActivity")}</li> : audits.map((a) => (
           <li key={a.id} className="flex justify-between gap-4 px-4 py-3"><code className="font-mono text-xs">{a.action}</code><time className="text-xs text-tertiary" dateTime={a.createdAt.toISOString()}>{a.createdAt.toISOString().slice(0, 16).replace("T", " ")}</time></li>
         ))}

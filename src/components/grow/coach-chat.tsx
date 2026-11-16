@@ -39,7 +39,7 @@ export function CoachChat({ initial, name }: { initial: Msg[]; name: string }) {
   };
 
   return (
-    <div className="flex h-[min(40rem,75dvh)] flex-col overflow-hidden rounded-card border border-border bg-surface">
+    <div className="flex h-[min(40rem,75dvh)] flex-col overflow-hidden rounded-card bg-surface shadow-card">
       <div ref={listRef} role="log" aria-live="polite" aria-label={t("title")} className="flex flex-1 flex-col gap-4 overflow-y-auto p-4">
         {messages.length === 0 ? (
           <div className="flex flex-col gap-3 py-6">

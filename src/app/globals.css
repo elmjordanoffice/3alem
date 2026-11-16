@@ -43,8 +43,21 @@
   --color-highlight: var(--highlight);
   --color-highlight-foreground: var(--highlight-foreground);
   --color-saffron: var(--saffron);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-raised: var(--sidebar-raised);
+  --color-sidebar-active: var(--sidebar-active);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-secondary: var(--sidebar-secondary);
+  --color-sidebar-tertiary: var(--sidebar-tertiary);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-glow-indigo: var(--glow-indigo);
+  --color-glow-lavender: var(--glow-lavender);
   --shadow-popover: var(--shadow-popover);
   --shadow-raised: var(--shadow-raised);
+  --shadow-card: var(--shadow-card);
+  --shadow-card-hover: var(--shadow-card-hover);
+  --shadow-window: var(--shadow-window);
 }
 
 @theme {
@@ -173,6 +186,55 @@
     border-radius: 2px;
   }
   .flip-rtl:where([dir="rtl"], [dir="rtl"] *) { transform: scaleX(-1); }
+
+  /* Ink lit from above by the range field: the brand's stage (hero, brief, sign-in). */
+  .ink-lit {
+    background-color: var(--ink);
+    background-image:
+      radial-gradient(70% 55% at 50% -8%, color-mix(in srgb, var(--glow-indigo) 55%, transparent), transparent 72%),
+      radial-gradient(38% 42% at 92% 8%, color-mix(in srgb, var(--glow-lavender) 22%, transparent), transparent 70%),
+      radial-gradient(30% 36% at 4% 30%, color-mix(in srgb, var(--saffron) 7%, transparent), transparent 70%);
+  }
+  /* A faint measuring grid on ink, fading out towards the edges. */
+  .ink-grid {
+    background-image:
+      linear-gradient(to right, rgb(245 244 255 / 0.055) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(245 244 255 / 0.055) 1px, transparent 1px);
+    background-size: 64px 64px;
+    mask-image: radial-gradient(ellipse 70% 60% at 50% 30%, #000 30%, transparent 75%);
+  }
+  /* Film grain so large ink areas don't band. */
+  .grain::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.07;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  /* Display type on ink that catches the light. */
+  .text-lit {
+    background: linear-gradient(180deg, var(--ink-foreground) 30%, color-mix(in srgb, var(--ink-secondary) 85%, var(--ink-foreground)) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  /* Hairline that fades at both ends, for dividing ink sections. */
+  .hairline-fade {
+    background: linear-gradient(90deg, transparent, rgb(245 244 255 / 0.18), transparent);
+  }
+  .eyebrow {
+    font-size: 0.75rem;
+    line-height: 1.4;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .eyebrow:where(:lang(ar), :lang(ar) *) {
+    letter-spacing: 0;
+    font-size: 0.8125rem;
+  }
 }
 
 /* Arabic headings need room for dots and marks above and below; this
@@ -190,6 +252,17 @@
   from { opacity: 0; transform: translateY(-50%) scale(0.4); }
 }
 .range-dot { animation: range-dot 0.5s var(--ease-out) 1.5s both; }
+
+/* Product figures settle into place: a slight tilt that flattens as they arrive. */
+@keyframes figure-settle {
+  from { opacity: 0; transform: perspective(1800px) rotateX(14deg) translateY(40px) scale(0.97); }
+  to { opacity: 1; transform: perspective(1800px) rotateX(5deg) translateY(0) scale(1); }
+}
+.figure-settle { animation: figure-settle 1.2s var(--ease-out) 0.15s both; transform-origin: 50% 0%; }
+@keyframes float-in {
+  from { opacity: 0; transform: translateY(16px); }
+}
+.float-in { animation: float-in 0.9s var(--ease-out) both; }
 
 @media (prefers-reduced-motion: reduce) {
   *, ::before, ::after {

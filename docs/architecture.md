@@ -138,9 +138,9 @@ Tokens live in `src/styles/tokens.css` (light and dark) and map to Tailwind util
 
 - **Colour:** warm stone neutrals; one indigo accent for actions, focus and selection; deep ink-indigo (`--ink`) for brand surfaces (verdict panel, chapter cards, auth panel); saffron (`--saffron`, `--highlight`) for evidence. Skill levels and role fit use a single-hue ramp, never red/green.
 - **Type:** Alexandria (display: page and section titles, verdicts, big numbers), designed for Latin and Arabic together so both languages share one voice; IBM Plex Sans and IBM Plex Sans Arabic for the interface. Both are self-hosted. Arabic headings get extra line height for marks above and below.
-- **Shape and depth:** radius 8 (controls), 12 (cards), 20 (brand panels). One raised shadow per page for the primary panel; borders elsewhere.
+- **Chrome and depth ("ink chrome, paper evidence", see [design references](design-references.md)):** the app's navigation sits on ink (`--sidebar-*` tokens) and the work on a light sheet laid over it; cards use a soft ink-tinted elevation (`shadow-card`) instead of borders, which stay for tables and inputs. Ink surfaces are lit from above (`.ink-lit`, `.ink-grid`, `.grain`) and are limited to the chrome plus one filled object per view (the Home brief, the report verdict, the landing hero). On ink, primary buttons turn light (`src/components/ui/ink.ts`). Radius 8 (controls), 12 (cards), 20 (brand panels).
 - **Motion:** 150–250 ms ease-out for responses to actions; one orchestrated moment per page at most. Disabled under `prefers-reduced-motion`.
-- **Labels:** sentence case throughout; no tracked-out capitals.
+- **Labels:** sentence case throughout. The one exception is the small `.eyebrow` label above section titles (tracked capitals in Latin, plain in Arabic).
 
 Contrast for every token pair (including ink and highlight) is asserted in `tests/unit/contrast.test.ts`. `tests/e2e/pages-a11y.spec.ts` runs axe on the landing, sign-in, Home and report in English light and Arabic dark; the gallery, candidate flow and admin pages have their own scans.
 
@@ -148,7 +148,7 @@ Contrast for every token pair (including ink and highlight) is asserted in `test
 
 - A short sidebar (Home, Assessments, Teams, My development, Framework; Organisation, Platform admin, Settings). Grow, Organisation and Platform admin each have a sticky row of section tabs, so their sub-pages don't lengthen the sidebar.
 - **Command menu** (⌘K / Ctrl+K, or Search in the sidebar): jump to any page, run common actions (new assessment, theme, language), and search candidates, roles, teams and people. Search runs through RLS and the viewer's permissions (`src/app/actions/search.ts`).
-- **Home** answers "what needs me?": reports nobody has opened yet (from the audit log), people taking an assessment right now, each role's pipeline, and team progress.
+- **Home** answers "what needs me?". It opens on an ink brief: a greeting, what changed, the next action and four numbers that link to the records behind them. Below it: reports nobody has opened yet (from the audit log), people taking an assessment right now, each role's pipeline, and team progress.
 
 ## Build phases
 

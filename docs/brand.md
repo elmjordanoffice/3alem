@@ -56,7 +56,7 @@ All files are outlined vectors (no font needed), generated from the brand fonts 
 | Stone | `#FAFAF9` … `#1C1917` | `#0F0E0D` … `#F5F5F4` | Backgrounds, text, borders | ~67% |
 | Level ramp | `#E4E5FB` → `#2F33AD` | `#262849` → `#B4B6FA` | Skill levels and role fit; one hue, never red/green | as needed |
 
-Every text pairing is tested for WCAG AA in `tests/unit/contrast.test.ts`.
+In the product, ink is also the navigation chrome (the sidebar), with the work on a light sheet beside it; see [design references](design-references.md). Every text pairing is tested for WCAG AA in `tests/unit/contrast.test.ts`.
 
 ## Type
 

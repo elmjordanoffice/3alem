@@ -102,7 +102,7 @@ export function WebhooksPanel({ hooks, deliveries }: { hooks: Hook[]; deliveries
         {hooks.length === 0 ? (
           <EmptyState icon={Plug} title={t("emptyTitle")} description={t("emptyBody")} />
         ) : (
-          <ul className="flex flex-col divide-y divide-border rounded-card border border-border bg-surface">
+          <ul className="flex flex-col divide-y divide-border rounded-card bg-surface shadow-card">
             {hooks.map((h) => (
               <li key={h.id} className="flex flex-wrap items-center gap-3 px-4 py-3">
                 <div className="min-w-0 flex-1">
@@ -127,7 +127,7 @@ export function WebhooksPanel({ hooks, deliveries }: { hooks: Hook[]; deliveries
         {deliveries.length === 0 ? (
           <p className="text-sm text-secondary">{t("noDeliveries")}</p>
         ) : (
-          <div className="overflow-x-auto rounded-card border border-border bg-surface">
+          <div className="overflow-x-auto rounded-card bg-surface shadow-card">
             <table className="w-full text-sm">
               <thead className="bg-surface-subtle text-xs text-secondary">
                 <tr>

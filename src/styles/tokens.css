@@ -72,9 +72,27 @@
   --highlight-foreground: #1c1917;
   --saffron: #f2b532;
 
+  /* App chrome: the navigation sits on ink, the work on paper (docs/design-references.md). */
+  --sidebar: #17184a;
+  --sidebar-raised: #22246a;
+  --sidebar-active: #2a2d78;
+  --sidebar-foreground: #f5f4ff;
+  --sidebar-secondary: #bfc1f2;
+  --sidebar-tertiary: #9497e0;
+  --sidebar-accent: #a5a8fa;
+  --sidebar-border: rgb(245 244 255 / 0.1);
+  /* Light that comes off the range field on ink surfaces. */
+  --glow-indigo: #4c51e8;
+  --glow-lavender: #8f92f7;
+
   --shadow-popover: 0 8px 24px -6px rgb(28 25 23 / 0.12), 0 2px 6px -2px rgb(28 25 23 / 0.08);
   /* The one raised surface on a page (a verdict, a hero panel). */
   --shadow-raised: 0 1px 2px rgb(28 25 23 / 0.04), 0 12px 32px -12px rgb(23 24 74 / 0.18);
+  /* Quiet elevation for cards on the paper canvas: depth instead of more borders. */
+  --shadow-card: 0 0 0 1px rgb(23 24 74 / 0.06), 0 1px 2px rgb(23 24 74 / 0.05), 0 4px 12px -4px rgb(23 24 74 / 0.06);
+  --shadow-card-hover: 0 0 0 1px rgb(23 24 74 / 0.1), 0 2px 4px rgb(23 24 74 / 0.06), 0 12px 24px -8px rgb(23 24 74 / 0.12);
+  /* Product figures floating on ink. */
+  --shadow-window: 0 0 0 1px rgb(245 244 255 / 0.08), 0 2px 4px rgb(8 8 30 / 0.2), 0 24px 48px -12px rgb(8 8 30 / 0.45), 0 60px 120px -40px rgb(8 8 30 / 0.6);
   --overlay: rgb(28 25 23 / 0.4);
 }
 
@@ -135,7 +153,21 @@
   --highlight-foreground: #fdf3d6;
   --saffron: #f2b532;
 
+  --sidebar: #111232;
+  --sidebar-raised: #1b1d4a;
+  --sidebar-active: #252870;
+  --sidebar-foreground: #f5f4ff;
+  --sidebar-secondary: #b3b5ea;
+  --sidebar-tertiary: #8f92dc;
+  --sidebar-accent: #a5a8fa;
+  --sidebar-border: rgb(245 244 255 / 0.08);
+  --glow-indigo: #4c51e8;
+  --glow-lavender: #8f92f7;
+
   --shadow-popover: 0 8px 24px -6px rgb(0 0 0 / 0.5), 0 2px 6px -2px rgb(0 0 0 / 0.4);
   --shadow-raised: 0 1px 2px rgb(0 0 0 / 0.3), 0 16px 40px -16px rgb(0 0 0 / 0.6);
+  --shadow-card: 0 0 0 1px rgb(255 255 255 / 0.06), 0 1px 2px rgb(0 0 0 / 0.3), 0 4px 12px -4px rgb(0 0 0 / 0.35);
+  --shadow-card-hover: 0 0 0 1px rgb(255 255 255 / 0.1), 0 2px 4px rgb(0 0 0 / 0.35), 0 12px 24px -8px rgb(0 0 0 / 0.5);
+  --shadow-window: 0 0 0 1px rgb(245 244 255 / 0.1), 0 2px 4px rgb(0 0 0 / 0.3), 0 24px 48px -12px rgb(0 0 0 / 0.6), 0 60px 120px -40px rgb(0 0 0 / 0.7);
   --overlay: rgb(0 0 0 / 0.6);
 }

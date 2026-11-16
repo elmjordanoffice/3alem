@@ -22,7 +22,7 @@ export function CompareView({ reports }: { reports: { sessionId: string; name: s
           <SkillRadar data={data} series={series} label={t("title")} />
         </CardContent>
       </Card>
-      <div className="overflow-x-auto rounded-card border border-border bg-surface">
+      <div className="overflow-x-auto rounded-card bg-surface shadow-card">
         <table className="w-full min-w-[640px] text-sm">
           <caption className="sr-only">{t("table")}</caption>
           <thead className="bg-surface-subtle">

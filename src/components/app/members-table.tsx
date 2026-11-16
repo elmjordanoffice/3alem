@@ -48,7 +48,7 @@ export function MembersTable({ members, canManage, currentUserId }: { members: M
       {members.length === 0 ? (
         <EmptyState icon={Users} title={t("emptyTitle")} description={t("emptyBody")} />
       ) : (
-        <div className="overflow-hidden rounded-card border border-border bg-surface">
+        <div className="overflow-hidden rounded-card bg-surface shadow-card">
           <table className="w-full text-sm">
             <caption className="sr-only">{t("title")}</caption>
             <thead className="bg-surface-subtle text-start text-xs text-secondary">

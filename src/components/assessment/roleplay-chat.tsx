@@ -59,7 +59,7 @@ export function RoleplayChat({ stakeholder, messages, onSend, onEnd, pending, en
   };
 
   return (
-    <div className="flex h-full min-h-[28rem] flex-col overflow-hidden rounded-card border border-border bg-surface">
+    <div className="flex h-full min-h-[28rem] flex-col overflow-hidden rounded-card bg-surface shadow-card">
       <div className="flex items-start gap-3 border-b border-border p-4">
         <Avatar name={stakeholder.name} size="lg" />
         <div className="min-w-0 flex-1">

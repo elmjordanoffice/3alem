@@ -86,6 +86,36 @@
       "evidence": {
         "title": "Read the evidence, then decide",
         "body": "Role fit with a confidence, a range for every skill, quotes from the candidate’s own answers, and questions to ask in the interview."
+      },
+      "eyebrow": "How it works",
+      "fig": "Fig.",
+      "jdFig": {
+        "role": "Operations Planner",
+        "weight": "Weight",
+        "s1": "Prioritising under pressure",
+        "s2": "Keeping stakeholders informed",
+        "s3": "Working with numbers",
+        "s4": "Solving problems",
+        "flagTitle": "Could exclude people unfairly",
+        "flagFrom": "Native English speaker",
+        "flagTo": "Fluent written English"
+      },
+      "weekFig": {
+        "d1": "Mon",
+        "d2": "Tue",
+        "d3": "Wed",
+        "d4": "Thu",
+        "d5": "Fri",
+        "inbox": "Inbox",
+        "m1from": "Layla Haddad",
+        "m1subject": "Port delay: the Henderson order",
+        "m2from": "Omar Nasser",
+        "m2subject": "Can we move Thursday’s stock count?",
+        "m3from": "Finance",
+        "m3subject": "Fuel costs are 12% over plan",
+        "m4from": "Sara, driver",
+        "m4subject": "Truck 2 has cleared customs",
+        "adaptive": "New, because of your last answer"
       }
     },
     "modesTitle": "One engine, three ways to use it",
@@ -126,7 +156,89 @@
       }
     },
     "footer": "Early version: use alongside interviews.",
-    "brandLink": "Brand"
+    "brandLink": "Brand",
+    "seeHow": "See how it works",
+    "hero": {
+      "eyebrow": "Skills assessment that shows its working",
+      "points": {
+        "time": "About 50 minutes per candidate",
+        "languages": "Arabic and English, as equals",
+        "people": "Never rejects anyone automatically"
+      }
+    },
+    "figure": {
+      "label": "A candidate report in Aalim",
+      "crumbRole": "Operations Planner",
+      "candidate": "Hana Al-Sayed",
+      "share": "Share",
+      "role": "Operations Planner · Qamar Logistics",
+      "confidence": "High confidence",
+      "summaryLabel": "Summary",
+      "summary": "Plans for what can go wrong and says early who it will affect. Writes clearly under time pressure; budgeting was tested less.",
+      "skills": {
+        "priorities": "Prioritising under pressure",
+        "stakeholders": "Keeping stakeholders informed",
+        "numbers": "Working with numbers"
+      },
+      "evidenceSource": "Scene 4 · Tuesday, 10:40",
+      "askLabel": "Ask in the interview",
+      "ask1": "Tell me about a plan you promised that couldn’t hold. Who did you tell first?",
+      "ask2": "How would you check a budget you inherited?",
+      "evidenceLabel": "Evidence",
+      "evidenceCount": "23 quotes from 9 scenes",
+      "scene": "Scene 6 of 9",
+      "narrowing": "Narrowing with each answer",
+      "expected": "Role needs"
+    },
+    "promise": {
+      "label": "The promise, in both languages",
+      "caption": "Arabic and English are equals in Aalim, from the first scene to the final report. Every scenario, score and email is written for both."
+    },
+    "bento": {
+      "hire": {
+        "header": "Operations Planner · 18 candidates",
+        "c1": "Hana Al-Sayed",
+        "c2": "Priya Raman",
+        "c3": "Mateo Fernández",
+        "skill1": "Priorities",
+        "skill2": "Stakeholders"
+      },
+      "fairness": {
+        "title": "Fairness you can check",
+        "body": "Selection rates by group, with the four-fifths rule built in and small groups hidden.",
+        "a": "Group A",
+        "b": "Group B",
+        "c": "Group C",
+        "line": "Four-fifths line",
+        "chart": "Selection rate by group: A 100%, B 92%, C 86%, all above the four-fifths line"
+      },
+      "small": {
+        "voice": {
+          "title": "Spoken role-play",
+          "body": "Candidates can talk through conversations instead of typing them."
+        },
+        "ats": {
+          "title": "Fits your hiring system",
+          "body": "Results reach your ATS by signed webhook, the moment a report is ready."
+        },
+        "bilingual": {
+          "title": "Right to left, done properly",
+          "body": "Every scenario, report and email in Arabic and English."
+        },
+        "privacy": {
+          "title": "Private by default",
+          "body": "Development data stays with the person, who can export or delete it."
+        }
+      }
+    },
+    "cta": {
+      "title": "See what your candidates can actually do.",
+      "body": "Set up your first assessment from a job description in a few minutes."
+    },
+    "footerNav": {
+      "product": "Product",
+      "more": "More"
+    }
   },
   "auth": {
     "fields": {
@@ -381,6 +493,12 @@
       "high": "High confidence",
       "moderate": "Moderate confidence",
       "low": "Low confidence"
+    },
+    "brief": {
+      "unopened": "Reports not opened",
+      "inProgress": "In progress",
+      "completed": "Finished",
+      "open": "Open roles"
     }
   },
   "framework": {

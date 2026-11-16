@@ -29,7 +29,7 @@ export function TeamConsent({ token, team, manager, status, memberId }: { token:
         <p className="text-lg leading-relaxed text-secondary">{t("intro", { manager })}</p>
       </div>
       <Alert tone="info" title={t("devToolTitle")}>{t("devToolBody")}</Alert>
-      <section className="rounded-card border border-border bg-surface p-5">
+      <section className="rounded-card bg-surface shadow-card p-5">
         <h2 className="flex items-center gap-2 text-sm font-semibold text-text"><ShieldCheck className="size-4 text-accent-text" aria-hidden />{t("whoSees")}</h2>
         <ul className="mt-3 flex list-disc flex-col gap-1.5 ps-5 text-sm text-secondary">
           <li>{t("sees.you")}</li>

@@ -67,7 +67,7 @@ export function Landing({ v, onStart }: { v: View<"landing">; onStart: (o: { loc
             ))}
           </ul>
 
-          <section aria-labelledby="data-use" className="rounded-card border border-border bg-surface-subtle p-5">
+          <section aria-labelledby="data-use" className="rounded-card bg-surface shadow-card-subtle p-5">
             <h2 id="data-use" className="flex items-center gap-2 text-sm font-semibold text-text">
               <ShieldCheck className="size-4 text-accent-text" aria-hidden />
               {t("data.title")}
@@ -80,7 +80,7 @@ export function Landing({ v, onStart }: { v: View<"landing">; onStart: (o: { loc
           </section>
         </section>
 
-        <aside className="flex flex-col gap-5 self-start rounded-card border border-border bg-surface p-5 shadow-raised lg:sticky lg:top-24 sm:p-6">
+        <aside className="flex flex-col gap-5 self-start rounded-card bg-surface shadow-card p-5 shadow-raised lg:sticky lg:top-24 sm:p-6">
           <div className="flex flex-col gap-2">
             <span className="text-sm font-medium text-text">{t("language")}</span>
             <div className="grid grid-cols-2 gap-1 rounded-control bg-surface-sunken p-0.5">
@@ -216,7 +216,7 @@ export function Briefing({ v, onBegin }: { v: View<"briefing">; onBegin: () => P
           <h2 id="cast-h" className="text-xl font-semibold text-text">{t("people")}</h2>
           <ul className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {v.world.cast.map((c) => (
-              <li key={c.name} className="rounded-card border border-border bg-surface p-4">
+              <li key={c.name} className="rounded-card bg-surface shadow-card p-4">
                 <Person name={c.name} role={c.role} size="lg" />
               </li>
             ))}
@@ -424,7 +424,7 @@ export function Complete({ v, onFeedback, onFairness }: { v: View<"complete">; o
             <li>{t("next3", { org: v.branding.orgName })}</li>
           </ul>
         </section>
-        <section className="rounded-card border border-border bg-surface p-5">
+        <section className="rounded-card bg-surface shadow-card p-5">
           {sent ? (
             <p className="text-sm text-secondary" role="status">{t("thanks")}</p>
           ) : (
@@ -462,7 +462,7 @@ export function Complete({ v, onFeedback, onFairness }: { v: View<"complete">; o
           )}
         </section>
         {onFairness ? (
-          <section className="rounded-card border border-border bg-surface p-5">
+          <section className="rounded-card bg-surface shadow-card p-5">
             <FairnessQuestions onSubmit={onFairness} />
           </section>
         ) : null}

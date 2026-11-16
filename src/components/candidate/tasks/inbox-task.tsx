@@ -94,7 +94,7 @@ export function InboxTask({ itemId, content, onChange, onSaveState, disabled, ti
         </ol>
 
         {open ? (
-          <article className="flex min-w-0 flex-col overflow-hidden rounded-card border border-border bg-surface">
+          <article className="flex min-w-0 flex-col overflow-hidden rounded-card bg-surface shadow-card">
             <header className="flex flex-col gap-3 border-b border-border p-4">
               <h3 className="text-base font-semibold text-text" dir="auto">
                 {open.subject}

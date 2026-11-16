@@ -10,10 +10,10 @@ import { formatNumber } from "@/lib/i18n/format";
 import { PageContainer } from "@/components/app/page-header";
 import { Alert } from "@/components/ui/alert";
 import { Avatar } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { FitPill } from "@/components/report/fit";
+import { INK_PRIMARY } from "@/components/ui/ink";
 import { RolePipelineList } from "@/components/recruiter/role-pipeline";
 import { cn } from "@/lib/utils";
 
@@ -63,23 +63,54 @@ export default async function AppHome({ searchParams }: { searchParams: Promise<
 
   return (
     <PageContainer className="max-w-6xl">
-      <header className="mb-10 flex flex-wrap items-end justify-between gap-6">
-        <div className="min-w-0">
-          <p className="text-sm text-tertiary">{org ? t("dateAt", { date: fmt.date, org: org.name }) : fmt.date}</p>
-          <h1 className="mt-2 text-[2.25rem] font-semibold leading-[1.1] text-text sm:text-[2.75rem]">{t("greeting", { name: firstName })}</h1>
-          <p className="mt-3 max-w-2xl text-[15px] leading-relaxed text-secondary">
-            {hiring ? (summary.length ? summary.join(" ") : t("summary.clear")) : org ? t("orgSubtitle", { org: org.name }) : t("personalSubtitle")}
-          </p>
+      {/* The brief: what changed and what to do next, before any list (docs/design-references.md). */}
+      <section aria-labelledby="brief-h" className="ink-lit grain relative isolate mb-12 overflow-hidden rounded-[22px] text-ink-foreground shadow-raised">
+        <div className="ink-grid absolute inset-0 -z-10 opacity-70" aria-hidden />
+        <div className="flex flex-wrap items-end justify-between gap-6 p-6 sm:p-8 lg:p-10">
+          <div className="min-w-0 max-w-2xl">
+            <p className="text-sm text-ink-secondary">{org ? t("dateAt", { date: fmt.date, org: org.name }) : fmt.date}</p>
+            <h1 id="brief-h" className="mt-2 text-[2.25rem] font-semibold leading-[1.1] sm:text-[2.75rem]">{t("greeting", { name: firstName })}</h1>
+            <p className="mt-3 text-[15px] leading-relaxed text-ink-secondary">
+              {hiring ? (summary.length ? summary.join(" ") : t("summary.clear")) : org ? t("orgSubtitle", { org: org.name }) : t("personalSubtitle")}
+            </p>
+          </div>
+          {org && viewerCan(viewer, "assessment.create") ? (
+            <Button asChild size="lg" className={INK_PRIMARY}>
+              <Link href="/app/assessments/new">
+                <Plus aria-hidden />
+                {t("newAssessment")}
+              </Link>
+            </Button>
+          ) : !hiring ? (
+            <Button asChild size="lg" className={INK_PRIMARY}>
+              <Link href="/app/grow">
+                <Sprout aria-hidden />
+                {grow ? t("grow.ctaActive") : t("grow.ctaNew")}
+              </Link>
+            </Button>
+          ) : null}
         </div>
-        {org && viewerCan(viewer, "assessment.create") ? (
-          <Button asChild size="lg">
-            <Link href="/app/assessments/new">
-              <Plus aria-hidden />
-              {t("newAssessment")}
-            </Link>
-          </Button>
+        {overview ? (
+          <dl className="grid grid-cols-2 gap-px border-t border-ink-foreground/10 bg-ink-foreground/10 sm:grid-cols-4">
+            {([
+              ["unopened", overview.unviewed, "/app/assessments"],
+              ["inProgress", overview.totals.inProgress, "/app/assessments"],
+              ["completed", overview.totals.completed, "/app/assessments"],
+              ["open", overview.totals.open, "/app/assessments"],
+            ] as const).map(([k, v, href]) => (
+              <div key={k} className="relative bg-ink/40 backdrop-blur-sm transition-colors hover:bg-ink-raised/60">
+                <dt className="px-6 pt-5 text-xs text-ink-secondary sm:px-8">{t(`brief.${k}`)}</dt>
+                <dd className="px-6 pb-5 pt-1.5 sm:px-8">
+                  <Link href={href} className="font-display text-[2rem] font-semibold leading-none tabular after:absolute after:inset-0 focus-visible:outline-none focus-visible:after:outline-2 focus-visible:after:-outline-offset-2 focus-visible:after:outline-focus">
+                    {fmt.n(v)}
+                  </Link>
+                  {k === "unopened" && v > 0 ? <span className="ms-2 inline-block size-2 -translate-y-1 rounded-full bg-saffron" aria-hidden /> : null}
+                </dd>
+              </div>
+            ))}
+          </dl>
         ) : null}
-      </header>
+      </section>
 
       {denied ? (
         <Alert tone="warning" className="mb-6" title={t("deniedTitle")}>
@@ -122,7 +153,7 @@ export default async function AppHome({ searchParams }: { searchParams: Promise<
                     const done = active.filter((m) => m.status === "ASSESSED").length;
                     return (
                       <li key={tm.id}>
-                        <Link href={`/app/teams/${tm.id}`} className="block rounded-card border border-border bg-surface px-4 py-3 transition-colors hover:border-border-strong focus-visible:outline-2 focus-visible:outline-focus">
+                        <Link href={`/app/teams/${tm.id}`} className="block rounded-card bg-surface shadow-card px-4 py-3 transition-[box-shadow,background-color,color] hover:shadow-card-hover focus-visible:outline-2 focus-visible:outline-focus">
                           <span className="block truncate text-sm font-medium text-text">{tm.name}</span>
                           <span className="mt-2 flex items-center gap-3">
                             <span className="h-1.5 flex-1 overflow-hidden rounded-full bg-level-empty" aria-hidden>
@@ -143,7 +174,7 @@ export default async function AppHome({ searchParams }: { searchParams: Promise<
       ) : (
         <div className="grid gap-6 md:grid-cols-2">
           <GrowCard t={t} hasProfile={Boolean(grow)} large />
-          <Link href="/app/framework" className="group flex flex-col justify-between gap-6 rounded-card border border-border bg-surface p-6 transition-colors hover:border-border-strong focus-visible:outline-2 focus-visible:outline-focus">
+          <Link href="/app/framework" className="group flex flex-col justify-between gap-6 rounded-card bg-surface shadow-card p-6 transition-[box-shadow,background-color,color] hover:shadow-card-hover focus-visible:outline-2 focus-visible:outline-focus">
             <span>
               <span className="block font-semibold text-text">{t("links.framework.title")}</span>
               <span className="mt-1 block text-sm text-secondary">{t("links.framework.body", { count: 47 })}</span>
@@ -182,7 +213,7 @@ function ReviewQueue({ overview, fmt, t }: { overview: HomeOverview; fmt: Fmt; t
       {overview.review.length === 0 ? (
         <EmptyState icon={ClipboardList} title={t("review.emptyTitle")} description={t("review.emptyBody")} />
       ) : (
-        <ul className="overflow-hidden rounded-card border border-border bg-surface">
+        <ul className="overflow-hidden rounded-card bg-surface shadow-card">
           {overview.review.map((r) => (
             <li key={r.sessionId} className="border-b border-border last:border-b-0">
               <Link href={`/app/reports/${r.sessionId}`} className="group grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-x-4 gap-y-1 px-4 py-3.5 transition-colors hover:bg-surface-subtle focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus sm:grid-cols-[auto_minmax(0,1fr)_auto_6.5rem] sm:px-5">
@@ -267,14 +298,6 @@ function Live({ overview, fmt, t }: { overview: HomeOverview; fmt: Fmt; t: T }) 
           ))}
         </ul>
       )}
-      <dl className="mt-6 grid grid-cols-3 divide-x divide-border rounded-card border border-border bg-surface rtl:divide-x-reverse">
-        {(["open", "inProgress", "completed"] as const).map((k) => (
-          <div key={k} className="px-3 py-3">
-            <dt className="text-[11px] leading-tight text-tertiary">{t(`totals.${k}`)}</dt>
-            <dd className="mt-1 font-display text-xl font-semibold text-text tabular">{fmt.n(overview.totals[k])}</dd>
-          </div>
-        ))}
-      </dl>
     </section>
   );
 }
@@ -284,16 +307,18 @@ function GrowCard({ t, hasProfile, large = false }: { t: T; hasProfile: boolean;
     <Link
       href="/app/grow"
       className={cn(
-        "group relative flex flex-col gap-4 overflow-hidden rounded-card bg-ink p-5 text-ink-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus",
+        "group relative flex flex-col gap-4 overflow-hidden rounded-card bg-surface p-5 shadow-card transition-[box-shadow] hover:shadow-card-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus",
         large && "p-7",
       )}
     >
-      <Sprout className="size-5 text-saffron" strokeWidth={1.75} aria-hidden />
-      <span>
-        <span className={cn("block font-display font-semibold", large ? "text-2xl" : "text-lg")}>{t("grow.title")}</span>
-        <span className="mt-1.5 block text-sm leading-relaxed text-ink-secondary">{hasProfile ? t("grow.bodyActive") : t("grow.bodyNew")}</span>
+      <span className="inline-flex size-9 items-center justify-center rounded-[10px] bg-accent-subtle text-accent-text">
+        <Sprout className="size-[18px]" strokeWidth={1.75} aria-hidden />
       </span>
-      <span className="text-sm font-medium text-saffron underline-offset-4 group-hover:underline">{hasProfile ? t("grow.ctaActive") : t("grow.ctaNew")}</span>
+      <span>
+        <span className={cn("block font-display font-semibold text-text", large ? "text-2xl" : "text-lg")}>{t("grow.title")}</span>
+        <span className="mt-1.5 block text-sm leading-relaxed text-secondary">{hasProfile ? t("grow.bodyActive") : t("grow.bodyNew")}</span>
+      </span>
+      <span className="text-sm font-medium text-accent-text underline-offset-4 group-hover:underline">{hasProfile ? t("grow.ctaActive") : t("grow.ctaNew")}</span>
     </Link>
   );
 }

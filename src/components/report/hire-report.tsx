@@ -230,12 +230,12 @@ export function HireReport({ content, audience, actions }: { content: ReportCont
 
         <Section id="profile" title={t("toc.profile")} note={t("profileNote")}>
           <div className={cn("grid gap-6", !print && "xl:grid-cols-[minmax(0,1fr)_17rem]")}>
-            <div className="divide-y divide-border overflow-hidden rounded-card border border-border bg-surface">
+            <div className="divide-y divide-border overflow-hidden rounded-card bg-surface shadow-card">
               {[...content.domains].sort((a, b) => (b.importance === "MUST_HAVE" ? 1 : 0) - (a.importance === "MUST_HAVE" ? 1 : 0)).map((d) => (
                 <DomainCard key={d.key} d={d} content={content} skillNames={skillNames} print={print} />
               ))}
             </div>
-            <figure className="self-start rounded-card border border-border bg-surface p-4 xl:sticky xl:top-24">
+            <figure className="self-start rounded-card bg-surface shadow-card p-4 xl:sticky xl:top-24">
               <SkillRadar data={radar} series={[{ key: "c", label: content.candidate.name }]} label={t("toc.profile")} />
               <figcaption className="mt-2 text-xs leading-relaxed text-tertiary">{t("radarCaption")}</figcaption>
             </figure>
@@ -265,7 +265,7 @@ export function HireReport({ content, audience, actions }: { content: ReportCont
                 if (!v) return null;
                 const pct = ((v.position + 1) / 2) * 100;
                 return (
-                  <li key={ws.key} className="flex flex-col gap-2 rounded-card border border-border bg-surface p-4">
+                  <li key={ws.key} className="flex flex-col gap-2 rounded-card bg-surface shadow-card p-4">
                     <span className="text-sm font-medium text-text">{ws.name[locale]}</span>
                     <div className="relative h-1.5 rounded-full bg-surface-sunken" role="img" aria-label={`${ws.name[locale]}: ${ws.poles.a[locale]} – ${ws.poles.b[locale]}`}>
                       <span className="absolute top-1/2 size-3.5 -translate-y-1/2 rounded-full border-2 border-surface bg-accent shadow-sm ltr:-translate-x-1/2 rtl:translate-x-1/2" style={{ insetInlineStart: `${pct}%` }} />
@@ -295,7 +295,7 @@ export function HireReport({ content, audience, actions }: { content: ReportCont
           <Section id="interview" title={t("toc.interview")} note={t("interviewNote")}>
             <ol className="flex flex-col gap-3">
               {content.narrative.interviewQuestions.map((q, i) => (
-                <li key={i} className="flex gap-3 rounded-card border border-border bg-surface p-4">
+                <li key={i} className="flex gap-3 rounded-card bg-surface shadow-card p-4">
                   <span className="inline-flex size-6 shrink-0 items-center justify-center rounded-full bg-surface-sunken text-xs font-semibold text-secondary tabular">{n.number(i + 1)}</span>
                   <div className="flex flex-col gap-1.5">
                     <p className="font-medium text-text" dir="auto">{q.question}</p>

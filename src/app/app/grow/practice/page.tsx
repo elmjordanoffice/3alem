@@ -36,7 +36,7 @@ export default async function PracticeGym() {
           <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             {recent.slice(0, 4).map((r) => (
               <li key={r.id}>
-                <Link href={`/app/grow/practice/${r.id}`} className="block h-full rounded-card border border-border bg-surface p-4 hover:border-border-strong">
+                <Link href={`/app/grow/practice/${r.id}`} className="block h-full rounded-card bg-surface shadow-card p-4 hover:shadow-card-hover">
                   <span className="block text-sm font-medium text-text" dir="auto">{title(r.item)}</span>
                   <span className="mt-1 block text-xs text-secondary">{r.completedAt ? t("done") : t("unfinished")}</span>
                 </Link>
