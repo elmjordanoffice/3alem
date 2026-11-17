@@ -30,7 +30,7 @@ export function RangeScale({
 }) {
   const pct = (v: number) => ((Math.min(5, Math.max(1, v)) - 1) / 4) * 100;
   const h = size === "lg" ? "h-3" : size === "sm" ? "h-1.5" : "h-2";
-  const dot = size === "lg" ? "size-4" : size === "sm" ? "size-2.5" : "size-3";
+  const dot = size === "lg" ? "size-4" : size === "sm" ? "size-2" : "size-3";
   const band = tone === "ink" ? "bg-saffron/85" : "bg-saffron/75";
   const fill = tone === "ink" ? "bg-ink-foreground" : "bg-ink dark:bg-ink-foreground";
   const track = tone === "ink" ? "bg-ink-foreground/10" : "bg-level-empty";
@@ -47,7 +47,7 @@ export function RangeScale({
         {expected ? <span className={cn("absolute -inset-y-1 w-0.5 rounded-full", tone === "ink" ? "bg-ink-foreground/70" : "bg-text/60")} style={{ insetInlineStart: `calc(${pct(expected)}% - 1px)` }} /> : null}
         <span
           className={cn("absolute top-1/2 -translate-y-1/2 rounded-full ring-2", dot, fill, tone === "ink" ? "ring-ink" : "ring-surface", animate && "range-dot")}
-          style={{ insetInlineStart: `calc(${pct(estimate)}% - ${size === "lg" ? 8 : size === "sm" ? 5 : 6}px)` }}
+          style={{ insetInlineStart: `calc(${pct(estimate)}% - ${size === "lg" ? 8 : size === "sm" ? 4 : 6}px)` }}
         />
       </div>
       {labels ? (

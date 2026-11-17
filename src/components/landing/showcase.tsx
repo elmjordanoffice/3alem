@@ -88,7 +88,7 @@ function Piece({ tag, title, body, className, wide = false, children }: { tag: s
       </div>
       <div className={wide ? "lg:order-first lg:max-w-md" : ""}>
         <p className="eyebrow text-sidebar-accent">{tag}</p>
-        <h3 className={cn("mt-3 font-display font-semibold text-ink-foreground", wide ? "text-4xl sm:text-5xl" : "text-3xl")}>
+        <h3 className={cn("mt-3 font-display font-semibold text-ink-foreground", wide ? "text-3xl sm:text-4xl" : "text-3xl")}>
           <SplitWords text={title} />
         </h3>
         <p className="fade-up mt-3 max-w-lg leading-relaxed text-ink-secondary" style={{ "--d": "200ms" } as React.CSSProperties}>

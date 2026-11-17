@@ -27,7 +27,7 @@ export async function HeroFigure() {
 
   return (
     <figure aria-label={t("label")} data-reveal className="relative mx-auto w-full max-w-[68rem] text-start">
-      <div className="relative overflow-hidden rounded-[18px] bg-surface text-text shadow-window">
+      <div className="card-lit relative overflow-hidden rounded-[18px] text-text">
         {/* Window chrome */}
         <div className="flex h-11 items-center gap-3 border-b border-border bg-surface-subtle px-4">
           <LogoMark className="size-5" />

@@ -41,7 +41,7 @@ export default async function Home() {
 
       {/* Glass navigation, floating over the film. */}
       <header className="fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-6">
-        <div className="nav-glass mx-auto flex h-14 max-w-6xl items-center justify-between gap-2 rounded-full ps-4 pe-2">
+        <div className="nav-glass mx-auto flex h-14 max-w-6xl items-center justify-between gap-2 rounded-full px-3 sm:ps-4">
           <Link href="/" className="rounded-control focus-visible:outline-2 focus-visible:outline-focus">
             <Logo reverse showArabic={false} className="sm:hidden" />
             <Logo reverse className="hidden sm:inline-flex" />
@@ -110,16 +110,13 @@ export default async function Home() {
               </a>
             </div>
             {/* The field's closest row, labelled: a skill with no evidence yet, so the range is wide. */}
-            <div className="float-in absolute inset-x-0 bottom-16 mx-auto w-full max-w-2xl px-5 text-start sm:bottom-[5.25rem]" style={{ animationDelay: "1100ms" }} aria-hidden>
+            <div className="float-in absolute inset-x-0 bottom-14 mx-auto w-full max-w-4xl px-5 text-start sm:bottom-16" style={{ animationDelay: "1100ms" }} aria-hidden>
               <div className="flex items-baseline justify-between gap-4 text-sm">
                 <span className="font-medium text-ink-foreground">{t("figure.skills.priorities")}</span>
                 <span className="text-ink-secondary">{t("film.noEvidence")}</span>
               </div>
-              <div className="relative mt-3 h-3 rounded-full bg-ink-foreground/10">
-                {[25, 50, 75].map((x) => (
-                  <span key={x} className="absolute inset-y-0 w-px bg-night/70" style={{ insetInlineStart: `${x}%` }} />
-                ))}
-                <span className="hero-row-band absolute inset-y-0 rounded-full" />
+              <div className="relative mt-3 h-3 rounded-full bg-ink-foreground/10 shadow-[0_0_40px_rgb(143_146_247/0.35)]">
+                <span className="hero-row-band absolute inset-y-0 rounded-full shadow-[0_0_24px_rgb(143_146_247/0.6)]" />
                 <span className="absolute -inset-y-1.5 w-0.5 rounded-full bg-ink-foreground/80" style={{ insetInlineStart: "calc(75% - 1px)" }} />
                 <span className="hero-row-dot absolute top-1/2 size-3 -translate-y-1/2 rounded-full bg-ink-secondary" />
               </div>
@@ -131,12 +128,7 @@ export default async function Home() {
                 <span>{td("scaleHigh")}</span>
               </div>
             </div>
-            <div className="float-in absolute inset-x-0 bottom-5 flex justify-center" style={{ animationDelay: "1400ms" }}>
-              <span className="sr-only">{t("film.scroll")}</span>
-              <span className="relative h-9 w-px overflow-hidden bg-ink-foreground/20" aria-hidden>
-                <span className="scroll-cue absolute inset-0 bg-ink-foreground" />
-              </span>
-            </div>
+            <span className="sr-only">{t("film.scroll")}</span>
           </div>
 
           {/* Beat 1: the world */}
@@ -144,19 +136,19 @@ export default async function Home() {
             <Stage>
               <BeatCopy title={t("film.b1title")} body={t("film.b1body")} className="beat-copy-1" />
               <div className="relative mx-auto flex w-full max-w-[24rem] flex-col gap-3 sm:block sm:h-[28rem] lg:mx-0 lg:max-w-[30rem]" aria-hidden>
-                <div className="fly card-lit w-[92%] rounded-[16px] p-4 text-text sm:absolute sm:start-0 sm:top-0 sm:w-[86%]" style={{ "--fy": "70px" } as React.CSSProperties}>
+                <div className="fly card-night w-full rounded-[16px] p-4 text-ink-foreground sm:absolute sm:start-0 sm:top-0 sm:w-[86%]" style={{ "--fy": "70px" } as React.CSSProperties}>
                   <div className="flex items-center gap-2.5">
                     <Avatar name={td("from")} size="sm" />
                     <span className="min-w-0 flex-1">
                       <span className="block truncate text-sm font-medium">{td("from")}</span>
-                      <span className="block truncate text-[11px] text-tertiary">{td("fromRole")}</span>
+                      <span className="block truncate text-[11px] text-ink-secondary">{td("fromRole")}</span>
                     </span>
-                    <Mail className="size-4 text-tertiary" aria-hidden />
+                    <Mail className="size-4 text-ink-secondary" aria-hidden />
                   </div>
                   <p className="mt-3 text-sm font-medium">{t("film.emailSubject")}</p>
-                  <p className="mt-1 text-[13px] leading-relaxed text-secondary">{td("message")}</p>
+                  <p className="mt-1 text-[13px] leading-relaxed text-ink-secondary">{td("message")}</p>
                 </div>
-                <div className="fly card-night ms-auto w-[86%] rounded-[16px] p-4 text-ink-foreground sm:absolute sm:end-0 sm:top-[11.25rem] sm:w-[72%]" style={{ "--fy": "130px" } as React.CSSProperties}>
+                <div className="fly card-night ms-auto hidden w-[86%] rounded-[16px] p-4 text-ink-foreground sm:absolute sm:end-0 sm:top-[11.25rem] sm:block sm:w-[72%]" style={{ "--fy": "130px" } as React.CSSProperties}>
                   <div className="flex items-center gap-2">
                     <span className="inline-flex size-6 items-center justify-center rounded-full bg-ink-foreground/15 text-[10px] font-medium">ON</span>
                     <span className="text-xs font-medium">{t("film.chatFrom")}</span>
@@ -198,16 +190,17 @@ export default async function Home() {
                   <span className="absolute -inset-y-1.5 w-0.5 rounded-full bg-ink-foreground/70" style={{ insetInlineStart: "calc(75% - 1px)" }} />
                   <span className="film-range-dot absolute top-1/2 size-[18px] -translate-y-1/2 rounded-full bg-ink-foreground ring-4 ring-[#151744]" />
                 </div>
-                <div className="mt-2 flex justify-between text-[11px] text-ink-secondary">
+                <div className="relative mt-2 flex h-4 justify-between text-[11px] text-ink-secondary">
                   <span>{td("scaleLow")}</span>
+                  <span className="absolute -translate-x-1/2 whitespace-nowrap rtl:translate-x-1/2" style={{ insetInlineStart: "75%" }}>
+                    {t("figure.expected")} <bdi dir="ltr" className="tabular">4.0</bdi>
+                  </span>
                   <span>{td("scaleHigh")}</span>
                 </div>
-                <div className="mt-6 flex items-center justify-between gap-3 border-t border-ink-foreground/10 pt-5 text-sm">
-                  <span className="film-settled font-medium">
+                <div className="relative mt-6 h-6 border-t border-ink-foreground/10 pt-5 text-sm">
+                  <span className="film-narrowing absolute start-0 text-ink-secondary">{t("figure.narrowing")}</span>
+                  <span className="film-settled absolute start-0 font-medium">
                     {td("level")} <bdi dir="ltr" className="tabular text-ink-secondary">3.6–4.2</bdi>
-                  </span>
-                  <span className="text-ink-secondary">
-                    {t("figure.expected")} <bdi dir="ltr" className="tabular">4.0</bdi>
                   </span>
                 </div>
               </div>
@@ -219,24 +212,24 @@ export default async function Home() {
             <Stage>
               <BeatCopy title={t("film.b3title")} body={t("film.b3body")} className="beat-copy-3" />
               <div className="beat-copy-3 mx-auto w-full max-w-[34rem] lg:mx-0" aria-hidden>
-                <div className="card-lit rounded-[22px] p-6 text-text sm:p-8">
-                  <p className="text-xs text-tertiary">{t("figure.evidenceSource")}</p>
+                <div className="card-night rounded-[22px] p-6 text-ink-foreground sm:p-8">
+                  <p className="text-xs text-ink-secondary">{t("figure.evidenceSource")}</p>
                   <p className="mt-4 text-[17px] leading-relaxed sm:text-lg">
                     {qo}
                     {td("answerStart")} <mark className="film-mark">{td("answerEvidence")}</mark> {td("answerEnd")}
                     {qc}
                   </p>
-                  <div className="mt-6 flex items-center justify-between gap-3 border-t border-border pt-4 text-xs text-secondary">
-                    <span className="font-medium text-text">{t("figure.skills.priorities")}</span>
+                  <div className="mt-6 flex items-center justify-between gap-3 border-t border-ink-foreground/10 pt-4 text-xs text-ink-secondary">
+                    <span className="font-medium text-ink-foreground">{t("figure.skills.priorities")}</span>
                     <span>
-                      {td("level")} <bdi dir="ltr" className="tabular text-tertiary">3.6–4.2</bdi>
+                      {td("level")} <bdi dir="ltr" className="tabular">3.6–4.2</bdi>
                     </span>
                   </div>
                 </div>
                 <div className="film-verdict card-night mt-4 flex flex-wrap items-center gap-3 rounded-[18px] px-5 py-4">
                   <FitPill fit="STRONG" label={tf("STRONG")} />
                   <span className="text-sm text-ink-secondary">{t("figure.confidence")}</span>
-                  <span className="ms-auto text-sm text-ink-foreground">{t("figure.ask1")}</span>
+                  <span className="basis-full text-sm text-ink-foreground">{t("figure.ask1")}</span>
                 </div>
               </div>
             </Stage>

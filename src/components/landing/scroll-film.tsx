@@ -121,7 +121,7 @@ export function ScrollFilm({
         <div className="film-scrim-side pointer-events-none absolute inset-0" aria-hidden />
         <div className="film-scrim-end pointer-events-none absolute inset-0" aria-hidden />
         <div className="film-vignette pointer-events-none absolute inset-0" aria-hidden />
-        <div className="pointer-events-none absolute inset-0">{children}</div>
+        <div className="pointer-events-none absolute inset-0 z-10">{children}</div>
       </div>
     </section>
   );
