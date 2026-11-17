@@ -694,7 +694,14 @@
       "stopDictation": "Stop dictation",
       "dictationHint": "Dictation uses your browser's speech recognition. You can edit the text before sending.",
       "dictationError": "Dictation stopped. Check microphone permission, or type instead.",
-      "listening": "Listening… speak your reply, then press send."
+      "listening": "Listening… speak your reply, then press send.",
+      "playedByAi": "Played by AI",
+      "disclosure": "AI plays {name}. Your replies are assessed on what you say, never on tone or accent.",
+      "turns": "Reply {n} of up to {max}",
+      "replying": "{name} is replying…",
+      "dictationEdit": "Your words appear in the box. Check them, then send.",
+      "micBlocked": "Microphone access is off. You can type your reply instead.",
+      "aiLink": "How AI is used"
     },
     "documents": {
       "to": "To",
@@ -968,6 +975,10 @@
         "people": {
           "title": "People decide",
           "body": "The assessment gives the hiring team evidence. It never rejects anyone automatically."
+        },
+        "adapts": {
+          "title": "It adapts as you answer",
+          "body": "Scenes get easier or harder depending on your answers, so earlier scenes can't be reopened. There are no trick questions."
         }
       },
       "data": {
@@ -991,7 +1002,11 @@
       "consent": "I have read how my data is used and agree to take this assessment for {org}.",
       "continue": "Continue",
       "minutesNote": "About {minutes} minutes. You can pause between chapters.",
-      "startError": "We couldn't start the assessment. Check your connection and try again."
+      "startError": "We couldn't start the assessment. Check your connection and try again.",
+      "aiLink": "How AI is used in this assessment",
+      "practice": "Try a practice scene",
+      "practiceNote": "The practice scene isn’t scored or saved.",
+      "humanReviewOn": "You asked for a person to review every score."
     },
     "briefing": {
       "beforeTitle": "Before you begin",
@@ -1011,6 +1026,10 @@
         "offline": {
           "title": "Nothing gets lost",
           "body": "Answers save on this device as you type and sync when you're online."
+        },
+        "noBack": {
+          "title": "One way, like a real week",
+          "body": "Each answer shapes what happens next, so earlier scenes can't be reopened."
         }
       },
       "ready": "I'm ready",
@@ -1154,6 +1173,49 @@
       "skip": "Skip",
       "thanks": "Thank you. Your answers are stored separately from your assessment.",
       "skipped": "Skipped. Nothing was stored."
+    },
+    "ai": {
+      "title": "How AI is used in this assessment",
+      "intro": "You have a right to know where AI is involved. This is all of it.",
+      "doesTitle": "What AI does",
+      "does": {
+        "world": "Writes the fictional company and its scenes, and adapts them to your answers.",
+        "roleplay": "Plays the colleagues you talk to in conversations.",
+        "scoring": "Scores the content of your answers against written descriptions of each skill level.",
+        "report": "Drafts the report, quoting your own words as evidence."
+      },
+      "neverTitle": "What AI never does",
+      "never": {
+        "decide": "Decide whether you are hired, or reject anyone.",
+        "face": "Look at your face, or analyse your voice, tone, accent or emotions.",
+        "style": "Score length, grammar or spelling.",
+        "integrity": "Treat a paste or a switched tab as cheating. These are context for the reviewer, never a verdict."
+      },
+      "decideTitle": "Who decides",
+      "decide": "People at {org} read the report and make every decision. They can change any level, and every change is recorded with a reason.",
+      "choiceTitle": "Your choice",
+      "choice": "The scenes adapt using automated scoring either way. If you ask for a human review, a person at {org} must read your answers and confirm or change every level before the report can be shared or exported.",
+      "choiceLabel": "Ask for a person to review every score",
+      "done": "Done"
+    },
+    "practice": {
+      "title": "Practice scene",
+      "badge": "Practice · not scored or saved",
+      "from": "Nadia Karim",
+      "fromRole": "Team lead",
+      "message": "The client has moved Thursday's review to tomorrow at 9. Our draft is about 70% done. What do you do first?",
+      "options": {
+        "a": "Ask the client which sections matter most for tomorrow",
+        "b": "Work late tonight to finish everything",
+        "c": "Split the remaining work across the team now"
+      },
+      "choose": "Choose what you would do",
+      "why": "Why? A sentence or two is enough.",
+      "finish": "Finish practice",
+      "doneTitle": "That's how a scene works.",
+      "doneBody": "In the real assessment, your answer would shape the next scene. Nothing here was scored or saved.",
+      "again": "Try it again",
+      "close": "Back to the start"
     }
   },
   "assessments": {
@@ -1403,7 +1465,9 @@
     "domain": "Domain",
     "emptyTitle": "Choose at least two candidates",
     "emptyBody": "Select 2–4 candidates with a ready report on the role page.",
-    "note": "Use comparison alongside interviews. People decide."
+    "note": "Use comparison alongside interviews. People decide.",
+    "reviewPendingTitle": "A human review is still pending",
+    "reviewPendingBody": "{names} asked for a person to review every score. Open their report and confirm the review before relying on this comparison."
   },
   "preview": {
     "banner": "Preview: this is what candidates see first. Nothing is saved."
@@ -1463,7 +1527,7 @@
     "styleNote": "Tendencies, not scores. Neither end is better.",
     "followUp": "Follow-up:",
     "interviewNote": "Questions that probe where the assessment is least certain.",
-    "integrityNote": "Context for the reviewer. These never change a score.",
+    "integrityNote": "Context for the reviewer, never a verdict. These never change a score.",
     "integrity": {
       "time": "Time used",
       "timeValue": "{used} of {budget} min",
@@ -1528,7 +1592,8 @@
       "revoked": "Link revoked.",
       "shareError": "Couldn't create the link. Try again.",
       "toCandidate": "Send to candidate",
-      "resendCandidate": "Send to candidate again"
+      "resendCandidate": "Send to candidate again",
+      "reviewPending": "Confirm the human review before sharing or exporting."
     },
     "candidateReportFor": "Candidate report for {role}",
     "yourReportFor": "Your report for {role}",
@@ -1537,7 +1602,41 @@
     "expectedLevel": "Role expects {level}",
     "gapsInterview": "Explore in the interview",
     "rangeSr": "Likely between {low} and {high}; the role expects {expected}.",
-    "radarCaption": "The overall shape across the nine areas. Each point is the estimate; the list shows the ranges."
+    "radarCaption": "The overall shape across the nine areas. Each point is the estimate; the list shows the ranges.",
+    "review": {
+      "pendingTitle": "{name} asked for a person to review every score",
+      "pendingBody": "Read the evidence for each skill and adjust any level that doesn't match what you see. Sharing and PDF export stay off until you confirm the review.",
+      "confirm": "Confirm review",
+      "confirmTitle": "Confirm your review",
+      "confirmBody": "Say what you checked and what you concluded. This is recorded with your name.",
+      "noteLabel": "Review note",
+      "doneTitle": "Reviewed by a person",
+      "doneBody": "{name}, {date}: “{note}”",
+      "error": "Couldn't save. Write at least a sentence and try again."
+    },
+    "adjust": {
+      "button": "Adjust",
+      "title": "Adjust {skill}",
+      "body": "The assessment estimated {range}. Set the level you think the evidence supports, and say why.",
+      "level": "Level",
+      "note": "Why (required)",
+      "noteHint": "At least a sentence. Shown on the report with your name.",
+      "save": "Save adjustment",
+      "restore": "Restore the assessment's estimate",
+      "tag": "Reviewer",
+      "by": "{name}, {date}",
+      "error": "Couldn't save. Write at least a sentence and try again."
+    },
+    "answer": {
+      "open": "Read the full answer",
+      "title": "The answer in full",
+      "scene": "The scene",
+      "chosen": "Choice",
+      "answer": "Answer",
+      "candidate": "Candidate",
+      "stakeholder": "Colleague (played by AI)",
+      "error": "Couldn't load this answer."
+    }
   },
   "grow": {
     "title": "My development",

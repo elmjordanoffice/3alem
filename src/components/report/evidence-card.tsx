@@ -1,4 +1,5 @@
 "use client";
+import type * as React from "react";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import { confidenceBand } from "@/lib/levels";
@@ -14,6 +15,7 @@ export function EvidenceCard({
   skill,
   confidence,
   rationale,
+  action,
   className,
 }: {
   quote: string;
@@ -22,6 +24,8 @@ export function EvidenceCard({
   skill?: string;
   confidence: number;
   rationale?: string;
+  /** e.g. "Read the full answer", shown in the caption. */
+  action?: React.ReactNode;
   className?: string;
 }) {
   const t = useTranslations("components.evidence");
@@ -36,6 +40,7 @@ export function EvidenceCard({
       <figcaption className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-tertiary">
         <span>{context}</span>
         {skill ? <span className="text-secondary">{skill}</span> : null}
+        {action}
         <Badge tone={band === "high" ? "accent" : "neutral"} className="ms-auto">
           {t(`confidence.${band}`)}
         </Badge>

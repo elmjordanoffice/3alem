@@ -21,11 +21,12 @@ const startSchema = z.object({
   untimed: z.boolean(),
   largerText: z.boolean(),
   consent: z.literal(true),
+  humanReview: z.boolean().default(false),
 });
 
 export async function startAction(token: string, input: z.input<typeof startSchema>): Promise<CandidateView> {
   const p = startSchema.parse(input);
-  await startSession(token, { locale: p.locale, accommodations: { extraTime: p.extraTime, untimed: p.untimed, largerText: p.largerText }, consent: p.consent });
+  await startSession(token, { locale: p.locale, accommodations: { extraTime: p.extraTime, untimed: p.untimed, largerText: p.largerText }, consent: p.consent, humanReview: p.humanReview });
   return candidateView(token);
 }
 

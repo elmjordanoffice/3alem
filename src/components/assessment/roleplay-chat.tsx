@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 export interface ChatMessage {
   id: string;
@@ -29,10 +30,12 @@ interface RoleplayChatProps {
   pending?: boolean;
   ended?: boolean;
   candidateName: string;
+  /** The stakeholder's turn limit, for the reply counter. */
+  maxTurns?: number;
 }
 
 /** Chat with an AI stakeholder. Calm: no read receipts, no typing pressure. */
-export function RoleplayChat({ stakeholder, messages, onSend, onEnd, pending, ended, candidateName }: RoleplayChatProps) {
+export function RoleplayChat({ stakeholder, messages, onSend, onEnd, pending, ended, candidateName, maxTurns }: RoleplayChatProps) {
   const t = useTranslations("components.roleplay");
   const [draft, setDraft] = React.useState("");
   const listRef = React.useRef<HTMLDivElement>(null);
@@ -63,7 +66,11 @@ export function RoleplayChat({ stakeholder, messages, onSend, onEnd, pending, en
       <div className="flex items-start gap-3 border-b border-border p-4">
         <Avatar name={stakeholder.name} size="lg" />
         <div className="min-w-0 flex-1">
-          <p className="text-sm font-semibold text-text">{stakeholder.name}</p>
+          <p className="flex flex-wrap items-center gap-2 text-sm font-semibold text-text">
+            {stakeholder.name}
+            {/* Always say who is speaking: a character played by AI, never a person. */}
+            <Badge tone="neutral">{t("playedByAi")}</Badge>
+          </p>
           <p className="text-xs text-secondary">{stakeholder.role}</p>
           <p className="mt-2 text-sm text-secondary">{stakeholder.context}</p>
         </div>
@@ -103,29 +110,32 @@ export function RoleplayChat({ stakeholder, messages, onSend, onEnd, pending, en
           );
         })}
         {pending ? (
-          <div className="flex items-center gap-2.5 self-start" aria-label={t("typing", { name: stakeholder.name })}>
-            <Avatar name={stakeholder.name} size="sm" />
-            <span className="flex gap-1 rounded-card bg-surface-subtle px-3.5 py-3">
-              {[0, 1, 2].map((i) => (
-                <span
-                  key={i}
-                  className="size-1.5 rounded-full bg-mark-muted animate-pulse-soft"
-                  style={{ animationDelay: `${i * 0.2}s` }}
-                />
-              ))}
-            </span>
-          </div>
+          <p className="self-start text-xs text-tertiary" role="status">
+            {t("replying", { name: stakeholder.name })}
+          </p>
         ) : null}
         {ended ? <p className="self-center text-xs text-tertiary">{t("ended")}</p> : null}
       </div>
 
       {dictation.listening || dictation.error ? (
         <p className="border-t border-border px-4 py-2 text-xs text-secondary" role="status" dir="auto">
-          {dictation.error ? t("dictationError") : dictation.interim ? <span className="italic">{dictation.interim}</span> : t("listening")}
+          {dictation.error ? (
+            dictation.error === "not-allowed" || dictation.error === "service-not-allowed" ? t("micBlocked") : t("dictationError")
+          ) : dictation.interim ? (
+            <span className="italic">{dictation.interim}</span>
+          ) : (
+            t("dictationEdit")
+          )}
         </p>
       ) : null}
+      <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 border-t border-border px-4 pt-2.5 text-[11px] text-tertiary">
+        <span>{t("disclosure", { name: stakeholder.name })}</span>
+        {maxTurns && !ended ? (
+          <span className="shrink-0 tabular">{t("turns", { n: Math.min(maxTurns, messages.filter((m) => m.from === "candidate").length + 1), max: maxTurns })}</span>
+        ) : null}
+      </div>
       <form
-        className="flex items-end gap-2 border-t border-border p-3"
+        className="flex items-end gap-2 p-3 pt-2"
         onSubmit={(e) => {
           e.preventDefault();
           send();

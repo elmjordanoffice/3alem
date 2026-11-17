@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Alert } from "@/components/ui/alert";
 import { LevelMeter, SkillChip } from "./level";
 import { EvidenceCard } from "./evidence-card";
+import { AdjustControl, OpenAnswer, ReviewBanner, ReviewProvider, useReview, type ReviewInfo } from "./review";
 import { SkillRadar } from "./charts";
 import { useLocaleSettings, useNumbers } from "@/components/providers";
 import { SENIORITY_LEVEL } from "@/lib/engine/config";
@@ -48,7 +49,7 @@ function EvidenceList({ ids, content, skillNames, max = 3 }: { ids: string[]; co
   return (
     <div className="flex flex-col gap-2">
       {list.map((e) => (
-        <EvidenceCard key={e.id} quote={e.quote} context={evidenceContext(t, e, n)} skill={skillNames[e.skillKey]} confidence={e.confidence} rationale={e.rationale.startsWith("Offline scoring") ? undefined : e.rationale} />
+        <EvidenceCard key={e.id} quote={e.quote} context={evidenceContext(t, e, n)} skill={skillNames[e.skillKey]} confidence={e.confidence} rationale={e.rationale.startsWith("Offline scoring") ? undefined : e.rationale} action={<OpenAnswer scoreId={e.scoreId} />} />
       ))}
     </div>
   );
@@ -78,13 +79,15 @@ function SkillRow({ s, content, skillNames, print }: { s: ReportSkill; content: 
 
 function DomainCard({ d, content, skillNames, print }: { d: ReportDomain; content: ReportContent; skillNames: Record<string, string>; print: boolean }) {
   const t = useTranslations("report");
+  const editable = Boolean(useReview()?.editable) && !print;
   return (
-    <Collapsible.Root className="group" defaultOpen={print}>
-      <Collapsible.Trigger className="flex w-full items-center gap-4 px-4 py-3.5 text-start transition-colors hover:bg-surface-subtle focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus sm:px-5">
+    <Collapsible.Root className="group relative" defaultOpen={print}>
+      <Collapsible.Trigger className={cn("flex w-full items-center gap-4 px-4 py-3.5 text-start transition-colors hover:bg-surface-subtle focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus sm:px-5", editable && "pe-12 sm:pe-14")}>
         <LevelMeter label={d.name} estimate={d.estimate} confidence={d.confidence} range={d.range} className="flex-1" />
         {d.importance === "MUST_HAVE" ? <Badge tone="accent" className="hidden sm:inline-flex">{t("mustHave")}</Badge> : null}
         <ChevronDown className="size-4 shrink-0 text-tertiary transition-transform group-data-[state=open]:rotate-180 print:hidden" aria-hidden />
       </Collapsible.Trigger>
+      <AdjustControl skillKey={d.key} skillName={d.name} range={d.range} />
       <Collapsible.Content className="border-t border-border bg-surface-subtle/50 px-4 sm:px-5">
         {d.subSkills.length ? d.subSkills.map((s) => <SkillRow key={s.key} s={s} content={content} skillNames={skillNames} print={print} />) : <p className="py-3 text-sm text-tertiary">{t("domainBaselineOnly")}</p>}
       </Collapsible.Content>
@@ -171,7 +174,7 @@ function Verdict({ content }: { content: ReportContent }) {
   );
 }
 
-export function HireReport({ content, audience, actions }: { content: ReportContent; audience: ReportAudience; actions?: React.ReactNode }) {
+export function HireReport({ content, audience, actions, review }: { content: ReportContent; audience: ReportAudience; actions?: React.ReactNode; review?: ReviewInfo }) {
   const t = useTranslations("report");
   const n = useNumbers();
   const { locale } = useLocaleSettings();
@@ -193,6 +196,7 @@ export function HireReport({ content, audience, actions }: { content: ReportCont
   ];
 
   return (
+    <ReviewProvider value={forCandidate ? null : (review ?? null)}>
     <div className={cn("grid gap-10", !print && "lg:grid-cols-[12rem_minmax(0,1fr)]")}>
       {!print ? (
         <nav aria-label={t("contents")} className="hidden lg:block print:hidden">
@@ -217,6 +221,7 @@ export function HireReport({ content, audience, actions }: { content: ReportCont
             {actions ? <div className="flex flex-wrap gap-2 print:hidden">{actions}</div> : null}
           </div>
           {content.earlyVersion ? <Alert tone="info" title={t("earlyTitle")}>{t("earlyBody")}</Alert> : null}
+          {!forCandidate ? <ReviewBanner candidateName={content.candidate.name} /> : null}
         </header>
 
         <section id="summary" aria-labelledby="summary-h" className="scroll-mt-24">
@@ -342,5 +347,6 @@ export function HireReport({ content, audience, actions }: { content: ReportCont
         </Section>
       </div>
     </div>
+    </ReviewProvider>
   );
 }

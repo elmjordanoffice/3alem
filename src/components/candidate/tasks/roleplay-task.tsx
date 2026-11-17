@@ -66,6 +66,7 @@ export function RoleplayTask({
           pending={pending}
           ended={ended}
           candidateName={candidateName}
+          maxTurns={rp.maxTurns}
         />
       </div>
       <p className="text-xs text-tertiary">{t("hint")}</p>

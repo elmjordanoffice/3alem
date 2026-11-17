@@ -34,31 +34,31 @@ model User {
   /// Platform staff. Never settable from the client.
   isPlatformAdmin Boolean  @default(false)
 
-  sessions            AuthSession[]
-  accounts            Account[]
-  memberships         Membership[]
-  assessmentSessions  AssessmentSession[]
-  developmentPlans    DevelopmentPlan[]
-  practiceSessions    PracticeSession[]
-  trackEnrollments    TrackEnrollment[]
-  teamMemberships     TeamMember[]
-  consents            Consent[]
+  sessions           AuthSession[]
+  accounts           Account[]
+  memberships        Membership[]
+  assessmentSessions AssessmentSession[]
+  developmentPlans   DevelopmentPlan[]
+  practiceSessions   PracticeSession[]
+  trackEnrollments   TrackEnrollment[]
+  teamMemberships    TeamMember[]
+  consents           Consent[]
 
   @@map("user")
 }
 
 model AuthSession {
-  id        String   @id
-  expiresAt DateTime
-  token     String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  ipAddress String?
-  userAgent String?
-  userId    String
+  id                   String   @id
+  expiresAt            DateTime
+  token                String   @unique
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+  ipAddress            String?
+  userAgent            String?
+  userId               String
   /// The organisation the person is currently working in.
   activeOrganizationId String?
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user                 User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@map("auth_session")
@@ -121,15 +121,16 @@ model Organization {
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
 
-  memberships   Membership[]
-  domains       CompetencyDomain[]
-  competencies  Competency[]
-  templates     AssessmentTemplate[]
-  invitations   Invitation[]
-  sessions      AssessmentSession[]
-  teams         Team[]
-  tracks        Track[]
-  auditLogs     AuditLog[]
+  memberships       Membership[]
+  domains           CompetencyDomain[]
+  competencies      Competency[]
+  templates         AssessmentTemplate[]
+  invitations       Invitation[]
+  sessions          AssessmentSession[]
+  teams             Team[]
+  tracks            Track[]
+  auditLogs         AuditLog[]
+  reportAdjustments ReportAdjustment[]
 
   @@map("organization")
 }
@@ -153,18 +154,18 @@ model Membership {
 
 /// organizationId = null for the built-in Aalim framework.
 model CompetencyDomain {
-  id                         String        @id @default(cuid())
-  organizationId             String?
-  key                        String
-  order                      Int
-  name                       Json
-  description                Json
-  highLevel                  Json
-  generatedFromJobDescription Boolean      @default(false)
-  createdAt                  DateTime      @default(now())
-  updatedAt                  DateTime      @updatedAt
-  organization               Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  competencies               Competency[]
+  id                          String        @id @default(cuid())
+  organizationId              String?
+  key                         String
+  order                       Int
+  name                        Json
+  description                 Json
+  highLevel                   Json
+  generatedFromJobDescription Boolean       @default(false)
+  createdAt                   DateTime      @default(now())
+  updatedAt                   DateTime      @updatedAt
+  organization                Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  competencies                Competency[]
 
   @@unique([organizationId, key])
   @@map("competency_domain")
@@ -209,7 +210,7 @@ enum SkillImportance {
 }
 
 model AssessmentTemplate {
-  id                String         @id @default(cuid())
+  id                String                @id @default(cuid())
   organizationId    String
   createdById       String
   title             String
@@ -218,15 +219,15 @@ model AssessmentTemplate {
   analysis          Json?
   /// Role-specific technical sub-skill map, reviewed by the recruiter.
   technicalSkillMap Json?
-  language          String         @default("en")
-  durationMinutes   Int            @default(50)
+  language          String                @default("en")
+  durationMinutes   Int                   @default(50)
   /// { extraTimeAllowed, untimedAllowed, ... }
-  accommodations    Json           @default("{}")
-  status            TemplateStatus @default(DRAFT)
+  accommodations    Json                  @default("{}")
+  status            TemplateStatus        @default(DRAFT)
   publishedAt       DateTime?
-  createdAt         DateTime       @default(now())
-  updatedAt         DateTime       @updatedAt
-  organization      Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  createdAt         DateTime              @default(now())
+  updatedAt         DateTime              @updatedAt
+  organization      Organization          @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   skillWeights      TemplateSkillWeight[]
   invitations       Invitation[]
   sessions          AssessmentSession[]
@@ -258,24 +259,24 @@ enum InvitationStatus {
 }
 
 model Invitation {
-  id             String             @id @default(cuid())
-  organizationId String
-  templateId     String
-  email          String
-  name           String?
+  id              String             @id @default(cuid())
+  organizationId  String
+  templateId      String
+  email           String
+  name            String?
   /// Hash of the token sent to the candidate. The raw token is never stored.
-  tokenHash      String             @unique
-  status         InvitationStatus   @default(PENDING)
+  tokenHash       String             @unique
+  status          InvitationStatus   @default(PENDING)
   /// { extraTimeMultiplier, untimed, largerText }
-  accommodations Json               @default("{}")
-  expiresAt      DateTime
-  invitedById    String
+  accommodations  Json               @default("{}")
+  expiresAt       DateTime
+  invitedById     String
   candidateUserId String?
-  createdAt      DateTime           @default(now())
-  updatedAt      DateTime           @updatedAt
-  organization   Organization       @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  template       AssessmentTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
-  session        AssessmentSession?
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+  organization    Organization       @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  template        AssessmentTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+  session         AssessmentSession?
 
   @@index([organizationId, templateId])
   @@index([email])
@@ -310,37 +311,43 @@ enum EnginePhase {
 }
 
 model AssessmentSession {
-  id                String             @id @default(cuid())
-  organizationId    String?
+  id                   String                   @id @default(cuid())
+  organizationId       String?
   /// The person being assessed.
-  subjectUserId     String?
-  mode              AssessmentMode
-  templateId        String?
-  invitationId      String?            @unique
-  status            SessionStatus      @default(INVITED)
-  phase             EnginePhase        @default(CALIBRATE)
-  timeBudgetMinutes Int                @default(50)
-  elapsedSeconds    Int                @default(0)
-  currentChapter    Int                @default(1)
-  locale            String             @default("en")
-  accommodations    Json               @default("{}")
-  engineVersion     String
-  startedAt         DateTime?
-  completedAt       DateTime?
-  createdAt         DateTime           @default(now())
-  updatedAt         DateTime           @updatedAt
-  organization      Organization?      @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  subject           User?              @relation(fields: [subjectUserId], references: [id], onDelete: SetNull)
-  template          AssessmentTemplate? @relation(fields: [templateId], references: [id], onDelete: SetNull)
-  invitation        Invitation?        @relation(fields: [invitationId], references: [id], onDelete: SetNull)
-  world             ScenarioWorld?
-  items             Item[]
-  responses         Response[]
-  scores            ItemScore[]
-  snapshots         CandidateModelSnapshot[]
-  hypotheses        Hypothesis[]
-  report            Report?
-  integrityEvents   IntegrityEvent[]
+  subjectUserId        String?
+  mode                 AssessmentMode
+  templateId           String?
+  invitationId         String?                  @unique
+  status               SessionStatus            @default(INVITED)
+  phase                EnginePhase              @default(CALIBRATE)
+  timeBudgetMinutes    Int                      @default(50)
+  elapsedSeconds       Int                      @default(0)
+  currentChapter       Int                      @default(1)
+  locale               String                   @default("en")
+  accommodations       Json                     @default("{}")
+  engineVersion        String
+  /// The candidate asked for a person to review every score before the report is used.
+  humanReviewRequested Boolean                  @default(false)
+  humanReviewedAt      DateTime?
+  humanReviewedById    String?
+  humanReviewNote      String?
+  startedAt            DateTime?
+  completedAt          DateTime?
+  createdAt            DateTime                 @default(now())
+  updatedAt            DateTime                 @updatedAt
+  organization         Organization?            @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  subject              User?                    @relation(fields: [subjectUserId], references: [id], onDelete: SetNull)
+  template             AssessmentTemplate?      @relation(fields: [templateId], references: [id], onDelete: SetNull)
+  invitation           Invitation?              @relation(fields: [invitationId], references: [id], onDelete: SetNull)
+  world                ScenarioWorld?
+  items                Item[]
+  responses            Response[]
+  scores               ItemScore[]
+  snapshots            CandidateModelSnapshot[]
+  hypotheses           Hypothesis[]
+  report               Report?
+  integrityEvents      IntegrityEvent[]
+  adjustments          ReportAdjustment[]
 
   @@index([organizationId, status])
   @@index([subjectUserId])
@@ -349,21 +356,21 @@ model AssessmentSession {
 
 /// The fictional company the session's story takes place in.
 model ScenarioWorld {
-  id               String            @id @default(cuid())
-  sessionId        String            @unique
-  organizationId   String?
-  subjectUserId    String?
-  companyName      String
-  industry         String
+  id             String            @id @default(cuid())
+  sessionId      String            @unique
+  organizationId String?
+  subjectUserId  String?
+  companyName    String
+  industry       String
   /// { premise, setting, chapters[] }
-  summary          Json
+  summary        Json
   /// [{ id, name, role, personality, initials }]
-  cast             Json
+  cast           Json
   /// Storyline hooks and carried-forward consequences.
-  hooks            Json
-  promptVersion    String
-  createdAt        DateTime          @default(now())
-  session          AssessmentSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  hooks          Json
+  promptVersion  String
+  createdAt      DateTime          @default(now())
+  session        AssessmentSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
 
   @@map("scenario_world")
 }
@@ -570,6 +577,27 @@ model Report {
   @@map("report")
 }
 
+/// A reviewer's change to a skill level in a report. One per skill; each change is also in the audit log.
+model ReportAdjustment {
+  id             String            @id @default(cuid())
+  organizationId String
+  sessionId      String
+  /// Domain or sub-skill key from the report.
+  skillKey       String
+  /// The level the reviewer set, on the 1–5 scale.
+  level          Float
+  /// Why: required, shown next to the change.
+  note           String
+  createdById    String
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+  session        AssessmentSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  organization   Organization      @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([sessionId, skillKey])
+  @@map("report_adjustment")
+}
+
 model ReportShareLink {
   id             String    @id @default(cuid())
   reportId       String
@@ -648,34 +676,34 @@ model Track {
 }
 
 model TrackEnrollment {
-  id             String    @id @default(cuid())
-  userId         String
-  trackId        String
+  id                String    @id @default(cuid())
+  userId            String
+  trackId           String
   /// Set when a manager assigned it through Team mode.
-  assignedByTeamId String?
-  completedSessions Int    @default(0)
-  startedAt      DateTime  @default(now())
-  completedAt    DateTime?
-  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  track          Track     @relation(fields: [trackId], references: [id], onDelete: Cascade)
+  assignedByTeamId  String?
+  completedSessions Int       @default(0)
+  startedAt         DateTime  @default(now())
+  completedAt       DateTime?
+  user              User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  track             Track     @relation(fields: [trackId], references: [id], onDelete: Cascade)
 
   @@unique([userId, trackId])
   @@map("track_enrollment")
 }
 
 model PracticeSession {
-  id              String   @id @default(cuid())
-  userId          String
-  competencyKeys  String[]
-  difficulty      Int
-  item            Json
-  response        Json?
+  id             String    @id @default(cuid())
+  userId         String
+  competencyKeys String[]
+  difficulty     Int
+  item           Json
+  response       Json?
   /// Did well (quoted), expert would also consider, one strong approach.
-  feedback        Json?
-  reflectionNote  String?
-  createdAt       DateTime @default(now())
-  completedAt     DateTime?
-  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  feedback       Json?
+  reflectionNote String?
+  createdAt      DateTime  @default(now())
+  completedAt    DateTime?
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, createdAt])
   @@map("practice_session")
@@ -683,16 +711,16 @@ model PracticeSession {
 
 /// The individual's Grow setup. Private to them.
 model GrowProfile {
-  id               String   @id @default(cuid())
-  userId           String   @unique
-  currentRole      String
-  experienceYears  Int
-  goal             String
+  id              String   @id @default(cuid())
+  userId          String   @unique
+  currentRole     String
+  experienceYears Int
+  goal            String
   /// Role family the goal points to (drives domain weights and technical skills).
-  targetFamily     String
-  hoursPerWeek     Int
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  targetFamily    String
+  hoursPerWeek    Int
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
   @@map("grow_profile")
 }
@@ -868,14 +896,14 @@ model OutcomeRating {
 
 /// Outbound webhooks for applicant-tracking systems.
 model Webhook {
-  id              String   @id @default(cuid())
+  id              String            @id @default(cuid())
   organizationId  String
   url             String
   /// Signing secret, encrypted with the app key.
   secretEncrypted String
   events          String[]
-  active          Boolean  @default(true)
-  createdAt       DateTime @default(now())
+  active          Boolean           @default(true)
+  createdAt       DateTime          @default(now())
   deliveries      WebhookDelivery[]
 
   @@index([organizationId])

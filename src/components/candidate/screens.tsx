@@ -2,7 +2,7 @@
 import * as React from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { Clock, Coffee, Lock, PauseCircle, ShieldCheck, Wifi } from "lucide-react";
+import { Clock, Coffee, Lock, PauseCircle, Route, ShieldCheck, Sparkles, UserCheck, Wifi } from "lucide-react";
 import type { Branding, CandidateView, PublicWorld } from "@/lib/hire/candidate-state";
 import { setLocale, setTextSize } from "@/app/actions/preferences";
 import { Button } from "@/components/ui/button";
@@ -13,6 +13,8 @@ import { Alert } from "@/components/ui/alert";
 import { Person } from "@/components/ui/avatar";
 import { useLocaleSettings, useNumbers } from "@/components/providers";
 import { CandidateShell } from "./shell";
+import { AiExplainer } from "./ai-explainer";
+import { PracticeScene } from "./practice-scene";
 import { cn } from "@/lib/utils";
 
 type View<K extends CandidateView["view"]> = Extract<CandidateView, { view: K }>;
@@ -31,7 +33,7 @@ export function StateScreen({ branding, icon: Icon, title, body }: { branding?: 
   );
 }
 
-export function Landing({ v, onStart }: { v: View<"landing">; onStart: (o: { locale: "en" | "ar"; extraTime: 1 | 1.25 | 1.5; untimed: boolean; largerText: boolean }) => Promise<void> }) {
+export function Landing({ v, onStart }: { v: View<"landing">; onStart: (o: { locale: "en" | "ar"; extraTime: 1 | 1.25 | 1.5; untimed: boolean; largerText: boolean; humanReview: boolean }) => Promise<void> }) {
   const t = useTranslations("candidate.landing");
   const n = useNumbers();
   const router = useRouter();
@@ -41,6 +43,7 @@ export function Landing({ v, onStart }: { v: View<"landing">; onStart: (o: { loc
   const [untimed, setUntimed] = React.useState(false);
   const [largerText, setLargerText] = React.useState(false);
   const [consent, setConsent] = React.useState(false);
+  const [humanReview, setHumanReview] = React.useState(false);
   const [pending, setPending] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
 
@@ -59,7 +62,7 @@ export function Landing({ v, onStart }: { v: View<"landing">; onStart: (o: { loc
           <p className="reading text-lg leading-relaxed text-secondary">{t("intro", { minutes: n.number(v.minutes) })}</p>
 
           <ul className="mt-2 grid gap-x-8 gap-y-6 sm:grid-cols-2">
-            {(["story", "noTricks", "pause", "people"] as const).map((k) => (
+            {(["story", "adapts", "noTricks", "pause", "people"] as const).map((k) => (
               <li key={k} className="flex flex-col gap-1.5 border-t border-border pt-4">
                 <span className="font-semibold text-text">{t(`expect.${k}.title`)}</span>
                 <span className="text-sm leading-relaxed text-secondary">{t(`expect.${k}.body`)}</span>
@@ -67,7 +70,7 @@ export function Landing({ v, onStart }: { v: View<"landing">; onStart: (o: { loc
             ))}
           </ul>
 
-          <section aria-labelledby="data-use" className="rounded-card bg-surface shadow-card-subtle p-5">
+          <section aria-labelledby="data-use" className="rounded-card bg-surface-subtle shadow-[inset_0_0_0_1px_var(--border)] p-5">
             <h2 id="data-use" className="flex items-center gap-2 text-sm font-semibold text-text">
               <ShieldCheck className="size-4 text-accent-text" aria-hidden />
               {t("data.title")}
@@ -77,6 +80,17 @@ export function Landing({ v, onStart }: { v: View<"landing">; onStart: (o: { loc
                 <li key={k}>{t(`data.${k}`, { org: v.branding.orgName })}</li>
               ))}
             </ul>
+            <AiExplainer
+              org={v.branding.orgName}
+              humanReview={humanReview}
+              onHumanReviewChange={setHumanReview}
+              trigger={
+                <button type="button" className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-accent-text underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-focus">
+                  <Sparkles className="size-4" aria-hidden />
+                  {t("aiLink")}
+                </button>
+              }
+            />
           </section>
         </section>
 
@@ -130,28 +144,45 @@ export function Landing({ v, onStart }: { v: View<"landing">; onStart: (o: { loc
             </fieldset>
           ) : null}
 
+          {humanReview ? (
+            <p className="flex items-start gap-2 rounded-control bg-accent-subtle px-3 py-2 text-sm text-accent-text" role="status">
+              <UserCheck className="mt-0.5 size-4 shrink-0" aria-hidden />
+              {t("humanReviewOn")}
+            </p>
+          ) : null}
           <div className="flex items-start gap-2.5 border-t border-border pt-4">
             <Checkbox id="consent" checked={consent} onCheckedChange={(c) => setConsent(c === true)} className="mt-0.5" />
             <Label htmlFor="consent" className="font-normal leading-snug">{t("consent", { org: v.branding.orgName })}</Label>
           </div>
           {error ? <Alert tone="critical">{error}</Alert> : null}
-          <Button
-            size="lg"
-            disabled={!consent}
-            loading={pending}
-            onClick={async () => {
-              setPending(true);
-              setError(null);
-              try {
-                await onStart({ locale, extraTime: Number(extraTime) as 1 | 1.25 | 1.5, untimed, largerText });
-              } catch {
-                setError(t("startError"));
-                setPending(false);
+          <div className="flex flex-col gap-2 sm:flex-row">
+            <PracticeScene
+              trigger={
+                <Button size="lg" variant="secondary" className="sm:flex-1">
+                  {t("practice")}
+                </Button>
               }
-            }}
-          >
-            {t("continue")}
-          </Button>
+            />
+            <Button
+              size="lg"
+              className="sm:flex-1"
+              disabled={!consent}
+              loading={pending}
+              onClick={async () => {
+                setPending(true);
+                setError(null);
+                try {
+                  await onStart({ locale, extraTime: Number(extraTime) as 1 | 1.25 | 1.5, untimed, largerText, humanReview });
+                } catch {
+                  setError(t("startError"));
+                  setPending(false);
+                }
+              }}
+            >
+              {t("continue")}
+            </Button>
+          </div>
+          <p className="-mt-2 text-xs text-tertiary">{t("practiceNote")}</p>
           <p className="text-xs text-tertiary">{t("minutesNote", { minutes: n.number(v.minutes) })}</p>
         </aside>
       </div>
@@ -175,6 +206,7 @@ export function Briefing({ v, onBegin }: { v: View<"briefing">; onBegin: () => P
               { icon: Coffee, k: "quiet" },
               { icon: Clock, k: "time" },
               { icon: PauseCircle, k: "pause" },
+              { icon: Route, k: "noBack" },
               { icon: Wifi, k: "offline" },
             ].map(({ icon: Icon, k }) => (
               <li key={k} className="flex gap-4">

@@ -7,6 +7,7 @@ import { reportsForCompare } from "@/lib/hire/recruiter";
 import { PageContainer, PageHeader } from "@/components/app/page-header";
 import { CompareView } from "@/components/recruiter/compare-view";
 import { EmptyState } from "@/components/ui/empty-state";
+import { Alert } from "@/components/ui/alert";
 import { Columns3 } from "lucide-react";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -27,6 +28,11 @@ export default async function ComparePage({ params, searchParams }: { params: Pr
         {t("back")}
       </Link>
       <PageHeader title={t("title")} description={t("description")} />
+      {reports.some((r) => r.reviewPending) ? (
+        <Alert tone="warning" className="mb-8" title={t("reviewPendingTitle")}>
+          {t("reviewPendingBody", { names: reports.filter((r) => r.reviewPending).map((r) => r.name).join(", ") })}
+        </Alert>
+      ) : null}
       {reports.length < 2 ? <EmptyState icon={Columns3} title={t("emptyTitle")} description={t("emptyBody")} /> : <CompareView reports={reports} />}
     </PageContainer>
   );

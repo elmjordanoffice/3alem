@@ -44,7 +44,7 @@ export function ChainTask({ itemId, content, onChange, onSaveState, disabled }: 
         ))}
       </ol>
       {consequence ? (
-        <div className="rounded-card bg-surface shadow-card-subtle p-4 animate-slide-up">
+        <div className="rounded-card bg-surface-subtle shadow-[inset_0_0_0_1px_var(--border)] p-4 animate-slide-up">
           <p className="text-[13px] font-medium text-tertiary">{t("whatHappened")}</p>
           <p className="mt-1.5 text-[15px] leading-relaxed text-text" dir="auto">
             {consequence}

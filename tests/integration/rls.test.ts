@@ -1,6 +1,7 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { randomUUID } from "node:crypto";
 import { PrismaPg } from "@prisma/adapter-pg";
+import { serialPool } from "@/lib/db-pool";
 import { PrismaClient } from "@/generated/prisma/client";
 import { createClients } from "@/lib/db-core";
 
@@ -16,7 +17,7 @@ describe.skipIf(!ready)("row-level security", () => {
   const clients = createClients({
     systemUrl,
     appUrl,
-    makeClient: (url) => new PrismaClient({ adapter: new PrismaPg({ connectionString: url }) }),
+    makeClient: (url) => new PrismaClient({ adapter: new PrismaPg(serialPool(url)) }),
   });
   const { system, withTenant } = clients;
   const run = randomUUID().slice(0, 8);

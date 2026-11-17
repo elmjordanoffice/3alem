@@ -63,7 +63,7 @@ export function PracticeRunner({ id, item, feedback, reflection, answerText }: {
         <section className="flex min-w-0 flex-col gap-5">
           {twist ? <div className="rounded-card border border-warning/30 bg-warning-subtle p-4 text-[15px] text-text" dir="auto">{c.twist!.change}</div> : <p className="text-[15px] font-medium text-text" dir="auto">{c.task.prompt}</p>}
           {feedback && answerText ? (
-            <div className="flex flex-col gap-2 rounded-card bg-surface shadow-card-subtle p-4">
+            <div className="flex flex-col gap-2 rounded-card bg-surface-subtle shadow-[inset_0_0_0_1px_var(--border)] p-4">
               <span className="text-[13px] font-medium text-tertiary">{t("yourAnswer")}</span>
               <p className="whitespace-pre-line text-[15px] leading-relaxed text-text" dir="auto">{answerText}</p>
             </div>

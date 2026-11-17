@@ -44,7 +44,7 @@ export async function inviteMembers(viewer: OrgViewer, teamId: string, emails: {
   const team = await withTenant(tenantOf(viewer), (tx) => tx.team.findUnique({ where: { id: teamId } }));
   if (!team) throw new Error("Not found");
   const created: { email: string; link: string }[] = [];
-  for (const { email, name } of emails) {
+  for (const { email } of emails) {
     const token = generateToken();
     const exists = await withTenant(tenantOf(viewer), (tx) => tx.teamMember.findUnique({ where: { teamId_email: { teamId, email } } }));
     if (exists && exists.status !== "DECLINED" && exists.status !== "REMOVED") continue;

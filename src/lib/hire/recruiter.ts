@@ -128,7 +128,12 @@ export async function reportsForCompare(viewer: Viewer, sessionIds: string[]) {
     return sessionIds
       .map((id) => reports.find((r) => r.sessionId === id))
       .filter((r): r is NonNullable<typeof r> => Boolean(r))
-      .map((r) => ({ sessionId: r.sessionId, name: r.session.invitation?.name ?? r.session.invitation?.email ?? "", content: r.content as unknown as ReportContent }));
+      .map((r) => ({
+        sessionId: r.sessionId,
+        name: r.session.invitation?.name ?? r.session.invitation?.email ?? "",
+        content: r.content as unknown as ReportContent,
+        reviewPending: r.session.humanReviewRequested && !r.session.humanReviewedAt,
+      }));
   });
 }
 

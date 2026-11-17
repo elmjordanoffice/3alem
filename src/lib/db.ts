@@ -2,6 +2,7 @@ import "server-only";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "@/generated/prisma/client";
 import { createClients, type Db, type TenantContext } from "./db-core";
+import { serialPool } from "./db-pool";
 
 /**
  * Two database clients:
@@ -21,7 +22,7 @@ const clients =
   createClients({
     systemUrl: requireEnv("DATABASE_URL"),
     appUrl: process.env.DATABASE_APP_URL ?? requireEnv("DATABASE_URL"),
-    makeClient: (url) => new PrismaClient({ adapter: new PrismaPg({ connectionString: url }) }),
+    makeClient: (url) => new PrismaClient({ adapter: new PrismaPg(serialPool(url)) }),
   });
 
 if (process.env.NODE_ENV !== "production") globalForDb.aalimDb = clients;

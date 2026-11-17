@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { chromium } from "playwright-core";
 import { getViewer, viewerCan } from "@/lib/auth/session";
 import { reportForViewer } from "@/lib/hire/recruiter";
+import { reviewForViewer, reviewPending } from "@/lib/hire/review";
 import { audit } from "@/lib/audit";
 
 export const runtime = "nodejs";
@@ -16,6 +17,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ sess
   const { sessionId } = await params;
   const r = await reportForViewer(viewer, sessionId);
   if (!r?.report?.content) return NextResponse.json({ error: "not_found" }, { status: 404 });
+  if (reviewPending((await reviewForViewer(viewer, sessionId))?.review)) return NextResponse.json({ error: "review_pending" }, { status: 409 });
 
   const origin = req.nextUrl.origin;
   const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined, args: ["--no-sandbox"] });

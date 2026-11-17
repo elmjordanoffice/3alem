@@ -287,13 +287,13 @@ Status against the current build: **✓ exists** · **△ change** · **＋ new*
 
 ### Candidate flow · رحلة المرشّح (`/a/[token]`)
 1. ✓ Invitation email · رسالة الدعوة. Branded and bilingual, in the candidate's language.
-2. △ Pre-start card · بطاقة ما قبل البدء. Add adaptive-behaviour and who-sees-results lines, "How AI is used", a microphone check, and Practice beside Start (P2, P3, P6).
-3. ＋ Practice scene · مشهد تدريبي. Untimed, not scored, all item types (P3).
-4. ＋ How AI is used · كيف يُستخدم الذكاء الاصطناعي. Includes the human-only review request (P6).
+2. ✓ Pre-start card · بطاقة ما قبل البدء. Adaptive-behaviour line, who sees results, "How AI is used", and Practice beside Start (P2, P3, P6). *Built.* The microphone message appears in the role-play itself when access is off.
+3. ✓ Practice scene · مشهد تدريبي. Untimed, not scored or saved (P3). *Built* as one message-and-choice scene; more item types later.
+4. ✓ How AI is used · كيف يُستخدم الذكاء الاصطناعي. With the request for a person to review every score (P6). *Built.*
 5. ✓ Briefing · الإحاطة. The fictional company and the week ahead.
-6. △ Task screens · شاشات المهام: message, ranking, choice, written answer, inbox, chain, role-play. Add a turn counter, editable voice transcript and "Type instead" to role-play (P5).
+6. ✓ Task screens · شاشات المهام: message, ranking, choice, written answer, inbox, chain, role-play. Role-play now says "Played by AI", has the disclosure by the input, a reply counter, a calm "replying" line and a clear microphone message; dictation already fills the box for editing, and typing is always available (P5). *Built.*
 7. ✓ Between chapters, pause and resume · بين الفصول، الإيقاف المؤقت والاستئناف.
-8. △ Finish · الإنهاء. In an adaptive test earlier answers can't be revisited, so say so before the last scene instead of offering a misleading review step.
+8. ✓ No going back · لا رجوع. Said upfront, on the pre-start card and in the briefing, instead of a misleading review step at the end. *Built.*
 9. ✓ Complete, feedback and optional fairness questions · الاكتمال والملاحظات وأسئلة العدالة الاختيارية.
 10. ＋ Candidate summary · ملخّص المرشّح. If the employer enables it (P10).
 
@@ -303,7 +303,7 @@ Status against the current build: **✓ exists** · **△ change** · **＋ new*
 3. ✓ Preview as candidate · المعاينة كمرشّح.
 4. △ Invite · الدعوة. Add pre-granted extra time per invitation and the candidate-summary switch (P4, P10).
 5. ✓ Candidates and pipeline · المرشّحون ومسار التوظيف.
-6. △ Report · التقرير. Add citation chips with open-in-context, noted overrides, and "context, never a verdict" integrity (P8).
+6. ✓ Report · التقرير. "Read the full answer" on every quote (the scene and the whole answer, with the quote marked), reviewer adjustments with a required note shown on the report and in the audit log, a human-review banner that keeps sharing and PDF off until confirmed, and "context for the reviewer, never a verdict" (P6, P8). *Built.*
 7. ＋ Interview kit · عُدّة المقابلة. A blind scorecard from the gaps (P9).
 8. ✓ Compare candidates · مقارنة المرشّحين.
 9. ✓ Share link and PDF · رابط المشاركة وملف PDF.

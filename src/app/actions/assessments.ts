@@ -207,6 +207,8 @@ export async function shareReport(input: z.input<typeof shareSchema>): Promise<R
   const result = await withTenant(tenantOf(viewer), async (tx) => {
     const report = await tx.report.findUnique({ where: { sessionId: p.data.sessionId }, include: { session: { include: { invitation: true, template: true } } } });
     if (!report || report.status !== "READY") return null;
+    // The candidate asked for a person to review every score: nothing leaves until someone has.
+    if (report.session.humanReviewRequested && !report.session.humanReviewedAt) return "reviewPending" as const;
     await tx.reportShareLink.create({
       data: { reportId: report.id, organizationId: report.organizationId, subjectUserId: report.subjectUserId, tokenHash: hashToken(token), audience: p.data.audience, expiresAt, createdById: viewer.user.id },
     });
@@ -214,6 +216,7 @@ export async function shareReport(input: z.input<typeof shareSchema>): Promise<R
     return report;
   });
   if (!result) return { ok: false, error: "notReady" };
+  if (result === "reviewPending") return { ok: false, error: "reviewPending" };
   const link = `${appUrl()}/r/${token}`;
   if (p.data.audience === "candidate" && result.session.invitation?.email) {
     const lang = (result.content as { language?: string } | null)?.language === "ar" ? "ar" : "en";

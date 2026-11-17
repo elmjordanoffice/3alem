@@ -11,7 +11,7 @@ import { CandidateShell } from "./shell";
 
 /** Server actions the app drives, already bound to a candidate token or a Grow session. */
 export interface CandidateApi {
-  start?: (o: { locale: "en" | "ar"; extraTime: 1 | 1.25 | 1.5; untimed: boolean; largerText: boolean; consent: true }) => Promise<CandidateView>;
+  start?: (o: { locale: "en" | "ar"; extraTime: 1 | 1.25 | 1.5; untimed: boolean; largerText: boolean; consent: true; humanReview: boolean }) => Promise<CandidateView>;
   begin: () => Promise<CandidateView>;
   submit: (p: SubmitPayload) => Promise<{ ok: boolean; error?: string; view: CandidateView }>;
   roleplay: (input: { itemId: string; clientId: string; text: string }) => Promise<{ ok: boolean; reply?: string; ended?: boolean }>;

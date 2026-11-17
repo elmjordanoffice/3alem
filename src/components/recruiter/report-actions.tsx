@@ -16,9 +16,12 @@ export function ReportActions({
   canShare,
   shareLinks,
   sharedWithCandidate,
+  reviewPending = false,
 }: {
   sessionId: string;
   canShare: boolean;
+  /** The candidate asked for a human review that nobody has confirmed yet. */
+  reviewPending?: boolean;
   shareLinks: { id: string; audience: string; expiresAt: string; expired: boolean }[];
   sharedWithCandidate: boolean;
 }) {
@@ -37,6 +40,8 @@ export function ReportActions({
       <Button
         variant="secondary"
         loading={pdfPending}
+        disabled={reviewPending}
+        title={reviewPending ? t("reviewPending") : undefined}
         onClick={async () => {
           setPdfPending(true);
           try {
@@ -63,7 +68,7 @@ export function ReportActions({
         <>
           <Dialog open={open !== null} onOpenChange={(o) => (o ? null : (setOpen(null), setLink(null)))}>
             <DialogTrigger asChild>
-              <Button variant="secondary" onClick={() => setOpen("team")}>
+              <Button variant="secondary" onClick={() => setOpen("team")} disabled={reviewPending} title={reviewPending ? t("reviewPending") : undefined}>
                 <Share2 aria-hidden />
                 {t("share")}
               </Button>
@@ -154,7 +159,7 @@ export function ReportActions({
               </DialogFooter>
             </DialogContent>
           </Dialog>
-          <Button variant="ghost" onClick={() => setOpen("candidate")}>
+          <Button variant="ghost" onClick={() => setOpen("candidate")} disabled={reviewPending} title={reviewPending ? t("reviewPending") : undefined}>
             <Send aria-hidden />
             {sharedWithCandidate ? t("resendCandidate") : t("toCandidate")}
           </Button>

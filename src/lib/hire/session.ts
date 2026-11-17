@@ -52,7 +52,7 @@ export async function candidateContext(token: string) {
 /** Consent given: create the session, the candidate's identity and the world. */
 export async function startSession(
   token: string,
-  opts: { locale: "en" | "ar"; accommodations: CandidateAccommodations; consent: boolean },
+  opts: { locale: "en" | "ar"; accommodations: CandidateAccommodations; consent: boolean; humanReview?: boolean },
 ) {
   const ctx = await candidateContext(token);
   if (ctx.state !== "valid") throw new Error(`Invitation ${ctx.state}`);
@@ -86,6 +86,7 @@ export async function startSession(
         locale: opts.locale,
         accommodations: opts.accommodations as unknown as Prisma.InputJsonValue,
         engineVersion: ENGINE_VERSION,
+        humanReviewRequested: opts.humanReview ?? false,
         startedAt: new Date(),
       },
     });
