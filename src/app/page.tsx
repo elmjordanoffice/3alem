@@ -313,7 +313,7 @@ export default async function Home() {
               {/* The safeguard, shown: selection rates by group against the four-fifths line. */}
               <figure className="fade-up card-night mt-10 rounded-[20px] p-6" style={{ "--d": "200ms" } as React.CSSProperties}>
                 <figcaption className="text-sm font-medium">{t("bento.fairness.title")}</figcaption>
-                <div className="relative mt-5 flex flex-col gap-3" dir="ltr" role="img" aria-label={t("bento.fairness.chart")}>
+                <div className="relative mt-5 flex flex-col gap-3" role="img" aria-label={t("bento.fairness.chart")}>
                   {(
                     [
                       ["a", 1],
@@ -322,15 +322,15 @@ export default async function Home() {
                     ] as const
                   ).map(([k, v]) => (
                     <div key={k} className="grid grid-cols-[4.5rem_minmax(0,1fr)_2.5rem] items-center gap-3">
-                      <span className="truncate text-xs text-ink-secondary" dir="auto">{t(`bento.fairness.${k}`)}</span>
+                      <span className="truncate text-xs text-ink-secondary">{t(`bento.fairness.${k}`)}</span>
                       <span className="h-2.5 rounded-full bg-ink-foreground/10">
                         <span className="block h-full rounded-full bg-sidebar-accent" style={{ width: `${v * 100}%` }} />
                       </span>
-                      <span className="text-end text-xs text-ink-secondary tabular">{Math.round(v * 100)}%</span>
+                      <span className="text-end text-xs text-ink-secondary tabular" dir="ltr">{Math.round(v * 100)}%</span>
                     </div>
                   ))}
-                  <span className="pointer-events-none absolute -bottom-2 -top-2 w-px border-s border-dashed border-ink-foreground/60" style={{ left: "calc(4.5rem + 0.75rem + (100% - 4.5rem - 2.5rem - 1.5rem) * 0.8)" }} aria-hidden>
-                    <span className="absolute start-0 top-full mt-1.5 -translate-x-1/2 whitespace-nowrap text-[11px] text-ink-secondary" dir="auto">
+                  <span className="pointer-events-none absolute -bottom-2 -top-2 w-px border-s border-dashed border-ink-foreground/60" style={{ insetInlineStart: "calc(4.5rem + 0.75rem + (100% - 4.5rem - 2.5rem - 1.5rem) * 0.8)" }} aria-hidden>
+                    <span className="absolute start-0 top-full mt-1.5 -translate-x-1/2 whitespace-nowrap text-[11px] text-ink-secondary rtl:translate-x-1/2">
                       {t("bento.fairness.line")}
                     </span>
                   </span>
