@@ -169,7 +169,7 @@
     "figure": {
       "label": "A candidate report in Aalim",
       "crumbRole": "Operations Planner",
-      "candidate": "Hana Al-Sayed",
+      "candidate": "Rania Khalil",
       "share": "Share",
       "role": "Operations Planner · Qamar Logistics",
       "confidence": "High confidence",
@@ -197,7 +197,7 @@
     "bento": {
       "hire": {
         "header": "Operations Planner · 18 candidates",
-        "c1": "Hana Al-Sayed",
+        "c1": "Rania Khalil",
         "c2": "Priya Raman",
         "c3": "Mateo Fernández",
         "skill1": "Priorities",
@@ -259,7 +259,8 @@
         "one": "The world",
         "two": "The range",
         "three": "The evidence"
-      }
+      },
+      "noEvidence": "No evidence yet"
     },
     "product": {
       "eyebrow": "The report",

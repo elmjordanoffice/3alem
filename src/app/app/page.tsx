@@ -70,7 +70,7 @@ export default async function AppHome({ searchParams }: { searchParams: Promise<
         <div className="absolute inset-y-0 end-0 -z-10 w-full [mask-image:linear-gradient(to_left,#000_30%,transparent_85%)] sm:w-[70%] rtl:[mask-image:linear-gradient(to_right,#000_30%,transparent_85%)]" aria-hidden>
           <EvidenceField horizon={0.06} spread={2.6} speed={0.2} intensity={0.8} bloom={0.45} palette="quiet" />
         </div>
-        <div className="flex flex-wrap items-end justify-between gap-6 p-6 sm:p-8 lg:p-10">
+        <div className="flex flex-col items-start gap-6 p-6 sm:p-8 lg:p-10">
           <div className="min-w-0 max-w-2xl">
             <p className="text-sm text-ink-secondary">{org ? t("dateAt", { date: fmt.date, org: org.name }) : fmt.date}</p>
             <h1 id="brief-h" className="mt-2 text-[2.25rem] font-semibold leading-[1.1] sm:text-[2.75rem]">{t("greeting", { name: firstName })}</h1>

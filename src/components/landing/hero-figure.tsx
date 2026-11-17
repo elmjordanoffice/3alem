@@ -1,5 +1,5 @@
 import type * as React from "react";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { MessageSquareText, Share2 } from "lucide-react";
 import { LogoMark } from "@/components/brand/logo";
 import { Avatar } from "@/components/ui/avatar";
@@ -17,6 +17,7 @@ export async function HeroFigure() {
   const td = await getTranslations("landing.demo");
   const tl = await getTranslations("levels");
   const tf = await getTranslations("home.fit");
+  const [qo, qc] = (await getLocale()) === "ar" ? ["«", "»"] : ["“", "”"];
 
   const skills = [
     { key: "priorities", low: 3.6, high: 4.2, est: 3.9, expected: 4, level: tl("4") },
@@ -74,7 +75,9 @@ export async function HeroFigure() {
                   {i === 0 ? (
                     <blockquote className="mt-3.5 border-s-2 border-saffron ps-3.5 text-sm leading-relaxed text-secondary">
                       <p>
-                        “{td("answerStart")} <mark className="evidence-mark">{td("answerEvidence")}</mark> {td("answerEnd")}”
+                        {qo}
+                        {td("answerStart")} <mark className="evidence-mark">{td("answerEvidence")}</mark> {td("answerEnd")}
+                        {qc}
                       </p>
                       <footer className="mt-1.5 text-xs text-tertiary">{t("evidenceSource")}</footer>
                     </blockquote>

@@ -31,8 +31,8 @@ export function RangeScale({
   const pct = (v: number) => ((Math.min(5, Math.max(1, v)) - 1) / 4) * 100;
   const h = size === "lg" ? "h-3" : size === "sm" ? "h-1.5" : "h-2";
   const dot = size === "lg" ? "size-4" : size === "sm" ? "size-2.5" : "size-3";
-  const band = tone === "ink" ? "bg-saffron/85" : "bg-accent/25";
-  const fill = tone === "ink" ? "bg-ink-foreground" : "bg-accent";
+  const band = tone === "ink" ? "bg-saffron/85" : "bg-saffron/75";
+  const fill = tone === "ink" ? "bg-ink-foreground" : "bg-ink dark:bg-ink-foreground";
   const track = tone === "ink" ? "bg-ink-foreground/10" : "bg-level-empty";
   return (
     <div className={cn("w-full", className)} aria-hidden>

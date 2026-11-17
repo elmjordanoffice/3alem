@@ -131,7 +131,7 @@ function Verdict({ content }: { content: ReportContent }) {
             {t(`confidence.${conf}`)}
           </p>
           <p className="mt-8 text-[17px] leading-relaxed" dir="auto">{content.narrative.portrait}</p>
-          <p className="mt-auto pt-8 text-xs text-ink-secondary">{t("fitNote")}</p>
+          <p className="mt-auto pt-8 text-sm text-ink-secondary">{t("fitNote")}</p>
         </div>
         <div className="flex flex-col">
           <div className="flex items-baseline justify-between gap-3">

@@ -405,13 +405,15 @@
 .film-range-band {
   inset-inline-start: calc(6% + var(--k) * 59.5%);
   width: calc(88% - var(--k) * 73%);
-  background: color-mix(in srgb, var(--glow-lavender) calc((1 - var(--k)) * 100%), var(--saffron));
+  background: color-mix(in srgb, var(--glow-lavender) calc((1 - var(--k)) * 100%), color-mix(in srgb, var(--saffron) 85%, transparent));
 }
 .film-range-dot { inset-inline-start: calc(50% + var(--k) * 22.5% - 9px); }
 .film-scene { counter-reset: scene var(--scene); }
 .film-scene::after { content: counter(scene); }
 .film-settled { opacity: clamp(0, calc((var(--k) - 0.85) * 7), 1); }
 .film-mark {
+  /* <mark> has a yellow UA background; only the sweep should show. */
+  background-color: transparent;
   background-image: linear-gradient(var(--highlight), var(--highlight));
   border-radius: 0.25em;
   background-repeat: no-repeat;
@@ -472,7 +474,7 @@
 }
 /* Glass navigation: links materialise a raised pill on hover. */
 .nav-glass {
-  background: rgb(7 8 28 / 0.55);
+  background: rgb(7 8 28 / 0.8);
   backdrop-filter: blur(16px) saturate(140%);
   -webkit-backdrop-filter: blur(16px) saturate(140%);
   box-shadow: inset 0 0 0 1px rgb(245 244 255 / 0.09), inset 0 1px 0 rgb(245 244 255 / 0.08), 0 12px 32px -12px rgb(0 0 0 / 0.6);
@@ -499,7 +501,7 @@
     0 28px 56px -18px rgb(3 3 12 / 0.7),
     0 0 90px -30px rgb(143 146 247 / 0.45);
 }
-.dark .card-lit { box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.1), 0 0 0 1px rgb(255 255 255 / 0.06), 0 28px 56px -18px rgb(0 0 0 / 0.75), 0 0 90px -30px rgb(143 146 247 / 0.35); }
+.dark .card-lit { background-color: #191b47; box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.1), 0 0 0 1px rgb(255 255 255 / 0.06), 0 28px 56px -18px rgb(0 0 0 / 0.75), 0 0 90px -30px rgb(143 146 247 / 0.35); }
 .card-night {
   background-color: #151744;
   background-image: linear-gradient(180deg, rgb(245 244 255 / 0.07), rgb(245 244 255 / 0) 40%);
@@ -510,7 +512,7 @@
     0 0 90px -30px rgb(143 146 247 / 0.4);
 }
 /* The hero's call to action carries a lavender halo so it wins the squint test. */
-.cta-halo { box-shadow: inset 0 1px 0 #fff, 0 0 0 1px rgb(255 255 255 / 0.4), 0 0 0 7px rgb(143 146 247 / 0.14), 0 14px 44px -8px rgb(143 146 247 / 0.7); }
+.cta-halo { background-color: #fff; box-shadow: inset 0 1px 0 #fff, 0 0 0 1px #fff, 0 0 0 6px rgb(165 168 250 / 0.22), 0 16px 48px -6px rgb(165 168 250 / 0.8); }
 .cta-halo:hover { box-shadow: inset 0 1px 0 #fff, 0 0 0 1px rgb(255 255 255 / 0.5), 0 0 0 9px rgb(143 146 247 / 0.18), 0 18px 54px -8px rgb(143 146 247 / 0.85); }
 /* While the hero's call to action is on screen, the nav's steps back to a ghost. */
 html[data-hero="1"] .nav-cta {
@@ -519,3 +521,7 @@ html[data-hero="1"] .nav-cta {
   color: var(--ink-foreground);
   box-shadow: inset 0 0 0 1px rgb(245 244 255 / 0.2);
 }
+
+/* The hero's foreground row: the closest estimate in the field, labelled, with no evidence yet. */
+.hero-row-band { inset-inline-start: 12%; width: 76%; background: color-mix(in srgb, var(--glow-lavender) 70%, transparent); }
+.hero-row-dot { inset-inline-start: calc(52% - 8px); }
