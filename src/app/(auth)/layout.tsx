@@ -3,7 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { Logo } from "@/components/brand/logo";
 import { LanguageToggle, ThemeMenu } from "@/components/app/preference-controls";
 import { RangeScale } from "@/components/report/range-scale";
-import { RangeField } from "@/components/brand/range-field";
+import { EvidenceField } from "@/components/brand/evidence-field";
 
 export default async function AuthLayout({ children }: { children: React.ReactNode }) {
   const t = await getTranslations("auth.brand");
@@ -27,8 +27,10 @@ export default async function AuthLayout({ children }: { children: React.ReactNo
       {/* Brand panel: what Aalim is for, shown rather than claimed. */}
       <aside className="ink-lit grain relative isolate hidden overflow-hidden text-ink-foreground lg:m-3 lg:flex lg:flex-col lg:justify-between lg:rounded-[24px] lg:p-14 xl:p-16" aria-label={t("label")}>
         <div className="ink-grid absolute inset-0 -z-10" aria-hidden />
-        <RangeField width={480} height={520} rows={9} className="pointer-events-none absolute -bottom-10 -end-16 -z-10 h-[62%] w-auto opacity-70 [mask-image:radial-gradient(ellipse_at_85%_90%,#000_15%,transparent_68%)] rtl:-scale-x-100" />
-        <p className="text-lit max-w-md font-display text-[2.75rem] font-semibold leading-[1.08] tracking-[-0.025em]">{t("title")}</p>
+        <div className="absolute inset-x-0 bottom-0 top-[34%] -z-10 [mask-image:linear-gradient(to_bottom,transparent,#000_35%)]" aria-hidden>
+          <EvidenceField horizon={0.04} spread={1.7} speed={0.24} intensity={0.9} bloom={0.5} />
+        </div>
+        <p className="max-w-md font-display text-[2.75rem] font-semibold leading-[1.06] tracking-[-0.03em]">{t("title")}</p>
         <figure className="relative max-w-md">
           <div className="float-in rounded-2xl bg-ink-foreground/[0.06] p-5 shadow-[inset_0_0_0_1px_rgb(245_244_255/0.12)] backdrop-blur-sm" style={{ animationDelay: "200ms" }}>
             <blockquote className="text-[15px] leading-relaxed">

@@ -84,3 +84,18 @@ One idea, applied everywhere: **the brand lives in deep ink around the work; the
 - Saffron only on evidence, the logo dot and the range band. Never on buttons.
 - Product figures are real components with realistic data, not illustrations.
 - Every composite is checked in RTL and dark mode, at phone width.
+
+## Fourth pass: cinematic
+
+The third pass was still judged not good enough: competent, but a clean SaaS template. Scored against the Linear and Higgsfield home pages it came to about 4/10: the visual didn't carry the story (a static screenshot), the controls were flat, almost nothing moved, the hero was crowded, and nothing was reviewed against a bar.
+
+What changed, following the cinematic-web playbook:
+
+- **One hero asset, from the brand itself.** عالم means "a world", so the signature (a skill estimate drawn as a band on the 1–5 scale) became one: the **evidence field** (`src/components/brand/evidence-field.tsx`), rows of estimates on a perspective ground plane receding into fog. Far rows are wide and lavender (uncertain); with evidence they narrow and turn saffron. Canvas 2D with a downsample bloom; pixel ratio capped at 1.75 with a governor; renders only while visible; still under reduced motion.
+- **A scroll film** (`src/components/landing/scroll-film.tsx`): a 440 vh section with a sticky stage. One smoothed progress value drives the field and four beats (the promise, the world, the range, the evidence) through CSS variables, so React never re-renders per frame. `window.__film(p)` forces a state for screenshots.
+- **Night ground** (`--night`) for the whole marketing page, with blooms, a vignette, a ghost "عالم" the field overlaps, and stepped film grain.
+- **Lit UI.** Primary buttons have a glass base, a light that follows the cursor and a backlit glow; hero buttons add an idle sheen. Applied to every primary button in the app.
+- **Motion grammar.** Easing tokens for entering, leaving, moving and one hero overshoot; masked word reveals; Lenis smooth scrolling on the marketing page only.
+- **Anti-slop removals.** No gradient headline text; the three-card trust row became an editorial numbered list; the bento's equal icon tiles were cut; Hire, Grow and Team became showcase pieces with real product fragments.
+- **In the app** the same field lights the Home brief and the sign-in panel. It was tried behind the report verdict and removed: it hurt legibility on a reading surface.
+

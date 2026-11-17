@@ -65,6 +65,10 @@ const PAIRS: [string, string, number][] = [
   ["sidebar-foreground", "sidebar-active", AA],
   ["sidebar-secondary", "sidebar-raised", AA],
   ["sidebar-accent", "sidebar-active", AA_LARGE],
+  ["ink-foreground", "night", AA],
+  ["ink-secondary", "night", AA],
+  ["ink-secondary", "night-raised", AA],
+  ["saffron", "night", AA],
 ];
 
 describe("design token contrast (WCAG AA)", () => {

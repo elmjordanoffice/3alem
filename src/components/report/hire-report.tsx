@@ -119,7 +119,7 @@ function Verdict({ content }: { content: ReportContent }) {
   const shown = (must.length ? must : [...content.domains].sort((a, b) => b.confidence - a.confidence).slice(0, 3)).slice(0, 5);
   const conf = content.fit.confidence >= 0.75 ? "high" : content.fit.confidence >= 0.5 ? "moderate" : "low";
   return (
-    <div className="overflow-hidden rounded-[20px] bg-ink text-ink-foreground shadow-raised print:shadow-none">
+    <div className="ink-lit relative isolate overflow-hidden rounded-[20px] text-ink-foreground shadow-raised print:bg-ink print:shadow-none">
       <div className="grid gap-10 p-6 sm:p-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:gap-12 lg:p-10">
         <div className="flex flex-col">
           <p className="text-sm text-ink-secondary">{t("roleFit")}</p>

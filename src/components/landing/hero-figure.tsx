@@ -1,3 +1,4 @@
+import type * as React from "react";
 import { getTranslations } from "next-intl/server";
 import { MessageSquareText, Share2 } from "lucide-react";
 import { LogoMark } from "@/components/brand/logo";
@@ -24,8 +25,8 @@ export async function HeroFigure() {
   ] as const;
 
   return (
-    <figure aria-label={t("label")} className="relative mx-auto w-full max-w-[68rem] text-start">
-      <div className="figure-settle relative overflow-hidden rounded-[18px] bg-surface text-text shadow-window">
+    <figure aria-label={t("label")} data-reveal className="relative mx-auto w-full max-w-[68rem] text-start">
+      <div className="relative overflow-hidden rounded-[18px] bg-surface text-text shadow-window">
         {/* Window chrome */}
         <div className="flex h-11 items-center gap-3 border-b border-border bg-surface-subtle px-4">
           <LogoMark className="size-5" />
@@ -117,7 +118,7 @@ export async function HeroFigure() {
       </div>
 
       {/* The scene that produced the evidence */}
-      <div className="float-in absolute -start-6 top-28 z-10 hidden w-[19rem] rounded-2xl bg-ink-raised/95 p-4 text-ink-foreground shadow-window backdrop-blur-md xl:block xl:-start-24" style={{ animationDelay: "700ms" }}>
+      <div className="fade-up absolute -start-6 top-28 z-10 hidden w-[19rem] rounded-2xl bg-ink-raised/95 p-4 text-ink-foreground shadow-window backdrop-blur-md xl:block xl:-start-24" style={{ "--d": "500ms" } as React.CSSProperties}>
         <div className="flex items-center gap-2.5">
           <span className="inline-flex size-8 items-center justify-center rounded-full bg-ink-foreground/10 text-xs font-medium" aria-hidden>
             {td("fromInitials")}
@@ -131,7 +132,7 @@ export async function HeroFigure() {
       </div>
 
       {/* The estimate narrowing as the scenes add up */}
-      <div className="float-in absolute -end-6 top-[27rem] z-10 hidden w-[17rem] rounded-2xl bg-surface p-4 text-text shadow-window lg:block xl:-end-14" style={{ animationDelay: "1000ms" }}>
+      <div className="fade-up absolute -end-6 top-[27rem] z-10 hidden w-[17rem] rounded-2xl bg-surface p-4 text-text shadow-window lg:block xl:-end-14" style={{ "--d": "800ms" } as React.CSSProperties}>
         <div className="flex items-center justify-between gap-3 text-[11px] text-tertiary">
           <span>{t("scene")}</span>
           <span className="flex items-center gap-1.5">

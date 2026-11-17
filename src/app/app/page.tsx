@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { FitPill } from "@/components/report/fit";
 import { INK_PRIMARY } from "@/components/ui/ink";
+import { EvidenceField } from "@/components/brand/evidence-field";
 import { RolePipelineList } from "@/components/recruiter/role-pipeline";
 import { cn } from "@/lib/utils";
 
@@ -65,7 +66,10 @@ export default async function AppHome({ searchParams }: { searchParams: Promise<
     <PageContainer className="max-w-6xl">
       {/* The brief: what changed and what to do next, before any list (docs/design-references.md). */}
       <section aria-labelledby="brief-h" className="ink-lit grain relative isolate mb-12 overflow-hidden rounded-[22px] text-ink-foreground shadow-raised">
-        <div className="ink-grid absolute inset-0 -z-10 opacity-70" aria-hidden />
+        <div className="ink-grid absolute inset-0 -z-10 opacity-50" aria-hidden />
+        <div className="absolute inset-y-0 end-0 -z-10 w-full [mask-image:linear-gradient(to_left,#000_30%,transparent_85%)] sm:w-[70%] rtl:[mask-image:linear-gradient(to_right,#000_30%,transparent_85%)]" aria-hidden>
+          <EvidenceField horizon={0.06} spread={2.6} speed={0.2} intensity={0.8} bloom={0.45} />
+        </div>
         <div className="flex flex-wrap items-end justify-between gap-6 p-6 sm:p-8 lg:p-10">
           <div className="min-w-0 max-w-2xl">
             <p className="text-sm text-ink-secondary">{org ? t("dateAt", { date: fmt.date, org: org.name }) : fmt.date}</p>
@@ -75,7 +79,7 @@ export default async function AppHome({ searchParams }: { searchParams: Promise<
             </p>
           </div>
           {org && viewerCan(viewer, "assessment.create") ? (
-            <Button asChild size="lg" className={INK_PRIMARY}>
+            <Button asChild size="lg" className={`btn-hero rounded-full px-6 ${INK_PRIMARY}`}>
               <Link href="/app/assessments/new">
                 <Plus aria-hidden />
                 {t("newAssessment")}

@@ -238,6 +238,47 @@
     "footerNav": {
       "product": "Product",
       "more": "More"
+    },
+    "film": {
+      "sub": "A realistic week at a fictional company. Every score backed by the candidate’s own words.",
+      "scroll": "Scroll to see how",
+      "b1title": "A week at a fictional company",
+      "b1body": "Messages, decisions, documents and conversations. About 50 minutes, and every answer shapes the next scene.",
+      "b2title": "Every answer narrows the range",
+      "b2body": "Aalim starts unsure and says so. Each scene adds evidence until the estimate is tight enough to trust.",
+      "b3title": "Every score shows its working",
+      "b3body": "The candidate’s own words sit under every score, with the questions to ask next. Your team decides.",
+      "scene": "Scene",
+      "of9": "of 9",
+      "chatFrom": "Omar Nasser",
+      "chat": "Can we move Thursday’s stock count? Finance needs the room.",
+      "sheetTitle": "Fuel costs, Q3",
+      "sheetNote": "12% over plan",
+      "emailSubject": "Port delay: the Henderson order",
+      "rail": {
+        "one": "The world",
+        "two": "The range",
+        "three": "The evidence"
+      }
+    },
+    "product": {
+      "eyebrow": "The report",
+      "title": "The report your panel will actually read."
+    },
+    "name": {
+      "label": "The name",
+      "title": "In Arabic, عالم is a world, and someone who knows it deeply.",
+      "body": "So we build a world for each candidate, and find out what they know in it.",
+      "alam": "a world",
+      "alim": "one who knows"
+    },
+    "showcase": {
+      "hireTag": "For hiring teams",
+      "growTag": "For individuals",
+      "teamTag": "For managers"
+    },
+    "safeguards": {
+      "eyebrow": "Safeguards"
     }
   },
   "auth": {

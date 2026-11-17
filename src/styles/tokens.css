@@ -84,6 +84,9 @@
   /* Light that comes off the range field on ink surfaces. */
   --glow-indigo: #4c51e8;
   --glow-lavender: #8f92f7;
+  /* The marketing page's night ground: ink taken almost to black. */
+  --night: #07081c;
+  --night-raised: #10123a;
 
   --shadow-popover: 0 8px 24px -6px rgb(28 25 23 / 0.12), 0 2px 6px -2px rgb(28 25 23 / 0.08);
   /* The one raised surface on a page (a verdict, a hero panel). */
@@ -163,6 +166,8 @@
   --sidebar-border: rgb(245 244 255 / 0.08);
   --glow-indigo: #4c51e8;
   --glow-lavender: #8f92f7;
+  --night: #07081c;
+  --night-raised: #10123a;
 
   --shadow-popover: 0 8px 24px -6px rgb(0 0 0 / 0.5), 0 2px 6px -2px rgb(0 0 0 / 0.4);
   --shadow-raised: 0 1px 2px rgb(0 0 0 / 0.3), 0 16px 40px -16px rgb(0 0 0 / 0.6);
