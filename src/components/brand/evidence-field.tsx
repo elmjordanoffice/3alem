@@ -76,7 +76,7 @@ export function EvidenceField({
     const rand = mulberry32(7);
     const spawn = (z: number): Row => ({ z, centre: 2.1 + rand() * 2.5, spread: 1.2 + rand() * 0.9, seed: rand() });
     const build = () => {
-      const n = W < 640 ? 34 : 56;
+      const n = W < 640 ? 40 : 72;
       rows = Array.from({ length: n }, (_, i) => spawn(Z_NEAR + ((Z_FAR - Z_NEAR) * (i + 0.5)) / n));
     };
 
@@ -188,16 +188,16 @@ export function EvidenceField({
         const th = Math.min(7, Math.max(1.2, (0.045 * f) / z));
 
         // The scale: a hairline with ticks at 2, 3, 4.
-        ctx.globalAlpha = 0.13 * fog;
+        ctx.globalAlpha = 0.11 * fog;
         ctx.fillStyle = "#f5f4ff";
         const x1 = toX(1, z);
         const x5 = toX(5, z);
         ctx.fillRect(x1, y - 0.5, x5 - x1, 1);
-        for (const t of [2, 3, 4]) ctx.fillRect(toX(t, z) - 0.5, y - th * 1.1, 1, th * 2.2);
+        if (palette !== "quiet") for (const t of [2, 3, 4]) ctx.fillRect(toX(t, z) - 0.5, y - th * 0.9, 1, th * 1.8);
 
         // The band.
         const [r, g, b] = mix([143, 146, 247], palette === "quiet" ? [214, 215, 255] : [242, 181, 50], k);
-        ctx.globalAlpha = (0.42 + 0.58 * k) * fog;
+        ctx.globalAlpha = (0.55 + 0.45 * k) * fog;
         ctx.fillStyle = `rgb(${r},${g},${b})`;
         const bx = toX(lo, z);
         const bw = Math.max(th, toX(hi, z) - bx);

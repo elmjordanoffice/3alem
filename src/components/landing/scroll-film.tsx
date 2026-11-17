@@ -41,6 +41,15 @@ export function ScrollFilm({
   const sectionRef = React.useRef<HTMLElement>(null);
   const stageRef = React.useRef<HTMLDivElement>(null);
   const state = React.useRef({ target: 0, value: 0, forced: null as number | null });
+  // Phones frame the field lower, below the stacked buttons.
+  const [narrow, setNarrow] = React.useState(false);
+  React.useEffect(() => {
+    const mq = window.matchMedia("(max-width: 639px)");
+    const on = () => setNarrow(mq.matches);
+    on();
+    mq.addEventListener("change", on);
+    return () => mq.removeEventListener("change", on);
+  }, []);
   const fieldProgress = React.useCallback(() => smooth(clamp01((state.current.value - 0.16) / 0.62)), []);
 
   React.useEffect(() => {
@@ -80,6 +89,7 @@ export function ScrollFilm({
         stage.style.setProperty("--scene", String(1 + Math.round(k * 8)));
         const front = env.indexOf(Math.max(...env));
         stage.dataset.beat = String(front);
+        document.documentElement.dataset.front = String(front);
       }
       raf = requestAnimationFrame(tick);
     };
@@ -88,6 +98,7 @@ export function ScrollFilm({
       cancelAnimationFrame(raf);
       delete w.__film;
       delete document.documentElement.dataset.hero;
+      delete document.documentElement.dataset.front;
     };
   }, []);
 
@@ -105,9 +116,10 @@ export function ScrollFilm({
         {/* Atmosphere: a bloom behind the headline, one near the field, a low horizon glow. */}
         <div className="film-atmosphere absolute inset-0" aria-hidden />
         {backdrop}
-        <EvidenceField getProgress={fieldProgress} horizon={0.6} horizonEnd={0.74} floor={0.78} floorEnd={1.1} className="film-field" />
+        <EvidenceField getProgress={fieldProgress} horizon={narrow ? 0.7 : 0.58} horizonEnd={0.74} floor={narrow ? 0.84 : 0.8} floorEnd={1.1} className="film-field" />
         <div className="film-scrim-center pointer-events-none absolute inset-0" aria-hidden />
         <div className="film-scrim-side pointer-events-none absolute inset-0" aria-hidden />
+        <div className="film-scrim-end pointer-events-none absolute inset-0" aria-hidden />
         <div className="film-vignette pointer-events-none absolute inset-0" aria-hidden />
         <div className="pointer-events-none absolute inset-0">{children}</div>
       </div>

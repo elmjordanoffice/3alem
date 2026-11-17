@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { getLocale, getTranslations } from "next-intl/server";
-import { ArrowRight, Mail } from "lucide-react";
+import { ArrowDown, ArrowRight, Download, Mail, Trash2 } from "lucide-react";
 import { Logo } from "@/components/brand/logo";
 import { EvidenceField } from "@/components/brand/evidence-field";
 import { Button } from "@/components/ui/button";
@@ -16,8 +16,6 @@ import { RevealOnScroll, ScrollSettle, SmoothScroll } from "@/components/landing
 import { getViewer } from "@/lib/auth/session";
 import { cn } from "@/lib/utils";
 
-const GHOST_BUTTON = "border border-ink-foreground/15 bg-ink-foreground/[0.04] text-ink-foreground hover:bg-ink-foreground/10 active:bg-ink-foreground/15";
-
 /** Splits a title at its first comma so the second clause can sit quieter. */
 function splitClause(title: string): [string, string] {
   const m = title.match(/^(.*?[,،])\s*(.+)$/);
@@ -28,6 +26,7 @@ export default async function Home() {
   const t = await getTranslations("landing");
   const td = await getTranslations("landing.demo");
   const tf = await getTranslations("home.fit");
+  const td2 = await getTranslations("dataRights");
   const viewer = await getViewer();
   const primaryHref = viewer ? "/app" : "/sign-up";
   const primaryLabel = viewer ? t("openApp") : t("getStarted");
@@ -87,7 +86,7 @@ export default async function Home() {
         >
           {/* Beat 0: the promise */}
           <div className="beat-0 absolute inset-0 flex flex-col items-center justify-center px-4 pb-[14vh] text-center">
-            <h1 className="max-w-4xl text-[2.5rem] font-semibold leading-[1.02] tracking-[-0.035em] sm:text-[3.5rem] lg:text-[4.75rem]">
+            <h1 className="max-w-4xl text-[2.4rem] font-semibold leading-[1.04] tracking-[-0.035em] text-[#e2e3fb] sm:text-[3.25rem] lg:text-[4.25rem]">
               <SplitWords text={lead} delay={150} />
               {rest ? (
                 <>
@@ -98,19 +97,20 @@ export default async function Home() {
             <p className="float-in mx-auto mt-8 max-w-xl text-lg leading-relaxed text-ink-secondary sm:text-xl" style={{ animationDelay: "650ms" }}>
               {t("film.sub")}
             </p>
-            <div className="float-in mt-10 flex w-full max-w-xs flex-col items-stretch gap-3 sm:max-w-none sm:flex-row sm:items-center sm:justify-center" style={{ animationDelay: "800ms" }}>
+            <div className="float-in mt-10 flex flex-col items-center gap-5 sm:flex-row sm:gap-7" style={{ animationDelay: "800ms" }}>
               <Button asChild size="lg" className={cn("btn-hero cta-halo h-13 rounded-full px-7", INK_PRIMARY)}>
                 <Link href={primaryHref}>
                   {primaryLabel}
                   <ArrowRight className="flip-rtl" aria-hidden />
                 </Link>
               </Button>
-              <Button asChild size="lg" variant="secondary" className={cn("h-13 rounded-full bg-night/60 px-7 backdrop-blur-md", GHOST_BUTTON)}>
-                <a href="#how">{t("seeHow")}</a>
-              </Button>
+              <a href="#how" className="group inline-flex items-center gap-2 rounded-full px-2 py-1 text-[15px] font-medium text-ink-secondary transition-colors hover:text-ink-foreground focus-visible:outline-2 focus-visible:outline-focus">
+                {t("seeHow")}
+                <ArrowDown className="size-4 transition-transform duration-300 group-hover:translate-y-0.5" aria-hidden />
+              </a>
             </div>
             {/* The field's closest row, labelled: a skill with no evidence yet, so the range is wide. */}
-            <div className="float-in absolute inset-x-0 bottom-24 mx-auto hidden w-full max-w-2xl px-4 text-start sm:block" style={{ animationDelay: "1100ms" }} aria-hidden>
+            <div className="float-in absolute inset-x-0 bottom-16 mx-auto w-full max-w-2xl px-5 text-start sm:bottom-[5.25rem]" style={{ animationDelay: "1100ms" }} aria-hidden>
               <div className="flex items-baseline justify-between gap-4 text-sm">
                 <span className="font-medium text-ink-foreground">{t("figure.skills.priorities")}</span>
                 <span className="text-ink-secondary">{t("film.noEvidence")}</span>
@@ -121,11 +121,11 @@ export default async function Home() {
                 ))}
                 <span className="hero-row-band absolute inset-y-0 rounded-full" />
                 <span className="absolute -inset-y-1.5 w-0.5 rounded-full bg-ink-foreground/80" style={{ insetInlineStart: "calc(75% - 1px)" }} />
-                <span className="hero-row-dot absolute top-1/2 size-4 -translate-y-1/2 rounded-full bg-ink-foreground ring-4 ring-night" />
+                <span className="hero-row-dot absolute top-1/2 size-3 -translate-y-1/2 rounded-full bg-ink-secondary" />
               </div>
-              <div className="mt-2 flex justify-between text-xs text-ink-secondary">
+              <div className="relative mt-2 flex h-4 justify-between text-xs text-ink-secondary">
                 <span>{td("scaleLow")}</span>
-                <span>
+                <span className="absolute -translate-x-1/2 whitespace-nowrap rtl:translate-x-1/2" style={{ insetInlineStart: "75%" }}>
                   {t("figure.expected")} <bdi dir="ltr" className="tabular">4.0</bdi>
                 </span>
                 <span>{td("scaleHigh")}</span>
@@ -142,7 +142,7 @@ export default async function Home() {
           {/* Beat 1: the world */}
           <div className="beat-1 absolute inset-0">
             <Stage>
-              <BeatCopy n="01" title={t("film.b1title")} body={t("film.b1body")} className="beat-copy-1" />
+              <BeatCopy title={t("film.b1title")} body={t("film.b1body")} className="beat-copy-1" />
               <div className="relative mx-auto flex w-full max-w-[24rem] flex-col gap-3 sm:block sm:h-[28rem] lg:mx-0 lg:max-w-[30rem]" aria-hidden>
                 <div className="fly card-lit w-[92%] rounded-[16px] p-4 text-text sm:absolute sm:start-0 sm:top-0 sm:w-[86%]" style={{ "--fy": "70px" } as React.CSSProperties}>
                   <div className="flex items-center gap-2.5">
@@ -181,8 +181,8 @@ export default async function Home() {
 
           {/* Beat 2: the range */}
           <div className="beat-2 absolute inset-0">
-            <Stage>
-              <BeatCopy n="02" title={t("film.b2title")} body={t("film.b2body")} className="beat-copy-2" />
+            <Stage reverse>
+              <BeatCopy title={t("film.b2title")} body={t("film.b2body")} className="beat-copy-2" />
               <div className="beat-copy-2 card-night mx-auto w-full max-w-[34rem] rounded-[22px] p-6 sm:p-8 lg:mx-0" aria-hidden>
                 <div className="flex items-baseline justify-between gap-3">
                   <p className="font-display text-lg font-semibold sm:text-xl">{t("figure.skills.priorities")}</p>
@@ -217,7 +217,7 @@ export default async function Home() {
           {/* Beat 3: the evidence */}
           <div className="beat-3 absolute inset-0">
             <Stage>
-              <BeatCopy n="03" title={t("film.b3title")} body={t("film.b3body")} className="beat-copy-3" />
+              <BeatCopy title={t("film.b3title")} body={t("film.b3body")} className="beat-copy-3" />
               <div className="beat-copy-3 mx-auto w-full max-w-[34rem] lg:mx-0" aria-hidden>
                 <div className="card-lit rounded-[22px] p-6 text-text sm:p-8">
                   <p className="text-xs text-tertiary">{t("figure.evidenceSource")}</p>
@@ -336,10 +336,28 @@ export default async function Home() {
                       <span className="text-end text-xs text-ink-secondary tabular">{Math.round(v * 100)}%</span>
                     </div>
                   ))}
-                  <span className="pointer-events-none absolute -inset-y-2 w-px border-s border-dashed border-ink-foreground/60" style={{ left: "calc(4.5rem + 0.75rem + (100% - 4.5rem - 2.5rem - 1.5rem) * 0.8)" }} aria-hidden />
+                  <span className="pointer-events-none absolute -bottom-2 -top-2 w-px border-s border-dashed border-ink-foreground/60" style={{ left: "calc(4.5rem + 0.75rem + (100% - 4.5rem - 2.5rem - 1.5rem) * 0.8)" }} aria-hidden>
+                    <span className="absolute start-0 top-full mt-1.5 -translate-x-1/2 whitespace-nowrap text-[11px] text-ink-secondary" dir="auto">
+                      {t("bento.fairness.line")}
+                    </span>
+                  </span>
                 </div>
-                <p className="mt-4 text-xs text-ink-secondary">{t("bento.fairness.line")}</p>
+                <div className="h-7" aria-hidden />
               </figure>
+              {/* And the data right, shown: anyone can take their data or delete it. */}
+              <div className="fade-up card-night mt-4 rounded-[20px] p-6" style={{ "--d": "320ms" } as React.CSSProperties} aria-hidden>
+                <p className="text-sm font-medium">{td2("title")}</p>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  <span className="inline-flex items-center gap-2 rounded-full bg-ink-foreground/[0.08] px-3.5 py-2 text-sm shadow-[inset_0_0_0_1px_rgb(245_244_255/0.12)]">
+                    <Download className="size-4" aria-hidden />
+                    {td2("exportAction")}
+                  </span>
+                  <span className="inline-flex items-center gap-2 rounded-full px-3.5 py-2 text-sm text-ink-secondary shadow-[inset_0_0_0_1px_rgb(245_244_255/0.12)]">
+                    <Trash2 className="size-4" aria-hidden />
+                    {td2("deleteAction")}
+                  </span>
+                </div>
+              </div>
             </div>
             <ul className="border-t border-ink-foreground/10">
               {(
@@ -374,23 +392,23 @@ export default async function Home() {
           <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(55%_48%_at_50%_40%,rgb(7_8_28/0.9),transparent_75%)]" aria-hidden />
           <div className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-2/3 bg-[radial-gradient(70%_60%_at_50%_100%,rgb(242_181_50/0.14),transparent_70%)]" aria-hidden />
           <div data-reveal className="relative mx-auto flex max-w-4xl flex-col items-center text-center">
-            <h2 id="cta-h" className="text-[2.6rem] font-semibold leading-[1.02] tracking-[-0.035em] sm:text-7xl">
+            <h2 id="cta-h" className="text-[2.4rem] font-semibold leading-[1.04] tracking-[-0.035em] text-[#e2e3fb] sm:text-6xl">
               <SplitWords text={t("cta.title")} />
             </h2>
             <p className="fade-up mt-6 max-w-xl text-lg leading-relaxed text-ink-secondary" style={{ "--d": "300ms" } as React.CSSProperties}>
               {t("cta.body")}
             </p>
-            <div className="fade-up mt-10 flex flex-wrap justify-center gap-3" style={{ "--d": "420ms" } as React.CSSProperties}>
-              <Button asChild size="lg" className={cn("btn-hero h-13 rounded-full px-7", INK_PRIMARY)}>
+            <div className="fade-up mt-10 flex flex-col items-center gap-5 sm:flex-row sm:gap-7" style={{ "--d": "420ms" } as React.CSSProperties}>
+              <Button asChild size="lg" className={cn("btn-hero cta-halo h-13 rounded-full px-7", INK_PRIMARY)}>
                 <Link href={primaryHref}>
                   {primaryLabel}
                   <ArrowRight className="flip-rtl" aria-hidden />
                 </Link>
               </Button>
               {!viewer ? (
-                <Button asChild size="lg" variant="secondary" className={cn("h-13 rounded-full px-7", GHOST_BUTTON)}>
-                  <Link href="/sign-in">{t("signIn")}</Link>
-                </Button>
+                <Link href="/sign-in" className="rounded-full px-2 py-1 text-[15px] font-medium text-ink-secondary transition-colors hover:text-ink-foreground focus-visible:outline-2 focus-visible:outline-focus">
+                  {t("signIn")}
+                </Link>
               ) : null}
             </div>
           </div>
@@ -432,15 +450,14 @@ export default async function Home() {
 }
 
 /** Copy on the start side, the visual on the end side; stacked on phones. */
-function Stage({ children }: { children: React.ReactNode }) {
-  return <div className="mx-auto flex h-full max-w-6xl flex-col justify-center gap-8 px-5 pb-10 pt-24 sm:px-8 lg:flex-row lg:items-center lg:justify-between lg:gap-16 lg:pb-0 lg:pe-36 lg:pt-0">{children}</div>;
+function Stage({ children, reverse = false }: { children: React.ReactNode; reverse?: boolean }) {
+  return <div className={cn("mx-auto flex h-full max-w-6xl flex-col justify-center gap-8 px-5 pb-10 pt-24 sm:px-8 lg:items-center lg:justify-between lg:gap-16 lg:pb-0 lg:pt-0", reverse ? "lg:flex-row-reverse" : "lg:flex-row")}>{children}</div>;
 }
 
-function BeatCopy({ n, title, body, className }: { n: string; title: string; body: string; className?: string }) {
+function BeatCopy({ title, body, className }: { title: string; body: string; className?: string }) {
   return (
     <div className={cn("max-w-md", className)}>
-      <p className="font-display text-sm font-semibold text-sidebar-accent tabular">{n}</p>
-      <h2 className="mt-3 text-[2rem] font-semibold leading-[1.05] tracking-[-0.03em] sm:text-5xl">{title}</h2>
+      <h2 className=" text-[2rem] font-semibold leading-[1.05] tracking-[-0.03em] sm:text-5xl">{title}</h2>
       <p className="mt-4 text-base leading-relaxed text-ink-secondary sm:text-lg">{body}</p>
     </div>
   );

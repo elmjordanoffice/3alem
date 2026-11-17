@@ -67,7 +67,7 @@ export function ScrollSettle({ children, className }: { children: React.ReactNod
       const dt = Math.min(0.05, (now - last) / 1000);
       last = now;
       const r = el.getBoundingClientRect();
-      const target = Math.min(1, Math.max(0, (window.innerHeight - r.top) / (window.innerHeight * 0.85)));
+      const target = Math.min(1, Math.max(0, (window.innerHeight - r.top) / (window.innerHeight * 0.55)));
       value += (target - value) * (1 - Math.pow(1 - 0.08, dt * 60));
       el.style.setProperty("--settle", value.toFixed(4));
       raf = requestAnimationFrame(tick);

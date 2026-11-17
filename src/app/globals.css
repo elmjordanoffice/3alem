@@ -388,8 +388,9 @@
 .film-vignette { background: radial-gradient(120% 90% at 50% 45%, transparent 55%, rgb(3 3 12 / 0.75) 100%); }
 /* Scrims keep copy readable over the field: centred for the hero, start-side for the beats. */
 .film-scrim-center { opacity: var(--b0); background: radial-gradient(46% 40% at 50% 46%, rgb(7 8 28 / 0.72), transparent 75%); }
-.film-scrim-side { opacity: calc(1 - var(--b0)); background: linear-gradient(to right, rgb(7 8 28 / 0.85) 0%, rgb(7 8 28 / 0.55) 32%, transparent 58%); }
-[dir="rtl"] .film-scrim-side { transform: scaleX(-1); }
+.film-scrim-side { opacity: calc(var(--b1) + var(--b3)); background: linear-gradient(to right, rgb(7 8 28 / 0.85) 0%, rgb(7 8 28 / 0.55) 32%, transparent 58%); }
+.film-scrim-end { opacity: var(--b2); background: linear-gradient(to left, rgb(7 8 28 / 0.85) 0%, rgb(7 8 28 / 0.55) 32%, transparent 58%); }
+[dir="rtl"] .film-scrim-side, [dir="rtl"] .film-scrim-end { transform: scaleX(-1); }
 .film-stage [data-beat-layer] { transition: none; }
 .film-stage .beat-0 { opacity: var(--b0); transform: translateY(calc((1 - var(--b0)) * -48px)) scale(calc(0.97 + var(--b0) * 0.03)); }
 .film-stage .beat-1 { opacity: var(--b1); }
@@ -411,6 +412,7 @@
 .film-scene { counter-reset: scene var(--scene); }
 .film-scene::after { content: counter(scene); }
 .film-settled { opacity: clamp(0, calc((var(--k) - 0.85) * 7), 1); }
+.dark .film-mark { --highlight: color-mix(in srgb, var(--saffron) 88%, transparent); --highlight-foreground: #17184a; }
 .film-mark {
   /* <mark> has a yellow UA background; only the sweep should show. */
   background-color: transparent;
@@ -474,9 +476,9 @@
 }
 /* Glass navigation: links materialise a raised pill on hover. */
 .nav-glass {
-  background: rgb(7 8 28 / 0.8);
-  backdrop-filter: blur(16px) saturate(140%);
-  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  background: rgb(7 8 28 / 0.92);
+  backdrop-filter: blur(24px) saturate(140%);
+  -webkit-backdrop-filter: blur(24px) saturate(140%);
   box-shadow: inset 0 0 0 1px rgb(245 244 255 / 0.09), inset 0 1px 0 rgb(245 244 255 / 0.08), 0 12px 32px -12px rgb(0 0 0 / 0.6);
 }
 .nav-pill { transition: background-color 0.3s var(--ease-enter), box-shadow 0.3s var(--ease-enter), color 0.2s var(--ease-move); }
@@ -525,3 +527,7 @@ html[data-hero="1"] .nav-cta {
 /* The hero's foreground row: the closest estimate in the field, labelled, with no evidence yet. */
 .hero-row-band { inset-inline-start: 12%; width: 76%; background: color-mix(in srgb, var(--glow-lavender) 70%, transparent); }
 .hero-row-dot { inset-inline-start: calc(52% - 8px); }
+
+/* During the hero the nav's call to action steps out of the way; for the rest of the film it is a ghost. */
+html[data-hero="1"][data-front="0"] .nav-cta { opacity: 0; pointer-events: none; }
+.nav-cta { transition: opacity 0.4s var(--ease-move), background-color 0.3s var(--ease-move), box-shadow 0.3s var(--ease-move); }
