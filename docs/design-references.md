@@ -99,3 +99,7 @@ What changed, following the cinematic-web playbook:
 - **Anti-slop removals.** No gradient headline text; the three-card trust row became an editorial numbered list; the bento's equal icon tiles were cut; Hire, Grow and Team became showcase pieces with real product fragments.
 - **In the app** the same field lights the Home brief and the sign-in panel. It was tried behind the report verdict and removed: it hurt legibility on a reading surface.
 
+### Review rounds
+
+Each round was scored blind by a fresh reviewer from screenshots, against the Linear and Higgsfield home pages: 5, 5, 6 and 6 out of 10. Fixes that came out of the rounds: the field fades out before a labelled foreground row (a skill with no evidence yet); no saffron until evidence arrives; one range control everywhere (saffron band, ink or white thumb); no card ever covers text; the primary button wins the squint test; template tells removed (glowing eyebrow pill, two-tone headline, gradient text, ghost letterform in the hero, chapter rail, numbered lists, orphan icon tiles); the browser's yellow `<mark>` background no longer shows behind the highlight sweep. The remaining gap the reviewers name is lighting below the film and a shell that still follows a familiar dark-SaaS layout.
+
