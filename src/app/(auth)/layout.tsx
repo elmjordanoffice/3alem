@@ -28,7 +28,7 @@ export default async function AuthLayout({ children }: { children: React.ReactNo
       <aside className="ink-lit grain relative isolate hidden overflow-hidden text-ink-foreground lg:m-3 lg:flex lg:flex-col lg:justify-between lg:rounded-[24px] lg:p-14 xl:p-16" aria-label={t("label")}>
         <div className="ink-grid absolute inset-0 -z-10" aria-hidden />
         <div className="absolute inset-x-0 bottom-0 top-[34%] -z-10 [mask-image:linear-gradient(to_bottom,transparent,#000_35%)]" aria-hidden>
-          <EvidenceField horizon={0.04} spread={1.7} speed={0.24} intensity={0.9} bloom={0.5} />
+          <EvidenceField horizon={0.04} spread={1.7} speed={0.24} intensity={0.9} bloom={0.5} palette="quiet" />
         </div>
         <p className="max-w-md font-display text-[2.75rem] font-semibold leading-[1.06] tracking-[-0.03em]">{t("title")}</p>
         <figure className="relative max-w-md">

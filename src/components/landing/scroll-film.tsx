@@ -77,7 +77,10 @@ export function ScrollFilm({
         stage.style.setProperty("--k", k.toFixed(3));
         stage.style.setProperty("--hl", smooth(clamp01((p - 0.74) / 0.12)).toFixed(3));
         stage.style.setProperty("--scene", String(1 + Math.round(k * 8)));
-        stage.dataset.beat = String(env.indexOf(Math.max(...env)));
+        const front = env.indexOf(Math.max(...env));
+        stage.dataset.beat = String(front);
+        // While the hero's own call to action is on screen, the nav's steps back.
+        document.documentElement.dataset.hero = front === 0 ? "1" : "0";
       }
       raf = requestAnimationFrame(tick);
     };
@@ -85,6 +88,7 @@ export function ScrollFilm({
     return () => {
       cancelAnimationFrame(raf);
       delete w.__film;
+      delete document.documentElement.dataset.hero;
     };
   }, []);
 
@@ -102,7 +106,7 @@ export function ScrollFilm({
         {/* Atmosphere: a bloom behind the headline, one near the field, a low horizon glow. */}
         <div className="film-atmosphere absolute inset-0" aria-hidden />
         {backdrop}
-        <EvidenceField getProgress={fieldProgress} horizon={0.54} className="film-field" />
+        <EvidenceField getProgress={fieldProgress} horizon={0.7} horizonEnd={0.6} className="film-field" />
         <div className="film-scrim-center pointer-events-none absolute inset-0" aria-hidden />
         <div className="film-scrim-side pointer-events-none absolute inset-0" aria-hidden />
         <div className="film-vignette pointer-events-none absolute inset-0" aria-hidden />

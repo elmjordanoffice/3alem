@@ -539,7 +539,8 @@
       "unopened": "Reports not opened",
       "inProgress": "In progress",
       "completed": "Finished",
-      "open": "Open roles"
+      "open": "Open roles",
+      "reviewCta": "Open the queue"
     }
   },
   "framework": {

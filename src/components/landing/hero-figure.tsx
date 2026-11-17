@@ -117,22 +117,8 @@ export async function HeroFigure() {
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-surface to-transparent md:hidden" aria-hidden />
       </div>
 
-      {/* The scene that produced the evidence */}
-      <div className="fade-up absolute -start-6 top-28 z-10 hidden w-[19rem] rounded-2xl bg-ink-raised/95 p-4 text-ink-foreground shadow-window backdrop-blur-md xl:block xl:-start-24" style={{ "--d": "500ms" } as React.CSSProperties}>
-        <div className="flex items-center gap-2.5">
-          <span className="inline-flex size-8 items-center justify-center rounded-full bg-ink-foreground/10 text-xs font-medium" aria-hidden>
-            {td("fromInitials")}
-          </span>
-          <span className="min-w-0">
-            <span className="block text-sm font-medium">{td("from")}</span>
-            <span className="block truncate text-[11px] text-ink-secondary">{td("chapter")}</span>
-          </span>
-        </div>
-        <p className="mt-3 line-clamp-3 text-[13px] leading-relaxed text-ink-foreground/90">{td("message")}</p>
-      </div>
-
       {/* The estimate narrowing as the scenes add up */}
-      <div className="fade-up absolute -end-6 top-[27rem] z-10 hidden w-[17rem] rounded-2xl bg-surface p-4 text-text shadow-window lg:block xl:-end-14" style={{ "--d": "800ms" } as React.CSSProperties}>
+      <div className="fade-up absolute -end-6 top-[31rem] z-10 hidden w-[17rem] rounded-2xl bg-surface p-4 text-text shadow-window lg:block xl:-end-14" style={{ "--d": "800ms" } as React.CSSProperties}>
         <div className="flex items-center justify-between gap-3 text-[11px] text-tertiary">
           <span>{t("scene")}</span>
           <span className="flex items-center gap-1.5">

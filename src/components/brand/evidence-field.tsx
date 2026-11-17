@@ -23,6 +23,8 @@ export function EvidenceField({
   bloom = 0.5,
   intensity = 1,
   spread = 1,
+  horizonEnd,
+  palette = "evidence",
 }: {
   getProgress?: () => number;
   className?: string;
@@ -35,6 +37,10 @@ export function EvidenceField({
   intensity?: number;
   /** Widens the field for short, wide panels. */
   spread?: number;
+  /** With a driver, the horizon moves here as progress goes to 1 (the camera tilts into the world). */
+  horizonEnd?: number;
+  /** "evidence" narrows to saffron; "quiet" stays lavender and white (for app surfaces, where saffron means evidence only). */
+  palette?: "evidence" | "quiet";
 }) {
   const ref = React.useRef<HTMLCanvasElement>(null);
   const progressRef = React.useRef(getProgress);
@@ -132,8 +138,27 @@ export function EvidenceField({
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, W, H);
       const f = Math.min(H * spread, W * 0.9) * 0.62;
-      const hy = H * (horizon + hz);
+      const hy = H * (horizon + (p !== null && horizonEnd !== undefined ? (horizonEnd - horizon) * smooth(p) : 0) + hz);
       const toX = (v: number, z: number) => W / 2 + ((((v - 1) / 4) * 2 - 1) * TRACK + camX) * (f / z);
+
+      // Key light: a warm glow where the ground meets the fog, brightening with evidence.
+      {
+        const warm = palette === "quiet" ? "143,146,247" : "242,181,50";
+        const glowA = (0.1 + 0.22 * (p ?? 0.5)) * intro * intensity;
+        const rx = W * 0.55;
+        const g = ctx.createRadialGradient(W / 2, hy, 0, W / 2, hy, rx);
+        g.addColorStop(0, `rgba(${warm},${glowA})`);
+        g.addColorStop(0.35, `rgba(143,146,247,${glowA * 0.45})`);
+        g.addColorStop(1, "rgba(143,146,247,0)");
+        ctx.save();
+        ctx.translate(W / 2, hy);
+        ctx.scale(1, 0.32);
+        ctx.translate(-W / 2, -hy);
+        ctx.globalAlpha = 1;
+        ctx.fillStyle = g;
+        ctx.fillRect(0, hy - rx, W, rx * 2);
+        ctx.restore();
+      }
 
       // Rails: the scale's ends and middle, converging on the vanishing point.
       ctx.lineWidth = 1;
@@ -160,7 +185,9 @@ export function EvidenceField({
         // Evidence: with a driver, rows converge with progress (staggered);
         // without one, they converge as they come closer.
         const kz = smooth(clamp01((0.92 - depth) / 0.75));
-        const k = p === null ? kz : smooth(clamp01(p * 1.45 - row.seed * 0.45 + kz * 0.12 * p));
+        let k = p === null ? kz : smooth(clamp01(p * 1.45 - row.seed * 0.45 + kz * 0.12 * p));
+        // A few rows are already evidenced at the start, previewing the payoff.
+        if (p !== null && row.seed < 0.07) k = Math.max(k, 0.9);
         const half = row.spread * (1 - k) + 0.16 * k;
         const lo = Math.max(1, row.centre - half);
         const hi = Math.min(5, row.centre + half);
@@ -176,7 +203,7 @@ export function EvidenceField({
         for (const t of [2, 3, 4]) ctx.fillRect(toX(t, z) - 0.5, y - th * 1.1, 1, th * 2.2);
 
         // The band.
-        const [r, g, b] = mix([143, 146, 247], [242, 181, 50], k);
+        const [r, g, b] = mix([143, 146, 247], palette === "quiet" ? [214, 215, 255] : [242, 181, 50], k);
         ctx.globalAlpha = (0.42 + 0.58 * k) * fog;
         ctx.fillStyle = `rgb(${r},${g},${b})`;
         const bx = toX(lo, z);
@@ -227,7 +254,7 @@ export function EvidenceField({
       window.removeEventListener("pointermove", onPointer);
       document.removeEventListener("visibilitychange", onVis);
     };
-  }, [horizon, speed, bloom, intensity, spread]);
+  }, [horizon, speed, bloom, intensity, spread, horizonEnd, palette]);
 
   return <canvas ref={ref} aria-hidden className={cn("pointer-events-none absolute inset-0 size-full rtl:-scale-x-100", className)} />;
 }

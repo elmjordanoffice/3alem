@@ -68,7 +68,7 @@ export default async function AppHome({ searchParams }: { searchParams: Promise<
       <section aria-labelledby="brief-h" className="ink-lit grain relative isolate mb-12 overflow-hidden rounded-[22px] text-ink-foreground shadow-raised">
         <div className="ink-grid absolute inset-0 -z-10 opacity-50" aria-hidden />
         <div className="absolute inset-y-0 end-0 -z-10 w-full [mask-image:linear-gradient(to_left,#000_30%,transparent_85%)] sm:w-[70%] rtl:[mask-image:linear-gradient(to_right,#000_30%,transparent_85%)]" aria-hidden>
-          <EvidenceField horizon={0.06} spread={2.6} speed={0.2} intensity={0.8} bloom={0.45} />
+          <EvidenceField horizon={0.06} spread={2.6} speed={0.2} intensity={0.8} bloom={0.45} palette="quiet" />
         </div>
         <div className="flex flex-wrap items-end justify-between gap-6 p-6 sm:p-8 lg:p-10">
           <div className="min-w-0 max-w-2xl">
@@ -95,20 +95,20 @@ export default async function AppHome({ searchParams }: { searchParams: Promise<
           ) : null}
         </div>
         {overview ? (
-          <dl className="grid grid-cols-2 gap-px border-t border-ink-foreground/10 bg-ink-foreground/10 sm:grid-cols-4">
+          <dl className="grid grid-cols-2 gap-px border-t border-ink-foreground/10 bg-ink-foreground/10 sm:grid-cols-5">
             {([
               ["unopened", overview.unviewed, "/app/assessments"],
               ["inProgress", overview.totals.inProgress, "/app/assessments"],
               ["completed", overview.totals.completed, "/app/assessments"],
               ["open", overview.totals.open, "/app/assessments"],
             ] as const).map(([k, v, href]) => (
-              <div key={k} className="relative bg-ink/40 backdrop-blur-sm transition-colors hover:bg-ink-raised/60">
+              <div key={k} className={cn("relative bg-ink transition-colors hover:bg-ink-raised", k === "unopened" && "col-span-2 bg-ink-raised/70")}>
                 <dt className="px-6 pt-5 text-xs text-ink-secondary sm:px-8">{t(`brief.${k}`)}</dt>
-                <dd className="px-6 pb-5 pt-1.5 sm:px-8">
-                  <Link href={href} className="font-display text-[2rem] font-semibold leading-none tabular after:absolute after:inset-0 focus-visible:outline-none focus-visible:after:outline-2 focus-visible:after:-outline-offset-2 focus-visible:after:outline-focus">
+                <dd className="flex items-baseline gap-3 px-6 pb-5 pt-1.5 sm:px-8">
+                  <Link href={href} className={cn("font-display font-semibold leading-none tabular after:absolute after:inset-0 focus-visible:outline-none focus-visible:after:outline-2 focus-visible:after:-outline-offset-2 focus-visible:after:outline-focus", k === "unopened" ? "text-[2.75rem]" : "text-[2rem]")}>
                     {fmt.n(v)}
                   </Link>
-                  {k === "unopened" && v > 0 ? <span className="ms-2 inline-block size-2 -translate-y-1 rounded-full bg-saffron" aria-hidden /> : null}
+                  {k === "unopened" && v > 0 ? <span className="text-sm text-sidebar-accent">{t("brief.reviewCta")}</span> : null}
                 </dd>
               </div>
             ))}

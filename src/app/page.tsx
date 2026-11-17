@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { ArrowRight, Mail } from "lucide-react";
-import { Logo, LogoMark } from "@/components/brand/logo";
+import { Logo } from "@/components/brand/logo";
 import { EvidenceField } from "@/components/brand/evidence-field";
 import { Button } from "@/components/ui/button";
 import { Avatar } from "@/components/ui/avatar";
@@ -61,7 +61,7 @@ export default async function Home() {
             <LanguageToggle className={cn("rounded-full", INK_GHOST)} />
             <ThemeMenu className={cn("hidden rounded-full sm:inline-flex", INK_GHOST)} />
             {viewer ? (
-              <Button asChild size="sm" className={cn("ms-1 rounded-full", INK_PRIMARY)}>
+              <Button asChild size="sm" className={cn("nav-cta ms-1 rounded-full", INK_PRIMARY)}>
                 <Link href="/app">{t("openApp")}</Link>
               </Button>
             ) : (
@@ -69,7 +69,7 @@ export default async function Home() {
                 <Button asChild variant="ghost" size="sm" className={cn("hidden rounded-full sm:inline-flex", INK_GHOST)}>
                   <Link href="/sign-in">{t("signIn")}</Link>
                 </Button>
-                <Button asChild size="sm" className={cn("ms-1 rounded-full", INK_PRIMARY)}>
+                <Button asChild size="sm" className={cn("nav-cta ms-1 rounded-full", INK_PRIMARY)}>
                   <Link href="/sign-up">{t("getStarted")}</Link>
                 </Button>
               </>
@@ -82,23 +82,15 @@ export default async function Home() {
         {/* ── The film: a world of estimates that narrows as you scroll ── */}
         <ScrollFilm
           anchors={[{ id: "how", p: 0.3 }]}
-          backdrop={
-            <p aria-hidden lang="ar" dir="rtl" className="ghost-word pointer-events-none absolute inset-x-0 bottom-[-6vw] text-center text-[46vw] sm:text-[34vw]">
-              عالم
-            </p>
-          }
         >
           {/* Beat 0: the promise */}
           <div className="beat-0 absolute inset-0 flex flex-col items-center justify-center px-4 pb-[14vh] text-center">
-            <p className="float-in inline-flex items-center gap-2 rounded-full bg-ink-foreground/[0.06] px-3.5 py-1.5 text-[13px] text-ink-secondary shadow-[inset_0_0_0_1px_rgb(245_244_255/0.12)] backdrop-blur-md">
-              <span className="size-1.5 rounded-full bg-saffron shadow-[0_0_10px_2px_rgb(242_181_50/0.6)]" aria-hidden />
-              {t("hero.eyebrow")}
-            </p>
-            <h1 className="mt-8 max-w-5xl text-[2.9rem] font-semibold leading-[0.98] tracking-[-0.035em] sm:text-7xl lg:text-[6.5rem]">
+            <p className="eyebrow float-in text-sidebar-accent">{t("hero.eyebrow")}</p>
+            <h1 className="mt-6 max-w-5xl text-[2.6rem] font-semibold leading-[1] tracking-[-0.035em] sm:text-6xl lg:text-[5.5rem]">
               <SplitWords text={lead} delay={150} />
               {rest ? (
                 <>
-                  <br className="hidden sm:block" /> <SplitWords text={rest} delay={330} className="text-ink-secondary/80" />
+                  <br className="hidden sm:block" /> <SplitWords text={rest} delay={330} />
                 </>
               ) : null}
             </h1>
@@ -106,13 +98,13 @@ export default async function Home() {
               {t("film.sub")}
             </p>
             <div className="float-in mt-10 flex flex-wrap items-center justify-center gap-3" style={{ animationDelay: "800ms" }}>
-              <Button asChild size="lg" className={cn("btn-hero h-13 rounded-full px-7", INK_PRIMARY)}>
+              <Button asChild size="lg" className={cn("btn-hero cta-halo h-13 rounded-full px-7", INK_PRIMARY)}>
                 <Link href={primaryHref}>
                   {primaryLabel}
                   <ArrowRight className="flip-rtl" aria-hidden />
                 </Link>
               </Button>
-              <Button asChild size="lg" variant="secondary" className={cn("h-13 rounded-full px-7 backdrop-blur-md", GHOST_BUTTON)}>
+              <Button asChild size="lg" variant="secondary" className={cn("h-13 rounded-full bg-night/60 px-7 backdrop-blur-md", GHOST_BUTTON)}>
                 <a href="#how">{t("seeHow")}</a>
               </Button>
             </div>
@@ -128,8 +120,8 @@ export default async function Home() {
           <div className="beat-1 absolute inset-0">
             <Stage>
               <BeatCopy n="01" title={t("film.b1title")} body={t("film.b1body")} className="beat-copy-1" />
-              <div className="relative mx-auto h-[16.5rem] w-full max-w-[24rem] sm:h-[24rem] lg:mx-0 lg:h-[26rem] lg:max-w-[30rem]" aria-hidden>
-                <div className="fly absolute start-0 top-0 w-[86%] rounded-[16px] bg-surface p-4 text-text shadow-window" style={{ "--fy": "70px" } as React.CSSProperties}>
+              <div className="relative mx-auto flex w-full max-w-[24rem] flex-col gap-3 sm:block sm:h-[28rem] lg:mx-0 lg:max-w-[30rem]" aria-hidden>
+                <div className="fly card-lit w-[92%] rounded-[16px] p-4 text-text sm:absolute sm:start-0 sm:top-0 sm:w-[86%]" style={{ "--fy": "70px" } as React.CSSProperties}>
                   <div className="flex items-center gap-2.5">
                     <Avatar name={td("from")} size="sm" />
                     <span className="min-w-0 flex-1">
@@ -139,9 +131,9 @@ export default async function Home() {
                     <Mail className="size-4 text-tertiary" aria-hidden />
                   </div>
                   <p className="mt-3 text-sm font-medium">{t("film.emailSubject")}</p>
-                  <p className="mt-1 line-clamp-2 text-[13px] leading-relaxed text-secondary">{td("message")}</p>
+                  <p className="mt-1 line-clamp-3 text-[13px] leading-relaxed text-secondary sm:line-clamp-none">{td("message")}</p>
                 </div>
-                <div className="fly absolute end-0 top-[46%] w-[78%] sm:top-[38%] sm:w-[72%] rounded-[16px] bg-ink-raised p-4 text-ink-foreground shadow-window ring-1 ring-ink-foreground/10" style={{ "--fy": "130px" } as React.CSSProperties}>
+                <div className="fly card-night ms-auto w-[86%] rounded-[16px] p-4 text-ink-foreground sm:absolute sm:end-0 sm:top-[11.25rem] sm:w-[72%]" style={{ "--fy": "130px" } as React.CSSProperties}>
                   <div className="flex items-center gap-2">
                     <span className="inline-flex size-6 items-center justify-center rounded-full bg-ink-foreground/15 text-[10px] font-medium">ON</span>
                     <span className="text-xs font-medium">{t("film.chatFrom")}</span>
@@ -149,14 +141,14 @@ export default async function Home() {
                   </div>
                   <p className="mt-2 text-[13px] leading-relaxed text-ink-foreground/90">{t("film.chat")}</p>
                 </div>
-                <div className="fly absolute bottom-0 start-[8%] hidden w-[62%] rounded-[16px] bg-surface p-4 text-text shadow-window sm:block" style={{ "--fy": "190px" } as React.CSSProperties}>
+                <div className="fly card-lit hidden w-[62%] rounded-[16px] p-4 text-text sm:absolute sm:start-[8%] sm:top-[18.75rem] sm:block" style={{ "--fy": "190px" } as React.CSSProperties}>
                   <div className="flex items-baseline justify-between gap-2">
                     <span className="text-xs font-medium">{t("film.sheetTitle")}</span>
-                    <span className="text-[11px] font-medium text-warning">{t("film.sheetNote")}</span>
+                    <span className="text-[11px] font-medium text-secondary">{t("film.sheetNote")}</span>
                   </div>
                   <div className="mt-3 flex h-14 items-end gap-1.5" dir="ltr">
                     {[42, 55, 48, 61, 58, 70, 84].map((h, i) => (
-                      <span key={i} className={cn("flex-1 rounded-t-[3px]", i === 6 ? "bg-warning" : "bg-level-3")} style={{ height: `${h}%` }} />
+                      <span key={i} className={cn("flex-1 rounded-t-[3px]", i === 6 ? "bg-level-5" : "bg-level-2")} style={{ height: `${h}%` }} />
                     ))}
                   </div>
                 </div>
@@ -168,7 +160,7 @@ export default async function Home() {
           <div className="beat-2 absolute inset-0">
             <Stage>
               <BeatCopy n="02" title={t("film.b2title")} body={t("film.b2body")} className="beat-copy-2" />
-              <div className="beat-copy-2 mx-auto w-full max-w-[34rem] rounded-[22px] bg-night-raised/80 p-6 shadow-window ring-1 ring-ink-foreground/10 backdrop-blur-xl sm:p-8 lg:mx-0" aria-hidden>
+              <div className="beat-copy-2 card-night mx-auto w-full max-w-[34rem] rounded-[22px] p-6 sm:p-8 lg:mx-0" aria-hidden>
                 <div className="flex items-baseline justify-between gap-3">
                   <p className="font-display text-lg font-semibold sm:text-xl">{t("figure.skills.priorities")}</p>
                   <p className="shrink-0 text-xs text-ink-secondary">
@@ -181,7 +173,7 @@ export default async function Home() {
                   ))}
                   <span className="film-range-band absolute inset-y-0 rounded-full shadow-[0_0_24px_rgb(242_181_50/0.45)]" />
                   <span className="absolute -inset-y-1.5 w-0.5 rounded-full bg-ink-foreground/70" style={{ insetInlineStart: "calc(75% - 1px)" }} />
-                  <span className="film-range-dot absolute top-1/2 size-[18px] -translate-y-1/2 rounded-full bg-ink-foreground ring-4 ring-night-raised" />
+                  <span className="film-range-dot absolute top-1/2 size-[18px] -translate-y-1/2 rounded-full bg-ink-foreground ring-4 ring-[#151744]" />
                 </div>
                 <div className="mt-2 flex justify-between text-[11px] text-ink-secondary">
                   <span>{td("scaleLow")}</span>
@@ -204,7 +196,7 @@ export default async function Home() {
             <Stage>
               <BeatCopy n="03" title={t("film.b3title")} body={t("film.b3body")} className="beat-copy-3" />
               <div className="beat-copy-3 mx-auto w-full max-w-[34rem] lg:mx-0" aria-hidden>
-                <div className="rounded-[22px] bg-surface p-6 text-text shadow-window sm:p-8">
+                <div className="card-lit rounded-[22px] p-6 text-text sm:p-8">
                   <p className="text-xs text-tertiary">{t("figure.evidenceSource")}</p>
                   <p className="mt-4 text-[17px] leading-relaxed sm:text-lg">
                     “{td("answerStart")} <mark className="film-mark">{td("answerEvidence")}</mark> {td("answerEnd")}”
@@ -216,7 +208,7 @@ export default async function Home() {
                     </span>
                   </div>
                 </div>
-                <div className="film-verdict mt-4 flex flex-wrap items-center gap-3 rounded-[18px] bg-night-raised/80 px-5 py-4 ring-1 ring-ink-foreground/10 backdrop-blur-xl">
+                <div className="film-verdict card-night mt-4 flex flex-wrap items-center gap-3 rounded-[18px] px-5 py-4">
                   <FitPill fit="STRONG" label={tf("STRONG")} />
                   <span className="text-sm text-ink-secondary">{t("figure.confidence")}</span>
                   <span className="ms-auto text-sm text-ink-foreground">{t("figure.ask1")}</span>
@@ -228,7 +220,7 @@ export default async function Home() {
           {/* Progress rail */}
           <ol className="absolute end-6 top-1/2 hidden -translate-y-1/2 flex-col items-end gap-5 lg:flex" aria-hidden>
             {(["one", "two", "three"] as const).map((k, i) => (
-              <li key={k} className="flex items-center gap-3 text-xs text-ink-secondary" style={{ opacity: `calc(0.4 + var(--b${i + 1}) * 0.6)` }}>
+              <li key={k} className="flex items-center gap-3 text-[13px] text-ink-secondary" style={{ opacity: `calc(0.7 + var(--b${i + 1}) * 0.3)` }}>
                 <span>{t(`film.rail.${k}`)}</span>
                 <span className="film-rail-dot h-0.5 rounded-full bg-ink-foreground" style={{ "--on": `var(--b${i + 1})` } as React.CSSProperties} />
               </li>
@@ -256,8 +248,8 @@ export default async function Home() {
         </section>
 
         {/* ── The name ── */}
-        <section aria-labelledby="name-h" className="relative isolate overflow-hidden px-4 py-32 sm:px-6 lg:py-48">
-          <p aria-hidden lang="ar" dir="rtl" className="ghost-word pointer-events-none absolute inset-x-0 top-1/2 -z-10 -translate-y-1/2 text-center text-[52vw] sm:text-[38vw]">
+        <section aria-labelledby="name-h" className="relative isolate overflow-hidden px-4 pb-16 pt-24 sm:px-6 lg:pb-20 lg:pt-32">
+          <p aria-hidden lang="ar" dir="rtl" className="ghost-word pointer-events-none absolute inset-x-0 top-1/2 -z-10 -translate-y-1/2 text-center text-[44vw] [mask-image:linear-gradient(to_bottom,transparent,#000_25%,#000_70%,transparent)] sm:text-[30vw]">
             عالم
           </p>
           <div data-reveal className="relative mx-auto max-w-4xl text-center">
@@ -287,7 +279,7 @@ export default async function Home() {
         </section>
 
         {/* ── Hire, Grow, Team ── */}
-        <section id="modes" aria-labelledby="modes-h" className="scroll-mt-24 px-4 py-24 sm:px-6 lg:py-32">
+        <section id="modes" aria-labelledby="modes-h" className="scroll-mt-24 px-4 pb-24 pt-16 sm:px-6 lg:pb-32 lg:pt-20">
           <div className="mx-auto max-w-6xl">
             <div data-reveal className="max-w-3xl">
               <p className="eyebrow text-sidebar-accent">{t("nav.modes")}</p>
@@ -310,7 +302,6 @@ export default async function Home() {
               <h2 id="trust-h" className="mt-5 text-4xl font-semibold leading-[1.05] tracking-[-0.03em] sm:text-[3.25rem]">
                 <SplitWords text={t("trust.title")} />
               </h2>
-              <LogoMark reverse className="fade-up mt-10 size-14" />
             </div>
             <ol className="border-t border-ink-foreground/10">
               {(
@@ -346,8 +337,7 @@ export default async function Home() {
           <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(50%_42%_at_50%_42%,rgb(7_8_28/0.85),transparent_75%)]" aria-hidden />
           <div className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-2/3 bg-[radial-gradient(70%_60%_at_50%_100%,rgb(242_181_50/0.14),transparent_70%)]" aria-hidden />
           <div data-reveal className="relative mx-auto flex max-w-4xl flex-col items-center text-center">
-            <LogoMark reverse className="fade-up size-14" />
-            <h2 id="cta-h" className="mt-9 text-[2.6rem] font-semibold leading-[1.02] tracking-[-0.035em] sm:text-7xl">
+            <h2 id="cta-h" className=" text-[2.6rem] font-semibold leading-[1.02] tracking-[-0.035em] sm:text-7xl">
               <SplitWords text={t("cta.title")} />
             </h2>
             <p className="fade-up mt-6 max-w-xl text-lg leading-relaxed text-ink-secondary" style={{ "--d": "300ms" } as React.CSSProperties}>

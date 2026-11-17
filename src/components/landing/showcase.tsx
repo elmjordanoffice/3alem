@@ -31,13 +31,12 @@ export async function Showcase() {
   return (
     <div className="mt-16 grid gap-x-6 gap-y-14 lg:grid-cols-12">
       <Piece className="lg:col-span-12" tag={t("showcase.hireTag")} title={t("modes.hire.title")} body={t("modes.hire.body")} wide>
-        <div className="w-full max-w-xl overflow-hidden rounded-[14px] bg-surface text-text shadow-window">
-          <div className="flex items-center justify-between gap-3 border-b border-border px-4 py-3 text-[11px] text-tertiary">
-            <span className="truncate">{t("bento.hire.header")}</span>
-            <span className="hidden gap-10 sm:flex">
-              <span>{t("bento.hire.skill1")}</span>
-              <span className="me-20">{t("bento.hire.skill2")}</span>
-            </span>
+        <div className="card-lit w-full max-w-xl overflow-hidden rounded-[14px] text-text">
+          <div className="grid grid-cols-[minmax(0,1fr)_5.5rem] items-center gap-4 border-b border-border px-4 py-3 text-[11px] text-tertiary sm:grid-cols-[minmax(0,1fr)_6rem_6rem_5.5rem]">
+            <span className="font-medium text-secondary">{t("figure.crumbRole")}</span>
+            <span className="hidden sm:block">{t("bento.hire.skill1")}</span>
+            <span className="hidden sm:block">{t("bento.hire.skill2")}</span>
+            <span aria-hidden />
           </div>
           <ul className="divide-y divide-border">
             {candidates.map((c) => (
@@ -59,7 +58,7 @@ export async function Showcase() {
 
       <Piece className="lg:col-span-6" tag={t("showcase.growTag")} title={t("modes.grow.title")} body={t("modes.grow.body")}>
         <div className="flex w-full max-w-sm flex-col gap-3 text-sm">
-          <div className="rounded-[14px] bg-surface p-4 text-text shadow-window">
+          <div className="card-lit rounded-[14px] p-4 text-text">
             <p className="text-[11px] font-medium text-tertiary">{t("modes.grow.wellLabel")}</p>
             <p className="mt-1.5 leading-relaxed">{t("modes.grow.well")}</p>
           </div>
@@ -71,7 +70,7 @@ export async function Showcase() {
       </Piece>
 
       <Piece className="lg:col-span-6" tag={t("showcase.teamTag")} title={t("modes.team.title")} body={t("modes.team.body")}>
-        <div className="grid w-full max-w-sm grid-cols-5 gap-1.5 rounded-[14px] bg-surface p-3 shadow-window" role="img" aria-label={t("modes.team.heatLabel")}>
+        <div className="card-lit grid w-full max-w-sm grid-cols-5 gap-1.5 rounded-[14px] p-3" role="img" aria-label={t("modes.team.heatLabel")}>
           {HEAT.flatMap((row, r) => row.map((v, c) => <span key={`${r}-${c}`} className={cn("aspect-[2] rounded-[5px]", LEVEL_BG[v])} />))}
         </div>
       </Piece>
@@ -81,7 +80,7 @@ export async function Showcase() {
 
 function Piece({ tag, title, body, className, wide = false, children }: { tag: string; title: string; body: string; className?: string; wide?: boolean; children: React.ReactNode }) {
   return (
-    <article data-reveal className={cn("group grid gap-6", wide ? "lg:grid-cols-[minmax(0,1.45fr)_minmax(0,1fr)] lg:items-center lg:gap-14" : "", className)}>
+    <article data-reveal className={cn("group grid gap-6", wide ? "lg:grid-cols-[minmax(0,1fr)_minmax(0,1.45fr)] lg:items-center lg:gap-14" : "", className)}>
       <div className={cn("showcase-frame relative isolate flex items-center justify-center overflow-hidden rounded-[22px] px-6 py-10 sm:px-10", wide ? "min-h-[22rem] sm:py-14" : "min-h-[17rem]")}>
         <div className="fade-up relative w-full" style={{ "--d": "120ms" } as React.CSSProperties}>
           <div className="flex justify-center">{children}</div>
