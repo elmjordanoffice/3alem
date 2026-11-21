@@ -47,6 +47,7 @@ export default async function ReportPage({ params }: { params: Promise<{ session
         <HireReport
           content={r.report.content}
           audience="team"
+          firstDays={decision?.outcome === "ADVANCE" || decision?.outcome === "HIRE" || ["STRONG", "GOOD"].includes(r.report.content.fit.level)}
           review={{ sessionId, state: rv?.review ?? null, adjustments: rv?.adjustments ?? [], editable: true }}
           actions={<ReportActions sessionId={sessionId} canShare={viewerCan(viewer, "report.share")} shareLinks={r.report.shareLinks} sharedWithCandidate={r.report.sharedWithCandidate} reviewPending={reviewPending(rv?.review)} />}
         />

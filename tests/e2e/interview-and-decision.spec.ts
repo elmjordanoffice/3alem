@@ -49,6 +49,9 @@ test("an interviewer scores blind, then sees the assessment and records a decisi
     await page.getByRole("button", { name: "Save decision" }).click();
     await expect(page.getByRole("heading", { name: /^Decision/ })).toContainText("Invite to interview");
     await expect(page.getByText(/test stakeholder management in person/)).toBeVisible();
+    // Moving forward: the report adds a first-90-days plan for their manager.
+    await expect(page.getByRole("heading", { name: "First 90 days" })).toBeVisible();
+    await expect(page.locator("#first-days")).toContainText(/Days 1–30/);
 
     const row = await withDb(async (c) => (await c.query(`SELECT outcome FROM hiring_decision WHERE "sessionId" = $1`, [sessionId])).rows[0]);
     expect(row?.outcome).toBe("ADVANCE");

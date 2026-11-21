@@ -1579,7 +1579,8 @@
       "decisions": "How they decide",
       "interview": "Interview questions",
       "integrity": "Confidence and integrity",
-      "method": "How these scores were produced"
+      "method": "How these scores were produced",
+      "firstDays": "First 90 days"
     },
     "roleFit": "Role fit",
     "fit": {
@@ -1759,7 +1760,32 @@
         "generic": "Couldn't save the decision. Try again."
       }
     },
-    "openKit": "Open the interview kit, with a scorecard"
+    "openKit": "Open the interview kit, with a scorecard",
+    "firstDays": {
+      "title": "First 90 days",
+      "note": "If you hire {name}: suggestions from the same evidence, for their manager. Adjust them to the role and the person.",
+      "useEarlyTitle": "Give early ownership",
+      "useEarly": "Work that leans on {skills}. The evidence is strongest there, and early wins build trust both ways.",
+      "supportTitle": "Support from day one",
+      "d30": "Days 1–30: pair them with someone strong in {skill}, and agree what good looks like in this team.",
+      "d60Track": "Days 31–60: start the “{track}” track in Aalim Grow, one 25-minute practice a week.",
+      "d60": "Days 31–60: one 25-minute practice a week on {skill} in Aalim Grow.",
+      "d90": "Days 61–90: check in on {skill}. Look for whether {look}.",
+      "none": "No clear gaps against this role: agree stretch goals together instead.",
+      "look": {
+        "reasons": "they say why, not only what",
+        "tradeoffs": "they name what a choice costs",
+        "specifics": "next steps come with owners and dates",
+        "perspective": "they acknowledge the other side before proposing",
+        "checking": "they check the numbers before committing",
+        "ownership": "they say what they will do, in the first person",
+        "contingency": "they say what they'll do if things change",
+        "options": "they offer people a choice",
+        "calibration": "they say how sure they are",
+        "learning": "they name what they'd do differently next time",
+        "people": "they think about who a decision affects"
+      }
+    }
   },
   "grow": {
     "title": "My development",

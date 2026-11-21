@@ -18,6 +18,7 @@ import { audit } from "@/lib/audit";
 import { enqueue } from "@/lib/jobs";
 import { TRACKS } from "@/lib/grow/tracks";
 import type { ReportContent } from "@/lib/hire/report-types";
+import { TRACK_FOR_DOMAIN } from "@/lib/grow/track-for";
 
 /** Below this many assessed members, managers see only anonymised aggregates. */
 export const MIN_NAMED_TEAM = 5;
@@ -140,18 +141,6 @@ export interface TeamAnalytics {
   suggestedTracks: { key: string; reasonDomain: string }[];
   assignedTracks: string[];
 }
-
-const TRACK_FOR_DOMAIN: Record<string, string> = {
-  leadership: "first-time-manager",
-  management: "first-time-manager",
-  communication: "executive-communication",
-  collaboration: "executive-communication",
-  "critical-thinking": "strategic-thinking",
-  judgment: "decisions-under-pressure",
-  adaptability: "decisions-under-pressure",
-  "product-thinking": "product-thinking",
-  technical: "strategic-thinking",
-};
 
 /**
  * Team analytics with privacy built in: only members who consented, finished

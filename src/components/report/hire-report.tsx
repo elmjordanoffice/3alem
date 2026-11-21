@@ -2,10 +2,12 @@
 import * as React from "react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { ArrowRight, ChevronDown, Info, Lightbulb, ShieldCheck, Sparkles, TrendingUp, MessageSquareQuote, Compass } from "lucide-react";
+import { ArrowRight, CalendarRange, ChevronDown, Info, Lightbulb, ShieldCheck, Sparkles, TrendingUp, MessageSquareQuote, Compass } from "lucide-react";
 import { Collapsible } from "radix-ui";
 import type { ReportContent, ReportDomain, ReportSkill } from "@/lib/hire/report-types";
-import { WORK_STYLES } from "@/lib/framework/data";
+import { DOMAINS, WORK_STYLES } from "@/lib/framework/data";
+import { TRACKS } from "@/lib/grow/tracks";
+import { firstDays as planFirstDays, type FirstDays } from "@/lib/hire/first-days";
 import { cn, initials } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Alert } from "@/components/ui/alert";
@@ -178,7 +180,7 @@ function Verdict({ content }: { content: ReportContent }) {
   );
 }
 
-export function HireReport({ content, audience, actions, review }: { content: ReportContent; audience: ReportAudience; actions?: React.ReactNode; review?: ReviewInfo }) {
+export function HireReport({ content, audience, actions, review, firstDays = false }: { content: ReportContent; audience: ReportAudience; actions?: React.ReactNode; review?: ReviewInfo; firstDays?: boolean }) {
   const t = useTranslations("report");
   const n = useNumbers();
   const { locale } = useLocaleSettings();
@@ -186,6 +188,8 @@ export function HireReport({ content, audience, actions, review }: { content: Re
   const forCandidate = audience === "candidate";
   const skillNames = React.useMemo(() => Object.fromEntries(content.domains.flatMap((d) => [[d.key, d.name], ...d.subSkills.map((s) => [s.key, s.name])])), [content]);
   const radar = content.domains.map((d) => ({ key: d.key, label: t(`domainShort.${d.key}`), values: { c: d.estimate } }));
+  // The first 90 days: for the hiring team, once someone is moving forward.
+  const plan = firstDays && !forCandidate ? planFirstDays(content) : null;
 
   const toc = [
     ["summary", t("toc.summary")],
@@ -195,7 +199,7 @@ export function HireReport({ content, audience, actions, review }: { content: Re
     ["development", t("toc.development")],
     ["style", t("toc.style")],
     ["decisions", t("toc.decisions")],
-    ...(forCandidate ? [] : [["interview", t("toc.interview")], ["integrity", t("toc.integrity")]]),
+    ...(forCandidate ? [] : [["interview", t("toc.interview")], ...(plan ? [["first-days", t("toc.firstDays")]] : []), ["integrity", t("toc.integrity")]]),
     ["method", t("toc.method")],
   ];
 
@@ -334,6 +338,8 @@ export function HireReport({ content, audience, actions, review }: { content: Re
           </Section>
         ) : null}
 
+        {plan ? <FirstDaysSection plan={plan} name={content.candidate.name} /> : null}
+
         {!forCandidate ? (
           <Section id="integrity" icon={ShieldCheck} title={t("toc.integrity")} note={t("integrityNote")}>
             <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-card border border-border bg-border sm:grid-cols-3">
@@ -366,5 +372,44 @@ export function HireReport({ content, audience, actions, review }: { content: Re
       </div>
     </div>
     </ReviewProvider>
+  );
+}
+
+/** If you hire them: where to lean on them early and how to support the gaps, phase by phase. */
+function FirstDaysSection({ plan, name }: { plan: FirstDays; name: string }) {
+  const t = useTranslations("report.firstDays");
+  const { locale } = useLocaleSettings();
+  const dn = (key: string, fallback: string) => {
+    const v = DOMAINS.find((d) => d.key === key)?.name[locale] ?? fallback;
+    return locale === "en" ? v.charAt(0).toLowerCase() + v.slice(1) : v;
+  };
+  const list = (xs: string[]) => new Intl.ListFormat(locale, { type: "conjunction" }).format(xs);
+  return (
+    <Section id="first-days" icon={CalendarRange} title={t("title")} note={t("note", { name })}>
+      <div className="grid gap-4 md:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]">
+        <div className="flex flex-col gap-2 rounded-card bg-surface p-5 shadow-card">
+          <h3 className="eyebrow text-tertiary">{t("useEarlyTitle")}</h3>
+          <p className="text-[15px] leading-relaxed text-text">{plan.useEarly.length ? t("useEarly", { skills: list(plan.useEarly.map((u) => dn(u.key, u.name))) }) : "—"}</p>
+        </div>
+        <div className="flex flex-col gap-3 rounded-card bg-surface p-5 shadow-card">
+          <h3 className="eyebrow text-tertiary">{t("supportTitle")}</h3>
+          {plan.support.length ? (
+            plan.support.map((g) => {
+              const track = g.track ? TRACKS.find((x) => x.key === g.track) : undefined;
+              const skill = dn(g.key, g.name);
+              return (
+                <ol key={g.key} className="flex flex-col gap-2 border-s-2 border-saffron ps-4 text-[15px] leading-relaxed text-text">
+                  <li>{t("d30", { skill })}</li>
+                  <li>{track ? t("d60Track", { track: track.name[locale] }) : t("d60", { skill })}</li>
+                  {g.habit ? <li>{t("d90", { skill, look: t(`look.${g.habit}`) })}</li> : null}
+                </ol>
+              );
+            })
+          ) : (
+            <p className="text-[15px] leading-relaxed text-text">{t("none")}</p>
+          )}
+        </div>
+      </div>
+    </Section>
   );
 }
