@@ -148,3 +148,15 @@ Each of these has unit tests. *(Product)*
 - **The native app** gets the same candidate moments, with haptics.
 
 All motion is CSS or Reanimated, uses springs and short eases, and goes still under reduced motion. *(UX)*
+
+**D-057: The scene as a stack of designed cards, on the web and natively.** On phones, a scene is a stack of cards with the next one peeking in by about 20 pt.
+- **Depth:** the leaving card shrinks and dims as it goes; the arriving one grows from 0.95 with its top edge fixed, so the peek never slides off-screen. On the web this uses scroll-driven CSS where supported. Natively it is computed on the UI thread from one shared scroll value, so dragging re-renders nothing, and the dimming is a canvas-coloured overlay so the card underneath doesn't show through.
+- **Each card has its own face:**
+  - The situation is an ink cover with art generated from the scene title (`src/lib/brand/scene-art.ts`, deterministic and shared by both apps, so a scene looks the same everywhere). It names the people involved and has chips for the documents.
+  - Emails look like a mail app.
+  - Memos carry the company letterhead.
+  - Tables behave like spreadsheets: sticky row numbers, zebra rows, and a hint when they scroll sideways.
+  - Charts are framed with their caption.
+  - The task card says how to answer before the prompt.
+- **Getting around:** long cards scroll inside before handing the swipe to the deck. Keys page through cards on the web. A single nudge on a device's first deck shows that it moves.
+- **Reduced motion:** removes all of it but short fades. *(Mobile)*
