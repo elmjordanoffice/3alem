@@ -140,7 +140,11 @@ export default async function AppHome({ searchParams }: { searchParams: Promise<
       {overview ? (
         <div className="grid gap-x-10 gap-y-12 lg:grid-cols-[minmax(0,1fr)_19rem]">
           <div className="flex min-w-0 flex-col gap-12">
-            {actions.length ? <NextActions actions={actions} fmt={fmt} t={t} /> : null}
+            {actions.length ? (
+              <NextActions actions={actions} fmt={fmt} t={t} />
+            ) : overview.unviewed === 0 && overview.awaitingDecision === 0 && overview.totals.completed > 0 ? (
+              <CaughtUp t={t} />
+            ) : null}
             <ReviewQueue overview={overview} fmt={fmt} t={t} />
             <Roles overview={overview} fmt={fmt} t={t} canCreate={viewerCan(viewer, "assessment.create")} />
           </div>
@@ -208,6 +212,24 @@ function SectionTitle({ id, title, count, href, linkLabel }: { id: string; title
 }
 
 /** The pipeline as a to-do list: the most urgent first, each one a link to where it's done. */
+/** Inbox zero for hiring: the bands have narrowed, the dot has landed. */
+function CaughtUp({ t }: { t: T }) {
+  return (
+    <section aria-labelledby="caught-h" className="flex items-center gap-5 rounded-card bg-surface p-5 shadow-card">
+      <span className="flex w-14 shrink-0 flex-col-reverse items-center gap-1.5" aria-hidden>
+        {[100, 70, 40].map((w, i) => (
+          <span key={i} className="narrow-band block h-2.5 rounded-full bg-text" style={{ width: `${w}%`, animationDelay: `${80 + i * 110}ms` }} />
+        ))}
+        <span className="narrow-dot block size-2.5 rounded-full bg-saffron" style={{ animationDelay: "420ms" }} />
+      </span>
+      <div>
+        <h2 id="caught-h" className="text-lg font-semibold text-text">{t("caughtUp.title")}</h2>
+        <p className="text-sm text-secondary">{t("caughtUp.body")}</p>
+      </div>
+    </section>
+  );
+}
+
 function NextActions({ actions, fmt, t }: { actions: NextAction[]; fmt: Fmt; t: T }) {
   const line = (a: NextAction) => {
     const others = a.count > 1 ? t("actions.others", { n: fmt.n(a.count - 1) }) : "";

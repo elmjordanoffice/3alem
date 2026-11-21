@@ -531,6 +531,10 @@
       "interview": "{name} is invited to interview{others}: the kit and scorecard are ready.",
       "decide": "You read {name}'s report {days} days ago{others}. Record a decision so they hear back.",
       "nudge": "{name} hasn't started after {days} days{others}. Resend the invitation from the role page."
+    },
+    "caughtUp": {
+      "title": "All caught up",
+      "body": "Every report is read and every decision recorded. Nothing is waiting on you."
     }
   },
   "framework": {

@@ -43,6 +43,8 @@ export function DecisionPanel({
   const [open, setOpen] = React.useState(false);
   const [outcome, setOutcome] = React.useState<Outcome | null>(decision?.outcome ?? null);
   const [reason, setReason] = React.useState(decision?.reason ?? "");
+  // Just recorded: the outcome lands like a stamp.
+  const [justSaved, setJustSaved] = React.useState(false);
   const [pending, setPending] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
   const blocked = reviewPending && (outcome === "HIRE" || outcome === "DECLINE");
@@ -51,13 +53,19 @@ export function DecisionPanel({
   return (
     <section aria-labelledby="decision-title" className="mb-6 grid gap-3 rounded-[16px] bg-surface p-4 shadow-card sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center sm:p-5">
       <div className="flex min-w-0 items-start gap-3">
-        <span className="grid size-10 shrink-0 place-items-center rounded-[10px] bg-accent-subtle text-accent-text" aria-hidden>
+        <span className={cn("grid size-10 shrink-0 place-items-center rounded-[10px] bg-accent-subtle text-accent-text", justSaved && decision && "joy-pop")} aria-hidden>
           {decision ? <CheckCircle2 className="size-5" /> : <Gavel className="size-5" />}
         </span>
         <div className="min-w-0">
           <h2 id="decision-title" className="flex flex-wrap items-center gap-2 text-sm font-semibold">
             {t("title")}
-            {decision ? <Badge tone={TONE[decision.outcome]}>{t(`outcome.${decision.outcome}`)}</Badge> : <span className="font-normal text-tertiary">{t("none")}</span>}
+            {decision ? (
+              <span key={`${decision.outcome}-${decision.at}`} className={cn("inline-flex", justSaved && "joy-stamp")}>
+                <Badge tone={TONE[decision.outcome]}>{t(`outcome.${decision.outcome}`)}</Badge>
+              </span>
+            ) : (
+              <span className="font-normal text-tertiary">{t("none")}</span>
+            )}
           </h2>
           <p className="mt-0.5 line-clamp-2 text-sm text-secondary" dir="auto">
             {decision ? t("by", { name: decision.byName, date: date(decision.at), reason: decision.reason }) : t("hint", { name: candidateName })}
@@ -117,6 +125,7 @@ export function DecisionPanel({
                   setPending(false);
                   if (!res.ok) return setError(res.error);
                   setOpen(false);
+                  setJustSaved(true);
                   router.refresh();
                 }}
               >
