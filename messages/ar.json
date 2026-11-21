@@ -1269,6 +1269,10 @@
       "toTask": "اسحب لأعلى لمهمتك",
       "next": "اسحب لأعلى للمستند التالي",
       "document": "المستند {n} من {total}"
+    },
+    "delight": {
+      "sent": "أُرسلت",
+      "chapterDone": "انتهى الفصل {n}"
     }
   },
   "assessments": {

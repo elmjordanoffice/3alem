@@ -1269,6 +1269,10 @@
       "toTask": "Swipe up for your task",
       "next": "Swipe up for the next document",
       "document": "Document {n} of {total}"
+    },
+    "delight": {
+      "sent": "Sent",
+      "chapterDone": "Chapter {n} done"
     }
   },
   "assessments": {

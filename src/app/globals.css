@@ -575,3 +575,7 @@ html[data-r-motion] [data-narrow]:not([data-in]) .r-fade { opacity: 0; }
   .joy-burst { display: none; }
   .ring-arc { transition: none; }
 }
+@keyframes sent-toast { 0% { opacity: 0; transform: translateY(-10px) scale(0.94); } 14% { opacity: 1; transform: translateY(0) scale(1); } 78% { opacity: 1; transform: none; } 100% { opacity: 0; transform: translateY(-6px) scale(0.98); } }
+@keyframes sent-toast-still { 0%, 80% { opacity: 1; } 100% { opacity: 0; } }
+.sent-toast { animation: sent-toast 1500ms var(--ease-out) both; }
+@media (prefers-reduced-motion: reduce) { .sent-toast { animation: sent-toast-still 1500ms linear both; } }

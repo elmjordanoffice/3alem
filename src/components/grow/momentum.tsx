@@ -6,6 +6,7 @@ import { ArrowRight, Award, Check, CalendarCheck, Flame, Footprints, Mountain, N
 import type { MilestoneKey } from "@/lib/grow/momentum";
 import { useLocaleSettings, useNumbers } from "@/components/providers";
 import { cn } from "@/lib/utils";
+import { Burst } from "@/components/brand/burst";
 
 /** Momentum as it crosses to the browser (dates as ISO strings). */
 export interface MomentumView {
@@ -200,17 +201,6 @@ export function MilestoneShelf({ m }: { m: MomentumView }) {
         })}
       </ul>
     </section>
-  );
-}
-
-/** A little burst of vermilion dots, once. */
-export function Burst({ count = 10, distance = 38, delay = 200 }: { count?: number; distance?: number; delay?: number }) {
-  return (
-    <span className="joy-burst" aria-hidden>
-      {Array.from({ length: count }, (_, i) => (
-        <i key={i} style={{ "--a": `${(360 / count) * i}deg`, "--d": `${distance + (i % 3) * 8}px`, "--delay": `${delay + (i % 2) * 60}ms` } as React.CSSProperties} />
-      ))}
-    </span>
   );
 }
 

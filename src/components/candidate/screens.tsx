@@ -16,6 +16,7 @@ import { CandidateShell } from "./shell";
 import { AiExplainer } from "./ai-explainer";
 import { PracticeScene } from "./practice-scene";
 import { cn } from "@/lib/utils";
+import { CountUp, FinishMark } from "./delight";
 
 type View<K extends CandidateView["view"]> = Extract<CandidateView, { view: K }>;
 
@@ -296,6 +297,7 @@ export function Briefing({ v, onBegin }: { v: View<"briefing">; onBegin: () => P
 
 export function Transition({ v, onContinue, onPause }: { v: View<"transition">; onContinue: () => Promise<void>; onPause: () => Promise<void> }) {
   const t = useTranslations("candidate.transition");
+  const td = useTranslations("candidate.delight");
   const ch = v.world.chapters[v.chapterIndex];
   const [pending, setPending] = React.useState<"go" | "pause" | null>(null);
   return (
@@ -306,10 +308,18 @@ export function Transition({ v, onContinue, onPause }: { v: View<"transition">; 
             <p className="text-sm text-hero-secondary">{t("eyebrow")}</p>
             <span className="flex gap-1" aria-hidden>
               {v.world.chapters.map((_, i) => (
-                <span key={i} className={cn("h-1.5 w-6 rounded-full", i < v.chapterIndex ? "bg-saffron" : i === v.chapterIndex ? "bg-ink-foreground" : "bg-ink-foreground/15")} />
+                <span key={i} className={cn("h-1.5 w-6 overflow-hidden rounded-full", i <= v.chapterIndex - 1 ? "bg-ink-foreground/15" : i === v.chapterIndex ? "bg-ink-foreground" : "bg-ink-foreground/15")}>
+                  {i < v.chapterIndex ? <span className={cn("block h-full rounded-full bg-saffron", i === v.chapterIndex - 1 && "joy-sweep")} style={i === v.chapterIndex - 1 ? { animationDelay: "250ms" } : undefined} /> : null}
+                </span>
               ))}
             </span>
           </div>
+          {/* The chapter just finished, stamped, then the next one. */}
+          {v.chapterIndex > 0 ? (
+            <span className="joy-stamp mt-6 inline-block rounded-[8px] border-2 border-saffron px-2.5 py-1 font-display text-xs font-extrabold uppercase tracking-[0.08em] text-saffron [font-stretch:112%]" style={{ animationDelay: "380ms" }}>
+              {td("chapterDone", { n: v.chapterIndex })}
+            </span>
+          ) : null}
           <h1 className="mt-4 text-[2rem] font-semibold leading-tight sm:text-[2.5rem]" dir="auto">{ch?.title}</h1>
           <p className="mt-4 text-lg leading-relaxed text-hero-secondary" dir="auto">{ch?.summary}</p>
         </div>
@@ -317,8 +327,8 @@ export function Transition({ v, onContinue, onPause }: { v: View<"transition">; 
           <section className="px-1">
             <h2 className="text-base font-semibold text-text">{t("soFar")}</h2>
             <ul className="mt-3 flex flex-col gap-2 text-[15px] text-secondary">
-              {v.recap.map((r) => (
-                <li key={r} className="flex gap-3" dir="auto">
+              {v.recap.map((r, i) => (
+                <li key={r} className="joy-rise flex gap-3" style={{ "--i": i + 4 } as React.CSSProperties} dir="auto">
                   <span className="mt-2 size-1.5 shrink-0 rounded-full bg-saffron" aria-hidden />
                   {r}
                 </li>
@@ -443,7 +453,6 @@ function FairnessQuestions({ onSubmit }: { onSubmit: (a: Record<string, string>)
 /** What they got through and the habits their own words showed: closure, not a verdict. */
 function RecapCard({ recap, org }: { recap: NonNullable<View<"complete">["recap"]>; org: string }) {
   const t = useTranslations("candidate.complete.recap");
-  const n = useNumbers();
   const stats = [
     { k: "scenes", v: recap.scenes },
     { k: "followUps", v: recap.followUps },
@@ -454,10 +463,10 @@ function RecapCard({ recap, org }: { recap: NonNullable<View<"complete">["recap"
     <section aria-labelledby="recap-h" className="overflow-hidden rounded-card bg-surface shadow-card">
       <h2 id="recap-h" className="eyebrow px-5 pt-5 text-tertiary">{t("title")}</h2>
       <dl className="grid grid-cols-2 gap-px bg-border sm:grid-cols-4 mt-4 border-y border-border">
-        {stats.map((s) => (
+        {stats.map((s, i) => (
           <div key={s.k} className="flex flex-col-reverse gap-0.5 bg-surface px-5 py-4">
             <dt className="text-sm text-secondary">{t(s.k, { n: s.v })}</dt>
-            <dd className="font-display text-[2rem] font-extrabold leading-none tabular [font-stretch:112%] text-text">{n.number(s.v)}</dd>
+            <dd className="font-display text-[2rem] font-extrabold leading-none tabular [font-stretch:112%] text-text"><CountUp value={s.v} delay={300 + i * 120} /></dd>
           </div>
         ))}
       </dl>
@@ -465,8 +474,8 @@ function RecapCard({ recap, org }: { recap: NonNullable<View<"complete">["recap"
         <div className="px-5 py-5">
           <h3 className="text-sm font-semibold text-text">{t("habitsTitle")}</h3>
           <ul className="mt-3 flex flex-col gap-3">
-            {recap.habits.map((h) => (
-              <li key={h} className="flex gap-3">
+            {recap.habits.map((h, i) => (
+              <li key={h} className="joy-rise flex gap-3" style={{ "--i": i + 8 } as React.CSSProperties}>
                 <span className="mt-[7px] size-1.5 shrink-0 rounded-full bg-saffron" aria-hidden />
                 <span className="text-sm leading-relaxed">
                   <span className="font-medium text-text">{t(`habits.${h}.title`)}.</span> <span className="text-secondary">{t(`habits.${h}.body`)}</span>
@@ -491,7 +500,8 @@ export function Complete({ v, onFeedback, onFairness }: { v: View<"complete">; o
     <CandidateShell branding={v.branding}>
       <div className="mx-auto flex max-w-[680px] flex-col gap-8 px-4 py-16 sm:py-24 animate-slide-up">
         <div className="flex flex-col gap-3">
-          <h1 className="text-2xl font-semibold text-text">{t("title")}</h1>
+          <FinishMark />
+          <h1 className="mt-4 text-2xl font-semibold text-text">{t("title")}</h1>
           <p className="text-lg leading-relaxed text-secondary">{t("body", { org: v.branding.orgName, role: v.roleTitle })}</p>
         </div>
         {v.recap ? <RecapCard recap={v.recap} org={v.branding.orgName} /> : null}
