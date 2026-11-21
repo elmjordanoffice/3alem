@@ -12,6 +12,8 @@ import { Badge } from "@/components/ui/badge";
 import { CandidatesTable } from "@/components/recruiter/candidates-table";
 import { InviteDialog } from "@/components/recruiter/invite-dialog";
 import { SkillChip } from "@/components/report/level";
+import { Shortlist } from "@/components/recruiter/shortlist";
+import { shortlistFor } from "@/lib/hire/shortlist";
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const viewer = await requirePermission("assessment.view");
@@ -29,6 +31,7 @@ export default async function AssessmentPage({ params, searchParams }: { params:
   const ta = await getTranslations("assessments");
   const canInvite = viewerCan(viewer, "candidate.invite") && detail.template.status === "PUBLISHED";
   const mustHaves = detail.weights.filter((w) => w.importance === "MUST_HAVE");
+  const shortlist = viewerCan(viewer, "report.view") ? await shortlistFor(viewer, id) : [];
   const nameOf = (key: string) => detail.technicalSkills.find((s) => s.key === key)?.name ?? ta(`domain.${key}`);
 
   return (
@@ -70,6 +73,7 @@ export default async function AssessmentPage({ params, searchParams }: { params:
           <SkillChip key={w.skillKey} name={nameOf(w.skillKey)} />
         ))}
       </div>
+      <Shortlist entries={shortlist} />
       <CandidatesTable templateId={id} rows={detail.candidates} canInvite={canInvite} />
     </PageContainer>
   );

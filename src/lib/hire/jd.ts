@@ -1,10 +1,11 @@
 import "server-only";
 import { DOMAINS } from "@/lib/framework/data";
-import { ROLE_FAMILIES, type RoleFamilyDef } from "@/lib/framework/role-families";
+import { ROLE_FAMILIES } from "@/lib/framework/role-families";
 import { WORLDS } from "@/lib/itembank";
 import { jdAnalyst, type JdAnalysis } from "@/lib/ai/prompts/jd-analyst";
 import { runAgent, getProvider, type AgentContext } from "@/lib/ai/run";
 import { isArabic, normalize } from "@/lib/ai/offline/text";
+import { blendedWeights, detectFamily } from "./jd-signals";
 
 export interface TechnicalSkillDef {
   key: string;
@@ -105,15 +106,6 @@ export function ruleFlags(jd: string, lang: "en" | "ar"): JdAnalysis["flags"] {
   return out;
 }
 
-function detectFamily(text: string): RoleFamilyDef {
-  const t = normalize(text);
-  let best: { f: RoleFamilyDef; hits: number } | null = null;
-  for (const f of ROLE_FAMILIES) {
-    const hits = f.keywords.reduce((n, k) => n + (t.includes(normalize(k)) ? 1 : 0), 0);
-    if (!best || hits > best.hits) best = { f, hits };
-  }
-  return best && best.hits > 0 ? best.f : (ROLE_FAMILIES.find((f) => f.key === "general-management") ?? ROLE_FAMILIES[0]!);
-}
 
 function detectSeniority(text: string): JdAnalysis["seniority"] {
   const t = text.toLowerCase();
@@ -147,16 +139,24 @@ export function offlineAnalysis(jd: string): { analysis: TemplateAnalysis; techn
   const seniority = detectSeniority(jd);
   const { industry, keywords } = detectIndustry(jd);
   const firstLine = jd.split("\n").map((l) => l.trim()).find((l) => l.length > 2 && l.length < 90) ?? family.name[lang];
-  const ranked = Object.entries(family.domainWeights).sort((a, b) => b[1] - a[1]);
-  const mustHave = new Set(ranked.filter(([, w]) => w >= 0.7).slice(0, 3).map(([d]) => d));
+  // The family's typical profile, moved by what this description asks for; each weight says why.
+  const blended = blendedWeights(jd, family);
   const domainWeights = DOMAINS.map((d) => {
-    const weight = family.domainWeights[d.key] ?? 0.3;
-    const importance = mustHave.has(d.key) ? "MUST_HAVE" : weight >= 0.45 ? "NICE_TO_HAVE" : "BASELINE";
+    const b = blended.find((x) => x.domain === d.key);
+    const weight = b?.weight ?? family.domainWeights[d.key] ?? 0.3;
+    const importance = b?.mustHave ? "MUST_HAVE" : weight >= 0.45 ? "NICE_TO_HAVE" : "BASELINE";
+    const found = b?.found.length ? b.found.map((f) => `“${f}”`).join(lang === "ar" ? "، " : ", ") : "";
     return {
       domain: d.key,
       weight,
       importance: importance as "MUST_HAVE" | "NICE_TO_HAVE" | "BASELINE",
-      rationale: lang === "ar" ? `وزن معتاد لأدوار ${family.name.ar}.` : `Typical weight for ${family.name.en} roles.`,
+      rationale: found
+        ? lang === "ar"
+          ? `يذكر الوصف ${found}؛ مع الوزن المعتاد لأدوار ${family.name.ar}.`
+          : `The description mentions ${found}; combined with the usual weight for ${family.name.en} roles.`
+        : lang === "ar"
+          ? `وزن معتاد لأدوار ${family.name.ar}.`
+          : `Typical weight for ${family.name.en} roles.`,
     };
   });
   const technicalSkills: TechnicalSkillDef[] = family.technicalSkills.map((s, i) => ({
@@ -182,7 +182,7 @@ export function offlineAnalysis(jd: string): { analysis: TemplateAnalysis; techn
       flags: ruleFlags(jd, lang),
       language: lang,
       source: "offline",
-      promptVersion: "jd-offline.v1",
+      promptVersion: "jd-offline.v2",
     },
     technicalSkills,
   };

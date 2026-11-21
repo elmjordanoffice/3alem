@@ -1409,7 +1409,33 @@
     "decisionNote": "Reports inform your decision. Aalim never rejects anyone automatically.",
     "exportCsv": "Export CSV",
     "candidateDeleted": "The candidate's data was deleted.",
-    "scorecards": "{n, plural, one {1 scorecard} other {# scorecards}}"
+    "scorecards": "{n, plural, one {1 scorecard} other {# scorecards}}",
+    "shortlist": {
+      "title": "Shortlist",
+      "body": "What the reports suggest doing next, with the reasons. Your team decides.",
+      "group": {
+        "interview": "Interview first",
+        "closer": "Worth a closer look",
+        "elsewhere": "Better fit elsewhere"
+      },
+      "groupHint": {
+        "interview": "Strong or good fit for this role.",
+        "closer": "One gap, thin evidence or a hidden strength.",
+        "elsewhere": "Fits another open role better."
+      },
+      "empty": "No one here yet.",
+      "notNow": "{n, plural, one {1 candidate isn't a match for this role now.} other {# candidates aren't a match for this role now.}}",
+      "more": "and {n} more",
+      "and": " and ",
+      "reason": {
+        "strongOn": "Strongest on {skills}.",
+        "gapOn": "Below the role on {skill}: test it in the interview.",
+        "thin": "Evidence is thin: confirm in the interview.",
+        "potential": "Hidden strength: {text}",
+        "fitsRole": "Fits {role} better."
+      },
+      "footer": "Suggestions order your reading; they never reject anyone. Open a report to see the evidence."
+    }
   },
   "invite": {
     "button": "Invite candidates",

@@ -39,6 +39,19 @@ What you bring
 - Clear, calm communication with clients and senior stakeholders
 - Good judgment under pressure, and the courage to raise risks early`;
 
+// A second open role, so the shortlist can point people to a better fit (talent rediscovery).
+const SECOND_JD = `Customer Success Lead
+
+Northwind is hiring a Customer Success Lead to own relationships with our largest retail and pharmaceutical clients.
+
+You will run quarterly reviews, turn client feedback into improvements with product and operations, and calm difficult conversations when something goes wrong. You will mentor two account coordinators and represent the client's voice in planning.
+
+What you bring
+- 3+ years managing client relationships or account management
+- Excellent listening and clear writing, in English and Arabic
+- Comfort building a case with data and persuading senior stakeholders
+- A habit of following through and owning the outcome`;
+
 const db = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL! }) });
 
 export const DEMO_PASSWORD = "aalim-demo-2026";
@@ -139,6 +152,25 @@ async function seedDemo() {
         status: "PUBLISHED",
         publishedAt: new Date(),
         skillWeights: { create: initialSkillWeights(analysis, technicalSkills).map((w) => ({ ...w, organizationId: org.id })) },
+      },
+    });
+  }
+  if (!(await db.assessmentTemplate.findFirst({ where: { organizationId: org.id, title: "Customer Success Lead" } }))) {
+    const second = offlineAnalysis(SECOND_JD);
+    await db.assessmentTemplate.create({
+      data: {
+        organizationId: org.id,
+        createdById: orgAdmin.id,
+        title: "Customer Success Lead",
+        jobDescription: SECOND_JD,
+        analysis: second.analysis as object,
+        technicalSkillMap: second.technicalSkills as object,
+        language: "en",
+        durationMinutes: 45,
+        accommodations: { extraTimeAllowed: true, untimedAllowed: true, largerTextAllowed: true },
+        status: "PUBLISHED",
+        publishedAt: new Date(),
+        skillWeights: { create: initialSkillWeights(second.analysis, second.technicalSkills).map((w) => ({ ...w, organizationId: org.id })) },
       },
     });
   }
