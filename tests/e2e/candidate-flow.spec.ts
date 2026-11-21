@@ -20,6 +20,10 @@ test("a candidate completes a full adaptive assessment and a report is produced"
 
   const transitions = await runSession(page, /you're done/);
   await expect(page.getByRole("heading", { name: /you're done/ })).toBeVisible();
+  // Closure, not a verdict: what they got through and habits from their own words.
+  const recap = page.getByRole("region", { name: "Your week, in short" });
+  await expect(recap).toContainText(/scenes/);
+  await expect(recap).toContainText(/not a score/);
 
   // Moving between scenes feels immediate: p90 under 1.5 s.
   const sorted = [...transitions].sort((a, b) => a - b);

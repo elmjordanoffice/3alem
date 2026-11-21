@@ -1121,7 +1121,62 @@
       "high": "Very good",
       "comment": "Anything we should change? (optional)",
       "send": "Send feedback",
-      "thanks": "Thank you for your feedback."
+      "thanks": "Thank you for your feedback.",
+      "recap": {
+        "title": "Your week, in short",
+        "scenes": "{n, plural, one {scene} other {scenes}}",
+        "followUps": "{n, plural, one {follow-up} other {follow-ups}}",
+        "words": "{n, plural, one {word} other {words}}",
+        "minutes": "{n, plural, one {minute} other {minutes}}",
+        "habitsTitle": "What showed up in your answers",
+        "note": "A description of your own words, not a score. {org} reviews your full report with a person.",
+        "habits": {
+          "reasons": {
+            "title": "You explained why",
+            "body": "You gave the reason behind your choices, so a reader can follow your thinking."
+          },
+          "ownership": {
+            "title": "You took it on yourself",
+            "body": "You said what you would do, in your own voice, rather than what should happen."
+          },
+          "checking": {
+            "title": "You checked before deciding",
+            "body": "You looked at the numbers and the evidence before you committed."
+          },
+          "tradeoffs": {
+            "title": "You named the cost",
+            "body": "You said what a choice would give up, not only what it would gain."
+          },
+          "perspective": {
+            "title": "You saw it from their side",
+            "body": "You acknowledged how the other people involved would see it."
+          },
+          "specifics": {
+            "title": "You put a time on it",
+            "body": "Your next steps had days and times, so people know what happens when."
+          },
+          "contingency": {
+            "title": "You planned for change",
+            "body": "You said what you would do if things went differently."
+          },
+          "options": {
+            "title": "You offered choices",
+            "body": "You gave people options instead of a single answer."
+          },
+          "calibration": {
+            "title": "You were honest about certainty",
+            "body": "You said how sure you were instead of sounding sure about everything."
+          },
+          "learning": {
+            "title": "You looked for the lesson",
+            "body": "You said what you would carry into next time."
+          },
+          "people": {
+            "title": "You kept people in mind",
+            "body": "You thought about who each decision affects."
+          }
+        }
+      }
     },
     "fairness": {
       "title": "Help us check that our assessments are fair (optional)",

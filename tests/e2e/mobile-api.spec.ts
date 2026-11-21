@@ -96,6 +96,11 @@ test("the mobile API runs a full assessment from invitation to completion", asyn
   }
   expect(view.view).toBe("complete");
   expect(seen.size).toBeGreaterThan(2);
+  // The recap: counts and the habits that showed up in at least two answers.
+  const recap = (view as unknown as { recap: { scenes: number; words: number; habits: string[] } }).recap;
+  expect(recap.scenes).toBeGreaterThan(2);
+  expect(recap.words).toBeGreaterThan(50);
+  expect(recap.habits).toContain("checking");
 
   await post(request, token, { action: "feedback", rating: 5, comment: "Smooth on my phone." });
 });

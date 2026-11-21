@@ -5,6 +5,7 @@ import { systemDb } from "@/lib/db";
 import { candidateContext, currentItem, currentStage, minutesLeft, roleplayTranscript, type Stage } from "./session";
 import { templateAccommodations, templateAnalysis, type TemplateRow } from "./templates";
 import type { ItemMeta } from "./items";
+import { recapFrom, type Recap } from "./recap";
 
 export interface PublicWorld {
   companyName: string;
@@ -61,7 +62,7 @@ export type CandidateView =
       };
     }
   | { view: "paused"; branding: Branding; world: PublicWorld; chapterIndex: number; minutesLeft: number }
-  | { view: "complete"; branding: Branding; roleTitle: string };
+  | { view: "complete"; branding: Branding; roleTitle: string; recap?: Recap };
 
 function branding(org: { name: string; logoUrl: string | null; brandColor: string | null }): Branding {
   return { orgName: org.name, logoUrl: org.logoUrl, brandColor: org.brandColor };
@@ -114,7 +115,10 @@ type SessionLike = { id: string; status: string; currentChapter: number; timeBud
 
 /** The view for an existing session (shared by Hire candidates and Grow). */
 export async function viewForSession(session: SessionLike, brand: Branding, roleTitle: string): Promise<CandidateView> {
-  if (["COMPLETED", "SCORED", "REPORTED"].includes(session.status)) return { view: "complete", branding: brand, roleTitle };
+  if (["COMPLETED", "SCORED", "REPORTED"].includes(session.status)) {
+    const responses = await systemDb.response.findMany({ where: { sessionId: session.id }, select: { stage: true, content: true, durationMs: true } });
+    return { view: "complete", branding: brand, roleTitle, recap: responses.length ? recapFrom(responses) : undefined };
+  }
 
   const worldRow = await systemDb.scenarioWorld.findUnique({ where: { sessionId: session.id } });
   if (!worldRow) return { view: "preparing", branding: brand };

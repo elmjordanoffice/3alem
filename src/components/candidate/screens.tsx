@@ -440,6 +440,47 @@ function FairnessQuestions({ onSubmit }: { onSubmit: (a: Record<string, string>)
   );
 }
 
+/** What they got through and the habits their own words showed: closure, not a verdict. */
+function RecapCard({ recap, org }: { recap: NonNullable<View<"complete">["recap"]>; org: string }) {
+  const t = useTranslations("candidate.complete.recap");
+  const n = useNumbers();
+  const stats = [
+    { k: "scenes", v: recap.scenes },
+    { k: "followUps", v: recap.followUps },
+    { k: "words", v: recap.words },
+    { k: "minutes", v: recap.minutes },
+  ] as const;
+  return (
+    <section aria-labelledby="recap-h" className="overflow-hidden rounded-card bg-surface shadow-card">
+      <h2 id="recap-h" className="eyebrow px-5 pt-5 text-tertiary">{t("title")}</h2>
+      <dl className="grid grid-cols-2 gap-px bg-border sm:grid-cols-4 mt-4 border-y border-border">
+        {stats.map((s) => (
+          <div key={s.k} className="flex flex-col-reverse gap-0.5 bg-surface px-5 py-4">
+            <dt className="text-sm text-secondary">{t(s.k, { n: s.v })}</dt>
+            <dd className="font-display text-[2rem] font-extrabold leading-none tabular [font-stretch:112%] text-text">{n.number(s.v)}</dd>
+          </div>
+        ))}
+      </dl>
+      {recap.habits.length ? (
+        <div className="px-5 py-5">
+          <h3 className="text-sm font-semibold text-text">{t("habitsTitle")}</h3>
+          <ul className="mt-3 flex flex-col gap-3">
+            {recap.habits.map((h) => (
+              <li key={h} className="flex gap-3">
+                <span className="mt-[7px] size-1.5 shrink-0 rounded-full bg-saffron" aria-hidden />
+                <span className="text-sm leading-relaxed">
+                  <span className="font-medium text-text">{t(`habits.${h}.title`)}.</span> <span className="text-secondary">{t(`habits.${h}.body`)}</span>
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
+      <p className="border-t border-border px-5 py-3 text-xs leading-relaxed text-tertiary">{t("note", { org })}</p>
+    </section>
+  );
+}
+
 export function Complete({ v, onFeedback, onFairness }: { v: View<"complete">; onFeedback: (f: { rating: number; comment: string }) => Promise<void>; onFairness?: (a: Record<string, string>) => Promise<void> }) {
   const t = useTranslations("candidate.complete");
   const n = useNumbers();
@@ -453,6 +494,7 @@ export function Complete({ v, onFeedback, onFairness }: { v: View<"complete">; o
           <h1 className="text-2xl font-semibold text-text">{t("title")}</h1>
           <p className="text-lg leading-relaxed text-secondary">{t("body", { org: v.branding.orgName, role: v.roleTitle })}</p>
         </div>
+        {v.recap ? <RecapCard recap={v.recap} org={v.branding.orgName} /> : null}
         <section className="flex flex-col gap-2">
           <h2 className="text-sm font-semibold text-text">{t("nextTitle")}</h2>
           <ul className="flex list-disc flex-col gap-1.5 ps-5 text-sm text-secondary">
