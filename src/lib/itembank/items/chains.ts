@@ -935,4 +935,666 @@ export const ITEMS: BankItem[] = [
       },
     },
   },
+
+  // ─────────────────────────────────────────────────────────────────────────
+  {
+    id: "chain-04-the-held-delivery",
+    type: "CONSEQUENCE_CHAIN",
+    difficulty: 3,
+    dials: { ambiguity: 4, stakeholders: 3, conflictingConstraints: 3, stakes: 3, timePressure: 4, informationGaps: 4 },
+    targets: ["adaptability.handling-new-information", "judgment.deciding-under-ambiguity", "collaboration.team-orientation"],
+    roleFamilies: ["operations"],
+    minutes: 8,
+    storyPhase: "middle",
+    content: {
+      en: {
+        title: "The held delivery",
+        scenario:
+          "You run the evening shift (14 staff) at {{company}}'s distribution centre, which supplies 45 pharmacies and clinics; 18 of the pharmacies belong to {{client}}'s chain. Tonight's orders must be loaded by 05:00. A delivery of 30 pallets of fever medicine and flu-season stock, needed for many of those orders, is held at the port. {{report1}} leads picking, {{report2}} runs stock control, and {{peer}} runs the returns team next door. {{manager}} is off tonight and reachable only for emergencies. You will make four decisions as the night unfolds; what happens next depends partly on your choices. The shift plan is in the materials.",
+        materials: [
+          {
+            kind: "table",
+            id: "m1",
+            title: "Tonight's shift plan",
+            caption:
+              "Overtime is limited to 2 hours per person per shift without {{manager}}'s approval. The 6 rural pharmacies on Route 7 receive one delivery a week; all others receive daily deliveries.",
+            columns: [
+              { key: "time", label: "Time" },
+              { key: "activity", label: "Activity" },
+            ],
+            rows: [
+              { time: "15:00", activity: "Shift starts: 14 staff" },
+              { time: "15:00–21:00", activity: "Pick and stage regular orders" },
+              { time: "21:00–02:00", activity: "Pick medicine orders (needs the port delivery)" },
+              { time: "02:00–05:00", activity: "Check and load trucks" },
+              { time: "05:00", activity: "Trucks leave for 45 pharmacies and clinics" },
+            ],
+          },
+        ],
+        task: {
+          kind: "chain",
+          prompt: "In each round, choose what you do and briefly say why.",
+          requireJustification: true,
+          chain: {
+            rounds: [
+              {
+                id: "round1",
+                situation:
+                  "15:00. The freight agent says the port's document check should finish 'probably by 18:00, maybe tomorrow morning'. If the pallets arrive by 21:00, the plan still works.",
+                options: [
+                  { id: "r1a", label: "Pick and stage everything else now and plan the medicine pick as a late wave, asking 4 people to be ready to stay up to 2 hours late." },
+                  { id: "r1b", label: "Decide now to send tonight's trucks without the medicines, and arrange a separate van run tomorrow afternoon." },
+                  { id: "r1c", label: "Ask {{specialist}} to go to the port and push the document check, and hold the decision until 18:00." },
+                ],
+                consequences: [
+                  { optionId: "r1a", text: "By 20:00, 80% of the regular orders are staged. Two of the four people you asked to stay say they have family commitments and were never asked whether they could." },
+                  { optionId: "r1b", text: "The shift runs calmly. At 17:30 {{client}} emails: the fever medicine goes on promotion in {{client}}'s pharmacies at 08:00 tomorrow, and radio advertising is already booked." },
+                  { optionId: "r1c", text: "The documents clear at 17:40 and the truck is expected at 21:00. While you waited, staging fell about an hour behind plan." },
+                ],
+              },
+              {
+                id: "round2",
+                situation:
+                  "21:15. The truck arrives. During unloading, 6 of the 30 pallets turn out to have crushed boxes. Sorting what can still be sent needs 2 people for about 90 minutes, and your team is already stretched. {{peer}}'s returns team finishes at 22:00. {{peer}} offers to lend you 3 people for 2 hours, 'if two of yours cover my Saturday shift next week'.",
+                options: [
+                  { id: "r2a", label: "Accept the offer and agree the Saturday swap now." },
+                  { id: "r2b", label: "Decline, move two of your own pickers onto sorting, and accept that some orders may load late." },
+                  { id: "r2c", label: "Accept the help tonight and say you will confirm the Saturday swap with {{manager}} tomorrow." },
+                ],
+                consequences: [
+                  { optionId: "r2a", text: "Sorting finishes by 23:00, and 4 of the 6 damaged pallets are usable. Next week two of your staff work Saturday; one says it is their third extra shift this month." },
+                  { optionId: "r2b", text: "Sorting finishes by 23:30 and picking is about 40 minutes behind. Your team is tired, but nobody owes anyone a shift." },
+                  { optionId: "r2c", text: "The help arrives, with a comment from {{peer}}: 'I thought we could sort this out between us.' Sorting finishes by 23:00, and 4 of the 6 damaged pallets are usable." },
+                ],
+              },
+              {
+                id: "round3",
+                situation:
+                  "00:30. {{report2}} reports that after the damage you have about 20% less fever medicine than ordered. By default, the system cuts every pharmacy's order by 20%. {{client}}'s 18 pharmacies start their promotion at 08:00. The 6 pharmacies on Route 7 are in rural areas.",
+                options: [
+                  { id: "r3a", label: "Fill {{client}}'s 18 pharmacies in full and take the whole shortfall from the other 27." },
+                  { id: "r3b", label: "Keep the system's even 20% cut for everyone, and tell all pharmacies in the morning." },
+                  { id: "r3c", label: "Fill the 6 Route 7 pharmacies in full, spread the shortfall across the other 39 including {{client}}'s, and call {{client}} at 07:00 to explain." },
+                ],
+                consequences: [
+                  { optionId: "r3a", text: "{{client}}'s promotion starts with full stock. By 10:00, three independent pharmacies call: they have run out of children's fever medicine, and one has a queue of parents." },
+                  { optionId: "r3b", text: "Every pharmacy is short by a fifth. The Route 7 pharmacies will not get another delivery for 7 days. {{client}} complains that the promotion is undersupplied." },
+                  { optionId: "r3c", text: "The Route 7 pharmacies get full orders. At 07:00 {{client}} is clearly unhappy, but thanks you for calling before the pharmacies opened and asks when the rest will come." },
+                ],
+              },
+              {
+                id: "round4",
+                situation:
+                  "03:30. A check by {{report2}} finds a counting error: 2 of the pallets marked damaged belong to a different product. The real shortfall is about 8%, not 20%. Re-picking to the new numbers would push loading to about 05:40, so trucks would reach some pharmacies after they open. A top-up van can leave at 10:00.",
+                options: [
+                  { id: "r4a", label: "Re-pick everything to the new numbers and accept that loading finishes at 05:40." },
+                  { id: "r4b", label: "Load as planned at 05:00 and send the extra stock on the 10:00 van to the pharmacies that were cut most." },
+                  { id: "r4c", label: "Re-pick only the orders that were cut most, accepting that those trucks leave at about 05:20." },
+                ],
+                consequences: [
+                  { optionId: "r4a", text: "Every pharmacy receives the right quantity, but 11 deliveries arrive after opening, and two pharmacies complain about vans unloading in their busiest hour." },
+                  { optionId: "r4b", text: "The trucks leave on time. The 10:00 van reaches the most-cut pharmacies in the early afternoon; some had to turn customers away in the morning." },
+                  { optionId: "r4c", text: "The most-cut pharmacies receive full orders 20 minutes late; the rest arrive on time, and the 10:00 van fills the small gaps." },
+                ],
+              },
+            ],
+          },
+        },
+        probe: { prompt: "Now that you know how the night ended, which of your four decisions would you change, and why?" },
+        twist: {
+          change:
+            "The following week, {{peer}}'s returns team falls badly behind after a supplier recall. {{peer}} asks you to lend 3 of your people for two evenings, in a week that is busy for your team too.",
+          prompt: "What do you decide, and what do you say to {{peer}} and to your own team?",
+        },
+      },
+      ar: {
+        title: "الشحنة المحتجزة",
+        scenario:
+          "تدير المناوبة المسائية (14 موظفًا) في مركز التوزيع التابع لـ{{company}}، الذي يزوّد 45 صيدلية وعيادة، منها 18 صيدلية تتبع سلسلة {{client}}. يجب تحميل طلبات الليلة قبل الساعة 05:00. وشحنة من 30 منصة نقّالة تحمل أدوية خافضة للحرارة ومخزون موسم الإنفلونزا، تحتاج إليها طلبات كثيرة، محتجزة في الميناء. فريق التجهيز بقيادة {{report1}}، ومراقبة المخزون بيد {{report2}}، وفريق المرتجعات المجاور بقيادة {{peer}}. و{{manager}} خارج الدوام الليلة، والاتصال متاح في الحالات الطارئة فقط. ستتخذ أربعة قرارات مع تطور الأحداث في هذه الليلة، وما يحدث بعد كل قرار يتوقف جزئيًا على اختياراتك. تجد خطة المناوبة ضمن المواد.",
+        materials: [
+          {
+            kind: "table",
+            id: "m1",
+            title: "خطة مناوبة الليلة",
+            caption:
+              "لا يتجاوز العمل الإضافي ساعتين للشخص الواحد في المناوبة دون موافقة {{manager}}. وتتسلم الصيدليات الريفية الست على المسار 7 شحنة واحدة في الأسبوع، أما البقية فتتسلم شحنات يومية.",
+            columns: [
+              { key: "time", label: "الوقت" },
+              { key: "activity", label: "النشاط" },
+            ],
+            rows: [
+              { time: "15:00", activity: "بدء المناوبة: 14 موظفًا" },
+              { time: "15:00–21:00", activity: "تجهيز الطلبات المعتادة وترتيبها" },
+              { time: "21:00–02:00", activity: "تجهيز طلبات الأدوية (تتوقف على شحنة الميناء)" },
+              { time: "02:00–05:00", activity: "المراجعة وتحميل الشاحنات" },
+              { time: "05:00", activity: "انطلاق الشاحنات إلى 45 صيدلية وعيادة" },
+            ],
+          },
+        ],
+        task: {
+          kind: "chain",
+          prompt: "في كل جولة، اختر ما تفعله واذكر السبب باختصار.",
+          requireJustification: true,
+          chain: {
+            rounds: [
+              {
+                id: "round1",
+                situation:
+                  "الساعة 15:00. يقول وكيل الشحن إن فحص المستندات في الميناء سينتهي «على الأرجح قبل الساعة 18:00، وربما صباح الغد». وإذا وصلت المنصات قبل الساعة 21:00 فالخطة ما زالت ممكنة.",
+                options: [
+                  { id: "r1a", label: "تجهيز كل الطلبات الأخرى وترتيبها الآن، وتخطيط تجهيز الأدوية في موجة متأخرة، مع الطلب من 4 أشخاص الاستعداد للبقاء حتى ساعتين إضافيتين." },
+                  { id: "r1b", label: "تقرير إرسال شاحنات الليلة دون الأدوية من الآن، وترتيب رحلة منفصلة بشاحنة صغيرة بعد ظهر الغد." },
+                  { id: "r1c", label: "إرسال {{specialist}} إلى الميناء لمتابعة فحص المستندات وتسريعه، وتأجيل القرار حتى الساعة 18:00." },
+                ],
+                consequences: [
+                  { optionId: "r1a", text: "بحلول الساعة 20:00 تكون 80% من الطلبات المعتادة جاهزة. ويقول اثنان من الأربعة الذين طلبت بقاءهم إن لديهما التزامات عائلية، وإن أحدًا لم يسألهما أصلًا إن كان البقاء ممكنًا." },
+                  { optionId: "r1b", text: "تسير المناوبة بهدوء. وفي الساعة 17:30 تصل رسالة من {{client}}: الدواء الخافض للحرارة معروض بسعر ترويجي في صيدليات السلسلة بدءًا من الساعة 08:00 غدًا، وإعلانات الإذاعة محجوزة مسبقًا." },
+                  { optionId: "r1c", text: "تُستكمل المستندات الساعة 17:40، ويُتوقع وصول الشاحنة الساعة 21:00. وفي أثناء الانتظار تأخر التجهيز نحو ساعة عن الخطة." },
+                ],
+              },
+              {
+                id: "round2",
+                situation:
+                  "الساعة 21:15. وصلت الشاحنة، وفي أثناء التفريغ تبيّن أن صناديق 6 من المنصات الثلاثين مسحوقة. فرز ما يمكن إرساله يحتاج إلى شخصين نحو 90 دقيقة، وفريقك مثقل أصلًا. ينتهي دوام فريق المرتجعات الساعة 22:00، والعرض من {{peer}}: إعارتك 3 أشخاص لمدة ساعتين، «على أن يغطي اثنان من فريقك مناوبة السبت لدى فريقي الأسبوع القادم».",
+                options: [
+                  { id: "r2a", label: "قبول العرض والموافقة على تبادل مناوبة السبت الآن." },
+                  { id: "r2b", label: "الاعتذار عن العرض، ونقل اثنين من فريق التجهيز إلى الفرز، وتقبّل تأخر تحميل بعض الطلبات." },
+                  { id: "r2c", label: "قبول المساعدة الليلة، والقول إنك ستؤكد تبادل مناوبة السبت مع {{manager}} غدًا." },
+                ],
+                consequences: [
+                  { optionId: "r2a", text: "ينتهي الفرز الساعة 23:00، و4 من المنصات الست التالفة صالحة للإرسال. وفي الأسبوع التالي يعمل اثنان من فريقك يوم السبت، ويقول أحدهما إنها المناوبة الإضافية الثالثة هذا الشهر." },
+                  { optionId: "r2b", text: "ينتهي الفرز الساعة 23:30، ويتأخر التجهيز نحو 40 دقيقة. فريقك متعب، لكن لا أحد مدين لأحد بمناوبة." },
+                  { optionId: "r2c", text: "تصل المساعدة من فريق {{peer}}، ومعها عبارة عتاب: «ظننت أننا نستطيع حل هذا فيما بيننا». ينتهي الفرز الساعة 23:00، و4 من المنصات الست التالفة صالحة للإرسال." },
+                ],
+              },
+              {
+                id: "round3",
+                situation:
+                  "الساعة 00:30. بحسب {{report2}}، صار لديكم بعد التلف أقل بنحو 20% من الكمية المطلوبة من الدواء الخافض للحرارة. والنظام يخفّض تلقائيًا طلب كل صيدلية بنسبة 20%. صيدليات سلسلة {{client}} الثماني عشرة تبدأ العرض الترويجي الساعة 08:00، والصيدليات الست على المسار 7 في مناطق ريفية.",
+                options: [
+                  { id: "r3a", label: "تلبية طلبات صيدليات {{client}} الثماني عشرة كاملة، وتحميل العجز كله على الصيدليات السبع والعشرين الأخرى." },
+                  { id: "r3b", label: "الإبقاء على التخفيض المتساوي بنسبة 20% للجميع كما يقترح النظام، وإبلاغ الصيدليات كلها في الصباح." },
+                  { id: "r3c", label: "تلبية طلبات صيدليات المسار 7 الست كاملة، وتوزيع العجز على الصيدليات التسع والثلاثين الأخرى ومنها صيدليات {{client}}، والاتصال بـ{{client}} الساعة 07:00 للشرح." },
+                ],
+                consequences: [
+                  { optionId: "r3a", text: "يبدأ عرض سلسلة {{client}} بمخزون كامل. وبحلول الساعة 10:00 تتصل ثلاث صيدليات مستقلة: نفد لديها الدواء الخافض للحرارة للأطفال، وفي إحداها طابور من الأهالي." },
+                  { optionId: "r3b", text: "تنقص كل صيدلية الخُمس، ولن تصل إلى صيدليات المسار 7 شحنة أخرى قبل 7 أيام. وتصل شكوى من {{client}} بأن العرض الترويجي لم يحصل على كفايته." },
+                  { optionId: "r3c", text: "تتسلم صيدليات المسار 7 طلباتها كاملة. وفي اتصال الساعة 07:00 يبدو الاستياء واضحًا في صوت {{client}}، ومع ذلك يأتي الشكر على الاتصال قبل فتح الصيدليات، مع سؤال عن موعد وصول بقية الكمية." },
+                ],
+              },
+              {
+                id: "round4",
+                situation:
+                  "الساعة 03:30. يكشف تدقيق {{report2}} خطأً في العد: منصتان من المنصات المصنفة تالفة تخصان منتجًا آخر، فالعجز الفعلي نحو 8% لا 20%. وإعادة التجهيز وفق الأرقام الجديدة ستؤخر التحميل حتى الساعة 05:40 تقريبًا، فتصل الشاحنات إلى بعض الصيدليات بعد فتح أبوابها. ويمكن أن تنطلق شاحنة تكميلية الساعة 10:00.",
+                options: [
+                  { id: "r4a", label: "إعادة تجهيز كل الطلبات وفق الأرقام الجديدة، وتقبّل انتهاء التحميل الساعة 05:40." },
+                  { id: "r4b", label: "التحميل كما هو مخطط الساعة 05:00، وإرسال الكمية الإضافية مع الشاحنة التكميلية الساعة 10:00 إلى الصيدليات الأكثر تضررًا من التخفيض." },
+                  { id: "r4c", label: "إعادة تجهيز طلبات الصيدليات الأكثر تضررًا فقط، وتقبّل انطلاق شاحناتها نحو الساعة 05:20." },
+                ],
+                consequences: [
+                  { optionId: "r4a", text: "تتسلم كل صيدلية الكمية الصحيحة، لكن 11 شحنة تصل بعد فتح الصيدليات، وتشتكي صيدليتان من تفريغ الشاحنات في ساعة الذروة." },
+                  { optionId: "r4b", text: "تنطلق الشاحنات في موعدها، وتصل الشاحنة التكميلية إلى الصيدليات الأكثر تضررًا في أول ساعات بعد الظهر، وقد اضطر بعضها إلى الاعتذار من زبائن في الصباح." },
+                  { optionId: "r4c", text: "تتسلم الصيدليات الأكثر تضررًا طلباتها كاملة بتأخير 20 دقيقة، وتصل البقية في موعدها، وتسد الشاحنة التكميلية الفجوات الصغيرة." },
+                ],
+              },
+            ],
+          },
+        },
+        probe: { prompt: "بعد أن عرفت كيف انتهت الليلة: أي قراراتك الأربعة كنت ستغيّره، ولماذا؟" },
+        twist: {
+          change:
+            "في الأسبوع التالي يتأخر فريق المرتجعات كثيرًا بعد أن سحب أحد الموردين منتجًا من السوق، ويصلك طلب من {{peer}} بإعارة 3 من فريقك لمدة مساءين، في أسبوع مزدحم على فريقك أيضًا.",
+          prompt: "ماذا تقرر، وماذا تقول لـ{{peer}} ولفريقك؟",
+        },
+      },
+    },
+    hidden: {
+      en: {
+        rubric: [
+          {
+            competencyKey: "adaptability.handling-new-information",
+            anchors: [
+              "Sticks to the first plan as each update arrives (port delay, damaged pallets, counting error), or throws the whole plan away at every new fact.",
+              "Notices the updates but changes the plan only in a token way, or acts on new figures without asking whether they are reliable.",
+              "Revisits the plan at each update, changes the parts affected (staffing, allocation, loading) and keeps what still works.",
+              "Checks new information before acting on it (e.g., confirms the recount before re-picking) and explains what changed in their reasoning.",
+              "Updates in proportion and draws wider implications, such as asking how the counting error happened and whether other pallets were misclassified.",
+            ],
+          },
+          {
+            competencyKey: "judgment.deciding-under-ambiguity",
+            anchors: [
+              "Refuses to commit until the port gives a firm time, or commits to one path as if the outcome were certain.",
+              "Decides, but on unstated assumptions, e.g., simply assumes the truck will arrive by 21:00.",
+              "Makes a reasonable call on the information available, states the main assumption and when it will be checked (e.g., 18:00).",
+              "Prefers options that keep choices open (staging regular orders early, a top-up van) and sets decision points through the night.",
+              "Structures the night so the plan works across likely outcomes, naming in advance what would trigger a change and who would be told.",
+            ],
+          },
+          {
+            competencyKey: "collaboration.team-orientation",
+            anchors: [
+              "Treats the night purely as their own team's problem: dismisses {{peer}}'s needs, or loads extra shifts on their own staff without a thought.",
+              "Takes or gives help reluctantly, without weighing the cost to the other team or to their own people.",
+              "Accepts or offers help on fair terms and asks their own staff before committing their time (overtime, the Saturday swap).",
+              "Balances their team's goals with the wider operation: treats pharmacies on every route fairly, keeps {{peer}} informed, and shares the extra shifts out fairly.",
+              "As level 4, and builds lasting cooperation, e.g., proposes a standing arrangement with {{peer}}'s team for peak nights and credits the people who helped.",
+            ],
+          },
+        ],
+        strongIndicators: [
+          {
+            text: "Uses the fact that Route 7 pharmacies get only one delivery a week when allocating the shortfall.",
+            competencyKey: "judgment.deciding-under-ambiguity",
+            keywords: ["route 7", "once a week", "one delivery a week", "7 days", "rural", "المسار 7", "مرة في الأسبوع", "شحنة واحدة في الأسبوع", "7 أيام", "الريفية"],
+          },
+          {
+            text: "Sets a decision point or a fallback rather than waiting for certainty.",
+            competencyKey: "judgment.deciding-under-ambiguity",
+            keywords: ["by 18:00", "if it arrives", "if not by", "fallback", "plan b", "قبل الساعة 18:00", "إذا وصلت", "إذا لم تصل", "خطة بديلة"],
+          },
+          {
+            text: "Checks the recount before re-planning around it.",
+            competencyKey: "adaptability.handling-new-information",
+            keywords: ["check the count", "verify", "recount", "confirm the figure", "أتحقق", "التحقق من العد", "إعادة العد", "أتأكد من الرقم"],
+          },
+          {
+            text: "Explains what the new information changes and what it does not.",
+            competencyKey: "adaptability.handling-new-information",
+            keywords: ["this changes", "now that", "no longer", "still holds", "هذا يغيّر", "الآن وقد", "لم يعد", "ما زال صالحًا"],
+          },
+          {
+            text: "Asks staff before committing them to overtime or extra shifts, and shares them out fairly.",
+            competencyKey: "collaboration.team-orientation",
+            keywords: ["ask who can", "volunteers", "fair", "rotate", "share the shifts", "أسأل من يستطيع", "متطوعين", "عادل", "بالتناوب", "توزيع المناوبات"],
+          },
+          {
+            text: "Treats help between teams as two-way and acknowledges {{peer}}'s team.",
+            competencyKey: "collaboration.team-orientation",
+            keywords: ["thank", "return the favour", "help them back", "we owe", "أشكر", "نردّ الجميل", "نساعدهم", "دين علينا"],
+          },
+        ],
+        redFlags: [
+          {
+            text: "Refuses to decide until everything is certain.",
+            competencyKey: "judgment.deciding-under-ambiguity",
+            keywords: ["wait and see", "nothing until we know", "ننتظر لنرى", "لا شيء حتى نعرف"],
+          },
+          {
+            text: "Re-plans on the new count without checking it.",
+            competencyKey: "adaptability.handling-new-information",
+            keywords: ["no need to check", "re-pick everything straight away", "لا داعي للتحقق", "نعيد التجهيز فورًا"],
+          },
+          {
+            text: "Dismisses the other team's needs as not their problem.",
+            competencyKey: "collaboration.team-orientation",
+            keywords: ["not my problem", "their problem", "not my team", "ليست مشكلتي", "مشكلتهم", "ليس فريقي"],
+          },
+          {
+            text: "Forces overtime on staff without asking.",
+            competencyKey: "collaboration.team-orientation",
+            keywords: ["everyone stays", "no choice", "they have to stay", "الجميع يبقى", "لا خيار", "عليهم البقاء"],
+          },
+        ],
+        embeddedDetail: {
+          description:
+            "The shift-plan caption says the 6 rural Route 7 pharmacies receive only one delivery a week, so any cut to them lasts 7 days, while every other pharmacy can be topped up the next day.",
+          location: "caption of the shift-plan table",
+          keywords: ["route 7", "once a week", "one delivery a week", "weekly", "المسار 7", "مرة في الأسبوع", "شحنة واحدة في الأسبوع"],
+        },
+        optionNotes: [
+          { optionId: "r1a", defensibleBecause: "Protects the 05:00 deadline whichever way the port goes, and keeps the medicines in tonight's trucks.", cost: "Commits people's evenings without asking; overtime may be wasted if the delivery slips to the morning." },
+          { optionId: "r1b", defensibleBecause: "Removes uncertainty early and keeps the shift calm and predictable.", cost: "Misses {{client}}'s promotion and leaves weekly-delivery pharmacies short; the van run costs extra." },
+          { optionId: "r1c", defensibleBecause: "Attacks the cause of the delay and keeps both options open.", cost: "Loses an hour of staging while waiting; relies on {{specialist}} being able to speed up the port." },
+          { optionId: "r2a", defensibleBecause: "Gets the sorting done on time and repays the help fairly.", cost: "Commits two of your staff to a Saturday without asking; adds to an already heavy month." },
+          { optionId: "r2b", defensibleBecause: "Keeps the team self-reliant and avoids a debt to another team.", cost: "Picking falls behind; the team carries the whole load." },
+          { optionId: "r2c", defensibleBecause: "Gets the help now and avoids committing staff without approval.", cost: "Looks like hedging to {{peer}}; damages goodwill between the teams." },
+          { optionId: "r3a", defensibleBecause: "Protects the largest customer's promotion and the relationship with {{client}}.", cost: "Shifts the whole shortage onto smaller pharmacies, including those with no delivery for a week; children's medicine runs out." },
+          { optionId: "r3b", defensibleBecause: "Simple, transparent and treats every pharmacy the same.", cost: "Ignores that Route 7 cannot be topped up for 7 days; {{client}}'s promotion is short." },
+          { optionId: "r3c", defensibleBecause: "Protects the pharmacies with no alternative supply and is honest with {{client}} before opening.", cost: "{{client}}'s promotion starts short; risks friction with the biggest customer." },
+          { optionId: "r4a", defensibleBecause: "Every pharmacy gets the right quantity in one delivery.", cost: "Late arrivals after opening; tired staff re-picking at the end of a long night." },
+          { optionId: "r4b", defensibleBecause: "Keeps the delivery promise to everyone and uses the top-up van for the gap.", cost: "Some pharmacies are short in the morning even though the stock exists." },
+          { optionId: "r4c", defensibleBecause: "Targets the extra effort where the shortage hurts most with a small delay.", cost: "Adds complexity late at night; a few trucks leave late." },
+        ],
+        probeTargets: ["judgment.deciding-under-ambiguity", "adaptability.handling-new-information"],
+        twistTargets: ["collaboration.team-orientation"],
+      },
+    },
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────
+  {
+    id: "chain-05-two-coordinators",
+    type: "CONSEQUENCE_CHAIN",
+    difficulty: 4,
+    dials: { ambiguity: 3, stakeholders: 4, conflictingConstraints: 4, stakes: 3, timePressure: 2, informationGaps: 4 },
+    targets: ["leadership.handling-conflict", "communication.listening", "management.performance-management"],
+    roleFamilies: [],
+    minutes: 9,
+    storyPhase: "late",
+    content: {
+      en: {
+        title: "The two coordinators",
+        scenario:
+          "You head the hospitality training department at {{company}}, a vocational institute with 340 students. The department depends on two roles working closely together: {{report1}} runs timetabling and exams, and {{report2}} runs student work placements with hotels and restaurants. Over the last month their disagreements have come into the open, and the rest of the team has started taking sides. This chain covers the next ten weeks. In each round you choose what to do; what happens next depends partly on your choice. What you know so far is in the materials.",
+        materials: [
+          {
+            kind: "memo",
+            id: "m1",
+            title: "What you know so far",
+            author: { name: "{{you}}", role: "{{you.role}}" },
+            body:
+              "- The term timetable was published 6 weeks ago. Three exam dates fall inside placement weeks already agreed with employers.\n- {{report2}} has asked twice for those dates to move. {{report1}} replied that exam dates are fixed by the awarding body.\n- Two team members have asked you privately who is actually in charge of dates.\n- Track record: {{report1}} has delivered exam results on time for 3 years; employers rate {{report2}}'s placements 4.6 out of 5.",
+          },
+          {
+            kind: "table",
+            id: "m2",
+            title: "The three exam dates",
+            columns: [
+              { key: "date", label: "Date" },
+              { key: "exam", label: "Exam" },
+              { key: "setBy", label: "Date set by" },
+            ],
+            rows: [
+              { date: "14th", exam: "Practical cookery", setBy: "Awarding body (cannot move)" },
+              { date: "21st", exam: "Food safety (theory)", setBy: "Institute (can move)" },
+              { date: "28th", exam: "Front office", setBy: "Institute (can move)" },
+            ],
+          },
+        ],
+        task: {
+          kind: "chain",
+          prompt: "In each round, choose what you do and briefly say why.",
+          requireJustification: true,
+          chain: {
+            rounds: [
+              {
+                id: "round1",
+                situation:
+                  "Week 1. In the weekly team meeting, {{report1}} and {{report2}} argue openly about who should set dates during placement weeks. Everyone else goes quiet.",
+                options: [
+                  { id: "r1a", label: "Stop the discussion and decide in the meeting: {{report1}} sets all dates." },
+                  { id: "r1b", label: "Pause the topic, then meet each of them separately this week to hear their side." },
+                  { id: "r1c", label: "Ask them to work it out between themselves and bring you a joint proposal by Thursday." },
+                ],
+                consequences: [
+                  { optionId: "r1a", text: "The meeting moves on. For the rest of the week {{report2}} says little and stops copying {{report1}} on emails to employers." },
+                  { optionId: "r1b", text: "{{report1}} says placements keep being agreed without checking the exam calendar. {{report2}} says employers were promised dates in good faith and that nothing ever moves. Both mention the same three dates." },
+                  { optionId: "r1c", text: "Thursday comes with no joint proposal. You receive two versions, one from each of them, and they cannot both work." },
+                ],
+              },
+              {
+                id: "round2",
+                situation:
+                  "Week 3. {{client}} complains on behalf of a large hotel group: 12 students were pulled from placement for an exam with only 2 days' notice. {{report1}} and {{report2}} each blame the other.",
+                options: [
+                  { id: "r2a", label: "Bring them together with the date data and agree a shared process for setting dates." },
+                  { id: "r2b", label: "Handle {{client}} yourself and leave the process question for later." },
+                  { id: "r2c", label: "Ask {{manager}} to mediate between them." },
+                ],
+                consequences: [
+                  { optionId: "r2a", text: "The meeting is tense at first. Once the dates are on the table, two rules are agreed: exams set by the institute will avoid placement weeks, and the exam calendar is checked before any date is confirmed with an employer." },
+                  { optionId: "r2b", text: "{{client}}'s complaint settles down. The tension between {{report1}} and {{report2}} continues, and a second clash appears in next term's draft timetable." },
+                  { optionId: "r2c", text: "A meeting with {{manager}} is set for next month. Until then, {{report1}} and {{report2}} communicate only by email." },
+                ],
+              },
+              {
+                id: "round3",
+                situation:
+                  "Week 6. {{report2}} tells you privately that {{report1}} makes dismissive comments about the placement team in front of new staff. You have not heard this yourself, and {{report1}} is your most reliable performer.",
+                options: [
+                  { id: "r3a", label: "Raise it with {{report1}} in a one-to-one this week, saying what you have heard and listening to their account." },
+                  { id: "r3b", label: "Watch for two weeks to see it for yourself before saying anything." },
+                  { id: "r3c", label: "Remind the whole team at the next meeting that everyone should treat each other with respect." },
+                ],
+                consequences: [
+                  { optionId: "r3a", text: "{{report1}} is defensive at first, then admits being fed up and having made a remark about 'placement people who don't plan'. You agree it was unfair, and {{report1}} offers to talk to the new staff concerned." },
+                  { optionId: "r3b", text: "In week 7 you hear {{report1}} call the placement calendar 'a wish list' in front of two new staff. A few days later one of them asks to move to {{report2}}'s side of the team." },
+                  { optionId: "r3c", text: "The team nods along. {{report1}} takes the comment to be aimed at {{report2}}, and nothing changes." },
+                ],
+              },
+              {
+                id: "round4",
+                situation:
+                  "Week 10. Mid-year reviews. {{report1}}'s exam work is excellent and the remarks have mostly stopped. {{report2}} missed two employer-reporting deadlines during the weeks of conflict.",
+                options: [
+                  { id: "r4a", label: "Rate both on results only, and leave the conflict out of the reviews." },
+                  { id: "r4b", label: "Include working together as part of both ratings, with specific examples from the term." },
+                  { id: "r4c", label: "Mark {{report2}} down for the missed deadlines, noting the conflict as context." },
+                ],
+                consequences: [
+                  { optionId: "r4a", text: "Both ratings are high on results. {{report2}} asks why the missed deadlines were not mentioned when others were marked down for less." },
+                  { optionId: "r4b", text: "Both reviews include a goal on working together. {{report1}} questions the collaboration point at first, then accepts the examples; {{report2}} accepts the feedback on deadlines." },
+                  { optionId: "r4c", text: "{{report2}} feels the rating is unfair, since much of the lost time went into the conflict, and asks why {{report1}}'s part is not reflected anywhere." },
+                ],
+              },
+            ],
+          },
+        },
+        probe: { prompt: "What did you learn from what each of them told you that changed how you handled the situation?" },
+        twist: {
+          change:
+            "In week 11, {{report1}} tells you about a job offer from another institute and says they will stay only with full control of all dates, including placement weeks.",
+          prompt: "What do you do, and what do you say to {{report1}}?",
+        },
+      },
+      ar: {
+        title: "المنسقان",
+        scenario:
+          "ترأس قسم التدريب الفندقي في {{company}}، وهو معهد مهني يدرس فيه 340 طالبًا. ويعتمد القسم على تنسيق وثيق بين ملفين: الجداول والاختبارات من مسؤولية {{report1}}، والتدريب الميداني للطلاب في الفنادق والمطاعم من مسؤولية {{report2}}. وخلال الشهر الماضي خرجت الخلافات بينهما إلى العلن، وبدأ بقية الفريق ينحازون إلى هذا الطرف أو ذاك. تغطي هذه السلسلة الأسابيع العشرة القادمة. في كل جولة تختار ما تفعله، وما يحدث بعدها يتوقف جزئيًا على اختيارك. تجد ما تعرفه حتى الآن ضمن المواد.",
+        materials: [
+          {
+            kind: "memo",
+            id: "m1",
+            title: "ما تعرفه حتى الآن",
+            author: { name: "{{you}}", role: "{{you.role}}" },
+            body:
+              "- نُشر جدول الفصل قبل 6 أسابيع، وتقع ثلاثة مواعيد اختبارات داخل أسابيع تدريب ميداني اتُّفق عليها مع أصحاب العمل.\n- جاء من {{report2}} طلبان لتغيير هذه المواعيد، وكان الرد من {{report1}} بأن مواعيد الاختبارات تحددها الجهة المانحة للشهادة.\n- سألك اثنان من الفريق على انفراد: من المسؤول فعلًا عن تحديد المواعيد؟\n- سجل الأداء: نتائج الاختبارات من مسؤولية {{report1}} وتُسلَّم في موعدها منذ 3 سنوات، وتقييم أصحاب العمل للتدريب الميداني الذي يقع في مسؤولية {{report2}} يبلغ 4.6 من 5.",
+          },
+          {
+            kind: "table",
+            id: "m2",
+            title: "مواعيد الاختبارات الثلاثة",
+            columns: [
+              { key: "date", label: "التاريخ" },
+              { key: "exam", label: "الاختبار" },
+              { key: "setBy", label: "الجهة التي تحدد الموعد" },
+            ],
+            rows: [
+              { date: "يوم 14", exam: "الطهي العملي", setBy: "الجهة المانحة (لا يمكن تغييره)" },
+              { date: "يوم 21", exam: "سلامة الغذاء (نظري)", setBy: "المعهد (يمكن تغييره)" },
+              { date: "يوم 28", exam: "المكتب الأمامي", setBy: "المعهد (يمكن تغييره)" },
+            ],
+          },
+        ],
+        task: {
+          kind: "chain",
+          prompt: "في كل جولة، اختر ما تفعله واذكر السبب باختصار.",
+          requireJustification: true,
+          chain: {
+            rounds: [
+              {
+                id: "round1",
+                situation:
+                  "الأسبوع 1. في الاجتماع الأسبوعي للفريق يحتدم النقاش علنًا بين {{report1}} و{{report2}} حول صاحب الحق في تحديد المواعيد خلال أسابيع التدريب الميداني، ويلوذ الآخرون بالصمت.",
+                options: [
+                  { id: "r1a", label: "إيقاف النقاش والحسم في الاجتماع نفسه: تحديد كل المواعيد من صلاحية {{report1}}." },
+                  { id: "r1b", label: "تعليق الموضوع، ثم لقاء كلٍّ منهما على حدة هذا الأسبوع للاستماع إلى رواية كل طرف." },
+                  { id: "r1c", label: "الطلب منهما حل المسألة فيما بينهما وتقديم مقترح مشترك إليك قبل الخميس." },
+                ],
+                consequences: [
+                  { optionId: "r1a", text: "يمضي الاجتماع إلى بنوده الأخرى. وفي بقية الأسبوع يكاد صوت {{report2}} يغيب، وتتوقف إضافة {{report1}} إلى المراسلات مع أصحاب العمل." },
+                  { optionId: "r1b", text: "في حديث {{report1}}: يُتفق على التدريب الميداني دائمًا دون مراجعة تقويم الاختبارات. وفي حديث {{report2}}: وُعد أصحاب العمل بمواعيد بحسن نية، ولا شيء يتحرك أبدًا. ويذكر كلاهما المواعيد الثلاثة نفسها." },
+                  { optionId: "r1c", text: "يحل الخميس دون مقترح مشترك. تصلك نسختان، واحدة من كل طرف، ولا يمكن العمل بالاثنتين معًا." },
+                ],
+              },
+              {
+                id: "round2",
+                situation:
+                  "الأسبوع 3. تصل شكوى من {{client}} باسم مجموعة فندقية كبيرة: سُحب 12 طالبًا من التدريب الميداني لأداء اختبار بإشعار قبل يومين فقط. والاتهام متبادل بين {{report1}} و{{report2}}.",
+                options: [
+                  { id: "r2a", label: "جمعهما معًا مع بيانات المواعيد، والاتفاق على آلية مشتركة لتحديد المواعيد." },
+                  { id: "r2b", label: "التعامل مع {{client}} بنفسك، وترك مسألة الآلية لوقت لاحق." },
+                  { id: "r2c", label: "الطلب من {{manager}} التوسط بينهما." },
+                ],
+                consequences: [
+                  { optionId: "r2a", text: "يبدأ الاجتماع متوترًا. وحين توضع المواعيد على الطاولة يُتفق على قاعدتين: أن تتجنب الاختبارات التي يحددها المعهد أسابيع التدريب الميداني، وأن يُراجَع تقويم الاختبارات قبل تأكيد أي موعد مع صاحب عمل." },
+                  { optionId: "r2b", text: "تهدأ شكوى {{client}}، لكن التوتر بين {{report1}} و{{report2}} يستمر، ويظهر تعارض ثانٍ في مسودة جدول الفصل القادم." },
+                  { optionId: "r2c", text: "يتحدد لقاء مع {{manager}} في الشهر القادم، وحتى ذلك الحين يقتصر التواصل بين {{report1}} و{{report2}} على البريد الإلكتروني." },
+                ],
+              },
+              {
+                id: "round3",
+                situation:
+                  "الأسبوع 6. يصلك في حديث خاص من {{report2}} أن تعليقات مستخفّة بفريق التدريب الميداني تصدر عن {{report1}} أمام الموظفين الجدد. لم تسمع شيئًا من ذلك بنفسك، و{{report1}} أكثر أعضاء فريقك موثوقية في الأداء.",
+                options: [
+                  { id: "r3a", label: "مفاتحة {{report1}} في لقاء فردي هذا الأسبوع بما بلغك، والاستماع إلى الرواية الأخرى." },
+                  { id: "r3b", label: "المراقبة أسبوعين لترى الأمر بنفسك قبل أن تقول شيئًا." },
+                  { id: "r3c", label: "تذكير الفريق كله في الاجتماع القادم بأن على الجميع التعامل باحترام." },
+                ],
+                consequences: [
+                  { optionId: "r3a", text: "يأتي الرد دفاعيًا في البداية، ثم يأتي الاعتراف: «ضقت ذرعًا»، وقد صدرت فعلًا عبارة عن «أهل التدريب الميداني الذين لا يخططون». وينتهي اللقاء باتفاق على أن العبارة لم تكن منصفة، وبعرض من {{report1}} للحديث مع الموظفين الجدد المعنيين." },
+                  { optionId: "r3b", text: "في الأسبوع 7 تسمع بنفسك عبارة «قائمة أمنيات» وصفًا لتقويم التدريب الميداني، على لسان {{report1}}، أمام موظفَين جديدين. وبعد أيام يطلب أحدهما الانتقال إلى الشق التابع لـ{{report2}} في الفريق." },
+                  { optionId: "r3c", text: "يومئ الفريق موافقًا. ويُفهم الكلام عند {{report1}} على أنه موجّه إلى {{report2}}، ولا يتغير شيء." },
+                ],
+              },
+              {
+                id: "round4",
+                situation:
+                  "الأسبوع 10. تقييمات منتصف العام. عمل {{report1}} في الاختبارات ممتاز، والتعليقات توقفت في معظمها. وفات {{report2}} موعدان لتقارير أصحاب العمل خلال أسابيع الخلاف.",
+                options: [
+                  { id: "r4a", label: "تقييم كلٍّ منهما على النتائج فقط، وإبقاء الخلاف خارج التقييم." },
+                  { id: "r4b", label: "إدراج العمل المشترك ضمن تقييم كلٍّ منهما، مع أمثلة محددة من الفصل." },
+                  { id: "r4c", label: "خفض تقييم {{report2}} بسبب المواعيد الفائتة، مع ذكر الخلاف بوصفه سياقًا." },
+                ],
+                consequences: [
+                  { optionId: "r4a", text: "يأتي التقييمان مرتفعين على النتائج. ويصلك سؤال من {{report2}}: لماذا لم تُذكر المواعيد الفائتة بينما خُفّض تقييم آخرين لأقل من ذلك؟" },
+                  { optionId: "r4b", text: "يتضمن التقييمان هدفًا عن العمل المشترك. يواجه بند التعاون اعتراضًا من {{report1}} في البداية، ثم تُقبل الأمثلة، وتُقبل ملاحظة المواعيد لدى {{report2}}." },
+                  { optionId: "r4c", text: "يصلك اعتراض من {{report2}}: التقييم غير منصف، فكثير من الوقت ضاع في الخلاف، فلماذا لا ينعكس دور {{report1}} في أي موضع؟" },
+                ],
+              },
+            ],
+          },
+        },
+        probe: { prompt: "ما الذي تعلمته مما قاله لك كل منهما، وغيّر طريقة تعاملك مع الموقف؟" },
+        twist: {
+          change:
+            "في الأسبوع 11 يصلك من {{report1}} خبر عرض عمل من معهد آخر، مع شرط واحد للبقاء: صلاحية كاملة على كل المواعيد، ومنها أسابيع التدريب الميداني.",
+          prompt: "ماذا تفعل، وماذا تقول لـ{{report1}}؟",
+        },
+      },
+    },
+    hidden: {
+      en: {
+        rubric: [
+          {
+            competencyKey: "leadership.handling-conflict",
+            anchors: [
+              "Avoids the conflict, lets it run, or settles it by decree without hearing either side.",
+              "Addresses it in a way that leaves the real issue (who sets dates, and how) unresolved, e.g., a general call for respect.",
+              "Brings the disagreement into the open, hears both sides, and agrees a practical way forward on dates.",
+              "Works on the underlying interests (exam integrity, promises to employers), reaches a shared process both support, and addresses behaviour that harms the team.",
+              "As level 4, and changes the system so the conflict does not return, e.g., a joint calendar check before dates are confirmed, with clear ownership.",
+            ],
+          },
+          {
+            competencyKey: "communication.listening",
+            anchors: [
+              "Seeks neither person's view, or acts on the first account heard.",
+              "Hears them out but does not use what they said; misses that both mention the same three dates.",
+              "Listens to each separately, summarises their concerns accurately and notices the facts they share.",
+              "Asks questions that uncover what lies beneath, such as which exam dates are actually fixed, and checks understanding before acting.",
+              "As level 4, and listens for what is not said ({{report1}}'s frustration with last-minute changes, the cost of the conflict to {{report2}}'s deadlines) and uses it to shape the solution.",
+            ],
+          },
+          {
+            competencyKey: "management.performance-management",
+            anchors: [
+              "Avoids feedback on the remarks or the missed deadlines, or rates on impressions.",
+              "Gives one-sided feedback (results only, or behaviour only) or vague comments.",
+              "Gives each specific feedback on results and behaviour, with examples, and sets clear expectations.",
+              "Holds both to the same standard: {{report1}}'s remarks and {{report2}}'s deadlines are addressed fairly, with goals and follow-up.",
+              "As level 4, and handles the retention threat without trading away standards or fairness, recognising {{report1}}'s value while declining sole control of shared decisions.",
+            ],
+          },
+        ],
+        strongIndicators: [
+          {
+            text: "Finds that only one of the three dates is fixed by the awarding body.",
+            competencyKey: "communication.listening",
+            keywords: ["awarding body", "only one", "can move", "set by the institute", "two of the three", "الجهة المانحة", "واحد فقط", "يمكن تغييره", "يحدده المعهد", "اثنان من الثلاثة"],
+          },
+          {
+            text: "Meets each person separately and reflects back what they heard.",
+            competencyKey: "communication.listening",
+            keywords: ["separately", "hear both", "what i heard", "their side", "على حدة", "الطرفين", "ما سمعته", "ما لدى كل"],
+          },
+          {
+            text: "Agrees a shared process for setting dates rather than picking a winner.",
+            competencyKey: "leadership.handling-conflict",
+            keywords: ["shared process", "joint calendar", "check the exam calendar", "both agree", "آلية مشتركة", "تقويم مشترك", "مراجعة تقويم الاختبارات", "يتفقان"],
+          },
+          {
+            text: "Addresses the reported remarks directly and specifically, after hearing {{report1}}'s account.",
+            competencyKey: "management.performance-management",
+            keywords: ["one-to-one", "specific", "in front of new staff", "remarks", "لقاء فردي", "محدد", "أمام الموظفين الجدد", "التعليقات"],
+          },
+          {
+            text: "Applies the same standard to both in the reviews, with examples.",
+            competencyKey: "management.performance-management",
+            keywords: ["same standard", "both of them", "examples", "fair to both", "المعيار نفسه", "كلٍّ منهما", "أمثلة", "منصف للطرفين"],
+          },
+        ],
+        redFlags: [
+          {
+            text: "Settles the conflict by decree without hearing either side.",
+            competencyKey: "leadership.handling-conflict",
+            keywords: ["my decision is final", "because i said so", "end of discussion", "قراري نهائي", "انتهى النقاش"],
+          },
+          {
+            text: "Relies on a general call for respect instead of addressing the issue.",
+            competencyKey: "leadership.handling-conflict",
+            keywords: ["everyone should be respectful", "remind the team", "على الجميع الاحترام", "تذكير الفريق"],
+          },
+          {
+            text: "Rates on results only and ignores behaviour.",
+            competencyKey: "management.performance-management",
+            keywords: ["results only", "behaviour doesn't matter", "النتائج فقط", "السلوك لا يهم"],
+          },
+          {
+            text: "Gives in to the ultimatum.",
+            competencyKey: "management.performance-management",
+            keywords: ["give full control", "whatever it takes to keep", "السيطرة الكاملة", "صلاحية كاملة له", "مهما كان الثمن"],
+          },
+          {
+            text: "Acts on the first account heard without checking the other side.",
+            competencyKey: "communication.listening",
+            keywords: ["without hearing", "i already know", "no need to ask", "دون الاستماع", "أعرف مسبقًا", "لا داعي لسؤال"],
+          },
+        ],
+        embeddedDetail: {
+          description:
+            "The dates table shows only the 14th is fixed by the awarding body; the 21st and 28th are set by the institute and can move, so {{report1}}'s claim that all exam dates are fixed is only partly true.",
+          location: "'Date set by' column of the exam dates table",
+          keywords: ["awarding body", "can move", "21st", "28th", "institute", "الجهة المانحة", "يمكن تغييره", "يوم 21", "يوم 28", "المعهد"],
+        },
+        optionNotes: [
+          { optionId: "r1a", defensibleBecause: "Ends a public argument quickly and gives the team clarity.", cost: "Decides without hearing either side; {{report2}} disengages and the cause stays hidden." },
+          { optionId: "r1b", defensibleBecause: "Takes the conflict out of public view and gathers both accounts before acting.", cost: "Slower; the team waits a few more days for clarity." },
+          { optionId: "r1c", defensibleBecause: "Treats them as senior professionals who can resolve their own work issues.", cost: "Leaves an escalating conflict unmanaged; likely to fail without facilitation." },
+          { optionId: "r2a", defensibleBecause: "Uses facts to move from blame to a shared process.", cost: "A tense meeting; needs your time and skill to facilitate." },
+          { optionId: "r2b", defensibleBecause: "Protects the employer relationship quickly.", cost: "Treats the symptom; the clash repeats next term." },
+          { optionId: "r2c", defensibleBecause: "Brings in a neutral, more senior person.", cost: "Gives away your role as their leader; a month's delay hardens positions." },
+          { optionId: "r3a", defensibleBecause: "Raises a serious concern promptly, while hearing {{report1}}'s side.", cost: "Acts on second-hand information; risks defensiveness from a strong performer." },
+          { optionId: "r3b", defensibleBecause: "Avoids acting on hearsay.", cost: "Lets harmful behaviour continue; new staff are affected meanwhile." },
+          { optionId: "r3c", defensibleBecause: "Sets a standard without singling anyone out.", cost: "Too general to change anything; may be read as taking sides." },
+          { optionId: "r4a", defensibleBecause: "Objective and easy to defend on numbers.", cost: "Ignores behaviour and the missed deadlines; looks inconsistent." },
+          { optionId: "r4b", defensibleBecause: "Holds both to the same standard on results and collaboration, with evidence.", cost: "Harder conversations; needs well-documented examples." },
+          { optionId: "r4c", defensibleBecause: "Addresses the missed deadlines while recognising context.", cost: "One-sided; ignores {{report1}}'s part in the conflict." },
+        ],
+        probeTargets: ["communication.listening"],
+        twistTargets: ["leadership.handling-conflict", "management.performance-management"],
+      },
+    },
+  },
 ];

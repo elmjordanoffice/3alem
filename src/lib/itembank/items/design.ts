@@ -864,4 +864,638 @@ export const ITEMS: BankItem[] = [
       },
     },
   },
+  // ───────────────────────────── ds-05 ─────────────────────────────
+  {
+    id: "ds-05-empty-appointment-slots",
+    type: "DESIGN_CHALLENGE",
+    difficulty: 3,
+    dials: { ambiguity: 3, stakeholders: 3, conflictingConstraints: 3, stakes: 3, timePressure: 2, informationGaps: 3 },
+    targets: ["product-thinking.idea-generation", "product-thinking.user-empathy", "product-thinking.problem-framing"],
+    roleFamilies: [],
+    minutes: 7,
+    storyPhase: "middle",
+    content: {
+      en: {
+        title: "The empty appointment slots",
+        scenario:
+          "{{company}} runs 3 community health clinics. 22% of booked appointments are missed without notice, and the wait for a new routine appointment has grown to 19 days. {{manager}} plans to charge a fee of 50 for every missed appointment and has asked you to design how the clinics should reduce missed appointments. You can involve the booking team, the clinic nurses and {{specialist}}, who manages patient records. The figures are in the materials.",
+        materials: [
+          {
+            kind: "table",
+            id: "leadtime",
+            title: "Missed appointments by how far ahead they were booked",
+            columns: [
+              { key: "lead", label: "Booked" },
+              { key: "share", label: "Share of bookings" },
+              { key: "missed", label: "Missed without notice" },
+            ],
+            rows: [
+              { lead: "0–3 days ahead", share: "25%", missed: "8%" },
+              { lead: "4–14 days ahead", share: "40%", missed: "19%" },
+              { lead: "15 or more days ahead", share: "35%", missed: "34%" },
+            ],
+          },
+          {
+            kind: "chart",
+            id: "reasons",
+            title: "Main reason given (phone survey of 200 patients who missed)",
+            caption:
+              "The cancellation line is answered from 08:00 to 09:00 only. Reminder text messages go to the number on file; {{specialist}} estimates that 30% of numbers are out of date.",
+            chartType: "bar",
+            xKey: "reason",
+            unit: "%",
+            series: [{ key: "share", label: "Patients" }],
+            data: [
+              { reason: "Forgot", share: 34 },
+              { reason: "Could not get through to cancel", share: 21 },
+              { reason: "Work or transport problem", share: 19 },
+              { reason: "Felt better, no longer needed", share: 18 },
+              { reason: "Other", share: 8 },
+            ],
+          },
+        ],
+        task: {
+          kind: "design",
+          prompt: "Design how the clinics should reduce missed appointments. Complete each section.",
+          design: {
+            sections: [
+              { id: "framing", label: "The problem, as you would frame it", hint: "What problem are you really solving, and how would you know it is solved?" },
+              { id: "patients", label: "Who misses appointments, and why", hint: "Describe two or three kinds of patient and what gets in their way." },
+              { id: "ideas", label: "Ideas", hint: "At least 3 genuinely different ideas, with a line on each, including your view of the fee." },
+              { id: "recommendation", label: "Your recommendation and first test", hint: "What you would do first, how you would test it, and what result would show it works." },
+            ],
+          },
+        },
+        probe: { prompt: "Who would your design serve worst, and what would you do about it?" },
+        twist: {
+          change: "The clinics' booking system cannot send text messages for the next 12 months; only phone calls and letters are possible.",
+          prompt: "What changes in your design?",
+        },
+      },
+      ar: {
+        title: "مواعيد شاغرة",
+        scenario:
+          "تدير {{company}} ثلاث عيادات صحية مجتمعية. يتغيب أصحاب 22% من المواعيد المحجوزة دون إشعار، وطالت مدة الانتظار للحصول على موعد اعتيادي جديد حتى بلغت 19 يومًا. وتنوي الإدارة، بحسب {{manager}}، فرض رسم قدره 50 على كل موعد يُفوَّت، والمطلوب منك أن تصمم الطريقة التي تقلل بها العيادات المواعيد الفائتة. يمكنك إشراك فريق الحجوزات وممرضي العيادات، وإشراك {{specialist}} أيضًا بحكم مسؤولية سجلات المرضى. تجد الأرقام ضمن المواد.",
+        materials: [
+          {
+            kind: "table",
+            id: "leadtime",
+            title: "المواعيد الفائتة بحسب المدة بين الحجز والموعد",
+            columns: [
+              { key: "lead", label: "وقت الحجز" },
+              { key: "share", label: "نسبتها من الحجوزات" },
+              { key: "missed", label: "الفائتة دون إشعار" },
+            ],
+            rows: [
+              { lead: "قبل الموعد بـ0–3 أيام", share: "25%", missed: "8%" },
+              { lead: "قبل الموعد بـ4–14 يومًا", share: "40%", missed: "19%" },
+              { lead: "قبل الموعد بـ15 يومًا أو أكثر", share: "35%", missed: "34%" },
+            ],
+          },
+          {
+            kind: "chart",
+            id: "reasons",
+            title: "السبب الرئيسي المذكور (استطلاع هاتفي لـ200 مريض فاتتهم مواعيدهم)",
+            caption:
+              "لا يُرد على خط إلغاء المواعيد إلا من الساعة 08:00 إلى 09:00. وتُرسل رسائل التذكير النصية إلى الرقم المسجل في الملف، وتقدير {{specialist}} أن 30% من الأرقام قديمة.",
+            chartType: "bar",
+            xKey: "reason",
+            unit: "%",
+            series: [{ key: "share", label: "المرضى" }],
+            data: [
+              { reason: "نسي الموعد", share: 34 },
+              { reason: "لم يتمكن من الاتصال للإلغاء", share: 21 },
+              { reason: "ظرف عمل أو مواصلات", share: 19 },
+              { reason: "تحسّن ولم يعد بحاجة إلى الموعد", share: 18 },
+              { reason: "أسباب أخرى", share: 8 },
+            ],
+          },
+        ],
+        task: {
+          kind: "design",
+          prompt: "صمّم الطريقة التي تقلل بها العيادات المواعيد الفائتة، واملأ كل قسم.",
+          design: {
+            sections: [
+              { id: "framing", label: "المشكلة كما تصوغها أنت", hint: "ما المشكلة التي تحلها فعلًا، وكيف ستعرف أنها حُلّت؟" },
+              { id: "patients", label: "من تفوتهم المواعيد، ولماذا", hint: "صف نوعين أو ثلاثة من المرضى وما يعترض طريقهم." },
+              { id: "ideas", label: "الأفكار", hint: "3 أفكار مختلفة اختلافًا حقيقيًا على الأقل، مع سطر عن كل منها، ورأيك في الرسم المقترح." },
+              { id: "recommendation", label: "توصيتك وأول اختبار", hint: "ما الذي ستفعله أولًا، وكيف ستختبره، وما النتيجة التي تثبت نجاحه." },
+            ],
+          },
+        },
+        probe: { prompt: "من هم المرضى الذين سيخدمهم تصميمك أقل من غيرهم، وماذا ستفعل حيال ذلك؟" },
+        twist: {
+          change: "لا يستطيع نظام الحجز في العيادات إرسال رسائل نصية خلال الأشهر الاثني عشر القادمة، ولا يتاح سوى الاتصال الهاتفي والرسائل الورقية.",
+          prompt: "ما الذي يتغيّر في تصميمك؟",
+        },
+      },
+    },
+    hidden: {
+      en: {
+        rubric: [
+          {
+            competencyKey: "product-thinking.idea-generation",
+            anchors: [
+              "Offers one idea, usually the fee, without alternatives.",
+              "Offers several variations of one approach, such as reminders by text, by email and by app.",
+              "Proposes at least 3 genuinely different ideas (easier cancelling, a shorter booking horizon, refilling freed slots) and says why one is preferred.",
+              "Varies key assumptions (how far ahead slots open, how cancelling works, who fills a freed slot) and combines ideas, e.g., same-week slots plus a waiting list.",
+              "Proposes an original, practical idea, e.g., patients booked far ahead confirm 3 days before or the slot goes to the waiting list, and shows how to test it cheaply.",
+            ],
+          },
+          {
+            competencyKey: "product-thinking.user-empathy",
+            anchors: [
+              "Treats patients who miss appointments as careless or irresponsible.",
+              "Acknowledges that patients have reasons, in general terms, without using the survey.",
+              "Uses the survey to describe distinct patient situations (forgot, could not cancel, no longer needed, work or transport) and designs for them.",
+              "Considers who a fee would hurt most (people on low incomes or shift workers) and whom reminders miss (out-of-date numbers), and adjusts the design.",
+              "As level 4, and proposes to check the design with patients themselves, e.g., short calls with patients who missed, before rolling it out.",
+            ],
+          },
+          {
+            competencyKey: "product-thinking.problem-framing",
+            anchors: [
+              "Accepts 'charge a fee' as the problem to design for.",
+              "Frames the problem as 'patients do not turn up' without looking at the data.",
+              "Reframes the goal as using clinic capacity and cutting the 19-day wait, using the lead-time and reasons data.",
+              "Identifies system causes (the long booking horizon, a cancellation line open one hour a day) and defines measures: missed rate, wait time, slots refilled.",
+              "As level 4, and separates what the clinics control from what they do not, with a target and a way to track it.",
+            ],
+          },
+        ],
+        strongIndicators: [
+          {
+            text: "Spots that cancelling is possible only from 08:00 to 09:00, so many 'no-shows' tried to cancel.",
+            competencyKey: "product-thinking.problem-framing",
+            keywords: ["08:00 to 09:00", "one hour", "cancellation line", "couldn't get through", "easier to cancel", "ساعة واحدة", "خط الإلغاء", "لم يتمكن من الاتصال", "تسهيل الإلغاء", "من 08:00 إلى 09:00"],
+          },
+          {
+            text: "Links missed appointments to booking far ahead.",
+            competencyKey: "product-thinking.problem-framing",
+            keywords: ["far ahead", "34%", "15 days", "booking horizon", "lead time", "مسبقًا بفترة طويلة", "34%", "15 يومًا", "مدة الحجز"],
+          },
+          {
+            text: "Notices that 30% of phone numbers are out of date, so reminders miss many patients.",
+            competencyKey: "product-thinking.user-empathy",
+            keywords: ["out of date", "30%", "update numbers", "wrong numbers", "أرقام قديمة", "30%", "تحديث الأرقام", "غير محدثة"],
+          },
+          {
+            text: "Weighs who the fee would hurt and whether it addresses the real reasons.",
+            competencyKey: "product-thinking.user-empathy",
+            keywords: ["can't afford", "low income", "unfair", "deter", "would not fix", "لا يستطيعون الدفع", "دخل محدود", "غير عادل", "لن يعالج"],
+          },
+          {
+            text: "Proposes refilling freed slots, e.g., a waiting list or confirm-or-release.",
+            competencyKey: "product-thinking.idea-generation",
+            keywords: ["waiting list", "refill", "release the slot", "confirm the appointment", "قائمة انتظار", "إعادة شغل", "تحرير الموعد", "تأكيد الموعد"],
+          },
+        ],
+        redFlags: [
+          {
+            text: "Describes patients who miss as irresponsible.",
+            competencyKey: "product-thinking.user-empathy",
+            keywords: ["irresponsible", "careless", "lazy", "don't care", "غير مسؤولين", "مستهترون", "مستهترين", "لا يبالون"],
+          },
+          {
+            text: "Relies on the fee alone.",
+            competencyKey: "product-thinking.idea-generation",
+            keywords: ["the fee will fix", "just charge", "fine them", "الرسم سيحل", "تغريمهم", "الغرامة وحدها"],
+          },
+          {
+            text: "Accepts the fee as the starting point without questioning the problem.",
+            competencyKey: "product-thinking.problem-framing",
+            keywords: ["how to collect the fee", "fee process", "طريقة تحصيل الرسم", "آلية تحصيل"],
+          },
+        ],
+        embeddedDetail: {
+          description:
+            "The chart caption says the cancellation line is answered only from 08:00 to 09:00 and 30% of phone numbers are out of date: many missed appointments come from patients who could not cancel or never got the reminder.",
+          location: "caption of the reasons chart",
+          keywords: ["08:00 to 09:00", "cancellation line", "out of date", "30%", "خط الإلغاء", "من 08:00 إلى 09:00", "أرقام قديمة"],
+        },
+        probeTargets: ["product-thinking.user-empathy"],
+        twistTargets: ["product-thinking.idea-generation"],
+      },
+    },
+  },
+  // ───────────────────────────── ds-06 ─────────────────────────────
+  {
+    id: "ds-06-three-big-requests",
+    type: "DESIGN_CHALLENGE",
+    difficulty: 4,
+    dials: { ambiguity: 3, stakeholders: 4, conflictingConstraints: 4, stakes: 4, timePressure: 3, informationGaps: 3 },
+    targets: ["product-thinking.feature-prioritisation", "product-thinking.problem-framing", "product-thinking.solution-design"],
+    roleFamilies: ["product-management"],
+    minutes: 7,
+    storyPhase: "middle",
+    content: {
+      en: {
+        title: "Three big requests",
+        scenario:
+          "You are product manager for {{company}}'s invoicing app, used by 3,400 small businesses. Next quarter your team has about 12 engineer-weeks. Three requests compete for them: {{client}}, a reseller that brings in 900 of your customers, wants multi-branch accounts; {{peer}} in sales wants automatic payment reminders by text message; and {{specialist}} in support wants the bank-feed connection fixed, because it fails for 1 in 5 new customers at set-up. {{manager}} wants your plan by Friday. The requests and the data are in the materials.",
+        materials: [
+          {
+            kind: "table",
+            id: "requests",
+            title: "The three requests",
+            caption:
+              "{{specialist}}'s note: most bank-feed failures since March come from 2 banks that changed their file format. Fixing those 2 banks alone is about 2 engineer-weeks.",
+            columns: [
+              { key: "request", label: "Request" },
+              { key: "from", label: "Requested by" },
+              { key: "weeks", label: "Estimate (engineer-weeks)", numeric: true },
+              { key: "why", label: "What they say" },
+            ],
+            rows: [
+              { request: "Multi-branch accounts", from: "{{client}}", weeks: 8, why: "120 of our 900 customers have more than one branch. We need this to keep recommending you." },
+              { request: "Automatic payment reminders by text", from: "{{peer}}", weeks: 4, why: "Prospects ask for it in most demos, and two competitors have it." },
+              { request: "Fix bank-feed set-up", from: "{{specialist}}", weeks: 5, why: "1 in 5 new customers cannot connect their bank, and many give up." },
+            ],
+          },
+          {
+            kind: "chart",
+            id: "cancellations",
+            title: "Why customers cancelled in their first 60 days (last quarter, 260 cancellations)",
+            chartType: "bar",
+            xKey: "reason",
+            unit: "%",
+            series: [{ key: "share", label: "Cancellations" }],
+            data: [
+              { reason: "Couldn't connect bank", share: 41 },
+              { reason: "Price", share: 18 },
+              { reason: "Chasing payments too manual", share: 15 },
+              { reason: "Needed multi-branch", share: 6 },
+              { reason: "Other", share: 20 },
+            ],
+          },
+        ],
+        task: {
+          kind: "design",
+          prompt: "Plan next quarter's work. Complete each section.",
+          design: {
+            sections: [
+              { id: "problem", label: "The problem to solve next quarter", hint: "What matters most for customers and for the business, and why." },
+              { id: "options", label: "Options and what each achieves", hint: "Include smaller versions of the requests, not only all-or-nothing choices." },
+              { id: "plan", label: "Your plan for the 12 engineer-weeks", hint: "What is in, what is out, and your reasoning." },
+              { id: "measure", label: "How you will know it worked", hint: "One or two measures, each with a target and a date." },
+            ],
+          },
+        },
+        probe: { prompt: "Write the two or three sentences you say to {{client}} about multi-branch accounts." },
+        twist: {
+          change: "{{exec}} tells you that {{client}} will move its 900 customers to a competitor unless multi-branch accounts ship within 6 months.",
+          prompt: "What changes in your plan, and what do you propose?",
+        },
+      },
+      ar: {
+        title: "ثلاثة طلبات كبيرة",
+        scenario:
+          "تعمل مديرًا لمنتج تطبيق الفوترة لدى {{company}}، ويستخدمه 3,400 نشاط تجاري صغير. لدى فريقك في الربع القادم نحو 12 أسبوع عمل هندسي، وتتنافس عليها ثلاثة طلبات: حسابات متعددة الفروع، بطلب من {{client}} باسم الموزّع الذي يأتي عن طريقه 900 من عملائكم؛ وتذكيرات دفع آلية برسائل نصية، بطلب من {{peer}} في فريق المبيعات؛ وإصلاح ربط الحساب المصرفي، بطلب من {{specialist}} في فريق الدعم، لأنه يتعثر لدى عميل من كل 5 عملاء جدد عند الإعداد. والموعد المحدد لتسليم خطتك إلى {{manager}} هو الجمعة. تجد الطلبات والبيانات ضمن المواد.",
+        materials: [
+          {
+            kind: "table",
+            id: "requests",
+            title: "الطلبات الثلاثة",
+            caption:
+              "ملاحظة من {{specialist}}: معظم حالات تعثر الربط المصرفي منذ مارس مصدرها مصرفان غيّرا صيغة ملفاتهما. وإصلاح هذين المصرفين وحدهما يحتاج إلى نحو أسبوعَي عمل هندسي.",
+            columns: [
+              { key: "request", label: "الطلب" },
+              { key: "from", label: "مقدّم الطلب" },
+              { key: "weeks", label: "التقدير (أسابيع عمل هندسي)", numeric: true },
+              { key: "why", label: "المبرر المذكور" },
+            ],
+            rows: [
+              { request: "حسابات متعددة الفروع", from: "{{client}}", weeks: 8, why: "لدى 120 من عملائنا التسعمئة أكثر من فرع، ونحتاج إلى هذه الخاصية لنواصل التوصية بكم." },
+              { request: "تذكيرات دفع آلية برسائل نصية", from: "{{peer}}", weeks: 4, why: "يطلبها العملاء المحتملون في معظم العروض التجريبية، ولدى منافسَين اثنين هذه الخاصية." },
+              { request: "إصلاح إعداد الربط المصرفي", from: "{{specialist}}", weeks: 5, why: "عميل من كل 5 عملاء جدد لا يستطيع ربط حسابه المصرفي، وكثيرون منهم يستسلمون." },
+            ],
+          },
+          {
+            kind: "chart",
+            id: "cancellations",
+            title: "أسباب إلغاء العملاء اشتراكهم في أول 60 يومًا (الربع الماضي، 260 إلغاءً)",
+            chartType: "bar",
+            xKey: "reason",
+            unit: "%",
+            series: [{ key: "share", label: "حالات الإلغاء" }],
+            data: [
+              { reason: "تعذّر ربط الحساب المصرفي", share: 41 },
+              { reason: "السعر", share: 18 },
+              { reason: "متابعة المدفوعات يدوية أكثر من اللازم", share: 15 },
+              { reason: "الحاجة إلى تعدد الفروع", share: 6 },
+              { reason: "أسباب أخرى", share: 20 },
+            ],
+          },
+        ],
+        task: {
+          kind: "design",
+          prompt: "خطّط لعمل الربع القادم، واملأ كل قسم.",
+          design: {
+            sections: [
+              { id: "problem", label: "المشكلة التي ستحلها في الربع القادم", hint: "ما الأهم للعملاء وللشركة، ولماذا." },
+              { id: "options", label: "الخيارات وما يحققه كل منها", hint: "أدرج نسخًا أصغر من الطلبات، لا خيارات «كل شيء أو لا شيء» فقط." },
+              { id: "plan", label: "خطتك لأسابيع العمل الاثني عشر", hint: "ما الذي يدخل الخطة، وما الذي يخرج منها، ولماذا." },
+              { id: "measure", label: "كيف ستعرف أن الخطة نجحت", hint: "مؤشر أو اثنان، لكل منهما هدف وموعد." },
+            ],
+          },
+        },
+        probe: { prompt: "اكتب الجملتين أو الجمل الثلاث التي تقولها لـ{{client}} بشأن الحسابات متعددة الفروع." },
+        twist: {
+          change: "يصلك من {{exec}} تحذير نقلًا عن {{client}}: سينقل الموزّع عملاءه التسعمئة إلى منافس ما لم تُطلق الحسابات متعددة الفروع خلال 6 أشهر.",
+          prompt: "ما الذي يتغيّر في خطتك، وماذا تقترح؟",
+        },
+      },
+    },
+    hidden: {
+      en: {
+        rubric: [
+          {
+            competencyKey: "product-thinking.feature-prioritisation",
+            anchors: [
+              "Prioritises by who is loudest or most important (all 8 weeks to {{client}}), or tries to fit 17 weeks of requests into 12.",
+              "Ranks the requests on gut feel, without using the cancellation data or the estimates.",
+              "Prioritises by impact and effort: the bank-feed problem drives 41% of early cancellations; says clearly what is out this quarter.",
+              "Uses the smaller 2-bank fix to free capacity for a second priority, and explains the trade-off to each requester.",
+              "As level 4, and sequences for learning, e.g., discovery or a minimal multi-branch version with {{client}}'s 120 customers, with a clear decision point.",
+            ],
+          },
+          {
+            competencyKey: "product-thinking.problem-framing",
+            anchors: [
+              "Treats the quarter as 'build what was asked for'.",
+              "Names a goal ('grow the business') too vague to choose between the requests.",
+              "Frames the problem around outcomes: new customers failing at set-up and cancelling, and keeping {{client}}'s referrals.",
+              "Separates acquisition, activation and retention problems, links each request to one, and uses the data to choose.",
+              "As level 4, and questions the requests themselves: what {{client}}'s 120 customers need from 'multi-branch', and whether text reminders address the 15% 'chasing payments' reason.",
+            ],
+          },
+          {
+            competencyKey: "product-thinking.solution-design",
+            anchors: [
+              "Accepts each request in its full form or rejects it outright.",
+              "Proposes changes without scoping them or thinking about how they would work.",
+              "Scopes solutions to the real need: the 2-bank fix first, smaller versions of reminders or multi-branch.",
+              "Considers failure points and dependencies (other banks may change formats; text-message costs) and plans a small release to learn from.",
+              "As level 4, and designs the smallest thing that tests the riskiest assumption, such as a multi-branch pilot for a few of {{client}}'s customers.",
+            ],
+          },
+        ],
+        strongIndicators: [
+          {
+            text: "Uses {{specialist}}'s note: fixing the 2 banks takes about 2 weeks instead of 5.",
+            competencyKey: "product-thinking.solution-design",
+            keywords: ["2 banks", "two banks", "2 engineer-weeks", "file format", "smaller fix", "مصرفين", "مصرفان", "أسبوعي عمل", "صيغة الملفات", "إصلاح أصغر"],
+          },
+          {
+            text: "Uses the 41% of early cancellations caused by bank connection.",
+            competencyKey: "product-thinking.feature-prioritisation",
+            keywords: ["41%", "first 60 days", "couldn't connect", "early cancellations", "41%", "أول 60 يومًا", "تعذر ربط", "الإلغاء المبكر"],
+          },
+          {
+            text: "States clearly what is out this quarter and how to tell the requesters.",
+            competencyKey: "product-thinking.feature-prioritisation",
+            keywords: ["not this quarter", "out of scope", "next quarter", "say no", "ليس هذا الربع", "خارج النطاق", "الربع القادم", "نعتذر عن"],
+          },
+          {
+            text: "Frames the quarter around activation and retention of new customers.",
+            competencyKey: "product-thinking.problem-framing",
+            keywords: ["activation", "new customers", "retention", "set-up", "churn", "التفعيل", "العملاء الجدد", "الاحتفاظ", "الإعداد"],
+          },
+          {
+            text: "Proposes a pilot or discovery with {{client}}'s multi-branch customers.",
+            competencyKey: "product-thinking.solution-design",
+            keywords: ["pilot", "120", "minimal version", "discovery", "interview", "تجربة", "120", "نسخة مبسطة", "استكشاف", "مقابلات"],
+          },
+        ],
+        redFlags: [
+          {
+            text: "Gives the whole quarter to the biggest partner without weighing the data.",
+            competencyKey: "product-thinking.feature-prioritisation",
+            keywords: ["biggest partner first", "all 8 weeks", "whatever the reseller wants", "الشريك الأكبر أولًا", "الأسابيع الثمانية كلها"],
+          },
+          {
+            text: "Tries to deliver all three in full by squeezing the team.",
+            competencyKey: "product-thinking.feature-prioritisation",
+            keywords: ["do all three", "overtime", "squeeze", "الثلاثة كلها", "العمل الإضافي", "ضغط الجدول"],
+          },
+          {
+            text: "Justifies features only because competitors have them.",
+            competencyKey: "product-thinking.problem-framing",
+            keywords: ["because competitors", "competitors have it", "لأن المنافسين", "المنافسون لديهم"],
+          },
+          {
+            text: "Accepts each request in its full form without scoping it.",
+            competencyKey: "product-thinking.solution-design",
+            keywords: ["exactly as requested", "full version of each", "كما طُلب تمامًا", "النسخة الكاملة من كل"],
+          },
+        ],
+        embeddedDetail: {
+          description:
+            "The table caption says most bank-feed failures come from 2 banks that changed their file format, and fixing those 2 alone is about 2 engineer-weeks rather than 5, which frees capacity for a second priority.",
+          location: "caption of the requests table",
+          keywords: ["2 banks", "two banks", "file format", "2 engineer-weeks", "مصرفان", "صيغة ملفاتهما", "أسبوعي عمل"],
+        },
+        probeTargets: ["product-thinking.feature-prioritisation"],
+        twistTargets: ["product-thinking.feature-prioritisation", "product-thinking.solution-design"],
+      },
+    },
+  },
+  // ───────────────────────────── ds-07 ─────────────────────────────
+  {
+    id: "ds-07-the-second-visit",
+    type: "DESIGN_CHALLENGE",
+    difficulty: 2,
+    dials: { ambiguity: 2, stakeholders: 2, conflictingConstraints: 3, stakes: 2, timePressure: 2, informationGaps: 2 },
+    targets: ["product-thinking.idea-generation", "product-thinking.solution-design", "product-thinking.user-empathy"],
+    roleFamilies: [],
+    minutes: 7,
+    storyPhase: "early",
+    content: {
+      en: {
+        title: "The second visit",
+        scenario:
+          "{{company}}'s licensing office renews about 9,000 shop trading licences a year. Owners must bring 4 documents in person. A visit takes 2.5 hours on average, including waiting, and 1 in 3 owners has to come back because a document is missing or out of date. {{manager}} has asked you to redesign the renewal so that most owners need only one visit. There is no budget for new IT for 6 months, but the office has a basic online form tool and can send text messages. The figures and a note from the front desk are in the materials.",
+        materials: [
+          {
+            kind: "table",
+            id: "returns",
+            title: "Why owners had to come back (last 6 months, 1,480 return visits)",
+            columns: [
+              { key: "reason", label: "Reason" },
+              { key: "share", label: "Share of return visits" },
+            ],
+            rows: [
+              { reason: "Lease contract expired", share: "38%" },
+              { reason: "Fire safety certificate missing or old type", share: "27%" },
+              { reason: "Fee paid at the wrong counter", share: "14%" },
+              { reason: "Shopfront photo wrong size", share: "9%" },
+              { reason: "Other", share: "12%" },
+            ],
+          },
+          {
+            kind: "memo",
+            id: "frontdesk",
+            title: "Note from the front desk",
+            author: { name: "{{report1}}", role: "{{report1.role}}" },
+            body:
+              "Most owners only find out what they need when they reach the counter. The checklist on our website is two years old and still asks for the old fire certificate, which was replaced last year. Many owners are renewing for the first time since they opened, and most run the shop themselves, so every visit means closing for the morning.",
+          },
+        ],
+        task: {
+          kind: "design",
+          prompt: "Redesign the licence renewal. Complete each section.",
+          design: {
+            sections: [
+              { id: "journey", label: "What shop owners go through today", hint: "From the renewal reminder to leaving with the licence: what they do, wait for and worry about." },
+              { id: "ideas", label: "Ideas", hint: "At least 3 genuinely different ideas, with a line on each." },
+              { id: "redesign", label: "Your redesigned renewal", hint: "The new steps, who does what, and why this design." },
+              { id: "test", label: "How you would try it first", hint: "A small test, what you would measure, and what would show it works." },
+            ],
+          },
+        },
+        probe: { prompt: "Which shop owners would find your design hardest to use, and what would you do for them?" },
+        twist: {
+          change: "For the next 3 months, half of the front-desk staff will be moved to another service.",
+          prompt: "What changes in your design?",
+        },
+      },
+      ar: {
+        title: "الزيارة الثانية",
+        scenario:
+          "يجدد مكتب التراخيص لدى {{company}} نحو 9,000 رخصة تجارية للمحلات سنويًا. وعلى صاحب المحل أن يحضر بنفسه ومعه 4 مستندات. تستغرق الزيارة ساعتين ونصفًا في المتوسط بما فيها الانتظار، وواحد من كل ثلاثة أصحاب محلات يضطر إلى العودة لأن أحد المستندات ناقص أو منتهي الصلاحية. والمطلوب منك، بتكليف من {{manager}}، إعادة تصميم إجراءات التجديد بحيث يكفي معظم أصحاب المحلات زيارة واحدة. لا ميزانية لأنظمة تقنية جديدة خلال 6 أشهر، لكن لدى المكتب أداة بسيطة للنماذج الإلكترونية ويستطيع إرسال رسائل نصية. تجد الأرقام وملاحظة من مكتب الاستقبال ضمن المواد.",
+        materials: [
+          {
+            kind: "table",
+            id: "returns",
+            title: "أسباب عودة أصحاب المحلات (آخر 6 أشهر، 1,480 زيارة متكررة)",
+            columns: [
+              { key: "reason", label: "السبب" },
+              { key: "share", label: "نسبته من الزيارات المتكررة" },
+            ],
+            rows: [
+              { reason: "انتهاء عقد الإيجار", share: "38%" },
+              { reason: "شهادة السلامة من الحريق ناقصة أو من النوع القديم", share: "27%" },
+              { reason: "دفع الرسوم في الشباك الخطأ", share: "14%" },
+              { reason: "صورة واجهة المحل بمقاس غير صحيح", share: "9%" },
+              { reason: "أسباب أخرى", share: "12%" },
+            ],
+          },
+          {
+            kind: "memo",
+            id: "frontdesk",
+            title: "ملاحظة من مكتب الاستقبال",
+            author: { name: "{{report1}}", role: "{{report1.role}}" },
+            body:
+              "معظم أصحاب المحلات لا يعرفون ما يحتاجون إليه إلا حين يصلون إلى الشباك. وقائمة المتطلبات على موقعنا الإلكتروني عمرها سنتان، وما زالت تطلب شهادة الحريق القديمة التي استُبدلت في العام الماضي. وكثيرون منهم يجددون للمرة الأولى منذ افتتاح محلاتهم، ومعظمهم يديرون المحل بأنفسهم، فكل زيارة تعني إغلاق المحل طوال الصباح.",
+          },
+        ],
+        task: {
+          kind: "design",
+          prompt: "أعد تصميم إجراءات تجديد الرخصة، واملأ كل قسم.",
+          design: {
+            sections: [
+              { id: "journey", label: "ما يمر به أصحاب المحلات اليوم", hint: "من رسالة التذكير بالتجديد حتى المغادرة بالرخصة: ما يفعلونه، وما ينتظرونه، وما يقلقهم." },
+              { id: "ideas", label: "الأفكار", hint: "3 أفكار مختلفة اختلافًا حقيقيًا على الأقل، مع سطر عن كل منها." },
+              { id: "redesign", label: "إجراءات التجديد بعد إعادة التصميم", hint: "الخطوات الجديدة، ومن يتولى كل خطوة، وسبب اختيار هذا التصميم." },
+              { id: "test", label: "كيف ستجرّب التصميم أولًا", hint: "تجربة صغيرة، وما ستقيسه، وما الذي يثبت نجاحها." },
+            ],
+          },
+        },
+        probe: { prompt: "أي أصحاب المحلات سيجدون تصميمك الأصعب استخدامًا، وماذا ستفعل من أجلهم؟" },
+        twist: {
+          change: "خلال الأشهر الثلاثة القادمة سيُنقل نصف موظفي مكتب الاستقبال إلى خدمة أخرى.",
+          prompt: "ما الذي يتغيّر في تصميمك؟",
+        },
+      },
+    },
+    hidden: {
+      en: {
+        rubric: [
+          {
+            competencyKey: "product-thinking.idea-generation",
+            anchors: [
+              "Offers one obvious idea, such as more staff or longer opening hours.",
+              "Offers several variations of one approach, such as more counters or faster counters.",
+              "Proposes at least 3 genuinely different ideas, e.g., an up-to-date checklist sent with the reminder, an online pre-check of documents, one payment point.",
+              "Varies key assumptions (when documents are checked, by whom, whether a visit is needed at all) and combines the best elements.",
+              "Proposes an original, practical idea, such as a text 60 days before expiry with a personal checklist that flags an expiring lease, and shows how to test it cheaply.",
+            ],
+          },
+          {
+            competencyKey: "product-thinking.solution-design",
+            anchors: [
+              "Designs something that adds steps or ignores the no-new-IT constraint.",
+              "Describes a workable process focused on the office's steps, not the owner's.",
+              "Redesigns the renewal so missing documents are caught before the visit, with owners and timings, using the existing tools.",
+              "Simplifies to the few changes that remove most return visits (lease, fire certificate and fee counter are 79%) and plans a small trial.",
+              "Prefers simple fixes, such as correcting the website checklist and a single payment point, over complex systems, and designs them to learn from real use.",
+            ],
+          },
+          {
+            competencyKey: "product-thinking.user-empathy",
+            anchors: [
+              "Blames owners for not bringing the right documents.",
+              "Mentions owners' frustration without understanding their situation.",
+              "Describes the owner's journey and pain points: closing the shop for a morning, finding out what is missing only at the counter.",
+              "Considers different owners (first-time renewers, owners with limited reading or phone access, sole traders with no cover) and designs for them.",
+              "As level 4, and proposes testing with owners themselves, e.g., observing a few renewals or calling owners who had to come back.",
+            ],
+          },
+        ],
+        strongIndicators: [
+          {
+            text: "Spots that the website checklist is out of date and fixes it first.",
+            competencyKey: "product-thinking.solution-design",
+            keywords: ["checklist", "website", "two years old", "old fire certificate", "update the checklist", "قائمة المتطلبات", "الموقع الإلكتروني", "عمرها سنتان", "شهادة الحريق القديمة", "تحديث القائمة"],
+          },
+          {
+            text: "Targets the three biggest return reasons (lease, fire certificate, fee counter).",
+            competencyKey: "product-thinking.solution-design",
+            keywords: ["38%", "27%", "lease", "fire certificate", "fee counter", "79%", "عقد الإيجار", "شهادة السلامة", "شباك الدفع", "79%"],
+          },
+          {
+            text: "Catches missing documents before the visit, e.g., an online pre-check.",
+            competencyKey: "product-thinking.idea-generation",
+            keywords: ["before the visit", "pre-check", "check documents online", "online form", "upload", "قبل الزيارة", "تدقيق مسبق", "النموذج الإلكتروني", "رفع المستندات"],
+          },
+          {
+            text: "Uses a text reminder with a personal checklist before expiry.",
+            competencyKey: "product-thinking.idea-generation",
+            keywords: ["text message", "reminder", "60 days", "before expiry", "رسالة نصية", "تذكير", "60 يومًا", "قبل انتهاء"],
+          },
+          {
+            text: "Designs around the owner's cost of a visit and first-time renewers.",
+            competencyKey: "product-thinking.user-empathy",
+            keywords: ["close the shop", "lose a morning", "first time", "first-time", "run the shop themselves", "إغلاق المحل", "طوال الصباح", "للمرة الأولى", "يديرون المحل بأنفسهم"],
+          },
+        ],
+        redFlags: [
+          {
+            text: "Proposes more staff or counters as the main fix.",
+            competencyKey: "product-thinking.idea-generation",
+            keywords: ["hire more", "more counters", "more staff", "توظيف المزيد", "شبابيك إضافية", "موظفين إضافيين"],
+          },
+          {
+            text: "Blames owners for coming unprepared.",
+            competencyKey: "product-thinking.user-empathy",
+            keywords: ["owners' fault", "should read the website", "careless owners", "خطأ أصحاب المحلات", "عليهم قراءة", "مهملون"],
+          },
+          {
+            text: "Depends on a new IT system despite the constraint.",
+            competencyKey: "product-thinking.solution-design",
+            keywords: ["new system", "build an app", "new software", "نظام جديد", "تطبيق جديد", "برنامج جديد"],
+          },
+        ],
+        embeddedDetail: {
+          description:
+            "The front-desk note says the website checklist is two years old and still asks for the old fire certificate, which explains many of the 27% of return visits for the wrong certificate.",
+          location: "{{report1}}'s front-desk note",
+          keywords: ["checklist", "two years old", "old fire certificate", "website", "قائمة المتطلبات", "عمرها سنتان", "شهادة الحريق القديمة"],
+        },
+        probeTargets: ["product-thinking.user-empathy"],
+        twistTargets: ["product-thinking.solution-design"],
+      },
+    },
+  },
 ];

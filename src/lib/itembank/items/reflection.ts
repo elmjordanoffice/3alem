@@ -497,4 +497,380 @@ export const ITEMS: BankItem[] = [
       },
     },
   },
+
+  // ─────────────────────────────────────────────────────────────────────────
+  {
+    id: "refl-04-feedback-set-aside",
+    type: "REFLECTION",
+    difficulty: 3,
+    dials: { ambiguity: 3, stakeholders: 3, conflictingConstraints: 2, stakes: 3, timePressure: 1, informationGaps: 2 },
+    targets: ["collaboration.taking-feedback", "collaboration.self-awareness", "communication.listening"],
+    roleFamilies: [],
+    minutes: 3,
+    storyPhase: "late",
+    content: {
+      en: {
+        title: "The feedback you set aside",
+        scenario:
+          "Six months ago you received 360-degree feedback from six colleagues. Some of it was hard to hear, and at the time you put it down to people being unhappy about a recent decision. Since then, things have happened in your team that you did not expect. {{manager}} has asked you to reflect before the next feedback round. The feedback summary and what happened next are in the materials.",
+        materials: [
+          {
+            kind: "table",
+            id: "m1",
+            title: "Your 360 feedback, six months ago",
+            columns: [
+              { key: "statement", label: "Statement about you" },
+              { key: "agreed", label: "Colleagues who agreed (of 6)", numeric: true },
+            ],
+            rows: [
+              { statement: "Decides quickly and gets results", agreed: 5 },
+              { statement: "Explains the reasons behind decisions", agreed: 4 },
+              { statement: "Often finishes other people's sentences or cuts discussion short", agreed: 3 },
+              { statement: "Is hard to disagree with in meetings", agreed: 3 },
+              { statement: "Asks for my ideas before deciding", agreed: 1 },
+            ],
+          },
+          {
+            kind: "memo",
+            id: "m2",
+            title: "What happened next",
+            author: { name: "{{you}}", role: "{{you.role}}" },
+            body:
+              "Month 0: You received the report and told {{manager}} the critical comments came from people unhappy with the new shift pattern.\nMonth 1: In a meeting, {{report1}} suggested combining deliveries with {{peer}}'s team. You said 'we tried that two years ago' and moved to the next item. {{report1}} later emailed the idea to {{manager}}.\nMonth 2: In the team survey, 'I can raise concerns with my manager' fell from 78% to 55%.\nMonth 3: {{report2}} stopped speaking in planning meetings. You assumed {{report2}} was simply busy.\nMonth 4: {{peer}}'s team tried {{report1}}'s idea on their own and cut their delivery costs by 12%.\nMonth 5: {{report1}} moved to {{peer}}'s team, saying in the exit conversation: 'I didn't feel my ideas were heard here.'",
+          },
+        ],
+        task: {
+          kind: "written",
+          prompt: "What would you do differently? Name the two or three changes that matter most, and say why.",
+          written: { format: "free", placeholder: "Next time I would…" },
+        },
+        probe: {
+          prompt: "How would you find out, within the next month, whether your team now experiences you differently?",
+        },
+        twist: {
+          change: "Suppose that in your next one-to-one, {{report2}} says: 'Honestly, the comments in that report were right, and nothing has changed.'",
+          prompt: "What do you say in that conversation?",
+        },
+      },
+      ar: {
+        title: "الملاحظات التي تجاهلتها",
+        scenario:
+          "قبل ستة أشهر تلقيت تقييمًا شاملًا (360 درجة) من ستة من زملائك. كان سماع بعض ما فيه صعبًا، وعزوته حينها إلى استياء بعضهم من قرار اتخذته مؤخرًا. ومنذ ذلك الحين وقعت في فريقك أمور لم تتوقعها. والمطلوب منك الآن، بطلب من {{manager}}، أن تتأمل ما جرى قبل جولة التقييم القادمة. تجد ملخص الملاحظات وما حدث بعدها ضمن المواد.",
+        materials: [
+          {
+            kind: "table",
+            id: "m1",
+            title: "تقييمك الشامل قبل ستة أشهر",
+            columns: [
+              { key: "statement", label: "العبارة التي تصفك" },
+              { key: "agreed", label: "الزملاء الموافقون (من 6)", numeric: true },
+            ],
+            rows: [
+              { statement: "يحسم القرار بسرعة ويحقق النتائج", agreed: 5 },
+              { statement: "يشرح الأسباب وراء قراراته", agreed: 4 },
+              { statement: "كثيرًا ما يكمل جمل الآخرين أو يقطع النقاش", agreed: 3 },
+              { statement: "يصعب الاختلاف معه في الاجتماعات", agreed: 3 },
+              { statement: "يسألني عن أفكاري قبل أن يقرر", agreed: 1 },
+            ],
+          },
+          {
+            kind: "memo",
+            id: "m2",
+            title: "ما حدث بعدها",
+            author: { name: "{{you}}", role: "{{you.role}}" },
+            body:
+              "الشهر 0: تسلّمت التقرير، وقلت لـ{{manager}} إن التعليقات الناقدة جاءت من أشخاص مستائين من نظام المناوبات الجديد.\nالشهر 1: في أحد الاجتماعات جاء من {{report1}} اقتراح بدمج عمليات التوصيل مع فريق {{peer}}. فقلت: «جرّبنا ذلك قبل سنتين»، وانتقلت إلى البند التالي. ولاحقًا وصلت الفكرة إلى {{manager}} في رسالة من {{report1}}.\nالشهر 2: في استبيان الفريق انخفضت نسبة الموافقة على عبارة «أستطيع أن أطرح مخاوفي على مديري» من 78% إلى 55%.\nالشهر 3: غاب صوت {{report2}} عن اجتماعات التخطيط، وافترضت أن السبب كثرة الانشغال.\nالشهر 4: جرّب فريق {{peer}} فكرة {{report1}} من تلقاء نفسه، فخفّض تكاليف التوصيل لديه بنسبة 12%.\nالشهر 5: انتقال {{report1}} إلى فريق {{peer}}، وفي مقابلة المغادرة: «لم أشعر بأن أفكاري تلقى آذانًا صاغية هنا».",
+          },
+        ],
+        task: {
+          kind: "written",
+          prompt: "ما الذي كنت ستفعله بشكل مختلف؟ اذكر التغييرين أو التغييرات الثلاثة الأهم، واشرح السبب.",
+          written: { format: "free", placeholder: "في المرة القادمة…" },
+        },
+        probe: {
+          prompt: "كيف ستعرف خلال الشهر القادم إن كان فريقك يلمس تغييرًا في تعاملك؟",
+        },
+        twist: {
+          change: "لنفترض أنك سمعت في لقائك الفردي القادم مع {{report2}} هذه العبارة: «بصراحة، التعليقات في ذلك التقرير كانت صحيحة، ولم يتغير شيء.»",
+          prompt: "ماذا تقول في تلك المحادثة؟",
+        },
+      },
+    },
+    hidden: {
+      en: {
+        rubric: [
+          {
+            competencyKey: "collaboration.taking-feedback",
+            anchors: [
+              "Still dismisses the feedback, or explains it away as resentment about the shift pattern.",
+              "Accepts the feedback in general terms ('I should listen more') without linking it to what happened.",
+              "Accepts the specific points (cutting discussion short, hard to disagree with) and names concrete changes, such as asking for ideas before giving a view.",
+              "Separates the message from the messengers, treats the survey drop and {{report1}}'s exit as confirming evidence, and plans to seek more feedback.",
+              "As level 4, and makes the change visible: tells the team what they heard and what will change, and invites them to point it out when it slips.",
+            ],
+          },
+          {
+            competencyKey: "collaboration.self-awareness",
+            anchors: [
+              "Describes their style as wholly positive and treats the events as other people's problems.",
+              "Admits a general weakness without linking it to their own reactions in these events.",
+              "Names how their own behaviour contributed: dismissing {{report1}}'s idea, assuming {{report2}} was busy, blaming the shift decision.",
+              "Identifies the underlying pattern (speed valued over hearing others; only 1 of 6 felt asked for ideas) and the situations where it shows up.",
+              "Explains the gap between intent (being decisive) and impact (people stop speaking up) and how they will watch for it in themselves.",
+            ],
+          },
+          {
+            competencyKey: "communication.listening",
+            anchors: [
+              "Proposes no change in how they listen.",
+              "Proposes to 'listen more' with no specific practice.",
+              "Names specific listening behaviours: letting people finish, asking for views before giving their own, summarising back.",
+              "Plans to notice quieter people such as {{report2}} and draw them out, and to explore ideas before judging them ('what would be different this time?').",
+              "As level 4, and creates ways to be heard beyond meetings (one-to-ones, written input before decisions) and checks that they work.",
+            ],
+          },
+        ],
+        strongIndicators: [
+          {
+            text: "Recognises that the idea they dismissed later cut {{peer}}'s delivery costs by 12%.",
+            competencyKey: "communication.listening",
+            keywords: ["12%", "tried that", "dismissed the idea", "it worked", "جربنا ذلك", "رفضت الفكرة", "نجحت", "12%"],
+          },
+          {
+            text: "Treats the survey drop as evidence that the feedback was accurate.",
+            competencyKey: "collaboration.taking-feedback",
+            keywords: ["78%", "55%", "survey", "raise concerns", "الاستبيان", "55%", "أطرح مخاوفي", "طرح المخاوف"],
+          },
+          {
+            text: "Takes ownership of their own reactions rather than blaming others.",
+            competencyKey: "collaboration.self-awareness",
+            keywords: ["i dismissed", "i assumed", "i was wrong", "my reaction", "i blamed", "تجاهلت", "افترضت", "كنت مخطئًا", "ردة فعلي", "عزوت"],
+          },
+          {
+            text: "Names concrete listening practices.",
+            competencyKey: "communication.listening",
+            keywords: ["let people finish", "ask for views first", "summarise", "before giving my view", "ask the quieter", "أترك الآخرين يكملون", "أسأل عن آرائهم أولًا", "ألخص", "قبل أن أبدي رأيي", "الأقل كلامًا"],
+          },
+          {
+            text: "Plans to ask for ongoing feedback and check whether anything has changed.",
+            competencyKey: "collaboration.taking-feedback",
+            keywords: ["ask for feedback", "ask the team", "pulse", "check in", "tell me if", "أطلب ملاحظات", "أسأل الفريق", "استبيان قصير", "أخبروني إذا"],
+          },
+        ],
+        redFlags: [
+          {
+            text: "Still explains the feedback away.",
+            competencyKey: "collaboration.taking-feedback",
+            keywords: ["unfair", "they were upset", "because of the shift", "just disgruntled", "غير منصفة", "كانوا مستائين", "بسبب المناوبات", "مجرد استياء"],
+          },
+          {
+            text: "Blames {{report1}} for going to {{manager}} or for leaving.",
+            competencyKey: "collaboration.self-awareness",
+            keywords: ["went behind my back", "should have spoken up", "disloyal", "من وراء ظهري", "تجاوزني", "غير وفي"],
+          },
+          {
+            text: "Offers only vague intentions.",
+            competencyKey: "communication.listening",
+            keywords: ["listen more", "be more open", "communicate better", "أستمع أكثر", "أكون أكثر انفتاحًا", "تواصل أفضل"],
+          },
+        ],
+        embeddedDetail: {
+          description:
+            "In month 4, {{peer}}'s team tried the idea {{report1}} had suggested in month 1 and cut delivery costs by 12%: the dismissed idea was right, and the cost of not listening is measurable.",
+          location: "month 4 line of the 'What happened next' memo",
+          keywords: ["12%", "month 4", "tried the idea", "الشهر 4", "12%", "جرّب فريق"],
+        },
+        probeTargets: ["collaboration.taking-feedback"],
+        twistTargets: ["communication.listening", "collaboration.taking-feedback"],
+      },
+    },
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────
+  {
+    id: "refl-05-group-that-stalled",
+    type: "REFLECTION",
+    difficulty: 4,
+    dials: { ambiguity: 4, stakeholders: 5, conflictingConstraints: 3, stakes: 3, timePressure: 2, informationGaps: 3 },
+    targets: ["leadership.influence-without-authority", "adaptability.comfort-with-ambiguity", "collaboration.team-orientation"],
+    roleFamilies: [],
+    minutes: 3,
+    storyPhase: "late",
+    content: {
+      en: {
+        title: "The working group that stalled",
+        scenario:
+          "Last quarter {{exec}} asked you to lead a working group from six departments to cut the time it takes to set up a new supplier, then 45 days. None of the members reported to you, and the brief was one line long. After 12 weeks the group stopped meeting without agreeing any change. The sequence of events and the latest figures are in the materials.",
+        materials: [
+          {
+            kind: "memo",
+            id: "m1",
+            title: "Sequence of events",
+            author: { name: "{{you}}", role: "{{you.role}}" },
+            body:
+              "Week 1: {{exec}}'s brief: 'Fix supplier set-up.' No target, no budget. You waited two weeks for a fuller brief, which never came.\nWeek 3: First meeting. {{peer}}, representing procurement, and {{specialist}}, representing finance, each said the delay came from the other's checks. You presented a new approval form you had designed alone. Nobody committed to it.\nWeek 5: Two departments sent junior deputies. You asked {{exec}} to 'make people attend'.\nWeek 7: {{specialist}} shared data showing that most of the delay was spent waiting for suppliers' documents. You noted it and kept working on the form.\nWeek 9: You presented the form to {{exec}}. {{peer}} said procurement had never agreed to it.\nWeek 12: The group stopped meeting. Supplier set-up now takes 44 days.",
+          },
+          {
+            kind: "table",
+            id: "m2",
+            title: "Where the 44 days go (average)",
+            columns: [
+              { key: "stage", label: "Stage" },
+              { key: "days", label: "Days", numeric: true },
+              { key: "owner", label: "Who it depends on" },
+            ],
+            rows: [
+              { stage: "Waiting for supplier documents", days: 26, owner: "Supplier (chased by procurement)" },
+              { stage: "Finance checks (bank details, tax)", days: 8, owner: "Finance" },
+              { stage: "Procurement approval", days: 6, owner: "Procurement" },
+              { stage: "IT system set-up", days: 4, owner: "IT" },
+            ],
+          },
+        ],
+        task: {
+          kind: "written",
+          prompt: "What would you do differently? Name the changes that would have made the biggest difference, and say why.",
+          written: { format: "free", placeholder: "Next time I would…" },
+        },
+        probe: {
+          prompt: "Who in the group would you have spoken to first, one to one, and what would you have asked them?",
+        },
+        twist: {
+          change: "Suppose {{exec}} had refused to add anything to the one-line brief, and had asked for a first improvement within 4 weeks.",
+          prompt: "How would you have started?",
+        },
+      },
+      ar: {
+        title: "فريق العمل الذي توقف",
+        scenario:
+          "في الربع الماضي جاءك تكليف من {{exec}} بقيادة فريق عمل من ست إدارات لتقليص المدة اللازمة لاعتماد مورّد جديد، وكانت آنذاك 45 يومًا. لم يكن أي من الأعضاء تابعًا لك، وجاء التكليف في سطر واحد. وبعد 12 أسبوعًا توقف الفريق عن الاجتماع دون الاتفاق على أي تغيير. تجد تسلسل الأحداث وأحدث الأرقام ضمن المواد.",
+        materials: [
+          {
+            kind: "memo",
+            id: "m1",
+            title: "تسلسل الأحداث",
+            author: { name: "{{you}}", role: "{{you.role}}" },
+            body:
+              "الأسبوع 1: نص التكليف من {{exec}}: «أصلحوا إجراءات اعتماد الموردين». لا هدف محدد ولا ميزانية. انتظرت أسبوعين تكليفًا أوفى لم يصل قط.\nالأسبوع 3: الاجتماع الأول. جاء من {{peer}} عن المشتريات ومن {{specialist}} عن المالية اتهام متبادل: كل طرف يرى أن التأخير سببه فحوص الطرف الآخر. وعرضتَ نموذج اعتماد جديدًا صممته وحدك، فلم يلتزم به أحد.\nالأسبوع 5: أرسلت إدارتان موظفَين مبتدئَين بالنيابة. وطلبتَ من {{exec}} «إلزام الناس بالحضور».\nالأسبوع 7: عُرضت بيانات من {{specialist}} تُظهر أن معظم التأخير يقع في انتظار مستندات الموردين. دوّنت ذلك، وواصلت العمل على النموذج.\nالأسبوع 9: عرضتَ النموذج على {{exec}}، فجاء اعتراض من {{peer}}: إدارة المشتريات لم توافق عليه قط.\nالأسبوع 12: توقف الفريق عن الاجتماع. واعتماد المورّد يستغرق الآن 44 يومًا.",
+          },
+          {
+            kind: "table",
+            id: "m2",
+            title: "أين تذهب الأيام الـ44 (متوسط)",
+            columns: [
+              { key: "stage", label: "المرحلة" },
+              { key: "days", label: "الأيام", numeric: true },
+              { key: "owner", label: "الجهة المعنية" },
+            ],
+            rows: [
+              { stage: "انتظار مستندات المورّد", days: 26, owner: "المورّد (بمتابعة المشتريات)" },
+              { stage: "فحوص المالية (البيانات المصرفية والضريبية)", days: 8, owner: "المالية" },
+              { stage: "موافقة المشتريات", days: 6, owner: "المشتريات" },
+              { stage: "الإعداد في الأنظمة", days: 4, owner: "تقنية المعلومات" },
+            ],
+          },
+        ],
+        task: {
+          kind: "written",
+          prompt: "ما الذي كنت ستفعله بشكل مختلف؟ اذكر التغييرات التي كانت ستُحدث الفرق الأكبر، واشرح السبب.",
+          written: { format: "free", placeholder: "في المرة القادمة…" },
+        },
+        probe: {
+          prompt: "بمن كنت ستبدأ من أعضاء الفريق في لقاء فردي، وما الأسئلة التي كنت ستطرحها؟",
+        },
+        twist: {
+          change: "لنفترض أن الرد من {{exec}} كان رفض إضافة أي شيء إلى التكليف المكتوب في سطر واحد، مع طلب أول تحسين خلال 4 أسابيع.",
+          prompt: "كيف كنت ستبدأ؟",
+        },
+      },
+    },
+    hidden: {
+      en: {
+        rubric: [
+          {
+            competencyKey: "leadership.influence-without-authority",
+            anchors: [
+              "Relies on {{exec}}'s authority ('make people attend') or blames the members for not cooperating.",
+              "Recognises they needed buy-in but proposes only more meetings or a better presentation of the form.",
+              "Describes building support before proposing solutions: one-to-ones with {{peer}} and {{specialist}} to understand what each department needed.",
+              "Uses shared evidence (26 of the 44 days are spent waiting for suppliers) to create a common goal, and gives members a stake in designing the fix.",
+              "As level 4, and builds a coalition deliberately: early allies, parts of the solution owned by others, and {{exec}}'s backing used sparingly to remove blockers rather than compel attendance.",
+            ],
+          },
+          {
+            competencyKey: "adaptability.comfort-with-ambiguity",
+            anchors: [
+              "Sees the vague brief as the reason for failure and would wait for clarity again.",
+              "Would push {{exec}} harder for a complete brief before starting anything.",
+              "Would set a working goal (e.g., under 30 days within 6 months), check it with {{exec}}, and start.",
+              "Takes small, reversible steps that produce information early (map the 45 days in week 1, trial one fix with a few suppliers) while clarifying the key unknowns.",
+              "As level 4, and creates structure for the group: working assumptions, decision points and a way to adjust the goal as data arrives.",
+            ],
+          },
+          {
+            competencyKey: "collaboration.team-orientation",
+            anchors: [
+              "Treats the group as an audience for their own plan.",
+              "Invites input but keeps ownership of the solution to themselves.",
+              "Treats members as joint owners: a shared goal, agreed roles and shared credit.",
+              "Puts the group's goal above their own design (drops the form once the week 7 data pointed elsewhere) and credits contributions such as {{specialist}}'s data.",
+              "As level 4, and builds lasting cooperation between departments, e.g., a shared measure each department owns part of.",
+            ],
+          },
+        ],
+        strongIndicators: [
+          {
+            text: "Uses the week 7 data: most of the delay is waiting for supplier documents, not internal checks.",
+            competencyKey: "leadership.influence-without-authority",
+            keywords: ["26 days", "supplier documents", "waiting for suppliers", "most of the delay", "26 يومًا", "مستندات المورد", "مستندات الموردين", "معظم التأخير"],
+          },
+          {
+            text: "Would meet members one to one before proposing anything.",
+            competencyKey: "leadership.influence-without-authority",
+            keywords: ["one-to-one", "one to one", "individually", "before the first meeting", "what they need", "لقاءات فردية", "لقاء فردي", "قبل الاجتماع الأول", "ما يحتاجون إليه"],
+          },
+          {
+            text: "Would set a working goal and start despite the vague brief.",
+            competencyKey: "adaptability.comfort-with-ambiguity",
+            keywords: ["working goal", "propose a target", "start anyway", "30 days", "first step", "هدف مبدئي", "أقترح هدفًا", "أبدأ دون انتظار", "30 يومًا", "خطوة أولى"],
+          },
+          {
+            text: "Would design the solution with the group and share the credit.",
+            competencyKey: "collaboration.team-orientation",
+            keywords: ["design it together", "co-design", "share the credit", "their ideas", "together", "نصممه معًا", "ننسب الفضل", "أفكارهم", "معًا"],
+          },
+          {
+            text: "Admits designing the form alone and sticking with it.",
+            competencyKey: "collaboration.team-orientation",
+            keywords: ["designed it alone", "my own plan", "stuck to my form", "صممته وحدي", "خطتي الخاصة", "تمسكت بالنموذج"],
+          },
+        ],
+        redFlags: [
+          {
+            text: "Relies on authority to force cooperation.",
+            competencyKey: "leadership.influence-without-authority",
+            keywords: ["make them attend", "force them", "instruct them", "order them", "إلزامهم", "أجبرهم", "أوامر"],
+          },
+          {
+            text: "Puts the failure down to the vague brief.",
+            competencyKey: "adaptability.comfort-with-ambiguity",
+            keywords: ["impossible without a clear brief", "exec's fault", "مستحيل دون تكليف واضح", "الذنب ذنب الإدارة"],
+          },
+          {
+            text: "Blames the departments for not cooperating.",
+            competencyKey: "collaboration.team-orientation",
+            keywords: ["they didn't cooperate", "they were the problem", "lack of commitment from them", "لم يتعاونوا", "هم المشكلة", "عدم التزامهم"],
+          },
+        ],
+        embeddedDetail: {
+          description:
+            "In week 7 {{specialist}} showed that most of the delay (26 of 44 days) is waiting for suppliers' documents, yet the group kept working on an internal approval form that addressed at most a few of the remaining days.",
+          location: "week 7 line of the sequence memo; first row of the days table",
+          keywords: ["26", "supplier documents", "week 7", "waiting", "26", "مستندات", "الأسبوع 7", "انتظار"],
+        },
+        probeTargets: ["leadership.influence-without-authority"],
+        twistTargets: ["adaptability.comfort-with-ambiguity"],
+      },
+    },
+  },
 ];

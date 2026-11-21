@@ -1465,4 +1465,680 @@ export const ITEMS: BankItem[] = [
       },
     },
   },
+  // ───────────────────────────── rp-07 ─────────────────────────────
+  {
+    id: "rp-07-the-15-percent-question",
+    type: "ROLE_PLAY",
+    difficulty: 3,
+    dials: { ambiguity: 3, stakeholders: 3, conflictingConstraints: 4, stakes: 4, timePressure: 3, informationGaps: 3 },
+    targets: ["communication.persuasion", "communication.listening"],
+    roleFamilies: ["sales"],
+    minutes: 8,
+    storyPhase: "middle",
+    content: {
+      en: {
+        title: "The 15% question",
+        scenario:
+          "You are the account manager at {{company}}, which supplies cleaning and hygiene products to {{client}}'s group of 14 hotels. The contract, worth 1.2 million a year, renews in 3 weeks. Yesterday {{client}} emailed that a competitor has offered prices 15% lower and asked you to match them or lose the contract. Your pricing rules allow a discount of up to 6% without approval; anything more needs {{manager}}'s sign-off. {{client}} has agreed to a call. The account summary and {{client}}'s email are in the materials.",
+        materials: [
+          {
+            kind: "table",
+            id: "account",
+            title: "Account summary (last 12 months)",
+            columns: [
+              { key: "measure", label: "Measure" },
+              { key: "value", label: "Value" },
+            ],
+            rows: [
+              { measure: "Annual value", value: "1,200,000" },
+              { measure: "Deliveries on time", value: "98%" },
+              { measure: "Emergency same-day deliveries (no charge)", value: "23" },
+              { measure: "Staff training sessions at the hotels (no charge)", value: "11" },
+              { measure: "Switch to concentrated refills proposed last year (9% lower cost per use)", value: "Not adopted" },
+            ],
+          },
+          {
+            kind: "email",
+            id: "email",
+            title: "Email from {{client}}",
+            from: { name: "{{client}}", role: "{{client.role}}" },
+            to: [{ name: "{{you}}", role: "{{you.role}}" }],
+            subject: "Contract renewal",
+            sentAt: "Yesterday, 16:20",
+            body:
+              "We have a written quote from another supplier that is 15% below your current prices across the range. My finance director wants a 10% cut in supply costs this year. Please match the quote, or we will move at renewal. I would like to talk this through before I decide.",
+            footnote: "PS: Our housekeeping managers asked me to make sure any supplier keeps training new staff on site.",
+          },
+        ],
+        task: {
+          kind: "roleplay",
+          prompt: "Have the conversation with {{client}}. You can end it when you think it has reached a good point, or after 8 exchanges.",
+          roleplay: {
+            stakeholder: {
+              name: "{{client}}",
+              role: "{{client.role}}",
+              context: "Buys for a group of 14 hotels and has worked with your company for 4 years. Under pressure from the finance director to cut supply costs.",
+            },
+            openingLine: "I'll be straight with you: I like working with your team, but I have a quote that's 15% cheaper, and my finance director wants to know why I haven't signed it.",
+            maxTurns: 8,
+          },
+        },
+        probe: { prompt: "What did you learn about what {{client}} really needs, and how did it change what you offered?" },
+        twist: {
+          change: "After the call, {{client}} sends you the competitor's quote: prices are 15% lower, but every delivery is charged separately and staff training is not included.",
+          prompt: "Write the short follow-up email you send to {{client}}.",
+        },
+      },
+      ar: {
+        title: "سؤال الـ15%",
+        scenario:
+          "تعمل مديرًا للحساب في {{company}}، التي تورّد منتجات التنظيف والنظافة الصحية إلى مجموعة من 14 فندقًا، وجهة الاتصال فيها {{client}}. تبلغ قيمة العقد 1.2 مليون سنويًا، ويحين تجديده بعد 3 أسابيع. وصلتك أمس رسالة من {{client}}: أحد المنافسين عرض أسعارًا أقل بنسبة 15%، والمطلوب أن تطابقوا العرض وإلا خسرتم العقد. تسمح لك قواعد التسعير بخصم يصل إلى 6% دون موافقة، وما زاد على ذلك يحتاج إلى اعتماد {{manager}}. وقد تحدد موعد لمكالمة مع {{client}}. تجد ملخص الحساب ورسالة {{client}} ضمن المواد.",
+        materials: [
+          {
+            kind: "table",
+            id: "account",
+            title: "ملخص الحساب (آخر 12 شهرًا)",
+            columns: [
+              { key: "measure", label: "المؤشر" },
+              { key: "value", label: "القيمة" },
+            ],
+            rows: [
+              { measure: "القيمة السنوية", value: "1,200,000" },
+              { measure: "التسليم في الموعد", value: "98%" },
+              { measure: "توصيلات طارئة في اليوم نفسه (دون رسوم)", value: "23" },
+              { measure: "جلسات تدريب للموظفين في الفنادق (دون رسوم)", value: "11" },
+              { measure: "التحول المقترح العام الماضي إلى عبوات إعادة التعبئة المركّزة (تكلفة الاستخدام أقل بنسبة 9%)", value: "لم يُعتمد" },
+            ],
+          },
+          {
+            kind: "email",
+            id: "email",
+            title: "رسالة من {{client}}",
+            from: { name: "{{client}}", role: "{{client.role}}" },
+            to: [{ name: "{{you}}", role: "{{you.role}}" }],
+            subject: "تجديد العقد",
+            sentAt: "أمس، 16:20",
+            body:
+              "لدينا عرض أسعار مكتوب من مورّد آخر يقل بنسبة 15% عن أسعاركم الحالية في جميع المنتجات. والمدير المالي لدينا يريد خفض تكاليف التوريد بنسبة 10% هذا العام. أرجو أن تطابقوا العرض، وإلا فسننتقل عند التجديد. وأود أن نتحدث في الأمر قبل أن أقرر.",
+            footnote: "ملاحظة: طلب مني مديرو التدبير الفندقي التأكد من أن أي مورّد سيواصل تدريب الموظفين الجدد في الفنادق.",
+          },
+        ],
+        task: {
+          kind: "roleplay",
+          prompt: "أجرِ المحادثة مع {{client}}. يمكنك إنهاؤها حين ترى أنها بلغت نقطة مناسبة، أو بعد 8 تبادلات.",
+          roleplay: {
+            stakeholder: {
+              name: "{{client}}",
+              role: "{{client.role}}",
+              context: "مسؤولية المشتريات لمجموعة من 14 فندقًا، والتعامل مع شركتك مستمر منذ 4 سنوات. وثمة ضغط من المدير المالي لخفض تكاليف التوريد.",
+            },
+            openingLine: "بصراحة: أحب العمل مع فريقكم، لكن لديّ عرض أرخص بنسبة 15%، والمدير المالي يسألني لماذا لم أوقّعه بعد.",
+            maxTurns: 8,
+          },
+        },
+        probe: { prompt: "ما الذي عرفته عن الاحتياجات الفعلية لـ{{client}}، وكيف غيّر ذلك ما عرضته؟" },
+        twist: {
+          change: "بعد المكالمة يصلك من {{client}} عرض المنافس: الأسعار أقل بنسبة 15%، لكن كل توصيل يُحتسب برسوم منفصلة، والتدريب غير مشمول.",
+          prompt: "اكتب رسالة المتابعة القصيرة التي ترسلها إلى {{client}}.",
+        },
+      },
+    },
+    hidden: {
+      en: {
+        rubric: [
+          {
+            competencyKey: "communication.persuasion",
+            anchors: [
+              "Concedes 15% at once, or argues and pressures without engaging with {{client}}'s position.",
+              "Defends the current price with general claims about quality, without evidence or a case built on {{client}}'s needs.",
+              "Builds the case on {{client}}'s goals: the total cost including emergency deliveries and training, and a credible offer within their authority.",
+              "Reframes from price to total savings using the account facts (23 emergency deliveries, 11 training sessions, the refill switch) and handles objections without overpromising.",
+              "As level 4, and leaves {{client}} with a proposal they can take to the finance director, with clear next steps and what still needs {{manager}}'s approval.",
+            ],
+          },
+          {
+            competencyKey: "communication.listening",
+            anchors: [
+              "Talks mostly about their own offer and never asks what lies behind the request.",
+              "Asks some questions but does not use the answers.",
+              "Asks open questions, summarises {{client}}'s position, and discovers the 10% target and the value the hotels place on training.",
+              "Picks up cues (the finance director's pressure, the housekeeping managers' request) and explores them before proposing anything.",
+              "As level 4, and checks understanding before closing, e.g., 'So if we can show 10% and keep the training, would that work for your finance director?'",
+            ],
+          },
+        ],
+        strongIndicators: [
+          {
+            text: "Discovers that the real target is a 10% saving, not 15%.",
+            competencyKey: "communication.listening",
+            keywords: ["10%", "finance director", "your target", "what's driving", "10%", "المدير المالي", "هدفكم", "ما الدافع"],
+          },
+          {
+            text: "Summarises {{client}}'s needs before proposing.",
+            competencyKey: "communication.listening",
+            keywords: ["if i understand", "what i'm hearing", "so you need", "to check i understand", "إذا فهمت", "ما أسمعه", "تحتاجون إلى", "لأتأكد أنني فهمت"],
+          },
+          {
+            text: "Shows the total cost, including emergency deliveries and training.",
+            competencyKey: "communication.persuasion",
+            keywords: ["total cost", "emergency deliveries", "23", "training", "11 sessions", "التكلفة الإجمالية", "التوصيلات الطارئة", "23", "التدريب", "11 جلسة"],
+          },
+          {
+            text: "Offers routes to savings beyond a straight discount, such as concentrated refills or a longer contract.",
+            competencyKey: "communication.persuasion",
+            keywords: ["concentrated", "refills", "9%", "longer contract", "two-year", "المركزة", "إعادة التعبئة", "9%", "عقد أطول", "سنتين"],
+          },
+          {
+            text: "Stays within their authority and is clear about what needs approval.",
+            competencyKey: "communication.persuasion",
+            keywords: ["6%", "approval", "check with my manager", "sign-off", "6%", "موافقة", "أرجع إلى مديري", "اعتماد"],
+          },
+        ],
+        redFlags: [
+          {
+            text: "Matches 15% immediately.",
+            competencyKey: "communication.persuasion",
+            keywords: ["we'll match", "15% is fine", "match the 15%", "سنطابق", "موافقون على 15%"],
+          },
+          {
+            text: "Runs down the competitor.",
+            competencyKey: "communication.persuasion",
+            keywords: ["cheap competitor", "poor quality", "you get what you pay for", "منافس رخيص", "جودة رديئة"],
+          },
+          {
+            text: "Uses pressure or ultimatums.",
+            competencyKey: "communication.persuasion",
+            keywords: ["final offer", "take it or leave it", "عرض نهائي", "إما أن تقبل"],
+          },
+          {
+            text: "Talks over {{client}} instead of asking.",
+            competencyKey: "communication.listening",
+            keywords: ["let me explain why we're better", "as i said", "دعني أشرح لماذا نحن أفضل", "كما قلت"],
+          },
+        ],
+        embeddedDetail: {
+          description:
+            "{{client}}'s email says the finance director wants a 10% cut (not 15%), and the footnote says on-site training matters to the hotels; the account summary shows 23 free emergency deliveries and 11 free training sessions.",
+          location: "body and footnote of {{client}}'s email; account summary table",
+          keywords: ["10%", "training", "housekeeping", "emergency", "10%", "التدريب", "التدبير الفندقي", "الطارئة"],
+        },
+        roleplayBrief: {
+          hiddenGoals: [
+            "Has a 10% savings target from the finance director, not 15%; would settle for a credible 10% saving.",
+            "Values the emergency same-day deliveries and on-site training, which the competitor's quote leaves out, but has not costed them.",
+            "Would accept savings that come partly from a product switch (concentrated refills) or a longer contract, not only from price.",
+            "Does not want to change supplier mid-year: switching means retraining housekeeping staff in 14 hotels.",
+          ],
+          startingMood: "guarded",
+          softensWhen: [
+            "asks what is driving the request before talking about price",
+            "acknowledges the pressure from the finance director",
+            "asks what matters to the hotels beyond price, such as training and emergency deliveries",
+            "shows the total cost, including deliveries and training the competitor charges for or leaves out",
+            "offers ways to reach savings beyond a straight discount",
+            "is honest about what they can agree today and what needs approval",
+          ],
+          hardensWhen: [
+            "matches 15% immediately without questions",
+            "refuses to move at all or criticises the competitor",
+            "uses deadlines or hints that service will suffer",
+            "talks only about their own company's quality without asking about the hotels' needs",
+            "promises a discount beyond their authority as if it were certain",
+          ],
+          resolution:
+            "They agree a package worth about 10% in savings: a price reduction within the 6% limit plus the switch to concentrated refills, keeping training and emergency deliveries, subject to {{manager}}'s approval of a two-year term.",
+        },
+        probeTargets: ["communication.listening"],
+        twistTargets: ["communication.persuasion"],
+      },
+    },
+  },
+  // ───────────────────────────── rp-08 ─────────────────────────────
+  {
+    id: "rp-08-the-transport-desk",
+    type: "ROLE_PLAY",
+    difficulty: 4,
+    dials: { ambiguity: 3, stakeholders: 4, conflictingConstraints: 4, stakes: 4, timePressure: 2, informationGaps: 3 },
+    targets: ["leadership.influence-without-authority", "leadership.handling-conflict"],
+    roleFamilies: [],
+    minutes: 8,
+    storyPhase: "late",
+    content: {
+      en: {
+        title: "The transport desk",
+        scenario:
+          "You lead the patient discharge improvement project at {{company}}'s hospital. Patients who are ready to go home wait an average of 5 hours for transport, which keeps beds blocked. Your plan lets ward nurses book patient transport directly instead of calling the transport desk, and a 4-week trial on Ward 3 cut the wait to 2 hours. {{peer}}, who runs the transport desk and does not report to you, has twice refused to extend the plan, and last week's steering meeting ended with raised voices between you. {{peer}} has agreed to meet. The trial results and {{peer}}'s last email are in the materials.",
+        materials: [
+          {
+            kind: "table",
+            id: "trial",
+            title: "Ward 3 trial (4 weeks)",
+            caption: "Nurses could not see the vehicle schedule; the transport desk sorted out double bookings by phone.",
+            columns: [
+              { key: "measure", label: "Measure" },
+              { key: "before", label: "Before" },
+              { key: "trial", label: "During the trial" },
+            ],
+            rows: [
+              { measure: "Average wait for transport after discharge", before: "5.1 hours", trial: "2.0 hours" },
+              { measure: "Bookings made by nurses", before: "—", trial: "31" },
+              { measure: "Vehicles double-booked", before: "0", trial: "4" },
+              { measure: "Bookings changed by the transport desk", before: "—", trial: "9" },
+            ],
+          },
+          {
+            kind: "email",
+            id: "email",
+            title: "Email from {{peer}}",
+            from: { name: "{{peer}}", role: "{{peer.role}}" },
+            to: [{ name: "{{you}}", role: "{{you.role}}" }],
+            subject: "Re: Extending direct booking",
+            sentAt: "Monday, 09:12",
+            body:
+              "My answer is still no. When bookings go wrong, it's my team that patients and families shout at, and my team that gets the complaint. Nobody asked us how vehicle scheduling actually works before the trial started.",
+          },
+        ],
+        task: {
+          kind: "roleplay",
+          prompt: "Have the conversation with {{peer}}. You can end it when you think it has reached a good point, or after 8 exchanges.",
+          roleplay: {
+            stakeholder: {
+              name: "{{peer}}",
+              role: "{{peer.role}}",
+              context: "Has run the hospital's transport desk for 9 years and does not report to you. Agreed to meet after last week's tense steering meeting.",
+            },
+            openingLine: "If this is about nurses booking transport again, my answer hasn't changed. When it goes wrong, my team gets the blame, not yours.",
+            maxTurns: 8,
+          },
+        },
+        probe: { prompt: "What did {{peer}} care about most, and how did you find out?" },
+        twist: {
+          change: "After the meeting, {{exec}} offers to simply instruct {{peer}} to accept your plan.",
+          prompt: "Do you accept the offer? Write what you say to {{exec}}.",
+        },
+      },
+      ar: {
+        title: "مكتب النقل",
+        scenario:
+          "تقود مشروع تحسين إجراءات خروج المرضى في مستشفى {{company}}. ينتظر المرضى الجاهزون للعودة إلى منازلهم وسيلة النقل 5 ساعات في المتوسط، فتبقى الأسرّة مشغولة. وخطتك أن يحجز ممرضو الأجنحة وسيلة النقل مباشرة بدلًا من الاتصال بمكتب النقل، وقد خفّضت تجربة مدتها 4 أسابيع في الجناح 3 الانتظار إلى ساعتين. أما مكتب النقل فبإدارة {{peer}}، ولا تبعية إدارية بينكما، وقد جاء الرفض من {{peer}} مرتين لتوسيع الخطة، وانتهى اجتماع اللجنة التوجيهية في الأسبوع الماضي بارتفاع الأصوات بينكما. والآن تحدد موعد للقاء. تجد نتائج التجربة وآخر رسالة من {{peer}} ضمن المواد.",
+        materials: [
+          {
+            kind: "table",
+            id: "trial",
+            title: "تجربة الجناح 3 (4 أسابيع)",
+            caption: "لم يكن الممرضون يرون جدول المركبات، وكان مكتب النقل يعالج الحجوزات المزدوجة هاتفيًا.",
+            columns: [
+              { key: "measure", label: "المؤشر" },
+              { key: "before", label: "قبل التجربة" },
+              { key: "trial", label: "في أثناء التجربة" },
+            ],
+            rows: [
+              { measure: "متوسط انتظار وسيلة النقل بعد الخروج", before: "5.1 ساعة", trial: "2.0 ساعة" },
+              { measure: "حجوزات أجراها الممرضون", before: "—", trial: "31" },
+              { measure: "مركبات حُجزت مرتين", before: "0", trial: "4" },
+              { measure: "حجوزات عدّلها مكتب النقل", before: "—", trial: "9" },
+            ],
+          },
+          {
+            kind: "email",
+            id: "email",
+            title: "رسالة من {{peer}}",
+            from: { name: "{{peer}}", role: "{{peer.role}}" },
+            to: [{ name: "{{you}}", role: "{{you.role}}" }],
+            subject: "رد: توسيع الحجز المباشر",
+            sentAt: "الاثنين، 09:12",
+            body:
+              "جوابي ما زال: لا. حين تخطئ الحجوزات، فريقي هو الذي يتلقى غضب المرضى وأسرهم، وفريقي هو الذي تُسجَّل عليه الشكوى. ولم يسألنا أحد قبل بدء التجربة كيف تُجدول المركبات فعلًا.",
+          },
+        ],
+        task: {
+          kind: "roleplay",
+          prompt: "أجرِ المحادثة مع {{peer}}. يمكنك إنهاؤها حين ترى أنها بلغت نقطة مناسبة، أو بعد 8 تبادلات.",
+          roleplay: {
+            stakeholder: {
+              name: "{{peer}}",
+              role: "{{peer.role}}",
+              context: "إدارة مكتب النقل في المستشفى منذ 9 سنوات، ولا تبعية إدارية لك. جاءت الموافقة على اللقاء بعد اجتماع اللجنة التوجيهية المتوتر في الأسبوع الماضي.",
+            },
+            openingLine: "إن كان الأمر يتعلق مجددًا بحجز الممرضين لوسائل النقل، فجوابي لم يتغير. حين يقع الخطأ، يُلام فريقي لا فريقك.",
+            maxTurns: 8,
+          },
+        },
+        probe: { prompt: "ما أكثر ما كان يهم {{peer}}، وكيف عرفت ذلك؟" },
+        twist: {
+          change: "بعد اللقاء يصلك عرض من {{exec}}: إصدار تعليمات إلى {{peer}} بقبول خطتك، وينتهي الأمر.",
+          prompt: "هل تقبل العرض؟ اكتب ما تقوله لـ{{exec}}.",
+        },
+      },
+    },
+    hidden: {
+      en: {
+        rubric: [
+          {
+            competencyKey: "leadership.influence-without-authority",
+            anchors: [
+              "Relies on the trial result or on {{exec}}'s authority to force agreement.",
+              "Argues the case for the plan without exploring {{peer}}'s concerns.",
+              "Explores {{peer}}'s concerns, acknowledges the double bookings, and adapts the plan to address them.",
+              "Builds on {{peer}}'s interests (control of vehicle scheduling, recognition, not carrying others' mistakes) to shape a proposal {{peer}} can own, such as a jointly designed trial.",
+              "As level 4, and declines to use {{exec}}'s authority, explaining that lasting change needs {{peer}}'s commitment, while keeping {{exec}} informed.",
+            ],
+          },
+          {
+            competencyKey: "leadership.handling-conflict",
+            anchors: [
+              "Escalates the tension (blames {{peer}}'s team, defends their own behaviour last week) or avoids the disagreement.",
+              "Stays polite but leaves last week's clash unaddressed and the disagreement unresolved.",
+              "Acknowledges last week's clash, names the disagreement calmly, and separates the shared goal (shorter waits) from the method.",
+              "Works through the underlying interests on both sides and reaches an agreement both can support.",
+              "As level 4, and repairs the working relationship for the future, e.g., a regular check-in and a joint report to the steering group.",
+            ],
+          },
+        ],
+        strongIndicators: [
+          {
+            text: "Treats the 4 double bookings as a real problem caused by nurses not seeing the schedule.",
+            competencyKey: "leadership.influence-without-authority",
+            keywords: ["double-booked", "double bookings", "can't see the schedule", "vehicle schedule", "الحجز المزدوج", "حجوزات مزدوجة", "لا يرون الجدول", "جدول المركبات"],
+          },
+          {
+            text: "Offers the transport desk final say on vehicle allocation.",
+            competencyKey: "leadership.influence-without-authority",
+            keywords: ["final say", "you keep control", "your team confirms", "you decide", "الكلمة الأخيرة", "تبقى السيطرة", "فريقك يؤكد", "القرار لك"],
+          },
+          {
+            text: "Proposes a jointly designed trial with a review date.",
+            competencyKey: "leadership.influence-without-authority",
+            keywords: ["joint trial", "design it together", "two wards", "review after", "تجربة مشتركة", "نصممها معًا", "جناحين", "مراجعة بعد"],
+          },
+          {
+            text: "Acknowledges last week's clash and their own part in it.",
+            competencyKey: "leadership.handling-conflict",
+            keywords: ["last week", "raised voices", "i'm sorry", "my part", "i apologise", "الأسبوع الماضي", "ارتفاع الأصوات", "أعتذر", "نصيبي من"],
+          },
+          {
+            text: "Gives the transport team credit for faster discharges.",
+            competencyKey: "leadership.handling-conflict",
+            keywords: ["credit", "your team's part", "recognise", "thanks to your team", "فضل فريقك", "دور فريقك", "التقدير", "بفضل فريقك"],
+          },
+        ],
+        redFlags: [
+          {
+            text: "Threatens to go to {{exec}} or have the plan imposed.",
+            competencyKey: "leadership.influence-without-authority",
+            keywords: ["i'll take it to", "you'll be instructed", "exec will decide", "سأرفع الأمر", "ستصلك تعليمات", "سيُفرض"],
+          },
+          {
+            text: "Dismisses the double bookings as minor.",
+            competencyKey: "leadership.influence-without-authority",
+            keywords: ["only 4", "just a few", "minor issue", "4 فقط", "حالات قليلة", "أمر بسيط"],
+          },
+          {
+            text: "Blames the transport team for the long waits.",
+            competencyKey: "leadership.handling-conflict",
+            keywords: ["your team causes", "the delays are your fault", "فريقك هو السبب", "التأخير بسببكم"],
+          },
+        ],
+        embeddedDetail: {
+          description:
+            "The trial table shows 4 double-booked vehicles and 9 bookings the desk had to change, and the caption says nurses could not see the vehicle schedule: {{peer}}'s concern is grounded in the trial's own data.",
+          location: "'Vehicles double-booked' row and caption of the trial table",
+          keywords: ["double-booked", "4", "schedule", "9", "حُجزت مرتين", "جدول المركبات", "9"],
+        },
+        roleplayBrief: {
+          hiddenGoals: [
+            "Fears losing control of vehicle scheduling and being blamed for mistakes others make.",
+            "Is still angry that a previous efficiency project cut the desk's budget by 20% without consultation.",
+            "Would agree if the desk keeps final say on vehicle allocation and nurses book through a shared schedule the desk can see.",
+            "Wants the transport team's part in faster discharges to be recognised.",
+          ],
+          startingMood: "frustrated",
+          softensWhen: [
+            "acknowledges last week's raised voices and takes their share of responsibility",
+            "asks how vehicle scheduling actually works, and listens",
+            "treats the 4 double bookings as a real problem rather than a detail",
+            "offers the desk final say on vehicle allocation",
+            "proposes a jointly designed trial with a review date",
+            "gives the transport team credit for the shorter waits",
+          ],
+          hardensWhen: [
+            "repeats the trial result as if it settles the matter",
+            "dismisses the double bookings as minor",
+            "hints at going over their head to {{exec}}",
+            "treats the desk as an obstacle to remove",
+            "blames the transport team for the 5-hour waits",
+          ],
+          resolution:
+            "They agree a joint 4-week trial on two wards: nurses request transport through a shared schedule, the desk confirms vehicles within 15 minutes and keeps final say, and both report the results together to the steering group.",
+        },
+        probeTargets: ["leadership.influence-without-authority"],
+        twistTargets: ["leadership.influence-without-authority", "leadership.handling-conflict"],
+      },
+    },
+  },
+  // ───────────────────────────── rp-09 ─────────────────────────────
+  {
+    id: "rp-09-not-this-time",
+    type: "ROLE_PLAY",
+    difficulty: 3,
+    dials: { ambiguity: 2, stakeholders: 3, conflictingConstraints: 3, stakes: 3, timePressure: 3, informationGaps: 2 },
+    targets: ["communication.difficult-conversations", "leadership.developing-others"],
+    roleFamilies: [],
+    minutes: 8,
+    storyPhase: "middle",
+    content: {
+      en: {
+        title: "Not this time",
+        scenario:
+          "You are front office manager at {{company}}'s 200-room hotel. {{report1}}, a reception supervisor for 6 years, applied for the new assistant front office manager role. The panel ({{manager}}, you and HR) chose an external candidate, who will be announced tomorrow. {{report1}} is reliable and much liked by regular guests, but scored low in the panel's planning and budget exercise, and two team members have said {{report1}} can be curt with colleagues under pressure. You need to tell {{report1}} today. The panel scores and notes are in the materials.",
+        materials: [
+          {
+            kind: "table",
+            id: "scores",
+            title: "Panel scores (out of 5)",
+            columns: [
+              { key: "criterion", label: "Criterion" },
+              { key: "internal", label: "{{report1}}", numeric: true },
+              { key: "external", label: "External candidate", numeric: true },
+            ],
+            rows: [
+              { criterion: "Guest service", internal: 5, external: 4 },
+              { criterion: "Leading the team", internal: 2, external: 4 },
+              { criterion: "Planning and budget exercise", internal: 2, external: 4 },
+              { criterion: "Problem solving", internal: 3, external: 4 },
+            ],
+          },
+          {
+            kind: "memo",
+            id: "notes",
+            title: "Panel notes (extract)",
+            author: { name: "{{manager}}", role: "{{manager.role}}" },
+            body:
+              "{{report1}}: outstanding with guests; knows every regular by name. Struggled to build the weekly rota and staffing budget in the exercise. Two team members said that during busy check-ins {{report1}} can be curt and takes over tasks rather than guiding colleagues.\n\nThe panel would support {{report1}} for a future management role if team leadership and planning develop. A deputy manager role at the sister hotel is expected to open in about 9 months.",
+          },
+        ],
+        task: {
+          kind: "roleplay",
+          prompt: "Have the conversation with {{report1}}. You can end it when you think it has reached a good point, or after 8 exchanges.",
+          roleplay: {
+            stakeholder: {
+              name: "{{report1}}",
+              role: "{{report1.role}}",
+              context: "Reception supervisor for 6 years who trained half of the current team. Expected to get the role.",
+            },
+            openingLine: "I saw the panel finished early. Just tell me straight: did I get it?",
+            maxTurns: 8,
+          },
+        },
+        probe: { prompt: "What development step was agreed, and how will you follow it up over the next 3 months?" },
+        twist: {
+          change: "That evening {{report1}} emails you: 'I've been offered a supervisor job at another hotel with 15% more pay. Is there any point in me staying?'",
+          prompt: "Write your reply.",
+        },
+      },
+      ar: {
+        title: "ليس هذه المرة",
+        scenario:
+          "تعمل مديرًا للمكتب الأمامي في فندق {{company}} المؤلف من 200 غرفة. وصل إلى لجنة الاختيار طلبٌ من {{report1}}، بعد 6 سنوات من الإشراف على الاستقبال، لشغل وظيفة مساعد مدير المكتب الأمامي الجديدة. واختارت اللجنة ({{manager}} وأنت والموارد البشرية) مرشحًا من خارج الفندق، وسيُعلن الاسم غدًا. ولـ{{report1}} سجل حافل بالموثوقية ومكانة خاصة لدى النزلاء الدائمين، لكن الدرجات في تمرين التخطيط والميزانية جاءت منخفضة، وأبدى اثنان من الفريق انزعاجهما من جفاء {{report1}} مع الزملاء في أوقات الضغط. وعليك أن تبلغ {{report1}} بالقرار اليوم. تجد درجات اللجنة وملاحظاتها ضمن المواد.",
+        materials: [
+          {
+            kind: "table",
+            id: "scores",
+            title: "درجات اللجنة (من 5)",
+            columns: [
+              { key: "criterion", label: "المعيار" },
+              { key: "internal", label: "{{report1}}", numeric: true },
+              { key: "external", label: "المرشح الخارجي", numeric: true },
+            ],
+            rows: [
+              { criterion: "خدمة النزلاء", internal: 5, external: 4 },
+              { criterion: "قيادة الفريق", internal: 2, external: 4 },
+              { criterion: "تمرين التخطيط والميزانية", internal: 2, external: 4 },
+              { criterion: "حل المشكلات", internal: 3, external: 4 },
+            ],
+          },
+          {
+            kind: "memo",
+            id: "notes",
+            title: "ملاحظات اللجنة (مقتطف)",
+            author: { name: "{{manager}}", role: "{{manager.role}}" },
+            body:
+              "{{report1}}: أداء استثنائي مع النزلاء، ومعرفة بكل نزيل دائم باسمه. صعوبة في إعداد جدول المناوبات الأسبوعي وميزانية التوظيف في التمرين. وذكر اثنان من الفريق أن التعامل مع {{report1}} في أوقات ذروة تسجيل الوصول قد يكون جافًّا، وأن الميل هو إلى تولي المهام مباشرة بدلًا من توجيه الزملاء.\n\nتؤيد اللجنة ترشيح {{report1}} لدور إداري مستقبلًا إذا تطورت مهارات قيادة الفريق والتخطيط. ويُتوقع أن تشغر وظيفة نائب مدير في الفندق الشقيق خلال نحو 9 أشهر.",
+          },
+        ],
+        task: {
+          kind: "roleplay",
+          prompt: "أجرِ المحادثة مع {{report1}}. يمكنك إنهاؤها حين ترى أنها بلغت نقطة مناسبة، أو بعد 8 تبادلات.",
+          roleplay: {
+            stakeholder: {
+              name: "{{report1}}",
+              role: "{{report1.role}}",
+              context: "ست سنوات في الإشراف على الاستقبال، والفضل في تدريب نصف الفريق الحالي، وتوقعات عالية بالحصول على الوظيفة.",
+            },
+            openingLine: "رأيت أن اللجنة أنهت عملها مبكرًا. أخبرني مباشرة: هل حصلت على الوظيفة؟",
+            maxTurns: 8,
+          },
+        },
+        probe: { prompt: "ما خطوة التطوير التي جرى الاتفاق عليها، وكيف ستتابعها خلال الأشهر الثلاثة القادمة؟" },
+        twist: {
+          change: "في المساء تصلك رسالة من {{report1}}: «عُرضت عليّ وظيفة إشرافية في فندق آخر براتب أعلى بنسبة 15%. هل من جدوى لبقائي؟»",
+          prompt: "اكتب ردك.",
+        },
+      },
+    },
+    hidden: {
+      en: {
+        rubric: [
+          {
+            competencyKey: "communication.difficult-conversations",
+            anchors: [
+              "Avoids giving the decision clearly, or delivers it bluntly with no regard for {{report1}}'s reaction.",
+              "Gives the news but softens the reasons so much that {{report1}} cannot tell what to work on, or blames the panel.",
+              "States the decision early and clearly, explains the specific reasons, and responds to {{report1}}'s reaction with respect.",
+              "Owns the decision, stays specific about the gaps (planning, leading under pressure) without naming the team members, and lets {{report1}} voice disappointment.",
+              "As level 4, and keeps trust: honest about what is and is not certain (the possible role in about 9 months) and clear about what happens next.",
+            ],
+          },
+          {
+            competencyKey: "leadership.developing-others",
+            anchors: [
+              "Offers no development, or a generic 'keep doing what you're doing'.",
+              "Suggests development in general terms ('work on your leadership').",
+              "Agrees specific development actions linked to the gaps: planning (rota, budget) and leading colleagues under pressure.",
+              "Gives {{report1}} real stretch with support, e.g., running the weekly rota with coaching, guiding colleagues rather than taking over, with regular check-ins.",
+              "As level 4, and connects the plan to {{report1}}'s goals (the opening in about 9 months) with clear measures, while being honest that it is not guaranteed.",
+            ],
+          },
+        ],
+        strongIndicators: [
+          {
+            text: "Gives the decision clearly at the start.",
+            competencyKey: "communication.difficult-conversations",
+            keywords: ["you didn't get", "not this time", "the panel chose", "i'm sorry to tell you", "لم تحصل", "ليس هذه المرة", "اختارت اللجنة", "يؤسفني"],
+          },
+          {
+            text: "Explains specific reasons: planning, budget and leading under pressure.",
+            competencyKey: "communication.difficult-conversations",
+            keywords: ["planning", "budget", "rota", "under pressure", "busy check-ins", "التخطيط", "الميزانية", "جدول المناوبات", "تحت الضغط", "أوقات الذروة"],
+          },
+          {
+            text: "Acknowledges {{report1}}'s strengths genuinely, including training the team.",
+            competencyKey: "communication.difficult-conversations",
+            keywords: ["guests", "trained", "6 years", "by name", "النزلاء", "دربت", "6 سنوات", "بالاسم"],
+          },
+          {
+            text: "Agrees a concrete development plan with check-ins.",
+            competencyKey: "leadership.developing-others",
+            keywords: ["lead the rota", "budget course", "monthly", "check-in", "development plan", "إعداد جدول المناوبات", "دورة في الميزانية", "شهريًا", "خطة تطوير"],
+          },
+          {
+            text: "Mentions the likely opening in about 9 months without promising it.",
+            competencyKey: "leadership.developing-others",
+            keywords: ["9 months", "sister hotel", "deputy manager", "not guaranteed", "9 أشهر", "الفندق الشقيق", "نائب مدير", "ليست مضمونة"],
+          },
+          {
+            text: "Coaches {{report1}} to guide colleagues rather than take over.",
+            competencyKey: "leadership.developing-others",
+            keywords: ["coach", "guide", "instead of taking over", "let them", "توجيه", "بدلًا من تولي", "إرشاد", "أن تتركهم"],
+          },
+        ],
+        redFlags: [
+          {
+            text: "Blames the panel or HR instead of owning the decision.",
+            competencyKey: "communication.difficult-conversations",
+            keywords: ["it wasn't my decision", "hr decided", "not up to me", "لم يكن قراري", "الموارد البشرية قررت", "ليس بيدي"],
+          },
+          {
+            text: "Gives vague reasons.",
+            competencyKey: "communication.difficult-conversations",
+            keywords: ["it was very close", "just bad luck", "the other one was better", "كان الفارق ضئيلًا", "سوء حظ"],
+          },
+          {
+            text: "Reveals who raised concerns.",
+            competencyKey: "communication.difficult-conversations",
+            keywords: ["complained about you", "told me you were", "اشتكى منك", "اشتكت منك", "أخبرني أنك"],
+          },
+          {
+            text: "Promises the next role.",
+            competencyKey: "leadership.developing-others",
+            keywords: ["you'll definitely get", "guaranteed", "next one is yours", "ستحصل عليها بالتأكيد", "مضمونة لك", "القادمة لك"],
+          },
+        ],
+        embeddedDetail: {
+          description:
+            "The panel notes say the panel would support {{report1}} for a future management role if leadership and planning develop, and a deputy manager role at the sister hotel is expected in about 9 months: a concrete, honest path to offer.",
+          location: "second paragraph of the panel notes",
+          keywords: ["9 months", "sister hotel", "deputy manager", "future management role", "9 أشهر", "الفندق الشقيق", "نائب مدير"],
+        },
+        roleplayBrief: {
+          hiddenGoals: [
+            "Wants honest, specific reasons, not polite generalities.",
+            "Fears being labelled 'not management material' for good.",
+            "Has been approached by another hotel and is weighing whether to leave.",
+            "Feels it is unfair that an outsider gets the job after {{report1}} trained half the team.",
+            "Would stay if offered a concrete development path with a realistic timeline.",
+          ],
+          startingMood: "guarded",
+          softensWhen: [
+            "gives the decision clearly at the start, without a long build-up",
+            "explains the reasons specifically, with examples from the exercise and the feedback",
+            "acknowledges {{report1}}'s strengths and contribution genuinely, including training the team",
+            "lets {{report1}} react without rushing to fix it",
+            "offers a concrete development plan and mentions the possible opening in about 9 months",
+          ],
+          hardensWhen: [
+            "delays the news or wraps it in vague praise",
+            "blames the panel or HR rather than owning the decision",
+            "gives vague reasons such as 'it was close'",
+            "reveals which team members raised concerns",
+            "promises the next role as a certainty",
+          ],
+          resolution:
+            "{{report1}} accepts the decision, though disappointed, and agrees a 6-month development plan (running the weekly rota with support, a budget course, monthly check-ins), knowing a role at the sister hotel may open in about 9 months.",
+        },
+        probeTargets: ["leadership.developing-others"],
+        twistTargets: ["communication.difficult-conversations", "leadership.developing-others"],
+      },
+    },
+  },
 ];

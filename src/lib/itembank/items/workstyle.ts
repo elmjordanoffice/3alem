@@ -295,4 +295,142 @@ export const ITEMS: BankItem[] = [
       },
     },
   },
+  {
+    id: "ws-03-working-rhythm",
+    type: "FORCED_CHOICE_WORK_STYLE",
+    difficulty: 2,
+    dials: { ambiguity: 2, stakeholders: 1, conflictingConstraints: 2, stakes: 1, timePressure: 1, informationGaps: 1 },
+    targets: ["collaboration.self-awareness"],
+    roleFamilies: [],
+    minutes: 3,
+    storyPhase: "middle",
+    content: {
+      en: {
+        title: "Your working rhythm",
+        scenario:
+          "These pairs ask about the way you like to work from day to day. Each statement describes a strength that suits some roles better than others. In each pair, choose the statement that sounds more like you, even if both are partly true. There are no right or wrong answers: answer as you are, not as you think you should be.",
+        materials: [],
+        task: {
+          kind: "forced_choice",
+          prompt: "For each pair, choose the statement that is more like you at work.",
+          forcedChoice: {
+            pairs: [
+              {
+                id: "s1",
+                a: { id: "s1a", text: "I am comfortable committing to a goal before I know exactly how we will reach it." },
+                b: { id: "s1b", text: "I quickly notice when a figure in a report does not add up." },
+              },
+              {
+                id: "s2",
+                a: { id: "s2a", text: "I prefer to work through a problem step by step rather than jump to a solution." },
+                b: { id: "s2b", text: "I like to build a plan together with the people who will carry it out." },
+              },
+              {
+                id: "s3",
+                a: { id: "s3a", text: "I am most productive when I can plan my own day without interruptions." },
+                b: { id: "s3b", text: "I prefer a reliable result to a better result that might not happen." },
+              },
+              {
+                id: "s4",
+                a: { id: "s4a", text: "I tend to ask how a task fits into what the organisation is trying to achieve." },
+                b: { id: "s4b", text: "I would rather make a good decision today than a perfect one next week." },
+              },
+              {
+                id: "s5",
+                a: { id: "s5a", text: "Before trying something new, I like to know what we will do if it fails." },
+                b: { id: "s5b", text: "When a decision is needed, I like to make it in the meeting rather than take it away." },
+              },
+              {
+                id: "s6",
+                a: { id: "s6a", text: "I enjoy work where I rely on others and they rely on me." },
+                b: { id: "s6b", text: "I find it easy to explain the main point of a complex topic in a few sentences." },
+              },
+              {
+                id: "s7",
+                a: { id: "s7a", text: "I take time to think a decision through, even when others want an answer now." },
+                b: { id: "s7b", text: "I am willing to change a familiar process if a new one could work much better." },
+              },
+              {
+                id: "s8",
+                a: { id: "s8a", text: "I prefer tasks that need precision and careful checking." },
+                b: { id: "s8b", text: "I prefer to be given a goal and left to decide how to reach it." },
+              },
+            ],
+          },
+        },
+      },
+      ar: {
+        title: "إيقاعك في العمل",
+        scenario:
+          "تتناول هذه الأزواج الطريقة التي تحب أن تعمل بها يومًا بعد يوم. تصف كل عبارة نقطة قوة تناسب بعض الأدوار أكثر من غيرها. اختر من كل زوج العبارة الأقرب إليك، حتى لو صدقت كلتاهما عليك جزئيًا. لا توجد إجابات صحيحة وأخرى خاطئة، فأجب بما أنت عليه فعلًا، لا بما تظن أنه ينبغي أن تكون عليه.",
+        materials: [],
+        task: {
+          kind: "forced_choice",
+          prompt: "اختر من كل زوج العبارة الأقرب إلى طريقتك في العمل.",
+          forcedChoice: {
+            pairs: [
+              {
+                id: "s1",
+                a: { id: "s1a", text: "لا أمانع الالتزام بهدف قبل أن أعرف بالضبط كيف سنصل إليه." },
+                b: { id: "s1b", text: "ألاحظ بسرعة حين لا يستقيم رقم في تقرير ما." },
+              },
+              {
+                id: "s2",
+                a: { id: "s2a", text: "أفضّل معالجة المشكلة خطوة خطوة على القفز إلى الحل." },
+                b: { id: "s2b", text: "أحب أن أضع الخطة مع الأشخاص الذين سينفذونها." },
+              },
+              {
+                id: "s3",
+                a: { id: "s3a", text: "أكون في أفضل حالاتي إنتاجًا حين أنظّم يومي بنفسي دون مقاطعة." },
+                b: { id: "s3b", text: "أفضّل نتيجة مضمونة على نتيجة أفضل قد لا تتحقق." },
+              },
+              {
+                id: "s4",
+                a: { id: "s4a", text: "أميل إلى السؤال عن موقع المهمة مما تسعى المؤسسة إلى تحقيقه." },
+                b: { id: "s4b", text: "أفضّل قرارًا جيدًا اليوم على قرار مثالي في الأسبوع القادم." },
+              },
+              {
+                id: "s5",
+                a: { id: "s5a", text: "قبل أن أجرّب شيئًا جديدًا، أحب أن أعرف ما سنفعله إن لم ينجح." },
+                b: { id: "s5b", text: "حين يلزم قرار، أحب أن يُتخذ في الاجتماع نفسه بدلًا من تأجيله إلى ما بعده." },
+              },
+              {
+                id: "s6",
+                a: { id: "s6a", text: "أستمتع بالعمل الذي أعتمد فيه على الآخرين ويعتمدون فيه عليّ." },
+                b: { id: "s6b", text: "يسهل عليّ شرح الفكرة الرئيسية في موضوع معقّد ببضع جمل." },
+              },
+              {
+                id: "s7",
+                a: { id: "s7a", text: "أمنح القرار وقته من التفكير، حتى حين يريد الآخرون إجابة فورية." },
+                b: { id: "s7b", text: "لا أتردد في تغيير إجراء مألوف إن كان بديل جديد قد ينجح أكثر بكثير." },
+              },
+              {
+                id: "s8",
+                a: { id: "s8a", text: "أفضّل المهام التي تتطلب الدقة والمراجعة المتأنية." },
+                b: { id: "s8b", text: "أفضّل أن يُحدَّد لي الهدف وأن يُترك لي اختيار طريق الوصول إليه." },
+              },
+            ],
+          },
+        },
+      },
+    },
+    hidden: {
+      en: {
+        rubric: [SELF_AWARENESS_RUBRIC],
+        strongIndicators: [],
+        redFlags: [],
+        embeddedDetail: null,
+        workStyleMap: [
+          { pairId: "s1", a: { style: "workstyle.risk", pole: "b" }, b: { style: "workstyle.focus", pole: "a" } },
+          { pairId: "s2", a: { style: "workstyle.pace", pole: "a" }, b: { style: "workstyle.mode", pole: "b" } },
+          { pairId: "s3", a: { style: "workstyle.mode", pole: "a" }, b: { style: "workstyle.risk", pole: "a" } },
+          { pairId: "s4", a: { style: "workstyle.focus", pole: "b" }, b: { style: "workstyle.pace", pole: "b" } },
+          { pairId: "s5", a: { style: "workstyle.risk", pole: "a" }, b: { style: "workstyle.pace", pole: "b" } },
+          { pairId: "s6", a: { style: "workstyle.mode", pole: "b" }, b: { style: "workstyle.focus", pole: "b" } },
+          { pairId: "s7", a: { style: "workstyle.pace", pole: "a" }, b: { style: "workstyle.risk", pole: "b" } },
+          { pairId: "s8", a: { style: "workstyle.focus", pole: "a" }, b: { style: "workstyle.mode", pole: "a" } },
+        ],
+      },
+    },
+  },
 ];

@@ -1320,4 +1320,662 @@ export const ITEMS: BankItem[] = [
       },
     },
   },
+
+  // ─────────────────────────────────────────────────────────────────────────
+  {
+    id: "case-07-members-spend-more",
+    type: "CASE_ANALYSIS",
+    difficulty: 4,
+    dials: { ambiguity: 3, stakeholders: 3, conflictingConstraints: 3, stakes: 4, timePressure: 3, informationGaps: 4 },
+    targets: ["critical-thinking.logical-reasoning", "critical-thinking.spotting-assumptions"],
+    roleFamilies: ["data-analytics"],
+    minutes: 7,
+    storyPhase: "middle",
+    content: {
+      en: {
+        title: "Members spend more",
+        scenario:
+          "{{company}} runs 40 home-goods stores. Six months ago it launched a paid membership: 10% off every purchase for a yearly fee. The marketing dashboard shows that members spend 38% more per month than non-members. {{exec}} wants to spend 2 million on a campaign to double membership, 'since every new member adds 38% to their spending'. {{manager}} has asked you, as the analyst, to check the analysis before Thursday's decision. The dashboard summary, the underlying figures and the data notes are in the materials.",
+        materials: [
+          {
+            kind: "memo",
+            id: "m1",
+            title: "Dashboard summary",
+            author: { name: "{{peer}}", role: "{{peer.role}}" },
+            body: "Membership is working. Members spend an average of 414 per month, against 300 for non-members: 38% more. Membership has grown to 18,000 customers. Recommendation: invest in a campaign to double membership this year.",
+          },
+          {
+            kind: "table",
+            id: "m2",
+            title: "Average monthly spend per customer",
+            caption:
+              "Data notes: spend is recorded only when a purchase is linked to a customer. Members' purchases are always linked through their card; non-members' purchases are linked only when they give a phone number at the till, about 55% of the time. For the first 3 months, membership was offered by invitation only, to the top 20% of customers by spend.",
+            columns: [
+              { key: "group", label: "Customer group" },
+              { key: "before", label: "6 months before launch", numeric: true },
+              { key: "since", label: "Since launch", numeric: true },
+            ],
+            rows: [
+              { group: "Customers who later joined (18,000)", before: 380, since: 414 },
+              { group: "Customers who did not join", before: 295, since: 300 },
+            ],
+          },
+        ],
+        task: {
+          kind: "written",
+          prompt: "Write a short memo to {{manager}}: does the analysis support {{exec}}'s campaign, and what should be said on Thursday?",
+          written: { format: "memo", placeholder: "To {{manager}}…" },
+        },
+        probe: {
+          prompt: "What one analysis would you run before Thursday, and what result would change your recommendation?",
+        },
+        twist: {
+          change: "{{peer}} replies: 'Every membership scheme in our industry shows this pattern. You're overcomplicating it.'",
+          prompt: "Write your reply to {{peer}}.",
+        },
+      },
+      ar: {
+        title: "الأعضاء ينفقون أكثر",
+        scenario:
+          "تدير {{company}} 40 متجرًا للأدوات المنزلية. وقبل ستة أشهر أطلقت عضوية مدفوعة: خصم 10% على كل عملية شراء مقابل رسم سنوي. وتُظهر لوحة مؤشرات التسويق أن الأعضاء ينفقون شهريًا أكثر من غير الأعضاء بنسبة 38%. وفي خطة {{exec}} إنفاق مليونين على حملة لمضاعفة عدد الأعضاء، «لأن كل عضو جديد يضيف 38% إلى إنفاقه». والمطلوب منك، بصفتك محللًا وبطلب من {{manager}}، أن تفحص التحليل قبل قرار يوم الخميس. تجد ملخص لوحة المؤشرات والأرقام الأصلية وملاحظات البيانات ضمن المواد.",
+        materials: [
+          {
+            kind: "memo",
+            id: "m1",
+            title: "ملخص لوحة المؤشرات",
+            author: { name: "{{peer}}", role: "{{peer.role}}" },
+            body: "العضوية تؤتي ثمارها. يبلغ متوسط إنفاق العضو 414 شهريًا مقابل 300 لغير العضو، أي أكثر بنسبة 38%. وقد وصل عدد الأعضاء إلى 18,000 عميل. التوصية: الاستثمار في حملة لمضاعفة العضوية هذا العام.",
+          },
+          {
+            kind: "table",
+            id: "m2",
+            title: "متوسط الإنفاق الشهري للعميل",
+            caption:
+              "ملاحظات البيانات: لا يُسجَّل الإنفاق إلا حين ترتبط عملية الشراء بعميل محدد. مشتريات الأعضاء مرتبطة دائمًا عن طريق بطاقاتهم، أما مشتريات غير الأعضاء فلا ترتبط بهم إلا حين يذكرون رقم الهاتف عند الدفع، أي في نحو 55% من المرات. وفي الأشهر الثلاثة الأولى كانت العضوية بالدعوة فقط، وعُرضت على أعلى 20% من العملاء إنفاقًا.",
+            columns: [
+              { key: "group", label: "فئة العملاء" },
+              { key: "before", label: "الأشهر الستة قبل الإطلاق", numeric: true },
+              { key: "since", label: "منذ الإطلاق", numeric: true },
+            ],
+            rows: [
+              { group: "العملاء الذين انضموا لاحقًا (18,000)", before: 380, since: 414 },
+              { group: "العملاء الذين لم ينضموا", before: 295, since: 300 },
+            ],
+          },
+        ],
+        task: {
+          kind: "written",
+          prompt: "اكتب مذكرة قصيرة إلى {{manager}}: هل يدعم التحليل حملة {{exec}}، وما الذي ينبغي قوله يوم الخميس؟",
+          written: { format: "memo", placeholder: "إلى {{manager}}…" },
+        },
+        probe: {
+          prompt: "ما التحليل الوحيد الذي ستجريه قبل الخميس، وما النتيجة التي قد تغيّر توصيتك؟",
+        },
+        twist: {
+          change: "يأتي الرد من {{peer}}: «كل برامج العضوية في قطاعنا تُظهر هذا النمط. أنت تعقّد الأمر أكثر من اللازم.»",
+          prompt: "اكتب ردك على {{peer}}.",
+        },
+      },
+    },
+    hidden: {
+      en: {
+        rubric: [
+          {
+            competencyKey: "critical-thinking.logical-reasoning",
+            anchors: [
+              "Accepts that membership causes the 38% and backs the campaign, or rejects it without reasons from the data.",
+              "Notes that other factors could matter but still treats the 38% gap as the effect of membership.",
+              "Shows that members already spent more before joining (380 against 295), so most of the gap reflects who joined, not what membership did.",
+              "Estimates the effect properly: members' spend rose by about 34 (9%) against about 5 for non-members, so the uplift is a few percent and the campaign case does not follow from 38%.",
+              "Asks what else would be true if membership raised spending (e.g., customers who joined in months 4–6 should show a similar rise), proposes that comparison, and states the conclusion with honest uncertainty.",
+            ],
+          },
+          {
+            competencyKey: "critical-thinking.spotting-assumptions",
+            anchors: [
+              "Takes the dashboard figure at face value.",
+              "Questions it vaguely ('correlation is not causation') without naming which assumption fails.",
+              "Names the hidden assumptions: members were like non-members before joining; spend is measured the same way for both groups.",
+              "Spots both data notes (invitation-only joining by top spenders; non-member spend recorded only about 55% of the time, inflating the gap) and asks whether the 10% discount is reflected.",
+              "As level 4, and exposes the assumption behind the campaign itself: that the next 18,000 members would behave like the first, who were selected top spenders.",
+            ],
+          },
+          {
+            competencyKey: "communication.persuasion",
+            anchors: [
+              "Replies defensively or simply gives in.",
+              "Repeats their point without engaging with {{peer}}'s view.",
+              "Acknowledges {{peer}}'s point and explains, with one clear figure, why this data cannot show the effect.",
+              "Frames the reply around a shared goal (a campaign that pays back), proposes a quick check before Thursday, and keeps the relationship.",
+              "As level 4, and makes it easy for {{peer}} to agree, e.g., offering to run the comparison together and present it jointly.",
+            ],
+          },
+        ],
+        strongIndicators: [
+          {
+            text: "Uses the pre-launch figures: future members already spent more before joining.",
+            competencyKey: "critical-thinking.logical-reasoning",
+            keywords: ["before launch", "380", "295", "already spent more", "before they joined", "قبل الإطلاق", "380", "295", "ينفقون أكثر من قبل", "قبل انضمامهم"],
+          },
+          {
+            text: "Compares the change in spend for both groups rather than the gap.",
+            competencyKey: "critical-thinking.logical-reasoning",
+            keywords: ["rose by 34", "34", "9%", "change in spend", "compared with 5", "difference in differences", "بمقدار 34", "9%", "التغير في الإنفاق", "مقارنة بـ5"],
+          },
+          {
+            text: "Spots that membership was first offered only to the top 20% of spenders.",
+            competencyKey: "critical-thinking.spotting-assumptions",
+            keywords: ["invitation", "top 20%", "selected", "biggest spenders", "self-selection", "بالدعوة", "أعلى 20%", "الأكثر إنفاقًا", "انتقاء"],
+          },
+          {
+            text: "Spots that non-member spend is recorded only about 55% of the time.",
+            competencyKey: "critical-thinking.spotting-assumptions",
+            keywords: ["55%", "phone number", "not recorded", "undercounted", "not linked", "55%", "رقم الهاتف", "لا يُسجل", "أقل من الحقيقة", "غير مرتبطة"],
+          },
+          {
+            text: "Questions whether new members would behave like the first members.",
+            competencyKey: "critical-thinking.spotting-assumptions",
+            keywords: ["next members", "new members would", "not the same customers", "الأعضاء الجدد", "لن يكونوا مثل", "ليسوا العملاء أنفسهم"],
+          },
+          {
+            text: "Proposes a quick joint check before Thursday.",
+            competencyKey: "communication.persuasion",
+            keywords: ["together", "quick check", "before thursday", "same goal", "معًا", "فحص سريع", "قبل الخميس", "الهدف نفسه"],
+          },
+        ],
+        redFlags: [
+          {
+            text: "Treats the 38% as the effect of membership.",
+            competencyKey: "critical-thinking.logical-reasoning",
+            keywords: ["increases spending by 38%", "38% uplift", "proves membership", "تزيد الإنفاق بنسبة 38%", "يثبت أن العضوية"],
+          },
+          {
+            text: "Supports the 2 million campaign on the dashboard figure.",
+            competencyKey: "critical-thinking.logical-reasoning",
+            keywords: ["go ahead with the campaign", "support the campaign", "worth the 2 million", "المضي في الحملة", "أؤيد الحملة"],
+          },
+          {
+            text: "Dismisses {{peer}} rather than persuading.",
+            competencyKey: "communication.persuasion",
+            keywords: ["you're wrong", "obviously", "you don't understand", "أنت مخطئ", "من الواضح", "لا تفهم"],
+          },
+          {
+            text: "Takes the dashboard figure at face value.",
+            competencyKey: "critical-thinking.spotting-assumptions",
+            keywords: ["the data is clear", "the dashboard proves", "clearly works", "البيانات واضحة", "اللوحة تثبت", "تنجح بوضوح"],
+          },
+        ],
+        embeddedDetail: {
+          description:
+            "The table's data notes say non-member spend is recorded only about 55% of the time and membership was first offered only to the top 20% of spenders; both inflate the 38% gap, which mostly reflects who joined.",
+          location: "caption (data notes) of the spend table",
+          keywords: ["55%", "phone number", "invitation", "top 20%", "55%", "رقم الهاتف", "بالدعوة", "أعلى 20%"],
+        },
+        probeTargets: ["critical-thinking.logical-reasoning"],
+        twistTargets: ["critical-thinking.spotting-assumptions", "communication.persuasion"],
+      },
+    },
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────
+  {
+    id: "case-08-wrong-kits",
+    type: "CASE_ANALYSIS",
+    difficulty: 3,
+    dials: { ambiguity: 3, stakeholders: 2, conflictingConstraints: 2, stakes: 3, timePressure: 2, informationGaps: 3 },
+    targets: ["critical-thinking.root-cause-analysis", "critical-thinking.spotting-assumptions", "critical-thinking.logical-reasoning"],
+    roleFamilies: [],
+    minutes: 7,
+    storyPhase: "early",
+    content: {
+      en: {
+        title: "The wrong kits",
+        scenario:
+          "{{company}}'s factory packs electrical parts into installation kits for contractors. Over the last 8 weeks, kits with a missing or wrong part have risen from 0.6% to 2.1%, and two large customers have complained. {{report1}}, the line supervisor, says the cause is the 9 temporary workers who started 7 weeks ago and wants them replaced. {{manager}} has asked for your analysis before agreeing. The figures and the change log are in the materials.",
+        materials: [
+          {
+            kind: "chart",
+            id: "m1",
+            title: "Kits with a missing or wrong part, by week",
+            chartType: "line",
+            xKey: "week",
+            unit: "%",
+            series: [{ key: "rate", label: "Faulty kits" }],
+            data: [
+              { week: "Wk -2", rate: 0.6 },
+              { week: "Wk -1", rate: 0.6 },
+              { week: "Wk 1", rate: 1.1 },
+              { week: "Wk 2", rate: 1.5 },
+              { week: "Wk 3", rate: 1.8 },
+              { week: "Wk 4", rate: 1.9 },
+              { week: "Wk 5", rate: 2.0 },
+              { week: "Wk 6", rate: 2.1 },
+              { week: "Wk 7", rate: 2.1 },
+              { week: "Wk 8", rate: 2.1 },
+            ],
+          },
+          {
+            kind: "table",
+            id: "m2",
+            title: "Faulty kits by shift, last 4 weeks",
+            columns: [
+              { key: "group", label: "Group" },
+              { key: "staff", label: "Staff" },
+              { key: "rate", label: "Faulty kits" },
+            ],
+            rows: [
+              { group: "Day shift: permanent staff", staff: "12", rate: "2.0%" },
+              { group: "Day shift: temporary staff", staff: "9", rate: "2.2%" },
+              { group: "Evening shift (no temporary staff)", staff: "14", rate: "2.1%" },
+            ],
+          },
+          {
+            kind: "memo",
+            id: "m3",
+            title: "Change log",
+            author: { name: "{{specialist}}", role: "{{specialist.role}}" },
+            body:
+              "Week 1: Parts bins on both shifts re-arranged by part number instead of by kit, to save space.\nWeek 2: 9 temporary workers start on the day shift after a 1-day induction.\nWeek 3: The supplier changes the packaging of two similar connectors (types C4 and C6) to identical grey bags with small labels.\nError check: 61% of wrong-part errors in weeks 3 to 8 are C4 and C6 swapped.",
+          },
+        ],
+        task: {
+          kind: "written",
+          prompt: "Write a short memo to {{manager}}: what is most likely causing the rise, how confident you are, and what to do first.",
+          written: { format: "memo", placeholder: "To {{manager}}…" },
+        },
+        probe: { prompt: "What evidence would prove your explanation wrong?" },
+        twist: {
+          change: "{{report1}} adds: 'The temporary workers are also slower: 4.1 minutes per kit against 3.2 for permanent staff.'",
+          prompt: "Does this change your conclusion? What, if anything, would you do with this information?",
+        },
+      },
+      ar: {
+        title: "الأطقم الخاطئة",
+        scenario:
+          "يعبّئ مصنع {{company}} قطعًا كهربائية في أطقم تركيب يستخدمها المقاولون. وخلال الأسابيع الثمانية الماضية ارتفعت نسبة الأطقم التي تنقصها قطعة أو فيها قطعة خاطئة من 0.6% إلى 2.1%، واشتكى عميلان كبيران. ورأي {{report1}}، من موقع الإشراف على خط الإنتاج، أن السبب هو العمال المؤقتون التسعة الذين بدؤوا العمل قبل 7 أسابيع، مع طلب باستبدالهم. و{{manager}} بانتظار تحليلك قبل الموافقة. تجد الأرقام وسجل التغييرات ضمن المواد.",
+        materials: [
+          {
+            kind: "chart",
+            id: "m1",
+            title: "الأطقم التي تنقصها قطعة أو فيها قطعة خاطئة، أسبوعيًا",
+            chartType: "line",
+            xKey: "week",
+            unit: "%",
+            series: [{ key: "rate", label: "الأطقم المعيبة" }],
+            data: [
+              { week: "الأسبوع -2", rate: 0.6 },
+              { week: "الأسبوع -1", rate: 0.6 },
+              { week: "الأسبوع 1", rate: 1.1 },
+              { week: "الأسبوع 2", rate: 1.5 },
+              { week: "الأسبوع 3", rate: 1.8 },
+              { week: "الأسبوع 4", rate: 1.9 },
+              { week: "الأسبوع 5", rate: 2.0 },
+              { week: "الأسبوع 6", rate: 2.1 },
+              { week: "الأسبوع 7", rate: 2.1 },
+              { week: "الأسبوع 8", rate: 2.1 },
+            ],
+          },
+          {
+            kind: "table",
+            id: "m2",
+            title: "الأطقم المعيبة بحسب المناوبة، آخر 4 أسابيع",
+            columns: [
+              { key: "group", label: "الفئة" },
+              { key: "staff", label: "عدد العاملين" },
+              { key: "rate", label: "الأطقم المعيبة" },
+            ],
+            rows: [
+              { group: "المناوبة الصباحية: العاملون الدائمون", staff: "12", rate: "2.0%" },
+              { group: "المناوبة الصباحية: العاملون المؤقتون", staff: "9", rate: "2.2%" },
+              { group: "المناوبة المسائية (لا عمال مؤقتين فيها)", staff: "14", rate: "2.1%" },
+            ],
+          },
+          {
+            kind: "memo",
+            id: "m3",
+            title: "سجل التغييرات",
+            author: { name: "{{specialist}}", role: "{{specialist.role}}" },
+            body:
+              "الأسبوع 1: أُعيد ترتيب صناديق القطع في المناوبتين بحسب رقم القطعة بدلًا من الطقم، توفيرًا للمساحة.\nالأسبوع 2: بدأ 9 عمال مؤقتين العمل في المناوبة الصباحية بعد تعريف مدته يوم واحد.\nالأسبوع 3: غيّر المورّد تغليف موصلَين متشابهين (النوعين C4 وC6) إلى أكياس رمادية متطابقة عليها ملصقات صغيرة.\nفحص الأخطاء: 61% من أخطاء القطع الخاطئة في الأسابيع من 3 إلى 8 تبديل بين C4 وC6.",
+          },
+        ],
+        task: {
+          kind: "written",
+          prompt: "اكتب مذكرة قصيرة إلى {{manager}}: ما السبب الأرجح لهذا الارتفاع، وما درجة ثقتك، وما أول ما ينبغي فعله؟",
+          written: { format: "memo", placeholder: "إلى {{manager}}…" },
+        },
+        probe: { prompt: "ما الدليل الذي قد يثبت خطأ تفسيرك؟" },
+        twist: {
+          change: "ثم تأتي إضافة من {{report1}}: «العمال المؤقتون أبطأ أيضًا: 4.1 دقيقة للطقم مقابل 3.2 للعاملين الدائمين.»",
+          prompt: "هل يغيّر هذا استنتاجك؟ وما الذي ستفعله بهذه المعلومة، إن كنت ستفعل شيئًا؟",
+        },
+      },
+    },
+    hidden: {
+      en: {
+        rubric: [
+          {
+            competencyKey: "critical-thinking.root-cause-analysis",
+            anchors: [
+              "Accepts the temporary workers as the cause, or blames carelessness, without using the data.",
+              "Lists possible causes but does not use the shift or timing data to tell them apart.",
+              "Uses the timing (the rise starts in week 1, before the temporary workers) and the evening shift (no temporary staff, same rate) to point to the bin layout and the look-alike packaging.",
+              "Separates contributing causes (bins from week 1; C4/C6 packaging from week 3, 61% of wrong-part errors) and proposes a test, such as restoring kit-based bins on one shift.",
+              "Identifies the systemic cause (layout and supplier packaging changed without checking the effect on picking) and proposes a fix at that level.",
+            ],
+          },
+          {
+            competencyKey: "critical-thinking.spotting-assumptions",
+            anchors: [
+              "Takes {{report1}}'s explanation at face value.",
+              "Questions it vaguely without naming the assumption.",
+              "Names the assumption that new workers make more errors and checks it against the data (2.2% against 2.0%).",
+              "Notices further hidden assumptions: that the rise began when the temporary workers arrived; that being slower means being less accurate.",
+              "As level 4, and examines the assumptions behind their own explanation and what data would confirm it.",
+            ],
+          },
+          {
+            competencyKey: "critical-thinking.logical-reasoning",
+            anchors: [
+              "Concludes the temporary workers are to blame because errors rose after they arrived.",
+              "Notes that timing alone is not proof, but draws the same conclusion anyway.",
+              "Explains why the evidence does not support the temporary-worker explanation: similar error rates, and the same rise on a shift with no temporary staff.",
+              "Builds a clear argument for the leading explanation, saying what would have to be true and checking it against the figures.",
+              "States conclusions with fitting confidence, separates what the data shows from what it suggests, and handles the twist cleanly (slower is not the same as less accurate).",
+            ],
+          },
+        ],
+        strongIndicators: [
+          {
+            text: "Uses the evening shift, which has no temporary staff but the same rate.",
+            competencyKey: "critical-thinking.logical-reasoning",
+            keywords: ["evening shift", "no temporary", "same rate", "2.1%", "المناوبة المسائية", "لا عمال مؤقتين", "النسبة نفسها"],
+          },
+          {
+            text: "Notices the rise began in week 1, before the temporary workers started.",
+            competencyKey: "critical-thinking.root-cause-analysis",
+            keywords: ["week 1", "before the temporary", "bins", "re-arranged", "by part number", "الأسبوع 1", "قبل بدء", "الصناديق", "إعادة ترتيب", "رقم القطعة"],
+          },
+          {
+            text: "Links most wrong-part errors to the look-alike C4/C6 packaging.",
+            competencyKey: "critical-thinking.root-cause-analysis",
+            keywords: ["c4", "c6", "grey bags", "look alike", "61%", "packaging", "الأكياس الرمادية", "متشابهين", "61%", "التغليف"],
+          },
+          {
+            text: "Checks the assumption against the data: 2.2% for temporary staff against 2.0% for permanent staff.",
+            competencyKey: "critical-thinking.spotting-assumptions",
+            keywords: ["2.2%", "2.0%", "almost the same", "similar rate", "2.2%", "2.0%", "متقاربة", "شبه متساوية"],
+          },
+          {
+            text: "Proposes a test on one shift before acting.",
+            competencyKey: "critical-thinking.root-cause-analysis",
+            keywords: ["trial", "one shift", "put the bins back", "test", "تجربة", "مناوبة واحدة", "إعادة الصناديق", "اختبار"],
+          },
+          {
+            text: "Separates speed from accuracy when handling the twist.",
+            competencyKey: "critical-thinking.logical-reasoning",
+            keywords: ["slower is not", "speed", "accuracy", "training", "أبطأ لا يعني", "السرعة", "الدقة", "تدريب"],
+          },
+        ],
+        redFlags: [
+          {
+            text: "Recommends replacing the temporary workers.",
+            competencyKey: "critical-thinking.root-cause-analysis",
+            keywords: ["replace the temporary", "get rid of", "temps are the cause", "استبدال العمال المؤقتين", "التخلص من", "المؤقتون هم السبب"],
+          },
+          {
+            text: "Blames carelessness.",
+            competencyKey: "critical-thinking.root-cause-analysis",
+            keywords: ["careless", "not paying attention", "lazy", "إهمال", "عدم الانتباه", "تكاسل"],
+          },
+          {
+            text: "Treats timing as proof of cause.",
+            competencyKey: "critical-thinking.logical-reasoning",
+            keywords: ["since they started", "after they arrived, so", "منذ بدؤوا", "بعد وصولهم مباشرة"],
+          },
+          {
+            text: "Accepts the supervisor's explanation without checking it.",
+            competencyKey: "critical-thinking.spotting-assumptions",
+            keywords: ["new workers always", "obviously the new staff", "the supervisor is right", "العمال الجدد دائمًا", "من الواضح أن المؤقتين", "المشرف محق"],
+          },
+        ],
+        embeddedDetail: {
+          description:
+            "The shift table shows the evening shift has no temporary staff yet the same 2.1% rate, and the chart shows the rise began in week 1, a week before the temporary workers started.",
+          location: "evening-shift row of the shift table; week 1 of the chart",
+          keywords: ["evening shift", "no temporary", "week 1", "المناوبة المسائية", "لا عمال مؤقتين", "الأسبوع 1"],
+        },
+        probeTargets: ["critical-thinking.logical-reasoning"],
+        twistTargets: ["critical-thinking.spotting-assumptions", "critical-thinking.logical-reasoning"],
+      },
+    },
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────
+  {
+    id: "case-09-the-early-queue",
+    type: "CASE_ANALYSIS",
+    difficulty: 5,
+    dials: { ambiguity: 5, stakeholders: 4, conflictingConstraints: 4, stakes: 4, timePressure: 3, informationGaps: 4 },
+    targets: ["product-thinking.problem-framing", "product-thinking.idea-generation", "critical-thinking.root-cause-analysis"],
+    roleFamilies: [],
+    minutes: 8,
+    storyPhase: "late",
+    content: {
+      en: {
+        title: "The early queue",
+        scenario:
+          "{{company}} is a charity that hands out weekly food parcels to 600 registered families at 2 centres. Families queue for up to 3 hours, and last month a volunteer fainted while managing the queue. Through {{exec}}, the board has offered 120,000 from a donor for 'a mobile app so families can book a collection time'. {{manager}} wants your recommendation before the money is committed. The arrival figures, a family survey and a note from {{specialist}}, who coordinates the volunteers, are in the materials.",
+        materials: [
+          {
+            kind: "chart",
+            id: "m1",
+            title: "Families arriving, by half hour (doors open at 09:00)",
+            chartType: "bar",
+            xKey: "time",
+            unit: "families",
+            series: [{ key: "families", label: "Families arriving" }],
+            data: [
+              { time: "07:00", families: 140 },
+              { time: "07:30", families: 160 },
+              { time: "08:00", families: 120 },
+              { time: "08:30", families: 70 },
+              { time: "09:00", families: 40 },
+              { time: "09:30", families: 30 },
+              { time: "10:00", families: 20 },
+              { time: "10:30", families: 20 },
+            ],
+          },
+          {
+            kind: "table",
+            id: "m2",
+            title: "Family survey (410 replies)",
+            columns: [
+              { key: "question", label: "Question" },
+              { key: "share", label: "Share" },
+            ],
+            rows: [
+              { question: "Why arrive early? Fresh items run out", share: "52%" },
+              { question: "Why arrive early? Afraid parcels run out", share: "24%" },
+              { question: "Why arrive early? Bus times", share: "14%" },
+              { question: "Why arrive early? Other", share: "10%" },
+              { question: "Have a smartphone with mobile data", share: "62%" },
+              { question: "Need help reading text messages", share: "27%" },
+            ],
+          },
+          {
+            kind: "memo",
+            id: "m3",
+            title: "Note from the volunteer coordinator",
+            author: { name: "{{specialist}}", role: "{{specialist.role}}" },
+            body: "Fresh produce goes into parcels first come, first served, so it is usually gone by 10:30. Dry items never run out. Volunteers start at 08:30, and 6 of our 14 leave by 11:00 for other commitments.",
+          },
+        ],
+        task: {
+          kind: "written",
+          prompt:
+            "Write a memo to {{manager}}: how you would frame the problem, at least three genuinely different ways to tackle it, and your recommendation.",
+          written: { format: "memo", placeholder: "To {{manager}}…" },
+        },
+        probe: { prompt: "What would you need to see to support the app after all?" },
+        twist: {
+          change: "The donor confirms that the 120,000 can only be spent on technology.",
+          prompt: "What do you recommend now?",
+        },
+      },
+      ar: {
+        title: "الطابور المبكر",
+        scenario:
+          "{{company}} جمعية خيرية توزّع طرودًا غذائية أسبوعية على 600 أسرة مسجلة في مركزين. تنتظر الأسر في الطابور حتى 3 ساعات، وفي الشهر الماضي أُغمي على أحد المتطوعين في أثناء تنظيم الطابور. وقد عرض مجلس الإدارة، عن طريق {{exec}}، مبلغ 120,000 من أحد المانحين من أجل «تطبيق للهاتف تحجز به الأسر موعد الاستلام». والمطلوب منك، بطلب من {{manager}}، توصية قبل الالتزام بالمبلغ. تجد أرقام الوصول واستبيانًا للأسر وملاحظة من {{specialist}} في تنسيق المتطوعين ضمن المواد.",
+        materials: [
+          {
+            kind: "chart",
+            id: "m1",
+            title: "وصول الأسر بحسب نصف الساعة (تُفتح الأبواب الساعة 09:00)",
+            chartType: "bar",
+            xKey: "time",
+            unit: "أسرة",
+            series: [{ key: "families", label: "الأسر الواصلة" }],
+            data: [
+              { time: "07:00", families: 140 },
+              { time: "07:30", families: 160 },
+              { time: "08:00", families: 120 },
+              { time: "08:30", families: 70 },
+              { time: "09:00", families: 40 },
+              { time: "09:30", families: 30 },
+              { time: "10:00", families: 20 },
+              { time: "10:30", families: 20 },
+            ],
+          },
+          {
+            kind: "table",
+            id: "m2",
+            title: "استبيان الأسر (410 ردود)",
+            columns: [
+              { key: "question", label: "السؤال" },
+              { key: "share", label: "النسبة" },
+            ],
+            rows: [
+              { question: "لماذا تأتون مبكرًا؟ الأصناف الطازجة تنفد", share: "52%" },
+              { question: "لماذا تأتون مبكرًا؟ الخوف من نفاد الطرود", share: "24%" },
+              { question: "لماذا تأتون مبكرًا؟ مواعيد الحافلات", share: "14%" },
+              { question: "لماذا تأتون مبكرًا؟ أسباب أخرى", share: "10%" },
+              { question: "لدى الأسرة هاتف ذكي مع باقة بيانات", share: "62%" },
+              { question: "تحتاج إلى مساعدة في قراءة الرسائل النصية", share: "27%" },
+            ],
+          },
+          {
+            kind: "memo",
+            id: "m3",
+            title: "ملاحظة من تنسيق المتطوعين",
+            author: { name: "{{specialist}}", role: "{{specialist.role}}" },
+            body: "توضع الخضار والفواكه الطازجة في الطرود بحسب الأسبقية، لذلك تنفد عادة قبل الساعة 10:30. أما المواد الجافة فلا تنفد أبدًا. يبدأ المتطوعون عملهم الساعة 08:30، ويغادر 6 من أصل 14 متطوعًا قبل الساعة 11:00 لارتباطات أخرى.",
+          },
+        ],
+        task: {
+          kind: "written",
+          prompt: "اكتب مذكرة إلى {{manager}} تبيّن فيها كيف تصوغ المشكلة، وثلاث طرق مختلفة اختلافًا حقيقيًا على الأقل لمعالجتها، وتوصيتك.",
+          written: { format: "memo", placeholder: "إلى {{manager}}…" },
+        },
+        probe: { prompt: "ما الذي تحتاج إلى رؤيته لتؤيد التطبيق في نهاية المطاف؟" },
+        twist: {
+          change: "أكد المانح أن مبلغ الـ120,000 لا يُنفق إلا على التقنية.",
+          prompt: "بماذا توصي الآن؟",
+        },
+      },
+    },
+    hidden: {
+      en: {
+        rubric: [
+          {
+            competencyKey: "product-thinking.problem-framing",
+            anchors: [
+              "Accepts 'build a booking app' as the problem to solve.",
+              "Frames the problem as 'the queue is too long' without asking why families come so early.",
+              "Reframes it: families arrive early because fresh items are handed out first come, first served and run out by 10:30; the goal is fair access without queuing.",
+              "Defines success in families' terms (waiting time, a fair share of fresh food, safety) and tests the app against it: 38% have no smartphone with data and 27% need help reading messages.",
+              "As level 4, and separates the scarcity problem from the scheduling problem, and asks what the donor actually wants to achieve so the money can serve that aim.",
+            ],
+          },
+          {
+            competencyKey: "product-thinking.idea-generation",
+            anchors: [
+              "Proposes only the app, or only more volunteers.",
+              "Offers several versions of the same idea (an app, a website, booking by phone).",
+              "Proposes at least 3 genuinely different approaches, e.g., setting aside fresh items for every parcel, assigned collection windows sent by letter or text, numbered tickets on arrival, delivery for some families.",
+              "Combines ideas and varies assumptions (how fresh items are shared, when families arrive, how volunteer shifts run) into one coherent recommendation.",
+              "Proposes an original, practical option, such as pre-packed parcels with each family's fresh share and collection windows by group, with a cheap trial at one centre.",
+            ],
+          },
+          {
+            competencyKey: "critical-thinking.root-cause-analysis",
+            anchors: [
+              "Blames families for arriving early.",
+              "Names 'too much demand' or 'too few staff' as the cause without data.",
+              "Uses the survey and {{specialist}}'s note to identify first-come allocation of fresh items as the main driver of early arrival.",
+              "Separates main and contributing causes (fear that parcels run out although dry items never do; bus times; volunteers leaving at 11:00) and checks the arrival curve against them.",
+              "Identifies the system that creates the queue (a scarcity rule plus a single opening time) and explains how changing the rule would change behaviour.",
+            ],
+          },
+        ],
+        strongIndicators: [
+          {
+            text: "Identifies first-come allocation of fresh produce as the main reason families arrive early.",
+            competencyKey: "critical-thinking.root-cause-analysis",
+            keywords: ["fresh", "first come", "run out by 10:30", "52%", "الطازجة", "بحسب الأسبقية", "تنفد", "10:30", "52%"],
+          },
+          {
+            text: "Notices dry items never run out, so the fear of parcels running out can be addressed by telling families.",
+            competencyKey: "critical-thinking.root-cause-analysis",
+            keywords: ["never run out", "dry items", "tell families", "24%", "لا تنفد أبدًا", "المواد الجافة", "إبلاغ الأسر", "24%"],
+          },
+          {
+            text: "Tests the app against families' access: 38% without smartphone data, 27% needing help reading.",
+            competencyKey: "product-thinking.problem-framing",
+            keywords: ["38%", "62%", "no smartphone", "27%", "help reading", "38%", "هاتف ذكي", "27%", "قراءة الرسائل"],
+          },
+          {
+            text: "Reframes the problem as fair access rather than booking.",
+            competencyKey: "product-thinking.problem-framing",
+            keywords: ["fair share", "real problem", "not an app problem", "fair access", "حصة عادلة", "المشكلة الحقيقية", "ليست مشكلة تطبيق", "وصول عادل"],
+          },
+          {
+            text: "Offers genuinely different options beyond the app.",
+            competencyKey: "product-thinking.idea-generation",
+            keywords: ["set aside", "every parcel", "collection window", "numbered ticket", "delivery", "تخصيص", "كل طرد", "موعد استلام", "أرقام", "التوصيل"],
+          },
+          {
+            text: "Proposes a cheap trial at one centre.",
+            competencyKey: "product-thinking.idea-generation",
+            keywords: ["one centre", "trial", "pilot", "for a month", "مركز واحد", "تجربة", "لمدة شهر"],
+          },
+        ],
+        redFlags: [
+          {
+            text: "Recommends building the app as requested.",
+            competencyKey: "product-thinking.problem-framing",
+            keywords: ["build the app", "the app will solve", "بناء التطبيق", "التطبيق سيحل"],
+          },
+          {
+            text: "Blames families for the queue.",
+            competencyKey: "critical-thinking.root-cause-analysis",
+            keywords: ["families are impatient", "no reason to come early", "الأسر غير صبورة", "لا داعي لمجيئهم مبكرًا"],
+          },
+          {
+            text: "Offers only more volunteers.",
+            competencyKey: "product-thinking.idea-generation",
+            keywords: ["just need more volunteers", "only more volunteers", "نحتاج فقط إلى متطوعين", "مزيد من المتطوعين فقط"],
+          },
+        ],
+        embeddedDetail: {
+          description:
+            "{{specialist}}'s note says fresh produce is allocated first come, first served and runs out by 10:30, while dry items never run out: the queue is driven by a scarcity rule that a booking app would not change.",
+          location: "volunteer coordinator's note",
+          keywords: ["first come", "fresh", "10:30", "never run out", "بحسب الأسبقية", "الطازجة", "10:30", "لا تنفد"],
+        },
+        probeTargets: ["product-thinking.problem-framing"],
+        twistTargets: ["product-thinking.idea-generation", "product-thinking.problem-framing"],
+      },
+    },
+  },
 ];

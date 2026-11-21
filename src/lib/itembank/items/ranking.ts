@@ -1181,4 +1181,401 @@ export const ITEMS: BankItem[] = [
       },
     },
   },
+
+  // ─────────────────────────────────────────────────────────────────────────
+  {
+    id: "rank-07-patient-app-budget",
+    type: "RANKING_ALLOCATION",
+    difficulty: 3,
+    dials: { ambiguity: 3, stakeholders: 4, conflictingConstraints: 4, stakes: 3, timePressure: 2, informationGaps: 3 },
+    targets: ["product-thinking.feature-prioritisation", "product-thinking.user-empathy"],
+    roleFamilies: [],
+    minutes: 5,
+    storyPhase: "middle",
+    content: {
+      en: {
+        title: "The patient app budget",
+        scenario:
+          "{{company}}'s patient app has 41,000 monthly users. Next quarter your team can deliver about 100 points of work, and six improvements are on the table, together needing 180 points. {{exec}} wants a home-screen redesign for the hospital's new brand, while patients and call-centre staff have their own priorities. {{manager}} has asked you to propose the split. The options, their full costs and the evidence for each are in the materials.",
+        materials: [
+          {
+            kind: "table",
+            id: "m1",
+            title: "Possible improvements",
+            caption:
+              "Lab results can be released only after a doctor has reviewed them, which takes 3 days on average. Abnormal results are currently explained to the patient by phone.",
+            columns: [
+              { key: "item", label: "Improvement" },
+              { key: "cost", label: "Full cost (points)", numeric: true },
+              { key: "evidence", label: "Evidence" },
+            ],
+            rows: [
+              { item: "Reschedule appointments in the app", cost: 40, evidence: "46% of surveyed patients name 'can't reschedule without calling' as their top frustration; average call wait 14 minutes." },
+              { item: "Lab results in the app", cost: 35, evidence: "30% of call-centre calls ask about results." },
+              { item: "Larger text and screen-reader support", cost: 20, evidence: "18% of users are over 65; 1 in 10 app reviews mention text that is too small." },
+              { item: "Repeat-prescription requests", cost: 30, evidence: "About 6,000 requests a month, each needing a phone call and 2 days." },
+              { item: "Home-screen redesign for the new brand", cost: 25, evidence: "Requested by {{exec}} for the brand launch in 4 months." },
+              { item: "Pay bills in the app", cost: 30, evidence: "Most patients are insured; about 900 self-paying patients a month." },
+            ],
+          },
+        ],
+        task: {
+          kind: "allocation",
+          prompt:
+            "Allocate 100 points across the six improvements. Each point is about 1% of next quarter's capacity; an improvement can get 0, and partial funding means a smaller first version.",
+          allocation: {
+            total: 100,
+            rows: [
+              { id: "i1", label: "Reschedule appointments in the app" },
+              { id: "i2", label: "Lab results in the app" },
+              { id: "i3", label: "Larger text and screen-reader support" },
+              { id: "i4", label: "Repeat-prescription requests" },
+              { id: "i5", label: "Home-screen redesign for the new brand" },
+              { id: "i6", label: "Pay bills in the app" },
+            ],
+          },
+        },
+        probe: { prompt: "Which patients does your split serve least well, and why did you accept that?" },
+        twist: {
+          change: "{{exec}} insists that the home-screen redesign gets at least 25 points because of the brand launch.",
+          prompt: "Re-allocate if needed, and write what you say to {{exec}}.",
+        },
+      },
+      ar: {
+        title: "ميزانية تطبيق المرضى",
+        scenario:
+          "يستخدم تطبيق المرضى لدى {{company}} 41,000 مستخدم شهريًا. وفي الربع القادم يستطيع فريقك إنجاز نحو 100 نقطة من العمل، بينما تُطرح ستة تحسينات تحتاج مجتمعةً إلى 180 نقطة. ومن طلبات {{exec}} إعادة تصميم الشاشة الرئيسية لتواكب الهوية الجديدة للمستشفى، وللمرضى وموظفي مركز الاتصال أولوياتهم الخاصة. والمطلوب منك، بطلب من {{manager}}، اقتراح طريقة التوزيع. تجد الخيارات وتكلفتها الكاملة والأدلة على كل منها ضمن المواد.",
+        materials: [
+          {
+            kind: "table",
+            id: "m1",
+            title: "التحسينات الممكنة",
+            caption:
+              "لا يمكن إظهار نتائج المختبر إلا بعد أن يراجعها الطبيب، وتستغرق المراجعة 3 أيام في المتوسط. وتُشرح النتائج غير الطبيعية للمريض حاليًا عبر الهاتف.",
+            columns: [
+              { key: "item", label: "التحسين" },
+              { key: "cost", label: "التكلفة الكاملة (نقاط)", numeric: true },
+              { key: "evidence", label: "الأدلة" },
+            ],
+            rows: [
+              { item: "تغيير المواعيد من داخل التطبيق", cost: 40, evidence: "46% من المرضى المستطلعة آراؤهم يرون أن «تعذّر تغيير الموعد دون اتصال» أكبر مصدر لإحباطهم، ومتوسط الانتظار على الهاتف 14 دقيقة." },
+              { item: "نتائج المختبر في التطبيق", cost: 35, evidence: "30% من مكالمات مركز الاتصال تسأل عن النتائج." },
+              { item: "خط أكبر ودعم قارئ الشاشة", cost: 20, evidence: "18% من المستخدمين تجاوزوا 65 عامًا، وتشير مراجعة من كل 10 مراجعات للتطبيق إلى صغر الخط." },
+              { item: "طلبات تكرار الوصفات الطبية", cost: 30, evidence: "نحو 6,000 طلب شهريًا، يحتاج كل منها إلى اتصال هاتفي ويومين." },
+              { item: "إعادة تصميم الشاشة الرئيسية للهوية الجديدة", cost: 25, evidence: "بطلب من {{exec}} لإطلاق الهوية بعد 4 أشهر." },
+              { item: "دفع الفواتير من داخل التطبيق", cost: 30, evidence: "معظم المرضى مؤمَّن عليهم، ونحو 900 مريض يدفعون بأنفسهم شهريًا." },
+            ],
+          },
+        ],
+        task: {
+          kind: "allocation",
+          prompt:
+            "وزّع 100 نقطة على التحسينات الستة. كل نقطة تعادل نحو 1% من طاقة الربع القادم، ويمكن أن ينال تحسينٌ صفرًا، والتمويل الجزئي يعني نسخة أولى أصغر.",
+          allocation: {
+            total: 100,
+            rows: [
+              { id: "i1", label: "تغيير المواعيد من داخل التطبيق" },
+              { id: "i2", label: "نتائج المختبر في التطبيق" },
+              { id: "i3", label: "خط أكبر ودعم قارئ الشاشة" },
+              { id: "i4", label: "طلبات تكرار الوصفات الطبية" },
+              { id: "i5", label: "إعادة تصميم الشاشة الرئيسية للهوية الجديدة" },
+              { id: "i6", label: "دفع الفواتير من داخل التطبيق" },
+            ],
+          },
+        },
+        probe: { prompt: "أي المرضى يخدمهم توزيعك أقل من غيرهم، ولماذا قبلت ذلك؟" },
+        twist: {
+          change: "يأتي إصرار من {{exec}} على أن تنال إعادة تصميم الشاشة الرئيسية 25 نقطة على الأقل بسبب إطلاق الهوية الجديدة.",
+          prompt: "أعد التوزيع إن لزم، واكتب ما تقوله لـ{{exec}}.",
+        },
+      },
+    },
+    hidden: {
+      en: {
+        rubric: [
+          {
+            competencyKey: "product-thinking.feature-prioritisation",
+            anchors: [
+              "Spreads points evenly or follows seniority (the redesign first because {{exec}} asked) without reasoning.",
+              "Allocates on gut feel, without weighing evidence, cost or how many patients benefit.",
+              "Allocates by impact and effort (rescheduling and prescriptions reach many patients and cut calls) and says what gets little or nothing and why.",
+              "Treats partial funding as smaller first versions (e.g., normal lab results only) and sequences the rest into later quarters.",
+              "As level 4, and handles the brand pressure with a proposal that meets {{exec}}'s real need, such as a light visual refresh, while protecting patient value.",
+            ],
+          },
+          {
+            competencyKey: "product-thinking.user-empathy",
+            anchors: [
+              "Considers only the organisation's goals (the brand, call volumes), not patients' experience.",
+              "Mentions patients in general without distinguishing groups.",
+              "Uses the evidence to consider patients' experience: phone waits, older users, people waiting anxiously for results.",
+              "Considers patients a change could harm, such as seeing abnormal results without explanation, and designs around it.",
+              "As level 4, and weighs less visible groups (older and visually impaired users, self-paying patients) against the majority, and proposes checking choices with patients.",
+            ],
+          },
+        ],
+        strongIndicators: [
+          {
+            text: "Notices the risk of patients seeing abnormal results with no explanation.",
+            competencyKey: "product-thinking.user-empathy",
+            keywords: ["abnormal", "without explanation", "doctor review", "3 days", "anxiety", "worry", "غير طبيعية", "دون شرح", "مراجعة الطبيب", "3 أيام", "القلق"],
+          },
+          {
+            text: "Considers older and visually impaired users.",
+            competencyKey: "product-thinking.user-empathy",
+            keywords: ["over 65", "18%", "screen reader", "larger text", "older", "65 عامًا", "18%", "قارئ الشاشة", "خط أكبر", "كبار السن"],
+          },
+          {
+            text: "Uses the rescheduling evidence (46%, 14-minute waits).",
+            competencyKey: "product-thinking.feature-prioritisation",
+            keywords: ["46%", "reschedul", "14 minutes", "fewer calls", "46%", "تغيير الموعد", "14 دقيقة", "مكالمات أقل"],
+          },
+          {
+            text: "Uses the prescription volume (about 6,000 a month).",
+            competencyKey: "product-thinking.feature-prioritisation",
+            keywords: ["6,000", "prescription", "6000", "الوصفات", "6,000"],
+          },
+          {
+            text: "Treats partial funding as a smaller first version.",
+            competencyKey: "product-thinking.feature-prioritisation",
+            keywords: ["first version", "smaller version", "phase", "next quarter", "نسخة أولى", "نسخة أصغر", "مرحلة", "الربع التالي"],
+          },
+        ],
+        redFlags: [
+          {
+            text: "Prioritises the redesign because {{exec}} asked for it.",
+            competencyKey: "product-thinking.feature-prioritisation",
+            keywords: ["because the exec asked", "brand comes first", "senior request", "لأن الإدارة طلبت", "الهوية أولًا"],
+          },
+          {
+            text: "Splits the points evenly.",
+            competencyKey: "product-thinking.feature-prioritisation",
+            keywords: ["equal split", "evenly", "same for each", "بالتساوي", "توزيع متساوٍ"],
+          },
+          {
+            text: "Assumes patients will cope with whatever is built.",
+            competencyKey: "product-thinking.user-empathy",
+            keywords: ["patients will cope", "they'll get used to it", "سيتأقلم المرضى", "سيعتادون"],
+          },
+        ],
+        embeddedDetail: {
+          description:
+            "The table caption says results can be shown only after a doctor's review (3 days on average) and abnormal results are explained by phone: putting results in the app would not remove those calls, and could expose patients to bad news without explanation.",
+          location: "caption of the improvements table",
+          keywords: ["doctor", "3 days", "abnormal", "by phone", "الطبيب", "3 أيام", "غير الطبيعية", "عبر الهاتف"],
+        },
+        probeTargets: ["product-thinking.user-empathy"],
+        twistTargets: ["product-thinking.feature-prioritisation"],
+      },
+    },
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────
+  {
+    id: "rank-08-riskiest-assumptions",
+    type: "RANKING_ALLOCATION",
+    difficulty: 4,
+    dials: { ambiguity: 4, stakeholders: 2, conflictingConstraints: 3, stakes: 4, timePressure: 3, informationGaps: 5 },
+    targets: ["critical-thinking.spotting-assumptions", "judgment.deciding-under-ambiguity"],
+    roleFamilies: [],
+    minutes: 5,
+    storyPhase: "middle",
+    content: {
+      en: {
+        title: "The riskiest assumptions",
+        scenario:
+          "{{company}}, a home-appliance repair service, plans to launch a household repair subscription: 9 a month for unlimited call-outs. The business plan needs 4,000 subscribers in year one to break even. Before {{exec}} commits 1.5 million, you have 6 weeks and a small budget to test the plan, enough to test two or three of its assumptions properly. The plan summary and its numbers are in the materials.",
+        materials: [
+          {
+            kind: "memo",
+            id: "m1",
+            title: "Business plan summary",
+            author: { name: "{{peer}}", role: "{{peer.role}}" },
+            body:
+              "Price: 9 per month. Target: 4,000 subscribers in year one, 60% of them from our existing list of 22,000 customers. Cost per call-out: 38, including parts. The plan assumes 1.5 call-outs per subscriber per year, technicians reaching 90% of call-outs on the same day, no extra call-centre staff, and parts prices staying at today's level.",
+          },
+          {
+            kind: "table",
+            id: "m2",
+            title: "Yearly profit per subscriber, by call-out rate",
+            caption: "The rate of 1.5 call-outs a year comes from current pay-per-visit customers, who average 1.1 call-outs a year, plus a margin for safety.",
+            columns: [
+              { key: "rate", label: "Call-outs per subscriber per year", numeric: true },
+              { key: "profit", label: "Yearly profit per subscriber", numeric: true },
+            ],
+            rows: [
+              { rate: 1.0, profit: 70 },
+              { rate: 1.5, profit: 51 },
+              { rate: 2.0, profit: 32 },
+              { rate: 2.5, profit: 13 },
+              { rate: 3.0, profit: -6 },
+            ],
+          },
+        ],
+        task: {
+          kind: "ranking",
+          prompt: "Rank the six assumptions in the order you would test them, with 1 tested first.",
+          rankItems: [
+            { id: "a1", label: "Households will pay a monthly fee for repairs they may not need." },
+            { id: "a2", label: "Technicians can reach 90% of call-outs on the same day." },
+            { id: "a3", label: "Subscribers will call us out about 1.5 times a year on average." },
+            { id: "a4", label: "60% of subscribers will come from the existing customer list." },
+            { id: "a5", label: "Parts prices will stay at today's level." },
+            { id: "a6", label: "The call centre can handle the extra bookings with current staff." },
+          ],
+        },
+        probe: {
+          prompt: "For the assumption you ranked first, describe the cheapest test you could run in 6 weeks and the result that would make you recommend stopping.",
+        },
+        twist: {
+          change: "{{specialist}} reports that a competitor that launched a similar subscription last year saw subscribers call out 2.8 times a year on average.",
+          prompt: "Re-rank if needed, and say what this means for the plan.",
+        },
+      },
+      ar: {
+        title: "الافتراضات الأخطر",
+        scenario:
+          "تخطط {{company}}، وهي شركة لإصلاح الأجهزة المنزلية، لإطلاق اشتراك للأسر: 9 شهريًا مقابل زيارات إصلاح غير محدودة. وتحتاج خطة العمل إلى 4,000 مشترك في السنة الأولى لبلوغ نقطة التعادل. وقبل التزام {{exec}} بمبلغ 1.5 مليون، لديك 6 أسابيع وميزانية صغيرة لاختبار الخطة، تكفي لاختبار افتراضين أو ثلاثة من افتراضاتها اختبارًا جادًّا. تجد ملخص الخطة وأرقامها ضمن المواد.",
+        materials: [
+          {
+            kind: "memo",
+            id: "m1",
+            title: "ملخص خطة العمل",
+            author: { name: "{{peer}}", role: "{{peer.role}}" },
+            body:
+              "السعر: 9 شهريًا. الهدف: 4,000 مشترك في السنة الأولى، 60% منهم من قائمة عملائنا الحاليين البالغ عددهم 22,000. تكلفة الزيارة: 38 شاملة القطع. وتفترض الخطة 1.5 زيارة للمشترك سنويًا، ووصول الفنيين إلى 90% من الزيارات في اليوم نفسه، وعدم الحاجة إلى موظفين إضافيين في مركز الاتصال، وثبات أسعار القطع عند مستواها الحالي.",
+          },
+          {
+            kind: "table",
+            id: "m2",
+            title: "الربح السنوي لكل مشترك بحسب معدل الزيارات",
+            caption: "رقم 1.5 زيارة سنويًا مأخوذ من العملاء الحاليين الذين يدفعون عن كل زيارة، ومتوسطهم 1.1 زيارة سنويًا، مع هامش احتياطي.",
+            columns: [
+              { key: "rate", label: "الزيارات لكل مشترك سنويًا", numeric: true },
+              { key: "profit", label: "الربح السنوي لكل مشترك", numeric: true },
+            ],
+            rows: [
+              { rate: 1.0, profit: 70 },
+              { rate: 1.5, profit: 51 },
+              { rate: 2.0, profit: 32 },
+              { rate: 2.5, profit: 13 },
+              { rate: 3.0, profit: -6 },
+            ],
+          },
+        ],
+        task: {
+          kind: "ranking",
+          prompt: "رتّب الافتراضات الستة بحسب الترتيب الذي ستختبرها به، بحيث يكون رقم 1 أول ما تختبره.",
+          rankItems: [
+            { id: "a1", label: "ستدفع الأسر رسمًا شهريًا مقابل إصلاحات قد لا تحتاج إليها." },
+            { id: "a2", label: "يستطيع الفنيون الوصول إلى 90% من الزيارات في اليوم نفسه." },
+            { id: "a3", label: "سيطلب المشتركون زيارة 1.5 مرة سنويًا في المتوسط." },
+            { id: "a4", label: "سيأتي 60% من المشتركين من قائمة العملاء الحاليين." },
+            { id: "a5", label: "ستبقى أسعار القطع عند مستواها الحالي." },
+            { id: "a6", label: "يستطيع مركز الاتصال استيعاب الحجوزات الإضافية بموظفيه الحاليين." },
+          ],
+        },
+        probe: {
+          prompt: "بالنسبة إلى الافتراض الذي وضعته أولًا، صف أرخص اختبار يمكنك إجراؤه في 6 أسابيع، والنتيجة التي تجعلك توصي بالتوقف.",
+        },
+        twist: {
+          change: "يفيد تقرير {{specialist}} بأن منافسًا أطلق اشتراكًا مشابهًا في العام الماضي، وبلغ متوسط زيارات مشتركيه 2.8 زيارة سنويًا.",
+          prompt: "أعد الترتيب إن لزم، ووضّح ما يعنيه ذلك للخطة.",
+        },
+      },
+    },
+    hidden: {
+      en: {
+        rubric: [
+          {
+            competencyKey: "critical-thinking.spotting-assumptions",
+            anchors: [
+              "Ranks by gut feel, or treats all six assumptions as equally certain.",
+              "Calls the assumptions risky in general without asking which ones the plan depends on most.",
+              "Ranks by how much the plan depends on each assumption and how uncertain it is, putting the call-out rate and willingness to pay near the top.",
+              "Spots that the 1.5 rate is borrowed from pay-per-visit customers, who have every reason to call less than subscribers with unlimited free call-outs.",
+              "As level 4, and notices linked assumptions (more call-outs also strain same-day service and the call centre) and the 11% take-up from the existing list implied by a4.",
+            ],
+          },
+          {
+            competencyKey: "judgment.deciding-under-ambiguity",
+            anchors: [
+              "Refuses to rank without more data, or ranks without acknowledging any uncertainty.",
+              "Ranks but does not say what each test should find or how results would change the decision.",
+              "Ranks on the evidence available, states the key assumptions and names what each test should look for.",
+              "Tests first what could stop the plan cheaply, and defers assumptions that would not change the go/no-go decision, such as parts prices.",
+              "Structures the 6 weeks so the recommendation holds across likely results, with clear stop-or-continue thresholds.",
+            ],
+          },
+          {
+            competencyKey: "adaptability.handling-new-information",
+            anchors: [
+              "Ignores the competitor figure or calls it irrelevant.",
+              "Notes the figure but changes neither the ranking nor the view of the plan.",
+              "Keeps the call-out rate first and updates the view: at about 2.8 call-outs each subscriber earns almost nothing (about 2 a year), so the plan cannot repay the 1.5 million.",
+              "Checks comparability (price, market, what counts as a call-out) before concluding, and explains what changed in their reasoning.",
+              "Updates in proportion and proposes design changes (a cap on call-outs, a higher price, a small fee per visit) and what to test next.",
+            ],
+          },
+        ],
+        strongIndicators: [
+          {
+            text: "Spots that the 1.5 rate comes from pay-per-visit customers, who call less than subscribers would.",
+            competencyKey: "critical-thinking.spotting-assumptions",
+            keywords: ["pay-per-visit", "pay per visit", "1.1", "unlimited", "call more", "free call-outs", "يدفعون عن كل زيارة", "1.1", "غير محدودة", "سيطلبون أكثر", "مجانية"],
+          },
+          {
+            text: "Uses the profit table to show how sensitive the plan is to the call-out rate.",
+            competencyKey: "critical-thinking.spotting-assumptions",
+            keywords: ["2.5", "3.0", "-6", "loss", "sensitive", "profit per subscriber", "2.5", "3.0", "خسارة", "حساسة", "الربح لكل مشترك"],
+          },
+          {
+            text: "Works out that a4 implies about 11% of the existing list signing up.",
+            competencyKey: "critical-thinking.spotting-assumptions",
+            keywords: ["11%", "2,400", "22,000", "take-up", "conversion", "11%", "2,400", "22,000", "نسبة الاشتراك", "نسبة التحويل"],
+          },
+          {
+            text: "Defines cheap tests with stop thresholds.",
+            competencyKey: "judgment.deciding-under-ambiguity",
+            keywords: ["stop if", "threshold", "pilot", "test with", "small group", "نتوقف إذا", "حد", "تجربة", "نختبر مع", "مجموعة صغيرة"],
+          },
+          {
+            text: "Defers assumptions that would not change the decision, such as parts prices.",
+            competencyKey: "judgment.deciding-under-ambiguity",
+            keywords: ["parts prices last", "won't change the decision", "less critical", "أسعار القطع أخيرًا", "لن يغير القرار", "أقل أهمية"],
+          },
+          {
+            text: "Concludes that at 2.8 call-outs each subscriber earns almost nothing, so the plan fails, after checking comparability.",
+            competencyKey: "adaptability.handling-new-information",
+            keywords: ["2.8", "almost nothing", "break even", "lose money", "comparable", "same price", "2.8", "لا يكاد", "نقطة التعادل", "نخسر", "قابل للمقارنة", "السعر نفسه"],
+          },
+        ],
+        redFlags: [
+          {
+            text: "Refuses to rank without more data.",
+            competencyKey: "judgment.deciding-under-ambiguity",
+            keywords: ["can't rank without", "need more data first", "لا يمكن الترتيب دون", "نحتاج إلى بيانات أولًا"],
+          },
+          {
+            text: "Treats the 1.5 rate as reliable because it comes from company data.",
+            competencyKey: "critical-thinking.spotting-assumptions",
+            keywords: ["1.5 is reliable", "based on our own data so", "رقم 1.5 موثوق", "مبني على بياناتنا لذا"],
+          },
+          {
+            text: "Dismisses the competitor figure.",
+            competencyKey: "adaptability.handling-new-information",
+            keywords: ["doesn't apply to us", "ignore the competitor", "لا ينطبق علينا", "نتجاهل المنافس"],
+          },
+        ],
+        embeddedDetail: {
+          description:
+            "The table caption says the 1.5 rate comes from pay-per-visit customers (1.1 a year); subscribers with unlimited free call-outs are likely to call more, and the table shows profit per subscriber turns negative at about 3 call-outs a year.",
+          location: "caption of the profit table",
+          keywords: ["pay-per-visit", "1.1", "unlimited", "يدفعون عن كل زيارة", "1.1", "غير محدودة"],
+        },
+        probeTargets: ["judgment.deciding-under-ambiguity"],
+        twistTargets: ["judgment.deciding-under-ambiguity", "adaptability.handling-new-information"],
+      },
+    },
+  },
 ];

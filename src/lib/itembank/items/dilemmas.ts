@@ -1893,4 +1893,421 @@ export const ITEMS: BankItem[] = [
       },
     },
   },
+
+  // ─────────────────────────────────────────────────────────────────────────
+  {
+    id: "dil-09-before-the-standard",
+    type: "TRADE_OFF_DILEMMA",
+    difficulty: 5,
+    dials: { ambiguity: 5, stakeholders: 4, conflictingConstraints: 5, stakes: 5, timePressure: 4, informationGaps: 5 },
+    targets: ["adaptability.comfort-with-ambiguity", "judgment.deciding-under-ambiguity"],
+    roleFamilies: [],
+    minutes: 5,
+    storyPhase: "late",
+    content: {
+      en: {
+        title: "Before the standard is published",
+        scenario:
+          "You run operations for {{company}}, a chain of 26 pharmacies. A new rule on electronic prescription records takes effect in 10 weeks. The regulator has published the principle but not the technical standard, which is 'expected within 4 to 6 weeks'. Your systems vendor needs 8 weeks to build any change. Missing the deadline risks fines and a possible suspension of dispensing controlled medicines. {{manager}} wants your decision today. A note from {{specialist}} and the vendor's email are in the materials.",
+        materials: [
+          {
+            kind: "memo",
+            id: "m1",
+            title: "What we know and don't know",
+            author: { name: "{{specialist}}", role: "{{specialist.role}}" },
+            body:
+              "Known: from week 10, every prescription must be stored electronically with an audit log and reported to the regulator daily.\nUnknown: the data format for the daily reports, and whether paper prescriptions must be scanned.\nThe regulator circulated an informal draft last month but says it 'may change'. Two other pharmacy chains are asking the industry association to request a transition period.",
+          },
+          {
+            kind: "email",
+            id: "m2",
+            title: "Email from the vendor",
+            from: { name: "Vendor account team" },
+            to: [{ name: "{{you}}", role: "{{you.role}}" }],
+            subject: "Build options and timing",
+            sentAt: "Today, 09:40",
+            body:
+              "We can start building now from the informal draft, or wait for the final standard. If we start now and the standard changes, rework will cost extra and may add 2 to 3 weeks. If we wait for the final standard (week 4 to 6), the earliest go-live is week 12 to 14.",
+            footnote: "Across every version of the draft we have seen, about 70% of the work (record storage and the audit log) is the same. The uncertain 30% is the daily report format.",
+          },
+        ],
+        task: {
+          kind: "choice",
+          prompt: "Choose what you will do, and briefly explain why.",
+          options: [
+            { id: "a", label: "Start the full build now from the informal draft, accepting rework if the final standard differs." },
+            { id: "b", label: "Wait for the final standard, and ask the regulator now for a transition period." },
+            { id: "c", label: "Run a manual stopgap (scanning and a spreadsheet log) from week 10, and start the system build once the standard is final." },
+            { id: "d", label: "Join the other chains through the industry association to agree a common interpretation and a shared build, starting in 2 weeks." },
+          ],
+          requireJustification: true,
+        },
+        probe: { prompt: "What would you need to learn in the next two weeks to know whether your choice is still right?" },
+        twist: {
+          change: "Week 4: the regulator publishes the standard. The daily report format differs from the draft, and patient consent must now be recorded for every electronic prescription.",
+          prompt: "What do you do now, and who do you tell?",
+        },
+      },
+      ar: {
+        title: "قبل صدور المعيار",
+        scenario:
+          "تدير العمليات في {{company}}، وهي سلسلة من 26 صيدلية. يبدأ العمل بقاعدة جديدة لسجلات الوصفات الإلكترونية بعد 10 أسابيع. وقد نشرت الجهة الرقابية المبدأ العام دون المعيار التقني، الذي «يُتوقع صدوره خلال 4 إلى 6 أسابيع». ويحتاج مورّد الأنظمة إلى 8 أسابيع لبناء أي تعديل. وتفويت الموعد يعرّض السلسلة لغرامات، وربما لإيقاف صرف الأدوية الخاضعة للرقابة. و{{manager}} بانتظار قرارك اليوم. تجد ملاحظة من {{specialist}} ورسالة المورّد ضمن المواد.",
+        materials: [
+          {
+            kind: "memo",
+            id: "m1",
+            title: "ما نعرفه وما لا نعرفه",
+            author: { name: "{{specialist}}", role: "{{specialist.role}}" },
+            body:
+              "ما نعرفه: اعتبارًا من الأسبوع 10 يجب حفظ كل وصفة إلكترونيًا مع سجل تدقيق، وإرسال تقرير يومي إلى الجهة الرقابية.\nما لا نعرفه: صيغة البيانات في التقارير اليومية، وهل يجب مسح الوصفات الورقية ضوئيًا.\nوزّعت الجهة الرقابية مسودة غير رسمية في الشهر الماضي، لكنها تقول إنها «قد تتغير». وتسعى سلسلتا صيدليات أخريان إلى أن تطلب الجمعية المهنية فترة انتقالية.",
+          },
+          {
+            kind: "email",
+            id: "m2",
+            title: "رسالة من المورّد",
+            from: { name: "فريق حسابات المورّد" },
+            to: [{ name: "{{you}}", role: "{{you.role}}" }],
+            subject: "خيارات البناء ومواعيده",
+            sentAt: "اليوم، 09:40",
+            body:
+              "يمكننا البدء في البناء الآن وفق المسودة غير الرسمية، أو انتظار المعيار النهائي. إذا بدأنا الآن وتغيّر المعيار، فستكلّف إعادة العمل مبلغًا إضافيًا وقد تضيف 2 إلى 3 أسابيع. وإذا انتظرنا المعيار النهائي (الأسبوع 4 إلى 6)، فأقرب موعد للتشغيل هو الأسبوع 12 إلى 14.",
+            footnote: "في كل نسخ المسودة التي اطلعنا عليها، نحو 70% من العمل (حفظ السجلات وسجل التدقيق) ثابت لا يتغير. أما الـ30% غير المؤكدة فهي صيغة التقرير اليومي.",
+          },
+        ],
+        task: {
+          kind: "choice",
+          prompt: "اختر ما ستفعله، واشرح سبب اختيارك باختصار.",
+          options: [
+            { id: "a", label: "البدء الآن في البناء الكامل وفق المسودة غير الرسمية، وتقبّل إعادة العمل إن جاء المعيار النهائي مختلفًا." },
+            { id: "b", label: "انتظار المعيار النهائي، ومطالبة الجهة الرقابية الآن بفترة انتقالية." },
+            { id: "c", label: "تشغيل حل يدوي مؤقت (مسح الوصفات ضوئيًا وسجل في جدول بيانات) بدءًا من الأسبوع 10، والبدء في بناء النظام حين يصدر المعيار النهائي." },
+            { id: "d", label: "الانضمام إلى السلسلتين الأخريين عبر الجمعية المهنية للاتفاق على تفسير موحد وبناء مشترك، يبدأ بعد أسبوعين." },
+          ],
+          requireJustification: true,
+        },
+        probe: { prompt: "ما الذي تحتاج إلى معرفته خلال الأسبوعين القادمين لتعرف إن كان اختيارك ما زال صائبًا؟" },
+        twist: {
+          change: "الأسبوع 4: نشرت الجهة الرقابية المعيار. وصيغة التقرير اليومي تختلف عن المسودة، وصار تسجيل موافقة المريض واجبًا في كل وصفة إلكترونية.",
+          prompt: "ماذا تفعل الآن، ومن تُبلغ؟",
+        },
+      },
+    },
+    hidden: {
+      en: {
+        rubric: [
+          {
+            competencyKey: "adaptability.comfort-with-ambiguity",
+            anchors: [
+              "Freezes until the standard is published, or acts as if the informal draft were final.",
+              "Chooses an option but on an unstated assumption, such as that the draft will hold or that the regulator will grant extra time.",
+              "States a working interpretation, chooses on it, and names what needs clarifying and from whom.",
+              "Takes reversible steps that produce information: starts the 70% common work now, holds the uncertain 30%, and clarifies key unknowns with the regulator.",
+              "As level 4, and creates structure for others: working assumptions, decision dates (e.g., week 6, standard or not) and a fallback that keeps dispensing legal.",
+            ],
+          },
+          {
+            competencyKey: "judgment.deciding-under-ambiguity",
+            anchors: [
+              "Refuses to decide today, or decides without weighing the options' risks.",
+              "Decides but does not say how they would know the decision was wrong.",
+              "Makes a reasonable decision on the available information, stating the main assumption and when it will be checked.",
+              "Combines options to keep choices open (start the common 70%, prepare a manual stopgap, support the transition request) and sets decision points.",
+              "Structures the plan so it holds whether the standard arrives on time, late or different, with explicit triggers for switching.",
+            ],
+          },
+          {
+            competencyKey: "adaptability.handling-new-information",
+            anchors: [
+              "Carries on as planned after the standard is published.",
+              "Acknowledges the change but makes only a token adjustment.",
+              "Re-plans the affected parts (report format, consent recording), keeps what still holds, and tells the vendor, {{manager}} and the pharmacies.",
+              "Checks the new requirements carefully before acting (what consent covers and from when) and explains what changed in the plan and timeline.",
+              "Updates in proportion and draws implications: whether week 10 is still reachable, whether the manual stopgap must record consent, and what to ask the regulator.",
+            ],
+          },
+        ],
+        strongIndicators: [
+          {
+            text: "Uses the vendor's footnote: about 70% of the work is the same in every draft and can start now.",
+            competencyKey: "adaptability.comfort-with-ambiguity",
+            keywords: ["70%", "storage", "audit log", "common part", "same in every", "start now", "70%", "حفظ السجلات", "سجل التدقيق", "الجزء الثابت", "نبدأ الآن"],
+          },
+          {
+            text: "Clarifies the unknowns with the regulator or through the industry association.",
+            competencyKey: "adaptability.comfort-with-ambiguity",
+            keywords: ["ask the regulator", "clarify", "transition period", "industry association", "نسأل الجهة الرقابية", "استيضاح", "فترة انتقالية", "الجمعية المهنية"],
+          },
+          {
+            text: "Sets a decision point tied to the standard's publication.",
+            competencyKey: "judgment.deciding-under-ambiguity",
+            keywords: ["week 6", "if the standard", "decision point", "by week", "الأسبوع 6", "إذا صدر المعيار", "نقطة قرار", "بحلول الأسبوع"],
+          },
+          {
+            text: "Prepares a fallback that keeps dispensing legal from week 10.",
+            competencyKey: "judgment.deciding-under-ambiguity",
+            keywords: ["stopgap", "manual", "fallback", "spreadsheet", "week 10", "حل مؤقت", "يدوي", "خطة بديلة", "جدول بيانات", "الأسبوع 10"],
+          },
+          {
+            text: "Re-plans for the new report format and consent requirement and tells the people affected.",
+            competencyKey: "adaptability.handling-new-information",
+            keywords: ["consent", "report format", "re-plan", "tell the vendor", "الموافقة", "صيغة التقرير", "إعادة التخطيط", "أبلغ المورد"],
+          },
+        ],
+        redFlags: [
+          {
+            text: "Waits for full clarity before doing anything.",
+            competencyKey: "adaptability.comfort-with-ambiguity",
+            keywords: ["wait until it's published", "do nothing until", "ننتظر حتى يصدر", "لا نفعل شيئًا حتى"],
+          },
+          {
+            text: "Treats the informal draft as final.",
+            competencyKey: "adaptability.comfort-with-ambiguity",
+            keywords: ["the draft is final", "it won't change", "المسودة نهائية", "لن تتغير"],
+          },
+          {
+            text: "Assumes the regulator will extend the deadline.",
+            competencyKey: "judgment.deciding-under-ambiguity",
+            keywords: ["they'll give us more time", "surely they'll extend", "سيمنحوننا وقتًا", "سيمددون حتمًا"],
+          },
+          {
+            text: "Carries on unchanged after the standard is published.",
+            competencyKey: "adaptability.handling-new-information",
+            keywords: ["carry on as planned", "no change needed", "نستمر كما خططنا", "لا حاجة إلى التغيير"],
+          },
+        ],
+        embeddedDetail: {
+          description:
+            "The vendor's footnote says about 70% of the work (record storage and audit log) is the same in every draft; only the daily report format is uncertain, so a partial start now is low-risk.",
+          location: "footnote of the vendor's email",
+          keywords: ["70%", "audit log", "storage", "same", "70%", "سجل التدقيق", "حفظ السجلات", "ثابت"],
+        },
+        optionNotes: [
+          {
+            optionId: "a",
+            defensibleBecause: "The only option that can meet week 10 with a built system if the draft holds; most of the work is common anyway.",
+            cost: "Rework cost and 2 to 3 weeks' delay if the standard changes; commits budget on an unofficial document.",
+          },
+          {
+            optionId: "b",
+            defensibleBecause: "Avoids building to the wrong specification; a transition period may well be granted given industry pressure.",
+            cost: "Go-live at week 12 to 14 misses the deadline unless the extension comes; relies on a decision outside your control.",
+          },
+          {
+            optionId: "c",
+            defensibleBecause: "Keeps dispensing legal from week 10 whatever the standard says, and builds the system only once.",
+            cost: "Manual work across 26 pharmacies, error risk in daily reports, and staff time for weeks or months.",
+          },
+          {
+            optionId: "d",
+            defensibleBecause: "Shares cost and interpretation risk, and gives a stronger voice with the regulator.",
+            cost: "Coordination slows decisions; a 2-week delay to start; dependent on other chains' priorities.",
+          },
+        ],
+        probeTargets: ["judgment.deciding-under-ambiguity"],
+        twistTargets: ["adaptability.handling-new-information", "adaptability.comfort-with-ambiguity"],
+      },
+    },
+  },
+
+  // ─────────────────────────────────────────────────────────────────────────
+  {
+    id: "dil-10-lending-your-best-writer",
+    type: "TRADE_OFF_DILEMMA",
+    difficulty: 2,
+    dials: { ambiguity: 2, stakeholders: 3, conflictingConstraints: 3, stakes: 3, timePressure: 3, informationGaps: 2 },
+    targets: ["collaboration.team-orientation", "judgment.trade-off-reasoning"],
+    roleFamilies: [],
+    minutes: 4,
+    storyPhase: "early",
+    content: {
+      en: {
+        title: "Lending your best writer",
+        scenario:
+          "You lead a team of 4 in {{company}}'s marketing department. {{peer}}'s team must submit a large tender by Thursday at 12:00, and their main writer is off sick. {{peer}} asks to borrow {{report1}}, your strongest writer, for Tuesday and Wednesday. Your team's quarterly customer report is due to {{manager}} on Wednesday, and {{report1}} has written most of it. {{manager}} is travelling and hard to reach. {{peer}}'s email and {{manager}}'s note about the report are in the materials.",
+        materials: [
+          {
+            kind: "email",
+            id: "m1",
+            title: "Email from {{peer}}",
+            from: { name: "{{peer}}", role: "{{peer.role}}" },
+            to: [{ name: "{{you}}", role: "{{you.role}}" }],
+            subject: "Could we borrow {{report1}}?",
+            sentAt: "Monday, 17:30",
+            body:
+              "Our tender for a patient-communication contract with the regional health authority is due on Thursday at 12:00. It is worth about 2.4 million a year, and we think our chance is about 40%. Our writer is off sick until next week. Could {{report1}} join us on Tuesday and Wednesday? I know it's a big ask.",
+            footnote: "Tender rules: late submissions are rejected without review.",
+          },
+          {
+            kind: "memo",
+            id: "m2",
+            title: "Note from {{manager}} (last week)",
+            author: { name: "{{manager}}", role: "{{manager.role}}" },
+            body: "Please have the quarterly customer report with me by Wednesday evening. I'll use it at Thursday's 09:00 review with {{client}}, our largest account.",
+          },
+        ],
+        task: {
+          kind: "choice",
+          prompt: "Choose what you will do, and briefly explain why.",
+          options: [
+            { id: "a", label: "Lend {{report1}} for both days, and tell {{manager}} the report will be a day or two late." },
+            { id: "b", label: "Lend {{report1}} for Tuesday only, and finish more of the report yourself in the evenings." },
+            { id: "c", label: "Keep {{report1}} on the report, and offer to review the tender's final draft yourself on Wednesday evening." },
+            { id: "d", label: "Ask {{peer}} to take the request to {{exec}}, who can decide between the two teams' priorities." },
+          ],
+          requireJustification: true,
+        },
+        probe: {
+          prompt: "{{report1}} tells you: 'I'd rather not be lent out. I want to finish the report I started.' What do you say?",
+        },
+        twist: {
+          change: "Wednesday morning: the tender deadline is extended to Sunday, and {{peer}} asks for {{report1}} for a third day.",
+          prompt: "Does your decision change? What do you do?",
+        },
+      },
+      ar: {
+        title: "إعارة أفضل كتّابك",
+        scenario:
+          "تقود فريقًا من 4 أشخاص في إدارة التسويق لدى {{company}}. على فريق {{peer}} تقديم مناقصة كبيرة قبل الساعة 12:00 يوم الخميس، والكاتب الرئيسي في ذلك الفريق في إجازة مرضية. ويصلك طلب من {{peer}} بإعارة {{report1}}، أقوى كتّاب فريقك، يومَي الثلاثاء والأربعاء. والتقرير الفصلي عن العملاء الذي يعدّه فريقك مستحق التسليم إلى {{manager}} يوم الأربعاء، ومعظمه بقلم {{report1}}. والتواصل مع {{manager}} صعب بسبب السفر. تجد رسالة {{peer}} وملاحظة {{manager}} عن التقرير ضمن المواد.",
+        materials: [
+          {
+            kind: "email",
+            id: "m1",
+            title: "رسالة من {{peer}}",
+            from: { name: "{{peer}}", role: "{{peer.role}}" },
+            to: [{ name: "{{you}}", role: "{{you.role}}" }],
+            subject: "هل يمكننا الاستعانة بـ{{report1}}؟",
+            sentAt: "الاثنين، 17:30",
+            body:
+              "موعد تقديم مناقصتنا لعقد التواصل مع المرضى لدى هيئة الصحة الإقليمية هو الساعة 12:00 يوم الخميس. تبلغ قيمة العقد نحو 2.4 مليون سنويًا، ونقدّر فرصتنا بنحو 40%. والكاتب لدينا في إجازة مرضية حتى الأسبوع القادم. هل يمكن الاستعانة بـ{{report1}} يومَي الثلاثاء والأربعاء؟ أعرف أنه طلب كبير.",
+            footnote: "شروط المناقصة: العروض المتأخرة تُرفض دون دراسة.",
+          },
+          {
+            kind: "memo",
+            id: "m2",
+            title: "ملاحظة من {{manager}} (الأسبوع الماضي)",
+            author: { name: "{{manager}}", role: "{{manager.role}}" },
+            body: "أرجو أن يصلني التقرير الفصلي عن العملاء قبل مساء الأربعاء، فسأستخدمه في مراجعة الساعة 09:00 يوم الخميس مع {{client}}، أكبر عملائنا.",
+          },
+        ],
+        task: {
+          kind: "choice",
+          prompt: "اختر ما ستفعله، واشرح سبب اختيارك باختصار.",
+          options: [
+            { id: "a", label: "إعارة {{report1}} يومين كاملين، وإبلاغ {{manager}} بأن التقرير سيتأخر يومًا أو يومين." },
+            { id: "b", label: "إعارة {{report1}} يوم الثلاثاء فقط، وإكمال جزء أكبر من التقرير بنفسك في المساء." },
+            { id: "c", label: "إبقاء {{report1}} على التقرير، وعرض مراجعة المسودة النهائية للمناقصة بنفسك مساء الأربعاء." },
+            { id: "d", label: "الطلب من {{peer}} رفع الطلب إلى {{exec}}، ليكون الحسم في المفاضلة بين أولويات الفريقين بيد {{exec}}." },
+          ],
+          requireJustification: true,
+        },
+        probe: {
+          prompt: "تسمع من {{report1}}: «أفضّل ألا أُعار إلى فريق آخر، فأنا أريد إنهاء التقرير الذي بدأته.» ماذا تقول؟",
+        },
+        twist: {
+          change: "صباح الأربعاء: مُدّد موعد المناقصة إلى يوم الأحد، ويصلك طلب من {{peer}} بإعارة {{report1}} يومًا ثالثًا.",
+          prompt: "هل يتغيّر قرارك؟ وماذا تفعل؟",
+        },
+      },
+    },
+    hidden: {
+      en: {
+        rubric: [
+          {
+            competencyKey: "collaboration.team-orientation",
+            anchors: [
+              "Treats the request purely as a threat to their own team's deliverable, or gives {{report1}} away without thinking about their own commitments.",
+              "Helps or refuses without exploring options or talking to the people affected.",
+              "Weighs the organisation's interest (a 2.4 million tender) against their own commitment, and offers real help on terms they can keep.",
+              "Looks for a solution that serves both teams (split days, reviewing the tender, re-sequencing the report work) and involves {{report1}} in the decision.",
+              "As level 4, and protects the wider relationship: keeps {{manager}} and {{peer}} informed, credits {{report1}} for helping, and suggests how to avoid single points of failure in future.",
+            ],
+          },
+          {
+            competencyKey: "judgment.trade-off-reasoning",
+            anchors: [
+              "Picks an option without naming what it costs.",
+              "Names only one side of the trade-off, the tender or the report.",
+              "Compares the options on what each gains and costs, including {{manager}}'s 09:00 review with {{client}} on Thursday.",
+              "Weighs size and likelihood (a 40% chance at 2.4 million a year against a review with the largest account) and reversibility, and explains why the chosen cost is acceptable.",
+              "As level 4, and reduces the cost of the chosen option (e.g., a shorter report in time for Thursday's review) and states what would change their mind.",
+            ],
+          },
+        ],
+        strongIndicators: [
+          {
+            text: "Notices the report is needed for Thursday's 09:00 review with {{client}}, so 'a day late' is not harmless.",
+            competencyKey: "judgment.trade-off-reasoning",
+            keywords: ["09:00", "thursday's review", "largest account", "before the review", "الساعة 09:00", "مراجعة الخميس", "أكبر عملائنا", "قبل المراجعة"],
+          },
+          {
+            text: "Weighs the tender's value and chance of success.",
+            competencyKey: "judgment.trade-off-reasoning",
+            keywords: ["40%", "2.4 million", "960,000", "expected value", "40%", "2.4 مليون", "960,000", "القيمة المتوقعة"],
+          },
+          {
+            text: "Notes that late tenders are rejected, so the tender deadline is absolute.",
+            competencyKey: "judgment.trade-off-reasoning",
+            keywords: ["rejected", "hard deadline", "late submissions", "تُرفض", "موعد نهائي", "العروض المتأخرة"],
+          },
+          {
+            text: "Finds a way to help both teams.",
+            competencyKey: "collaboration.team-orientation",
+            keywords: ["one day", "review the draft", "split", "both teams", "يوم واحد", "مراجعة المسودة", "تقسيم", "الفريقين"],
+          },
+          {
+            text: "Involves {{report1}} and keeps {{manager}} informed.",
+            competencyKey: "collaboration.team-orientation",
+            keywords: ["talk it through", "involve", "let my manager know", "inform", "أتحدث مع", "أشرك", "أبلغ مديري", "إبلاغ"],
+          },
+        ],
+        redFlags: [
+          {
+            text: "Dismisses the other team's need.",
+            competencyKey: "collaboration.team-orientation",
+            keywords: ["not my problem", "their problem", "ليست مشكلتي", "مشكلتهم"],
+          },
+          {
+            text: "Assumes a late report costs nothing.",
+            competencyKey: "judgment.trade-off-reasoning",
+            keywords: ["a day late won't matter", "it can wait", "no harm", "يوم تأخير لن يضر", "يمكن أن ينتظر", "لا ضرر"],
+          },
+          {
+            text: "Passes the decision upward without a recommendation.",
+            competencyKey: "collaboration.team-orientation",
+            keywords: ["not my call", "let them decide", "ليس قراري", "ليقرروا هم"],
+          },
+        ],
+        embeddedDetail: {
+          description:
+            "{{manager}}'s note says the report is needed for Thursday's 09:00 review with {{client}}, the largest account, so delaying it to Friday is not a harmless slip.",
+          location: "{{manager}}'s note about the report",
+          keywords: ["09:00", "review with", "largest account", "thursday", "الساعة 09:00", "مراجعة", "أكبر عملائنا", "الخميس"],
+        },
+        optionNotes: [
+          {
+            optionId: "a",
+            defensibleBecause: "Gives the tender, worth far more, the best chance; the organisation's interest comes first.",
+            cost: "The report misses {{manager}}'s Thursday 09:00 review with the largest account; {{manager}} is told rather than asked.",
+          },
+          {
+            optionId: "b",
+            defensibleBecause: "Helps the tender on its most important day while protecting the report.",
+            cost: "Half-help may not be enough for {{peer}}; you work late; both pieces of work may suffer.",
+          },
+          {
+            optionId: "c",
+            defensibleBecause: "Keeps your commitment to {{manager}} and still adds senior help to the tender.",
+            cost: "The tender team still lacks a writer for two days; a late review may come too late to fix much.",
+          },
+          {
+            optionId: "d",
+            defensibleBecause: "The trade-off is between two teams' priorities, which {{exec}} is placed to judge.",
+            cost: "Slow with a hard deadline; looks like avoiding a call you could make; adds to {{exec}}'s load.",
+          },
+        ],
+        probeTargets: ["collaboration.team-orientation"],
+        twistTargets: ["judgment.trade-off-reasoning"],
+      },
+    },
+  },
 ];

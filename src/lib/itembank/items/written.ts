@@ -1135,4 +1135,534 @@ export const ITEMS: BankItem[] = [
       },
     },
   },
+  // ───────────────────────────── wr-07 ─────────────────────────────
+  {
+    id: "wr-07-case-for-the-evening-course",
+    type: "WRITTEN_WORK_SAMPLE",
+    difficulty: 4,
+    dials: { ambiguity: 3, stakeholders: 4, conflictingConstraints: 4, stakes: 4, timePressure: 3, informationGaps: 3 },
+    targets: ["communication.persuasion", "communication.clarity-structure"],
+    roleFamilies: [],
+    minutes: 6,
+    storyPhase: "middle",
+    content: {
+      en: {
+        title: "The case for the evening course",
+        scenario:
+          "You coordinate the adult skills programme at {{company}}, a vocational training institute. To save money next year, the board will close one of two programmes: your evening digital-skills course for job seekers (210,000 a year) or the weekend bookkeeping course (180,000 a year). {{manager}} warns you that the board thinks the digital course 'has a drop-out problem'. {{exec}}, who chairs the board, has asked each coordinator for a one-page memo before Monday's vote. The programme figures are in the materials.",
+        materials: [
+          {
+            kind: "table",
+            id: "figures",
+            title: "Programme figures (last year)",
+            caption:
+              "Completion counts only learners who finish within the 12-week term. 31 digital-skills learners paused for job interviews or new jobs and finished in the following term; they are counted as not completed.",
+            columns: [
+              { key: "measure", label: "Measure" },
+              { key: "digital", label: "Digital skills (evening)" },
+              { key: "bookkeeping", label: "Bookkeeping (weekend)" },
+            ],
+            rows: [
+              { measure: "Annual cost", digital: "210,000", bookkeeping: "180,000" },
+              { measure: "Learners enrolled", digital: "160", bookkeeping: "220" },
+              { measure: "Learners not in work when they enrolled", digital: "88%", bookkeeping: "30%" },
+              { measure: "Completed within the 12-week term", digital: "58%", bookkeeping: "81%" },
+              { measure: "Completers who were not working and found work within 6 months", digital: "41%", bookkeeping: "22%" },
+              { measure: "Cost per learner enrolled", digital: "1,313", bookkeeping: "818" },
+            ],
+          },
+        ],
+        task: {
+          kind: "written",
+          prompt: "Write the one-page memo to the board making your case. You may propose an option other than closing one course outright.",
+          written: { format: "memo", placeholder: "To the board…" },
+        },
+        probe: { prompt: "What is the strongest argument against your position, and where in your memo do you deal with it?" },
+        twist: {
+          change: "{{exec}} replies that the board will keep your course only if its cost falls to 150,000 a year.",
+          prompt: "Write a short reply proposing how.",
+        },
+      },
+      ar: {
+        title: "حجة الدورة المسائية",
+        scenario:
+          "تنسّق برنامج مهارات الكبار في {{company}}، وهو معهد للتدريب المهني. ولتوفير النفقات في العام القادم، سيغلق مجلس الإدارة أحد برنامجين: دورتك المسائية في المهارات الرقمية للباحثين عن عمل (210,000 سنويًا)، أو دورة مسك الدفاتر في عطلة نهاية الأسبوع (180,000 سنويًا). وفي تحذير من {{manager}}: المجلس يرى أن في الدورة الرقمية «مشكلة تسرّب». وتطلب رئاسة المجلس، ممثلةً في {{exec}}، من كل منسق مذكرة من صفحة واحدة قبل التصويت يوم الاثنين. تجد أرقام البرنامجين ضمن المواد.",
+        materials: [
+          {
+            kind: "table",
+            id: "figures",
+            title: "أرقام البرنامجين (العام الماضي)",
+            caption:
+              "لا تشمل نسبة الإتمام إلا المتعلمين الذين أنهوا الدورة خلال الفصل البالغ 12 أسبوعًا. وقد توقف 31 متعلمًا في الدورة الرقمية مؤقتًا بسبب مقابلات عمل أو وظائف جديدة، ثم أنهوا الدورة في الفصل التالي، ويُحتسبون ضمن من لم يُتمّوها.",
+            columns: [
+              { key: "measure", label: "المؤشر" },
+              { key: "digital", label: "المهارات الرقمية (مسائية)" },
+              { key: "bookkeeping", label: "مسك الدفاتر (نهاية الأسبوع)" },
+            ],
+            rows: [
+              { measure: "التكلفة السنوية", digital: "210,000", bookkeeping: "180,000" },
+              { measure: "المتعلمون المسجلون", digital: "160", bookkeeping: "220" },
+              { measure: "المتعلمون الذين لم يكونوا يعملون عند التسجيل", digital: "88%", bookkeeping: "30%" },
+              { measure: "أتمّوا الدورة خلال الفصل (12 أسبوعًا)", digital: "58%", bookkeeping: "81%" },
+              { measure: "من أتمّوا الدورة ولم يكونوا يعملون ثم وجدوا عملًا خلال 6 أشهر", digital: "41%", bookkeeping: "22%" },
+              { measure: "التكلفة لكل متعلم مسجل", digital: "1,313", bookkeeping: "818" },
+            ],
+          },
+        ],
+        task: {
+          kind: "written",
+          prompt: "اكتب مذكرة من صفحة واحدة إلى مجلس الإدارة تعرض فيها حجتك. ويمكنك اقتراح خيار غير إغلاق إحدى الدورتين إغلاقًا تامًا.",
+          written: { format: "memo", placeholder: "إلى مجلس الإدارة…" },
+        },
+        probe: { prompt: "ما أقوى حجة ضد موقفك، وأين تعالجها في مذكرتك؟" },
+        twist: {
+          change: "يأتي الرد من {{exec}}: لن يُبقي المجلس على دورتك إلا إذا انخفضت تكلفتها إلى 150,000 سنويًا.",
+          prompt: "اكتب ردًّا قصيرًا تقترح فيه طريقة تحقيق ذلك.",
+        },
+      },
+    },
+    hidden: {
+      en: {
+        rubric: [
+          {
+            competencyKey: "communication.persuasion",
+            anchors: [
+              "Argues from personal belief or attacks the other course, ignoring the board's concern.",
+              "Makes the case with selected figures and leaves the drop-out concern unanswered.",
+              "Leads with the board's goals, answers the drop-out concern directly with evidence (the 31 learners who paused for work), and makes a clear request.",
+              "Anticipates the objections (cost per learner of 1,313 against 818) and answers them honestly, framing the outcomes that matter (job seekers finding work).",
+              "As level 4, and offers the board an option it can accept, e.g., savings that keep both courses or a cheaper blended format, without overstating the case.",
+            ],
+          },
+          {
+            competencyKey: "communication.clarity-structure",
+            anchors: [
+              "A loose set of points with no clear recommendation.",
+              "Has a recommendation, but it is buried, or evidence and argument are mixed without order.",
+              "Opens with the recommendation, follows with reasons and evidence in a logical order, and closes with the decision needed.",
+              "Tight and easy to scan within one page: headline, three supporting points with figures, the counter-argument, the request.",
+              "As level 4, and every number is framed for the reader (what it means for the decision), with nothing that does not serve the argument.",
+            ],
+          },
+        ],
+        strongIndicators: [
+          {
+            text: "Uses the caption: counting the 31 learners who finished later lifts completion to about 77%.",
+            competencyKey: "communication.persuasion",
+            keywords: ["31", "77%", "78%", "paused", "following term", "job interviews", "31", "77%", "توقفوا مؤقتًا", "الفصل التالي", "مقابلات عمل"],
+          },
+          {
+            text: "Frames the course around getting job seekers into work.",
+            competencyKey: "communication.persuasion",
+            keywords: ["41%", "found work", "job seekers", "88%", "41%", "وجدوا عملًا", "الباحثين عن عمل", "88%"],
+          },
+          {
+            text: "Addresses the higher cost per learner honestly.",
+            competencyKey: "communication.persuasion",
+            keywords: ["cost per learner", "1,313", "more expensive", "per job", "التكلفة لكل متعلم", "1,313", "أعلى تكلفة"],
+          },
+          {
+            text: "Offers an alternative option, such as reducing cost or keeping both courses.",
+            competencyKey: "communication.persuasion",
+            keywords: ["blended", "reduce the cost", "both courses", "alternative", "online", "مدمج", "خفض التكلفة", "الدورتين", "بديل", "عن بعد"],
+          },
+          {
+            text: "Opens with the recommendation.",
+            competencyKey: "communication.clarity-structure",
+            keywords: ["i recommend", "recommendation:", "the board should", "in summary", "أوصي", "التوصية:", "أقترح على المجلس", "باختصار"],
+          },
+          {
+            text: "Ends with the specific decision requested.",
+            competencyKey: "communication.clarity-structure",
+            keywords: ["decision", "we ask the board", "on monday", "القرار المطلوب", "نطلب من المجلس", "يوم الاثنين"],
+          },
+        ],
+        redFlags: [
+          {
+            text: "Attacks the other course.",
+            competencyKey: "communication.persuasion",
+            keywords: ["bookkeeping is useless", "waste of money", "nobody needs bookkeeping", "عديمة الفائدة", "هدر للمال"],
+          },
+          {
+            text: "Denies the drop-out concern without evidence.",
+            competencyKey: "communication.persuasion",
+            keywords: ["there is no drop-out problem", "the figures are wrong", "لا توجد مشكلة تسرب", "الأرقام خاطئة"],
+          },
+          {
+            text: "Relies on feeling rather than evidence.",
+            competencyKey: "communication.persuasion",
+            keywords: ["i strongly feel", "it would be a shame", "أشعر بقوة", "سيكون من المؤسف"],
+          },
+          {
+            text: "Never states a clear recommendation or the decision needed.",
+            competencyKey: "communication.clarity-structure",
+            keywords: ["there are many factors to consider", "hard to say which", "هناك عوامل كثيرة", "يصعب القول"],
+          },
+        ],
+        embeddedDetail: {
+          description:
+            "The table caption says 31 digital-skills learners paused for job interviews or new jobs and finished the next term but count as not completed; including them, completion is about 77% (124 of 160), close to the bookkeeping course.",
+          location: "caption of the programme figures table",
+          keywords: ["31", "paused", "following term", "77%", "توقفوا مؤقتًا", "الفصل التالي", "31"],
+        },
+        probeTargets: ["communication.persuasion"],
+        twistTargets: ["communication.persuasion", "communication.clarity-structure"],
+      },
+    },
+  },
+  // ───────────────────────────── wr-08 ─────────────────────────────
+  {
+    id: "wr-08-comments-on-your-draft",
+    type: "WRITTEN_WORK_SAMPLE",
+    difficulty: 3,
+    dials: { ambiguity: 3, stakeholders: 3, conflictingConstraints: 3, stakes: 3, timePressure: 3, informationGaps: 2 },
+    targets: ["collaboration.taking-feedback", "communication.written-communication"],
+    roleFamilies: [],
+    minutes: 6,
+    storyPhase: "late",
+    content: {
+      en: {
+        title: "The comments on your draft",
+        scenario:
+          "You have drafted a proposal to change the shift pattern in {{company}}'s customer contact centre from three 8-hour shifts to a mix of 8- and 10-hour shifts, to cover the evening peak. {{manager}} has returned the draft with blunt written comments. Some seem right to you; others you disagree with. {{manager}} wants your response by tomorrow, and the proposal goes to {{exec}} on Thursday. The comments and your draft's key figures are in the materials.",
+        materials: [
+          {
+            kind: "memo",
+            id: "comments",
+            title: "Comments on your draft",
+            author: { name: "{{manager}}", role: "{{manager.role}}" },
+            body:
+              "1. The savings figure is wrong: you used last year's overtime rate. At this year's rate the saving is 51,000, not 64,000.\n2. Nobody from the evening shift was consulted.\n3. Ten-hour shifts will be hard for staff with childcare.\n4. It's 9 pages. {{exec}} won't read past page 2.\n5. Honestly, I'm not convinced this is worth the disruption.\n\nPS: {{exec}} has asked me to cut overtime by 10% this year.",
+          },
+          {
+            kind: "table",
+            id: "figures",
+            title: "Key figures in your draft",
+            columns: [
+              { key: "measure", label: "Measure" },
+              { key: "current", label: "Current" },
+              { key: "proposed", label: "Proposed" },
+            ],
+            rows: [
+              { measure: "Calls answered within 60 seconds, 17:00–21:00", current: "61%", proposed: "85% (forecast)" },
+              { measure: "Overtime hours per month", current: "1,150", proposed: "990 (−14%)" },
+              { measure: "Annual saving", current: "—", proposed: "64,000" },
+              { measure: "Staff consulted", current: "—", proposed: "Day shift: 18 of 22; evening shift: 0 of 14" },
+              { measure: "Staff in favour (survey)", current: "—", proposed: "70% of those surveyed" },
+            ],
+          },
+        ],
+        task: {
+          kind: "written",
+          prompt: "Write your reply to {{manager}}: what you will change, what you will not change, and why.",
+          written: { format: "email", placeholder: "Hi {{manager}}…" },
+        },
+        probe: { prompt: "Which comment was hardest to accept, and why?" },
+        twist: {
+          change: "{{manager}} replies: 'Fine. But if the evening shift doesn't support it, I won't take it to {{exec}}.'",
+          prompt: "Write the short message you send to the evening shift's team leaders.",
+        },
+      },
+      ar: {
+        title: "الملاحظات على مسودتك",
+        scenario:
+          "أعددت مسودة مقترح لتغيير نظام المناوبات في مركز التواصل مع العملاء لدى {{company}}، من ثلاث مناوبات مدة كل منها 8 ساعات إلى مزيج من مناوبات بثماني ساعات وأخرى بعشر، لتغطية ذروة المساء. وعادت إليك المسودة من {{manager}} مع ملاحظات مكتوبة صريحة إلى حد الحدة، يبدو لك بعضها صحيحًا وتختلف مع بعضها الآخر. والمطلوب ردك قبل الغد، فالمقترح سيُعرض على {{exec}} يوم الخميس. تجد الملاحظات وأهم أرقام مسودتك ضمن المواد.",
+        materials: [
+          {
+            kind: "memo",
+            id: "comments",
+            title: "ملاحظات على مسودتك",
+            author: { name: "{{manager}}", role: "{{manager.role}}" },
+            body:
+              "1. رقم الوفر خاطئ: استخدمت أجر العمل الإضافي للعام الماضي. وبأجر هذا العام يبلغ الوفر 51,000 لا 64,000.\n2. لم يُستشر أحد من المناوبة المسائية.\n3. المناوبات ذات الساعات العشر ستكون صعبة على الموظفين الذين يرعون أطفالًا.\n4. المقترح في 9 صفحات، وما بعد الصفحة الثانية لن يُقرأ عند {{exec}}.\n5. بصراحة، لم يقنعني أن الأمر يستحق كل هذا الإرباك.\n\nملاحظة: وصلني طلب من {{exec}} بخفض العمل الإضافي بنسبة 10% هذا العام.",
+          },
+          {
+            kind: "table",
+            id: "figures",
+            title: "أهم الأرقام في مسودتك",
+            columns: [
+              { key: "measure", label: "المؤشر" },
+              { key: "current", label: "الوضع الحالي" },
+              { key: "proposed", label: "المقترح" },
+            ],
+            rows: [
+              { measure: "المكالمات التي يُرد عليها خلال 60 ثانية، 17:00–21:00", current: "61%", proposed: "85% (متوقع)" },
+              { measure: "ساعات العمل الإضافي شهريًا", current: "1,150", proposed: "990 (−14%)" },
+              { measure: "الوفر السنوي", current: "—", proposed: "64,000" },
+              { measure: "الموظفون الذين استُشيروا", current: "—", proposed: "المناوبة الصباحية: 18 من 22؛ المناوبة المسائية: 0 من 14" },
+              { measure: "المؤيدون (استبيان)", current: "—", proposed: "70% ممن شملهم الاستبيان" },
+            ],
+          },
+        ],
+        task: {
+          kind: "written",
+          prompt: "اكتب ردك على {{manager}}: ما الذي ستغيّره، وما الذي لن تغيّره، ولماذا.",
+          written: { format: "email", placeholder: "مرحبًا {{manager}}…" },
+        },
+        probe: { prompt: "أي الملاحظات كان تقبّلها الأصعب عليك، ولماذا؟" },
+        twist: {
+          change: "يأتي الرد من {{manager}}: «حسنًا. لكن إن لم تؤيد المناوبة المسائية المقترح، فلن أعرضه على {{exec}}.»",
+          prompt: "اكتب الرسالة القصيرة التي ترسلها إلى قادة فرق المناوبة المسائية.",
+        },
+      },
+    },
+    hidden: {
+      en: {
+        rubric: [
+          {
+            competencyKey: "collaboration.taking-feedback",
+            anchors: [
+              "Defends the draft against every comment, or accepts every comment without thought and drops the proposal.",
+              "Accepts the comments politely but commits to no specific change, or argues the uncomfortable ones away.",
+              "Accepts the valid points (the overtime rate, no evening-shift consultation, the length) with specific changes, and explains disagreement on others respectfully, with evidence.",
+              "Separates fact from opinion: corrects the figure, takes the childcare concern seriously by proposing how to test it, and answers comment 5 by asking what would convince {{manager}}.",
+              "As level 4, and thanks {{manager}} for the challenge, links the proposal to {{manager}}'s own goal (the 10% overtime cut), and invites a further review.",
+            ],
+          },
+          {
+            competencyKey: "communication.written-communication",
+            anchors: [
+              "A defensive or rambling reply with no clear structure.",
+              "Covers the points, but the reader has to hunt for what will change and when.",
+              "Clear and well organised: responds to each comment, says what changes and by when, in a professional tone.",
+              "Leads with the main changes and the revised figure, answers each comment concisely, and stays constructive where disagreeing.",
+              "As level 4, and is easy to act on, e.g., promises a revised two-page summary by a specific time before Thursday.",
+            ],
+          },
+        ],
+        strongIndicators: [
+          {
+            text: "Accepts the corrected saving of 51,000.",
+            competencyKey: "collaboration.taking-feedback",
+            keywords: ["51,000", "you're right", "overtime rate", "corrected", "this year's rate", "51,000", "معك حق", "أجر العمل الإضافي", "صححت", "أجر هذا العام"],
+          },
+          {
+            text: "Commits to consulting the evening shift, noting the survey covered only the day shift.",
+            competencyKey: "collaboration.taking-feedback",
+            keywords: ["evening shift", "consult", "0 of 14", "only the day shift", "المناوبة المسائية", "استشارة", "0 من 14", "المناوبة الصباحية فقط"],
+          },
+          {
+            text: "Links the proposal to the 10% overtime target: it cuts overtime by 14%.",
+            competencyKey: "collaboration.taking-feedback",
+            keywords: ["10%", "14%", "overtime target", "cut overtime", "10%", "14%", "خفض العمل الإضافي", "هدف"],
+          },
+          {
+            text: "Disagrees respectfully, with evidence or a proposed test.",
+            competencyKey: "collaboration.taking-feedback",
+            keywords: ["i see it differently", "the data shows", "propose to test", "trial", "أرى الأمر بشكل مختلف", "تُظهر البيانات", "أقترح أن نختبر", "تجربة"],
+          },
+          {
+            text: "Promises a shorter version for {{exec}}.",
+            competencyKey: "communication.written-communication",
+            keywords: ["two pages", "two-page", "summary", "shorter", "صفحتين", "ملخص", "أقصر"],
+          },
+          {
+            text: "Says what will change and by when.",
+            competencyKey: "communication.written-communication",
+            keywords: ["by tomorrow", "by wednesday", "revised draft", "before thursday", "قبل الغد", "قبل الأربعاء", "مسودة معدلة", "قبل الخميس"],
+          },
+        ],
+        redFlags: [
+          {
+            text: "Replies defensively.",
+            competencyKey: "collaboration.taking-feedback",
+            keywords: ["you're wrong", "you didn't read", "that's not fair", "أنت مخطئ", "لم تقرأ", "هذا غير منصف"],
+          },
+          {
+            text: "Dismisses the childcare concern.",
+            competencyKey: "collaboration.taking-feedback",
+            keywords: ["not our problem", "they'll adapt", "ليست مشكلتنا", "سيتأقلمون"],
+          },
+          {
+            text: "Abandons the proposal rather than improving it.",
+            competencyKey: "collaboration.taking-feedback",
+            keywords: ["i'll drop the proposal", "forget it", "withdraw it", "سأتخلى عن المقترح", "انسَ الأمر", "أسحب المقترح"],
+          },
+          {
+            text: "Writes a defensive reply that never says what will change.",
+            competencyKey: "communication.written-communication",
+            keywords: ["as i explained in the draft", "if you had read", "كما شرحت في المسودة", "لو قرأت"],
+          },
+        ],
+        embeddedDetail: {
+          description:
+            "{{manager}}'s PS reveals the goal of cutting overtime by 10%, which the proposal exceeds (−14%); the figures table shows the 70% support came only from the day shift, since none of the 14 evening staff were consulted.",
+          location: "PS of {{manager}}'s comments; 'Staff consulted' row of the figures table",
+          keywords: ["10%", "14%", "0 of 14", "evening shift", "10%", "14%", "0 من 14", "المناوبة المسائية"],
+        },
+        probeTargets: ["collaboration.taking-feedback"],
+        twistTargets: ["communication.written-communication"],
+      },
+    },
+  },
+  // ───────────────────────────── wr-09 ─────────────────────────────
+  {
+    id: "wr-09-the-plan-has-changed",
+    type: "WRITTEN_WORK_SAMPLE",
+    difficulty: 2,
+    dials: { ambiguity: 2, stakeholders: 3, conflictingConstraints: 2, stakes: 2, timePressure: 3, informationGaps: 2 },
+    targets: ["adaptability.handling-new-information", "leadership.setting-direction"],
+    roleFamilies: [],
+    minutes: 6,
+    storyPhase: "early",
+    content: {
+      en: {
+        title: "The plan has changed",
+        scenario:
+          "You lead the 9-person team at {{company}}'s largest store. Last week you told the team the store refit would happen over 3 nights next month with the store open as normal, and you gave each person a task. Today {{manager}} told you that head office has changed the plan. Several team members have already booked leave around the old dates. You need to tell the team today. {{manager}}'s email and your announcement from last week are in the materials.",
+        materials: [
+          {
+            kind: "memo",
+            id: "announcement",
+            title: "Your announcement last week",
+            author: { name: "{{you}}", role: "{{you.role}}" },
+            body:
+              "The refit happens over 3 nights, the 12th to the 14th of next month, and the store stays open as normal. Night tasks: {{report1}} leads stock moves; {{report2}} handles the new shelf labels; everyone else works one night each, rota to follow. Please avoid booking leave from the 12th to the 15th.",
+          },
+          {
+            kind: "email",
+            id: "newplan",
+            title: "Email from {{manager}}",
+            from: { name: "{{manager}}", role: "{{manager.role}}" },
+            to: [{ name: "{{you}}", role: "{{you.role}}" }],
+            subject: "Refit: new plan",
+            sentAt: "Today, 10:05",
+            body:
+              "Head office has changed the refit plan. The store will now close for 5 days, from the 3rd to the 7th of next month. During the closure, staff can either work shifts at the North or Harbour branches or take paid leave. The store's sales target for next month is reduced by 20%. Staff must tell us their choice by Thursday.",
+            footnote: "Staff who work at another branch receive a daily travel allowance. Anyone who has not chosen by Thursday will be given paid leave automatically.",
+          },
+        ],
+        task: {
+          kind: "written",
+          prompt: "Write the message to your team explaining the change and what happens next.",
+          written: { format: "message", placeholder: "Hi team…" },
+        },
+        probe: { prompt: "Which part of your original plan did you keep, and why?" },
+        twist: {
+          change: "The next day, {{manager}} tells you the Harbour branch can take only 3 of your staff, not the 6 you expected.",
+          prompt: "Write the short follow-up message to your team.",
+        },
+      },
+      ar: {
+        title: "تغيّرت الخطة",
+        scenario:
+          "تقود الفريق المؤلف من 9 أشخاص في أكبر متاجر {{company}}. في الأسبوع الماضي أبلغت الفريق أن تجديد المتجر سيجري على مدى 3 ليالٍ في الشهر القادم مع بقاء المتجر مفتوحًا كالمعتاد، ووزعت المهام على الجميع. واليوم علمت من {{manager}} أن الإدارة العامة غيّرت الخطة. وكان عدد من أعضاء الفريق قد حجزوا إجازاتهم حول المواعيد السابقة. وعليك أن تبلغ الفريق اليوم. تجد رسالة {{manager}} وإعلانك في الأسبوع الماضي ضمن المواد.",
+        materials: [
+          {
+            kind: "memo",
+            id: "announcement",
+            title: "إعلانك في الأسبوع الماضي",
+            author: { name: "{{you}}", role: "{{you.role}}" },
+            body:
+              "يجري التجديد على مدى 3 ليالٍ، من 12 إلى 14 الشهر القادم، ويبقى المتجر مفتوحًا كالمعتاد. المهام الليلية: نقل المخزون بقيادة {{report1}}، وملصقات الرفوف الجديدة من مسؤولية {{report2}}، ويعمل كل من البقية ليلة واحدة وفق جدول سيصلكم لاحقًا. يرجى تجنب حجز الإجازات من 12 إلى 15.",
+          },
+          {
+            kind: "email",
+            id: "newplan",
+            title: "رسالة من {{manager}}",
+            from: { name: "{{manager}}", role: "{{manager.role}}" },
+            to: [{ name: "{{you}}", role: "{{you.role}}" }],
+            subject: "التجديد: الخطة الجديدة",
+            sentAt: "اليوم، 10:05",
+            body:
+              "غيّرت الإدارة العامة خطة التجديد. سيُغلق المتجر الآن 5 أيام، من 3 إلى 7 الشهر القادم. وفي أثناء الإغلاق يمكن للموظفين إما العمل في مناوبات بفرعَي الشمال والميناء، وإما أخذ إجازة مدفوعة. وقد خُفّض هدف المبيعات للمتجر في الشهر القادم بنسبة 20%. وعلى الموظفين إبلاغنا باختيارهم قبل الخميس.",
+            footnote: "يحصل من يعمل في فرع آخر على بدل تنقل يومي. ومن لم يحدد اختياره قبل الخميس تُمنح له إجازة مدفوعة تلقائيًا.",
+          },
+        ],
+        task: {
+          kind: "written",
+          prompt: "اكتب الرسالة إلى فريقك لتشرح التغيير وما سيحدث بعد ذلك.",
+          written: { format: "message", placeholder: "مرحبًا بالجميع…" },
+        },
+        probe: { prompt: "أي جزء من خطتك الأصلية أبقيت عليه، ولماذا؟" },
+        twist: {
+          change: "في اليوم التالي تعلم من {{manager}} أن فرع الميناء لا يستوعب إلا 3 من موظفيك، لا 6 كما كنت تتوقع.",
+          prompt: "اكتب رسالة المتابعة القصيرة إلى فريقك.",
+        },
+      },
+    },
+    hidden: {
+      en: {
+        rubric: [
+          {
+            competencyKey: "adaptability.handling-new-information",
+            anchors: [
+              "Repeats last week's plan, or presents the change as if nothing else needs to move.",
+              "Announces the new plan but leaves the old instructions (night tasks, leave dates) hanging, so people cannot tell which still apply.",
+              "Clearly replaces what changed (dates, closure, tasks), keeps what still holds, and speaks to those who booked leave around the old dates.",
+              "Works through the knock-on effects (leave already booked, choices due Thursday, the automatic leave if no choice, the lower target) and gives people what they need to decide.",
+              "As level 4, and is open about what is still uncertain (e.g., how many each branch can take) and when the team will hear more.",
+            ],
+          },
+          {
+            competencyKey: "leadership.setting-direction",
+            anchors: [
+              "Passes on the change with no reasoning or sense of what matters now.",
+              "Explains the change but gives no clear priorities for the coming weeks.",
+              "Explains why the plan changed as far as known, what the new goal is, and what each person needs to do next.",
+              "Connects the change to what matters for the team (a smooth reopening, fair choices, the reduced target) and sets clear priorities and deadlines.",
+              "As level 4, and keeps the team engaged: invites questions, offers a short meeting and acknowledges the disruption to people's plans.",
+            ],
+          },
+        ],
+        strongIndicators: [
+          {
+            text: "Highlights the Thursday deadline and the automatic leave if no choice is made.",
+            competencyKey: "adaptability.handling-new-information",
+            keywords: ["thursday", "by thursday", "automatically", "if you don't choose", "الخميس", "قبل الخميس", "تلقائيًا", "إن لم تحددوا"],
+          },
+          {
+            text: "Mentions the travel allowance for working at another branch.",
+            competencyKey: "adaptability.handling-new-information",
+            keywords: ["travel allowance", "allowance", "بدل تنقل", "بدل"],
+          },
+          {
+            text: "Speaks to those who booked leave around the old dates.",
+            competencyKey: "adaptability.handling-new-information",
+            keywords: ["already booked", "leave you booked", "old dates", "12th to the 15th", "الإجازات المحجوزة", "حجزتم", "المواعيد السابقة", "من 12 إلى 15"],
+          },
+          {
+            text: "Clearly cancels the old night tasks.",
+            competencyKey: "adaptability.handling-new-information",
+            keywords: ["no longer", "cancelled", "replaces", "instead of", "لم تعد", "أُلغيت", "تحل محل", "بدلًا من"],
+          },
+          {
+            text: "Explains the reason and sets priorities.",
+            competencyKey: "leadership.setting-direction",
+            keywords: ["head office", "why", "our priority", "what matters", "reopening", "الإدارة العامة", "السبب", "أولويتنا", "الأهم", "إعادة الافتتاح"],
+          },
+          {
+            text: "Invites questions or a short meeting.",
+            competencyKey: "leadership.setting-direction",
+            keywords: ["questions", "meet", "talk to me", "huddle", "أسئلة", "اجتماع", "تحدثوا معي", "لقاء قصير"],
+          },
+        ],
+        redFlags: [
+          {
+            text: "Blames head office or distances themselves from the change.",
+            competencyKey: "leadership.setting-direction",
+            keywords: ["head office messed up", "not my decision", "don't blame me", "أخطأت الإدارة العامة", "ليس قراري", "لا تلوموني"],
+          },
+          {
+            text: "Assigns branch shifts without offering the choice.",
+            competencyKey: "leadership.setting-direction",
+            keywords: ["everyone will work at", "you must work", "الجميع سيعمل في", "يجب أن تعملوا"],
+          },
+          {
+            text: "Leaves the team unsure what is happening.",
+            competencyKey: "adaptability.handling-new-information",
+            keywords: ["no idea what's happening", "we'll see what happens", "لا أعرف ما الذي يحدث", "سنرى ما سيحدث"],
+          },
+        ],
+        embeddedDetail: {
+          description:
+            "{{manager}}'s footnote says staff working at another branch get a travel allowance, and anyone who has not chosen by Thursday is given paid leave automatically: both shape what people should decide.",
+          location: "footnote of {{manager}}'s email",
+          keywords: ["travel allowance", "automatically", "thursday", "بدل تنقل", "تلقائيًا", "الخميس"],
+        },
+        probeTargets: ["adaptability.handling-new-information"],
+        twistTargets: ["adaptability.handling-new-information", "leadership.setting-direction"],
+      },
+    },
+  },
 ];
