@@ -1710,7 +1710,14 @@
       "start": "Start practising",
       "choose": "Choose another skill",
       "fallbackSkill": "Decision-making",
-      "now": "Where you are now"
+      "now": "Where you are now",
+      "why": {
+        "start": "Why today: the biggest gap toward your goal.",
+        "rested": "Why today: rested for {days} days, ready to practise again.",
+        "consolidate": "Why today: last time you reached {level}; one more to make it stick.",
+        "retry": "Why today: last attempt reached {level}; try again while it's fresh.",
+        "biggestGap": "Why today: it matters most for your goal."
+      }
     },
     "focus": {
       "title": "Your current focus",

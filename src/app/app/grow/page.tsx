@@ -10,6 +10,7 @@ import { withTenant } from "@/lib/db";
 import { getGrowProfile, growSessions } from "@/lib/grow/profile";
 import { TRACKS } from "@/lib/grow/tracks";
 import { DOMAINS } from "@/lib/framework/data";
+import { nextStep } from "@/lib/grow/next-step";
 import { isLocale } from "@/i18n/config";
 import type { ReportContent } from "@/lib/hire/report-types";
 import { startBaselineAction } from "@/app/actions/grow";
@@ -43,7 +44,16 @@ export default async function GrowHome() {
   const enrollments = await withTenant({ userId: viewer.user.id }, (tx) => tx.trackEnrollment.findMany({ where: { userId: viewer.user.id }, include: { track: true } }));
   const daysSince = latest?.report ? daysAgo(latest.report.createdAt) : null;
   const nameOf = (k: string) => DOMAINS.flatMap((d) => d.subSkills).find((s) => s.key === k)?.name[locale] ?? k;
-  const today = plan[0]?.skillKey ?? "judgment.trade-off-reasoning";
+  // Today's focus is chosen from the plan by spacing and recent results (src/lib/grow/next-step.ts).
+  const practice = await withTenant({ userId: viewer.user.id }, (tx) =>
+    tx.practiceSession.findMany({ where: { userId: viewer.user.id, completedAt: { not: null } }, orderBy: { completedAt: "desc" }, take: 40, select: { competencyKeys: true, completedAt: true, feedback: true } }),
+  );
+  const next = nextStep(
+    plan.map((p) => p.skillKey),
+    practice.map((p) => ({ skillKeys: p.competencyKeys, completedAt: p.completedAt, scores: ((p.feedback as { scores?: { competencyKey: string; level: number }[] } | null)?.scores ?? []) })),
+  );
+  const today = next?.skillKey ?? plan[0]?.skillKey ?? "judgment.trade-off-reasoning";
+  const tl = await getTranslations("levels");
 
   // Every skill's estimate from the latest report, for the ranges below.
   const skills = new Map((report?.domains ?? []).flatMap((d) => d.subSkills.map((x) => [x.key, x] as const)));
@@ -89,6 +99,16 @@ export default async function GrowHome() {
             <h2 id="today-h" className="font-sans text-sm font-normal tracking-normal text-hero-secondary">{t("today.title")}</h2>
             <p className="mt-2 font-display text-[2rem] font-semibold leading-tight">{report ? nameOf(today) : t("today.fallbackSkill")}</p>
             <p className="mt-2 max-w-xl text-[15px] leading-relaxed text-hero-secondary">{report ? t("today.body", { skill: nameOf(today) }) : t("today.bodyNoReport")}</p>
+            {report && next ? (
+              <p className="mt-3 inline-flex items-center gap-2 rounded-[8px] px-2.5 py-1 text-[13px] text-hero-foreground shadow-[inset_0_0_0_1px_rgb(242_240_235/0.2)]">
+                <span className="size-1.5 rounded-full bg-saffron" aria-hidden />
+                {next.reason.key === "rested"
+                  ? t("today.why.rested", { days: next.reason.days })
+                  : next.reason.key === "retry" || next.reason.key === "consolidate"
+                    ? t(`today.why.${next.reason.key}`, { level: tl(String(Math.round(next.reason.level))) })
+                    : t(`today.why.${next.reason.key}`)}
+              </p>
+            ) : null}
             {todaySkill ? (
               <div className="mt-6 max-w-md">
                 <div className="flex items-baseline justify-between text-sm">
