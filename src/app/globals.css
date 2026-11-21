@@ -537,3 +537,14 @@ html[data-r-motion] [data-narrow]:not([data-in]) .r-fade { opacity: 0; }
 [data-narrow] .r-band > i,
 [data-narrow] .r-at { transition: transform 900ms var(--ease-enter) calc(160ms + var(--i, 0) * 170ms); }
 [data-narrow] .r-fade { transition: opacity 500ms var(--ease-move) calc(700ms + var(--i, 0) * 170ms); }
+
+/* The phone deck (src/components/candidate/phone-deck.tsx). */
+@keyframes deck-in { from { opacity: 0; transform: translateY(28px); } }
+@keyframes deck-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(5px); } }
+.animate-deck-in { animation: deck-in 0.55s var(--ease-out) both; }
+.deck { -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+.deck::-webkit-scrollbar { display: none; }
+.deck-hint svg { animation: deck-bob 1.8s var(--ease-move) infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .animate-deck-in, .deck-hint svg { animation: none; }
+}

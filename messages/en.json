@@ -1193,6 +1193,13 @@
       "doneBody": "In the real assessment, your answer would shape the next scene. Nothing here was scored or saved.",
       "again": "Try it again",
       "close": "Back to the start"
+    },
+    "deck": {
+      "scene": "{chapter}",
+      "toMaterials": "{count, plural, one {Swipe up for the document} other {Swipe up for the # documents}}",
+      "toTask": "Swipe up for your task",
+      "next": "Swipe up for the next document",
+      "document": "Document {n} of {total}"
     }
   },
   "assessments": {

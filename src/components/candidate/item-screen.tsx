@@ -20,6 +20,21 @@ import { RoleplayTask } from "./tasks/roleplay-task";
 import { ChainTask } from "./tasks/chain-task";
 import { ForcedChoiceTask } from "./tasks/forced-choice-task";
 import { cn } from "@/lib/utils";
+import { PhoneDeck } from "./phone-deck";
+
+/** Phones get the vertical deck; the query is read on the client only. */
+const PHONE = "(max-width: 767px)";
+function usePhone() {
+  return React.useSyncExternalStore(
+    (cb) => {
+      const m = window.matchMedia(PHONE);
+      m.addEventListener("change", cb);
+      return () => m.removeEventListener("change", cb);
+    },
+    () => window.matchMedia(PHONE).matches,
+    () => false,
+  );
+}
 
 type ItemView = Extract<CandidateView, { view: "item" }>;
 
@@ -62,6 +77,7 @@ function ItemStage({ v, token, submit, sendTurn }: ItemScreenProps) {
   const [timeUp, setTimeUp] = React.useState(false);
   const [showScenario, setShowScenario] = React.useState(stage === "MAIN");
   const outboxKey = `aalim:outbox:${token}`;
+  const phone = usePhone();
 
   // Move focus to the scene title when a new stage appears.
   React.useEffect(() => {
@@ -134,6 +150,27 @@ function ItemStage({ v, token, submit, sendTurn }: ItemScreenProps) {
 
   const wide = stage === "MAIN" && WIDE_TASKS.has(kind);
   const label = stage === "MAIN" ? t("yourTask") : stage === "PROBE" ? t("followUp") : t("changed");
+  const submitLabel = stage === "MAIN" && content.probe ? t("continue") : t("submit");
+
+  if (phone) {
+    return (
+      <PhoneDeck
+        containerRef={containerRef}
+        v={v}
+        label={label}
+        task={task}
+        value={value}
+        submitting={submitting}
+        error={error}
+        online={online}
+        deadline={deadline}
+        onExpire={() => setTimeUp(true)}
+        onSubmit={doSubmit}
+        submitLabel={submitLabel}
+        timeUpNote={timeUp && kind === "inbox" ? <Alert tone="info" className="mt-4">{t("timeUp")}</Alert> : null}
+      />
+    );
+  }
 
   const scenario = (
     <section aria-labelledby="scenario-title" className="flex min-w-0 flex-col gap-5">
@@ -203,7 +240,7 @@ function ItemStage({ v, token, submit, sendTurn }: ItemScreenProps) {
             <div className="flex items-center justify-between gap-4 border-t border-border pt-5">
               <p className="text-xs text-tertiary">{value ? t("readyHint") : t("incompleteHint")}</p>
               <Button size="lg" onClick={doSubmit} disabled={!value} loading={submitting}>
-                {stage === "MAIN" && content.probe ? t("continue") : t("submit")}
+                {submitLabel}
               </Button>
             </div>
           </section>
