@@ -132,3 +132,19 @@ Each of these has unit tests. *(Product)*
 - **Answers:** drafts autosave on the device, and submissions go through an offline outbox with backoff.
 - **Repo setup:** the root TypeScript, ESLint and Prettier configs skip `mobile/`.
 - **Testing so far:** the web build was walked through every task kind in both languages and themes. The native gestures, haptics, blur, deep links and screen readers still need testing on real devices. *(Mobile)*
+
+**D-056: Fun, without gamifying judgement.** The owner asked for the product to be fun to use. The rule we follow: celebrate what people *do*, never how an answer scored, and keep hiring free of points, leaderboards and fake urgency.
+- **Grow** (`src/lib/grow/momentum.ts`):
+  - A weekly ring, with the goal set by the hours chosen at onboarding: ink, with the brand's vermilion dot at its tip.
+  - A streak counted in weeks, not days, so a missed day never breaks it.
+  - Eight dated, private milestones, each earned by an action: a first practice, a reflection, a retry that beats the first attempt, a week goal, Advanced in practice, three weeks in a row, every plan skill, ten sessions.
+  - Every fresh practice result gets a moment: a light one for an ordinary session, an ink card with a small burst for a level gained, a milestone or a week goal.
+- **Candidates** (`src/components/candidate/delight.tsx`):
+  - A brief "Sent" after each answer. It never delays the next scene; transitions stay at p90 of about 0.4 s.
+  - A stamp for the chapter just finished, with the decisions so far revealed one by one.
+  - A finish where the bands narrow into the dot with a burst and the recap counts up.
+  - Nothing in these moments hints at how an answer went.
+- **Hiring teams:** "All caught up" when nothing is waiting, and a recorded decision lands like a stamp.
+- **The native app** gets the same candidate moments, with haptics.
+
+All motion is CSS or Reanimated, uses springs and short eases, and goes still under reduced motion. *(UX)*
