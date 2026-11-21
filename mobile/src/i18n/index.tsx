@@ -8,7 +8,6 @@ import arMessages from "../../../messages/ar.json";
 import { kv } from "../lib/storage";
 import { formatMessage, type Params } from "./format";
 import { mobileAr, mobileEn } from "./mobile";
-import { sharedFallbackAr, sharedFallbackEn } from "./fallback";
 
 export type Locale = "en" | "ar";
 export type Dir = "ltr" | "rtl";
@@ -19,9 +18,6 @@ const MESSAGES: Record<Locale, Tree> = {
   en: { ...(enMessages as unknown as Tree), mobile: mobileEn as unknown as Tree },
   ar: { ...(arMessages as unknown as Tree), mobile: mobileAr as unknown as Tree },
 };
-
-/** Shared keys newer than this branch's messages/*.json (see fallback.ts). */
-const FALLBACK: Record<Locale, Tree> = { en: sharedFallbackEn as unknown as Tree, ar: sharedFallbackAr as unknown as Tree };
 
 const LOCALE_KEY = "aalim:locale";
 
@@ -130,7 +126,7 @@ export function LocaleProvider({ children }: { children: React.ReactNode }) {
         if (opts?.persist !== false) void kv.set(LOCALE_KEY, l);
       },
       t: (key, params) => {
-        const msg = lookup(tree, key) ?? lookup(FALLBACK[locale], key) ?? lookup(MESSAGES.en, key) ?? lookup(FALLBACK.en, key);
+        const msg = lookup(tree, key) ?? lookup(MESSAGES.en, key);
         if (msg === undefined) return key;
         return params ? formatMessage(msg, params, locale, fmtNumber) : msg.includes("{") ? formatMessage(msg, {}, locale, fmtNumber) : msg;
       },
