@@ -1,44 +1,52 @@
 import { cn } from "@/lib/utils";
-import { ARABIC, LATIN } from "./wordmark-paths";
+import { ARABIC, LATIN, MARK } from "./wordmark-paths";
 
 /**
- * The Aalim mark: the narrowing range. A scale, the band of plausible levels
- * in saffron (the evidence colour) and the estimate. See /brand.
+ * The Aalim mark ("Range"): bands of uncertainty narrowing, step by step, into
+ * one point, the estimate. Stacked, they read as an A. The dot is the only
+ * colour: vermilion, the signal. See /brand and scripts/brand-assets.mts.
  */
-export function LogoMark({ className, reverse = false }: { className?: string; reverse?: boolean }) {
-  // Reversed (on ink): the square turns light and the scale turns ink, as in public/brand/logo-reverse.svg.
-  const square = reverse ? "var(--ink-foreground)" : "var(--ink)";
-  const track = reverse ? "var(--ink)" : "var(--ink-foreground)";
+export function LogoMark({ className, mono = false }: { className?: string; mono?: boolean; reverse?: boolean }) {
   return (
-    <svg viewBox="0 0 32 32" className={cn("size-7 shrink-0", className)} aria-hidden>
-      <rect width="32" height="32" rx="9" fill={square} />
-      <rect x="5" y="15.2" width="22" height="1.6" rx="0.8" fill={track} opacity="0.38" />
-      <rect x="11.5" y="12.4" width="13" height="7.2" rx="3.6" fill="var(--saffron)" />
-      <circle cx="18.6" cy="16" r="1.9" fill={reverse ? "var(--ink-foreground)" : "var(--ink)"} />
+    <svg viewBox="0 0 64 64" className={cn("size-7 shrink-0", className)} aria-hidden>
+      {MARK.bars.map((b) => (
+        <rect key={b.y} x={b.x} y={b.y} width={b.w} height={MARK.h} rx={MARK.h / 2} fill="currentColor" />
+      ))}
+      <circle cx={MARK.dot.cx} cy={MARK.dot.cy} r={MARK.dot.r} fill={mono ? "currentColor" : "var(--saffron)"} />
     </svg>
   );
 }
 
+/** The app tile: the mark on ink, as on home screens and in the browser tab. */
+export function LogoTile({ className }: { className?: string }) {
+  return (
+    <span className={cn("grid size-9 shrink-0 place-items-center rounded-[22.5%] bg-ink text-ink-foreground", className)} aria-hidden>
+      <LogoMark className="size-[70%]" />
+    </span>
+  );
+}
+
 /**
- * The wordmark, outlined from Alexandria (scripts/brand-assets.mts): "aalim"
- * with its tittle in saffron, and عالم. Arabic sits on the Latin baseline.
+ * The wordmarks, outlined from the brand fonts: AALIM in Archivo Expanded
+ * ExtraBold and عالم in Beiruti Black, baselines aligned, with a hairline.
  */
 export function Wordmark({ showArabic = true, className }: { showArabic?: boolean; className?: string }) {
-  const arScale = (LATIN.height * 0.9) / ARABIC.height;
-  const arDy = LATIN.baseline - ARABIC.baseline * arScale;
-  const gap = LATIN.height * 0.36;
+  const H = LATIN.height;
+  const arScale = (H * 1.18) / ARABIC.baseline;
+  const arDy = H - ARABIC.baseline * arScale;
+  const gap = H * 0.34;
   const arX = LATIN.width + gap * 2;
+  const top = showArabic ? Math.min(0, arDy) : 0;
   const width = showArabic ? arX + ARABIC.width * arScale : LATIN.width;
-  const bottom = showArabic ? Math.max(LATIN.height, arDy + ARABIC.height * arScale) : LATIN.height;
+  const bottom = showArabic ? Math.max(H, arDy + ARABIC.height * arScale) : H;
   return (
-    <svg viewBox={`0 0 ${width} ${bottom}`} className={cn("h-[1.05em] w-auto shrink-0", className)} role="img" aria-label="Aalim">
-      <path d={LATIN.body} fill="currentColor" />
-      <path d={LATIN.tittle} fill="var(--saffron)" />
+    <svg viewBox={`0 ${top} ${width} ${bottom - top}`} className={cn("h-[0.9em] w-auto shrink-0 overflow-visible", className)} role="img" aria-label="Aalim">
+      <path d={LATIN.d} fill="currentColor" />
       {showArabic ? (
         <>
-          <rect x={LATIN.width + gap * 0.93} y={LATIN.height * 0.14} width={LATIN.height * 0.03} height={LATIN.height * 0.78} fill="currentColor" opacity={0.25} />
+          <rect x={LATIN.width + gap * 0.95} y={H * 0.02} width={H * 0.05} height={H * 0.96} fill="currentColor" opacity={0.22} />
           <g transform={`translate(${arX} ${arDy}) scale(${arScale})`}>
-            <path d={ARABIC.d} fill="currentColor" opacity={0.75} />
+            <path d={ARABIC.d} fill="currentColor" />
           </g>
         </>
       ) : null}
@@ -48,8 +56,8 @@ export function Wordmark({ showArabic = true, className }: { showArabic?: boolea
 
 export function Logo({ className, showArabic = true, reverse = false }: { className?: string; showArabic?: boolean; reverse?: boolean }) {
   return (
-    <span className={cn("inline-flex items-center gap-2.5 text-[19px]", reverse ? "text-ink-foreground" : "text-text", className)}>
-      <LogoMark reverse={reverse} />
+    <span className={cn("inline-flex items-center gap-2 text-[17px]", reverse ? "text-ink-foreground" : "text-text", className)}>
+      <LogoMark className="size-[1.6em]" />
       <Wordmark showArabic={showArabic} />
     </span>
   );

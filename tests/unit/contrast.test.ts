@@ -71,6 +71,12 @@ const PAIRS: [string, string, number][] = [
   ["ink-secondary", "night", AA],
   ["ink-secondary", "night-raised", AA],
   ["saffron", "night", AA],
+  // The signal: ink text on a vermilion button; vermilion as a non-text mark on bone and white.
+  ["signal-foreground", "signal", AA],
+  ["signal-foreground", "signal-hover", AA],
+  ["signal", "background", AA_LARGE],
+  ["signal", "surface", AA_LARGE],
+  ["hero-secondary", "hero-from", AA],
 ];
 
 describe("design token contrast (WCAG AA)", () => {
@@ -89,19 +95,20 @@ describe("design token contrast (WCAG AA)", () => {
 
   it("uses one hue for the level ramp (no red/green)", () => {
     for (const theme of ["light", "dark"] as const) {
-      const hues = [1, 2, 3, 4, 5].map((l) => {
+      const hues = [1, 2, 3, 4, 5].flatMap((l) => {
         const hex = t[theme][`level-${l}`]!;
         const [r, g, b] = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255) as [number, number, number];
         const max = Math.max(r, g, b);
-        const min = Math.min(r, g, b);
-        const d = max - min;
-        if (d === 0) return 0;
+        const d = max - Math.min(r, g, b);
+        // Near-neutral steps (ink, bone) carry no hue.
+        if (d < 0.03) return [];
         const h = max === r ? ((g - b) / d) % 6 : max === g ? (b - r) / d + 2 : (r - g) / d + 4;
-        return (h * 60 + 360) % 360;
+        return [(h * 60 + 360) % 360];
       });
+      // Warm stone only: one family, never red or green.
       for (const h of hues) {
-        expect(h).toBeGreaterThan(225);
-        expect(h).toBeLessThan(250);
+        expect(h).toBeGreaterThan(20);
+        expect(h).toBeLessThan(55);
       }
     }
   });

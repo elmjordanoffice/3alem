@@ -1,200 +1,220 @@
 /*
- * Aalim design tokens: direction C, "bright product".
+ * Aalim design tokens: "Range".
+ *
+ * Direction: ink, bone and a single vermilion signal. Swiss, exact, warm.
+ * Accent (actions, selection) is ink; vermilion is the signal: the estimate
+ * dot, the evidence band, the one hero call to action, focus. Neutrals are
+ * warm stone so the vermilion belongs. Flat surfaces with hairlines, no blur.
  *
  * One source of truth for colour, shadow and light. Components use these
  * through Tailwind utilities (bg-surface, text-secondary, ...). Every
  * text/background pair is checked for WCAG AA in tests/unit/contrast.test.ts.
+ * Some names are historical (saffron = the signal colour, hero-* = the one
+ * filled object per screen); the values are the Range brand.
  */
 
 :root {
   color-scheme: light;
 
-  /* Neutrals: cool, lavender-tinted, so the indigo accent belongs. */
-  --background: #f5f5fb;
+  /* Neutrals: bone and warm stone. */
+  --background: #f2f0eb;
   --surface: #ffffff;
-  --surface-subtle: #f7f7fd;
-  --surface-sunken: #eeeef8;
-  --border: #e6e6f2;
-  --border-strong: #d2d3e6;
-  --text: #15163a;
-  --text-secondary: #555780;
-  --text-tertiary: #6a6c94;
+  --surface-subtle: #f8f7f4;
+  --surface-sunken: #ebe8e1;
+  --border: #e2ded5;
+  --border-strong: #cdc8bd;
+  --text: #141414;
+  --text-secondary: #4f4b45;
+  --text-tertiary: #67635b;
   /* Non-text marks only: disabled icons, dividers, chart grid. */
-  --mark-muted: #a9aacb;
+  --mark-muted: #aca79c;
 
-  /* Brand accent: primary actions, focus, current selection. */
-  --accent: #3b3fd8;
-  --accent-hover: #3236c0;
-  --accent-active: #2a2ea6;
+  /* Accent: ink. Primary actions, current selection. */
+  --accent: #141414;
+  --accent-hover: #2b2a28;
+  --accent-active: #000000;
   --accent-foreground: #ffffff;
-  --accent-subtle: #eeeeff;
-  --accent-text: #3236c0;
-  --focus-ring: #3b3fd8;
+  /* Accent tints and links carry the signal hue. */
+  --accent-subtle: #ffe8e0;
+  --accent-text: #b2300c;
+  --focus-ring: #f04a23;
+
+  /* The signal: vermilion. */
+  --signal: #f04a23;
+  --signal-hover: #ff6440;
+  --signal-foreground: #141414;
+  --signal-subtle: #ffe8e0;
 
   /* Semantic */
-  --success: #15803d;
-  --success-subtle: #ecfdf3;
-  --warning: #b45309;
-  --warning-subtle: #fff7ed;
-  --critical: #b91c1c;
-  --critical-subtle: #fef2f2;
-  --info: #1d4ed8;
-  --info-subtle: #eff4ff;
+  --success: #1a7a47;
+  --success-subtle: #e8f5ec;
+  --warning: #9a5600;
+  --warning-subtle: #fdf1df;
+  --critical: #b42318;
+  --critical-subtle: #fdeceb;
+  --info: #1f5fbf;
+  --info-subtle: #eaf1fc;
 
-  /* Skill levels: a single-hue ramp. Never red/green. */
-  --level-1: #e4e5fb;
-  --level-2: #c2c4f5;
-  --level-3: #9497ec;
-  --level-4: #5d61dd;
-  --level-5: #2f33ad;
-  --level-1-fg: #15163a;
-  --level-2-fg: #15163a;
-  --level-3-fg: #15163a;
+  /* Skill levels: one hue, stone to ink. Never red/green. */
+  --level-1: #ebe7df;
+  --level-2: #d2cbbe;
+  --level-3: #a39b8d;
+  --level-4: #55514a;
+  --level-5: #141414;
+  --level-1-fg: #141414;
+  --level-2-fg: #141414;
+  --level-3-fg: #141414;
   --level-4-fg: #ffffff;
   --level-5-fg: #ffffff;
-  --level-empty: #eeeef8;
+  --level-empty: #ebe8e1;
 
   /* Charts: categorical, for comparing up to 4 candidates. */
-  --chart-1: #3b3fd8;
-  --chart-2: #0f766e;
-  --chart-3: #b45309;
-  --chart-4: #9d2f7a;
-  --chart-grid: #e6e6f2;
+  --chart-1: #141414;
+  --chart-2: #f04a23;
+  --chart-3: #0e7c66;
+  --chart-4: #6b5b95;
+  --chart-grid: #e2ded5;
 
-  /* Ink: the logo square and the marketing page's night. */
-  --ink: #17184a;
-  --ink-raised: #22246a;
-  --ink-foreground: #f5f4ff;
-  --ink-secondary: #bfc1f2;
+  /* Ink: the logo, the hero objects and the marketing page. */
+  --ink: #141414;
+  --ink-raised: #232220;
+  --ink-foreground: #f2f0eb;
+  --ink-secondary: #b9b4aa;
   /* Evidence: the person's own words, highlighted. Never decoration. */
-  --highlight: #ffe7a3;
-  --highlight-foreground: #15163a;
-  --saffron: #f2b532;
-  --saffron-light: #ffd978;
+  --highlight: #ffd6c9;
+  --highlight-foreground: #141414;
+  /* Range bands: the signal. */
+  --saffron: #f04a23;
+  --saffron-light: #ff7b55;
 
-  /* Hero cards: the one filled object per screen, an indigo gradient. */
-  --hero-from: #3236c0;
-  --hero-via: #3b3fd8;
-  --hero-to: #5458e8;
-  --hero-foreground: #ffffff;
-  --hero-secondary: #e4e5fd;
+  /* Hero objects: the one filled object per screen, flat ink. */
+  --hero-from: #141414;
+  --hero-via: #141414;
+  --hero-to: #1c1b1a;
+  --hero-foreground: #f2f0eb;
+  --hero-secondary: #c9c4ba;
 
-  /* App chrome: a floating white sidebar card on the canvas. */
+  /* App chrome: a white rail with a hairline. */
   --sidebar: #ffffff;
-  --sidebar-raised: #f5f5fb;
-  --sidebar-active: #3b3fd8;
-  --sidebar-foreground: #15163a;
-  --sidebar-secondary: #555780;
-  --sidebar-tertiary: #6a6c94;
+  --sidebar-raised: #f8f7f4;
+  --sidebar-active: #141414;
+  --sidebar-foreground: #141414;
+  --sidebar-secondary: #4f4b45;
+  --sidebar-tertiary: #67635b;
   --sidebar-accent: #ffffff;
-  --sidebar-border: rgb(23 24 74 / 0.06);
+  --sidebar-border: #e2ded5;
 
-  /* Soft colour washes on the canvas. */
-  --wash-1: #e3e1ff;
-  --wash-2: #fff1d6;
+  /* No washes in Range: the canvas is flat bone. Kept so older classes resolve. */
+  --wash-1: transparent;
+  --wash-2: transparent;
 
-  /* Light that comes off the evidence field on dark surfaces. */
-  --glow-indigo: #4c51e8;
-  --glow-lavender: #8f92f7;
-  /* The marketing page's night ground. */
-  --night: #07081c;
-  --night-raised: #10123a;
+  --glow-indigo: #f04a23;
+  --glow-lavender: #ff7b55;
+  /* The marketing page's dark ground. */
+  --night: #0e0e0d;
+  --night-raised: #1a1918;
 
-  --shadow-popover: 0 16px 40px -12px rgb(23 24 74 / 0.22), 0 2px 6px -2px rgb(23 24 74 / 0.08);
-  /* The one raised object on a screen: an indigo glow beneath the hero card. */
-  --shadow-raised: 0 30px 60px -30px rgb(59 63 216 / 0.6);
-  /* Cards float on the canvas: soft depth instead of borders. */
-  --shadow-card: 0 0 0 1px rgb(23 24 74 / 0.04), 0 1px 2px rgb(23 24 74 / 0.04), 0 12px 32px -18px rgb(23 24 74 / 0.3);
-  --shadow-card-hover: 0 0 0 1px rgb(23 24 74 / 0.06), 0 2px 4px rgb(23 24 74 / 0.05), 0 22px 44px -18px rgb(23 24 74 / 0.36);
-  --shadow-window: 0 0 0 1px rgb(245 244 255 / 0.08), 0 2px 4px rgb(8 8 30 / 0.2), 0 24px 48px -12px rgb(8 8 30 / 0.45), 0 60px 120px -40px rgb(8 8 30 / 0.6);
-  --overlay: rgb(21 22 58 / 0.4);
+  --shadow-popover: 0 0 0 1px rgb(20 20 20 / 0.08), 0 18px 40px -16px rgb(20 20 20 / 0.28);
+  /* The hero object sits flat; a faint drop keeps it off the canvas. */
+  --shadow-raised: 0 24px 48px -32px rgb(20 20 20 / 0.55);
+  /* Cards: a hairline, no blur. Hover lifts a little. */
+  --shadow-card: 0 0 0 1px rgb(20 20 20 / 0.08);
+  --shadow-card-hover: 0 0 0 1px rgb(20 20 20 / 0.14), 0 12px 28px -18px rgb(20 20 20 / 0.35);
+  --shadow-window: 0 0 0 1px rgb(20 20 20 / 0.1), 0 30px 60px -30px rgb(20 20 20 / 0.45);
+  --overlay: rgb(20 20 20 / 0.5);
 }
 
 .dark {
   color-scheme: dark;
 
-  --background: #0c0d22;
-  --surface: #15163a;
-  --surface-subtle: #1a1b44;
-  --surface-sunken: #10112c;
-  --border: #26285a;
-  --border-strong: #383b80;
-  --text: #f2f2ff;
-  --text-secondary: #bdbfea;
-  --text-tertiary: #a1a4da;
-  --mark-muted: #5a5d9a;
+  --background: #0f0f0e;
+  --surface: #191817;
+  --surface-subtle: #1e1d1b;
+  --surface-sunken: #0b0b0a;
+  --border: #2d2b28;
+  --border-strong: #423f3a;
+  --text: #f2f0eb;
+  --text-secondary: #c4bfb5;
+  --text-tertiary: #a29d93;
+  --mark-muted: #5e5a54;
 
-  --accent: #5b5fef;
-  --accent-hover: #4f53e3;
-  --accent-active: #4448d2;
-  --accent-foreground: #ffffff;
-  --accent-subtle: #23255e;
-  --accent-text: #b4b6fa;
-  --focus-ring: #8f92f7;
+  /* Inverted: bone becomes the action colour. */
+  --accent: #f2f0eb;
+  --accent-hover: #ffffff;
+  --accent-active: #dedad2;
+  --accent-foreground: #141414;
+  --accent-subtle: #3b1a10;
+  --accent-text: #ff9472;
+  --focus-ring: #ff6a45;
 
-  --success: #4ade80;
+  --signal: #ff5a33;
+  --signal-hover: #ff6f4c;
+  --signal-foreground: #141414;
+  --signal-subtle: #3b1a10;
+
+  --success: #5fd08f;
   --success-subtle: #12261a;
-  --warning: #fbbf24;
+  --warning: #f5b84a;
   --warning-subtle: #2b2010;
-  --critical: #f87171;
-  --critical-subtle: #2d1515;
-  --info: #7aa7fa;
-  --info-subtle: #141f36;
+  --critical: #ff8578;
+  --critical-subtle: #2d1513;
+  --info: #7fb0f5;
+  --info-subtle: #13213a;
 
-  --level-1: #262849;
-  --level-2: #353a86;
-  --level-3: #4b50c2;
-  --level-4: #7a7ef0;
-  --level-5: #b4b6fa;
-  --level-1-fg: #f2f2ff;
-  --level-2-fg: #f2f2ff;
-  --level-3-fg: #ffffff;
-  --level-4-fg: #0c0d22;
-  --level-5-fg: #0c0d22;
-  --level-empty: #222451;
+  --level-1: #2a2826;
+  --level-2: #4a4641;
+  --level-3: #938d83;
+  --level-4: #c4bfb5;
+  --level-5: #f2f0eb;
+  --level-1-fg: #f2f0eb;
+  --level-2-fg: #f2f0eb;
+  --level-3-fg: #0f0f0e;
+  --level-4-fg: #0f0f0e;
+  --level-5-fg: #0f0f0e;
+  --level-empty: #24221f;
 
-  --chart-1: #8286f5;
-  --chart-2: #2dd4bf;
-  --chart-3: #fbbf24;
-  --chart-4: #f0abfc;
-  --chart-grid: #26285a;
+  --chart-1: #f2f0eb;
+  --chart-2: #ff6a45;
+  --chart-3: #3fc1a3;
+  --chart-4: #b3a3e0;
+  --chart-grid: #2d2b28;
 
-  --ink: #15163a;
-  --ink-raised: #1f2152;
-  --ink-foreground: #f5f4ff;
-  --ink-secondary: #b3b5ea;
-  --highlight: #4d3c10;
-  --highlight-foreground: #fdf3d6;
-  --saffron: #f2b532;
-  --saffron-light: #ffd978;
+  --ink: #141414;
+  --ink-raised: #232220;
+  --ink-foreground: #f2f0eb;
+  --ink-secondary: #b9b4aa;
+  --highlight: #5a2414;
+  --highlight-foreground: #ffe8e0;
+  --saffron: #ff5a33;
+  --saffron-light: #ff8a66;
 
-  --hero-from: #2a2da8;
-  --hero-via: #3b3fd8;
-  --hero-to: #5458e8;
-  --hero-foreground: #ffffff;
-  --hero-secondary: #e4e5fd;
+  --hero-from: #232220;
+  --hero-via: #232220;
+  --hero-to: #2a2826;
+  --hero-foreground: #f2f0eb;
+  --hero-secondary: #c9c4ba;
 
-  --sidebar: #15163a;
-  --sidebar-raised: #1a1b44;
-  --sidebar-active: #5b5fef;
-  --sidebar-foreground: #f2f2ff;
-  --sidebar-secondary: #bdbfea;
-  --sidebar-tertiary: #a1a4da;
-  --sidebar-accent: #ffffff;
-  --sidebar-border: rgb(255 255 255 / 0.06);
+  --sidebar: #141413;
+  --sidebar-raised: #1e1d1b;
+  --sidebar-active: #f2f0eb;
+  --sidebar-foreground: #f2f0eb;
+  --sidebar-secondary: #c4bfb5;
+  --sidebar-tertiary: #a29d93;
+  --sidebar-accent: #141414;
+  --sidebar-border: #2d2b28;
 
-  --wash-1: rgb(59 63 216 / 0.22);
-  --wash-2: rgb(242 181 50 / 0.06);
+  --wash-1: transparent;
+  --wash-2: transparent;
 
-  --glow-indigo: #4c51e8;
-  --glow-lavender: #8f92f7;
-  --night: #07081c;
-  --night-raised: #10123a;
+  --glow-indigo: #ff5a33;
+  --glow-lavender: #ff8a66;
+  --night: #0e0e0d;
+  --night-raised: #1a1918;
 
-  --shadow-popover: 0 16px 40px -12px rgb(0 0 0 / 0.6), 0 2px 6px -2px rgb(0 0 0 / 0.4);
-  --shadow-raised: 0 30px 60px -30px rgb(59 63 216 / 0.7);
-  --shadow-card: 0 0 0 1px rgb(255 255 255 / 0.05), 0 1px 2px rgb(0 0 0 / 0.3), 0 12px 32px -18px rgb(0 0 0 / 0.6);
-  --shadow-card-hover: 0 0 0 1px rgb(255 255 255 / 0.08), 0 2px 4px rgb(0 0 0 / 0.35), 0 22px 44px -18px rgb(0 0 0 / 0.7);
-  --shadow-window: 0 0 0 1px rgb(245 244 255 / 0.1), 0 2px 4px rgb(0 0 0 / 0.3), 0 24px 48px -12px rgb(0 0 0 / 0.6), 0 60px 120px -40px rgb(0 0 0 / 0.7);
+  --shadow-popover: 0 0 0 1px rgb(255 255 255 / 0.08), 0 18px 40px -16px rgb(0 0 0 / 0.7);
+  --shadow-raised: 0 24px 48px -32px rgb(0 0 0 / 0.8);
+  --shadow-card: 0 0 0 1px rgb(255 255 255 / 0.07);
+  --shadow-card-hover: 0 0 0 1px rgb(255 255 255 / 0.12), 0 12px 28px -18px rgb(0 0 0 / 0.7);
+  --shadow-window: 0 0 0 1px rgb(255 255 255 / 0.08), 0 30px 60px -30px rgb(0 0 0 / 0.8);
   --overlay: rgb(0 0 0 / 0.6);
 }

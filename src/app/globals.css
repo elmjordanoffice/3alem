@@ -69,9 +69,10 @@
 }
 
 @theme {
-  /* Readex Pro: one family for Arabic and Latin, text and display, so both languages share one voice. */
-  --font-sans: "Readex Pro Variable", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Readex Pro Variable", ui-sans-serif, system-ui, sans-serif;
+  /* Range: IBM Plex for reading and interface (Latin and Arabic drawn as one family);
+     Archivo, often expanded, for display; Beiruti for Arabic display. */
+  --font-sans: "IBM Plex Sans Variable", "IBM Plex Sans Arabic", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Archivo Variable", "Beiruti Variable", ui-sans-serif, system-ui, sans-serif;
   --font-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
 
   /* Type scale: 12 / 14 / 16 / 20 / 24 / 32 / 40 */
@@ -94,8 +95,8 @@
   --text-5xl: 4.25rem;
   --text-5xl--line-height: 1.02;
 
-  --radius-control: 12px;
-  --radius-card: 20px;
+  --radius-control: 10px;
+  --radius-card: 16px;
 
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   /* Easing grammar: enter fast and settle; leave quicker; move evenly; one overshoot for the hero. */
@@ -134,7 +135,8 @@
 
 @layer base {
   :lang(ar) {
-    --font-sans: "Readex Pro Variable", ui-sans-serif, system-ui, sans-serif;
+    --font-sans: "IBM Plex Sans Arabic", "IBM Plex Sans Variable", ui-sans-serif, system-ui, sans-serif;
+    --font-display: "Beiruti Variable", "Archivo Variable", ui-sans-serif, system-ui, sans-serif;
   }
   html {
     -webkit-text-size-adjust: 100%;
@@ -160,10 +162,12 @@
     letter-spacing: -0.006em;
     text-wrap: balance;
   }
-  /* Page and section titles carry the brand voice. */
+  /* Page and section titles carry the brand voice: Archivo, a little wide. */
   h1, h2 {
     font-family: var(--font-display);
-    letter-spacing: -0.022em;
+    font-stretch: 112%;
+    font-weight: 700;
+    letter-spacing: -0.012em;
   }
   :lang(ar) h1, :lang(ar) h2, :lang(ar) h3, :lang(ar) h4 {
     letter-spacing: 0;
@@ -173,8 +177,8 @@
     text-wrap: pretty;
   }
   ::selection {
-    background: var(--accent-subtle);
-    color: var(--text);
+    background: var(--highlight);
+    color: var(--highlight-foreground);
   }
   :focus-visible {
     outline: 2px solid var(--focus-ring);
@@ -189,6 +193,21 @@
   .tabular { font-variant-numeric: tabular-nums; }
   .reading { max-width: var(--container-reading); }
   .font-display { font-family: var(--font-display); }
+  /* Range display: Archivo at full width, heavy, in capitals. Arabic keeps its own shapes. */
+  .display-x {
+    font-family: var(--font-display);
+    font-stretch: 125%;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.004em;
+    line-height: 0.98;
+  }
+  .display-x:where(:lang(ar), :lang(ar) *) {
+    text-transform: none;
+    letter-spacing: 0;
+    line-height: 1.25;
+    font-weight: 800;
+  }
   /* Verbatim evidence: the candidate's words, marked like a reviewer's highlighter. */
   .evidence-mark {
     background: linear-gradient(to bottom, transparent 8%, var(--highlight) 8%, var(--highlight) 92%, transparent 92%);
@@ -238,15 +257,18 @@
     background: linear-gradient(90deg, transparent, rgb(245 244 255 / 0.18), transparent);
   }
   .eyebrow {
-    font-size: 0.75rem;
+    font-family: var(--font-display);
+    font-stretch: 125%;
+    font-size: 0.6875rem;
     line-height: 1.4;
-    font-weight: 500;
-    letter-spacing: 0.08em;
+    font-weight: 700;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
   }
   .eyebrow:where(:lang(ar), :lang(ar) *) {
     letter-spacing: 0;
-    font-size: 0.8125rem;
+    font-size: 0.875rem;
+    font-weight: 700;
   }
 }
 
@@ -544,42 +566,41 @@ html[data-hero="1"] .nav-cta {
 html[data-hero="1"][data-front="0"] .nav-cta { opacity: 0; pointer-events: none; }
 .nav-cta { transition: opacity 0.4s var(--ease-move), background-color 0.3s var(--ease-move), box-shadow 0.3s var(--ease-move); }
 
-/* ── Direction C ─────────────────────────────────────────────────────────
-   The canvas carries two soft colour washes; hero cards are the one filled
-   object per screen, an indigo gradient with a quiet light in the corner. */
-.app-canvas {
-  background:
-    radial-gradient(50% 42% at 88% 0%, var(--wash-1), transparent 72%),
-    radial-gradient(40% 38% at 0% 100%, var(--wash-2), transparent 70%),
-    var(--background);
-  background-attachment: fixed;
-}
+/* ── Range ───────────────────────────────────────────────────────────────
+   Flat bone canvas, hairlines instead of blur, and one filled object per
+   screen: an ink panel carrying the mark's narrowing bands in its corner. */
+.app-canvas { background: var(--background); }
 .hero-card {
   position: relative;
   isolation: isolate;
   overflow: hidden;
   color: var(--hero-foreground);
-  background: linear-gradient(135deg, var(--hero-from) 0%, var(--hero-via) 55%, var(--hero-to) 100%);
-  box-shadow: var(--shadow-raised), inset 0 1px 0 rgb(255 255 255 / 0.14);
+  background: var(--hero-from);
+  box-shadow: var(--shadow-raised);
 }
+/* The signature: the mark's bands, faint, in the corner; the estimate dot stays vermilion. */
 .hero-card::after {
   content: "";
   position: absolute;
   z-index: -1;
-  inset-inline-end: -70px;
-  top: -80px;
-  width: 260px;
-  height: 260px;
-  border-radius: 9999px;
-  background: rgb(255 255 255 / 0.1);
+  inset-inline-end: 28px;
+  top: 28px;
+  width: 132px;
+  height: 132px;
   pointer-events: none;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cg fill='%23f2f0eb' fill-opacity='.09'%3E%3Crect x='3' y='48.25' width='58' height='11' rx='5.5'/%3E%3Crect x='11' y='33.75' width='42' height='11' rx='5.5'/%3E%3Crect x='19' y='19.25' width='26' height='11' rx='5.5'/%3E%3C/g%3E%3Ccircle cx='32' cy='10.25' r='5.5' fill='%23f04a23'/%3E%3C/svg%3E") no-repeat center / contain;
 }
-/* Translucent tiles inside a hero card (numbers, must-haves). */
+/* Tiles inside a hero (numbers, must-haves): a hairline on ink. */
 .hero-tile {
-  border-radius: 18px;
-  background: rgb(255 255 255 / 0.13);
-  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.1);
+  border-radius: 12px;
+  background: rgb(242 240 235 / 0.05);
+  box-shadow: inset 0 0 0 1px rgb(242 240 235 / 0.12);
 }
-/* The evidenced range: a warm gold band. */
-.band-gold { background: linear-gradient(90deg, var(--saffron-light), var(--saffron)); }
-[dir="rtl"] .band-gold { background: linear-gradient(270deg, var(--saffron-light), var(--saffron)); }
+/* The evidenced range: the signal, solid. */
+.band-gold { background: var(--saffron); }
+/* A hairline rule with a vermilion tick at the start: section openers. */
+.rule-signal {
+  height: 1px;
+  background: linear-gradient(to right, var(--saffron) 0 28px, var(--border) 28px);
+}
+[dir="rtl"] .rule-signal { background: linear-gradient(to left, var(--saffron) 0 28px, var(--border) 28px); }

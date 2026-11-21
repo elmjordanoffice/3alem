@@ -2,8 +2,14 @@ import type { Metadata, Viewport } from "next";
 import { cookies } from "next/headers";
 import { getLocale } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
-// Readex Pro: one family drawn for Arabic and Latin together (direction C).
-import "@fontsource-variable/readex-pro";
+// Range: IBM Plex Sans (+ Arabic) for reading, Archivo (expanded) and Beiruti for display.
+import "@fontsource-variable/ibm-plex-sans";
+import "@fontsource/ibm-plex-sans-arabic/arabic-400.css";
+import "@fontsource/ibm-plex-sans-arabic/arabic-500.css";
+import "@fontsource/ibm-plex-sans-arabic/arabic-600.css";
+import "@fontsource/ibm-plex-sans-arabic/arabic-700.css";
+import "@fontsource-variable/archivo/standard.css";
+import "@fontsource-variable/beiruti";
 import "./globals.css";
 import { Providers } from "@/components/providers";
 import { NUMERALS_COOKIE, directionOf, isLocale, isNumeralSystem, DEFAULT_LOCALE } from "@/i18n/config";
@@ -28,8 +34,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#fafaf9" },
-    { media: "(prefers-color-scheme: dark)", color: "#0f0e0d" },
+    { media: "(prefers-color-scheme: light)", color: "#f2f0eb" },
+    { media: "(prefers-color-scheme: dark)", color: "#0f0f0e" },
   ],
 };
 
