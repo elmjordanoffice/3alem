@@ -56,13 +56,13 @@ All files are outlined vectors (no font needed), generated from the brand fonts 
 | Stone | `#FAFAF9` … `#1C1917` | `#0F0E0D` … `#F5F5F4` | Backgrounds, text, borders | ~67% |
 | Level ramp | `#E4E5FB` → `#2F33AD` | `#262849` → `#B4B6FA` | Skill levels and role fit; one hue, never red/green | as needed |
 
-In the product, ink is also the navigation chrome (the sidebar), with the work on a light sheet beside it; see [design references](design-references.md). Every text pairing is tested for WCAG AA in `tests/unit/contrast.test.ts`.
+In the product (direction C, "bright product"), the canvas is a cool lavender-white with two soft washes, the sidebar is a floating white card, and each screen's one filled object is an indigo gradient hero card. Ink stays for the logo square and the marketing page's night; see [design references](design-references.md). Every text pairing is tested for WCAG AA in `tests/unit/contrast.test.ts`.
 
 ## Type
 
-- **Alexandria** for display (page titles, verdicts, big numbers): drawn for Latin and Arabic together.
-- **IBM Plex Sans / Plex Sans Arabic** for text: one family designed to pair across scripts.
+- **Readex Pro** for everything, display and text: one family drawn for Arabic and Latin together, so both languages share one voice. Hierarchy comes from size and weight (600 for titles and big numbers, 500 for labels, 400 for reading).
 - Arabic: line height 1.65 (text) and 1.32 (display), no letter spacing. Latin digits by default; Arabic-Indic digits are a personal setting.
+- The wordmark stays outlined from Alexandria (it is a drawing, not live text).
 
 ## Signatures
 

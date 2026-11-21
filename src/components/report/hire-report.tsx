@@ -5,7 +5,7 @@ import { ChevronDown, Info, Lightbulb, ShieldCheck, Sparkles, TrendingUp, Messag
 import { Collapsible } from "radix-ui";
 import type { ReportContent, ReportDomain, ReportSkill } from "@/lib/hire/report-types";
 import { WORK_STYLES } from "@/lib/framework/data";
-import { cn } from "@/lib/utils";
+import { cn, initials } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Alert } from "@/components/ui/alert";
 import { LevelMeter, SkillChip } from "./level";
@@ -122,10 +122,10 @@ function Verdict({ content }: { content: ReportContent }) {
   const shown = (must.length ? must : [...content.domains].sort((a, b) => b.confidence - a.confidence).slice(0, 3)).slice(0, 5);
   const conf = content.fit.confidence >= 0.75 ? "high" : content.fit.confidence >= 0.5 ? "moderate" : "low";
   return (
-    <div className="ink-lit relative isolate overflow-hidden rounded-[20px] text-ink-foreground shadow-raised print:bg-ink print:shadow-none">
+    <div className="hero-card rounded-[28px] print:bg-hero-via print:shadow-none">
       <div className="grid gap-10 p-6 sm:p-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:gap-12 lg:p-10">
         <div className="flex flex-col">
-          <p className="text-sm text-ink-secondary">{t("roleFit")}</p>
+          <p className="text-sm text-hero-secondary">{t("roleFit")}</p>
           <p className="mt-2 font-display text-[2.5rem] font-semibold leading-none tracking-[-0.02em] sm:text-5xl">{t(`fit.${content.fit.level}`)}</p>
           <p className="mt-3 flex items-center gap-2 text-sm">
             <span className="flex gap-0.5" aria-hidden>
@@ -134,12 +134,12 @@ function Verdict({ content }: { content: ReportContent }) {
             {t(`confidence.${conf}`)}
           </p>
           <p className="mt-8 text-[17px] leading-relaxed" dir="auto">{content.narrative.portrait}</p>
-          <p className="mt-auto pt-8 text-sm text-ink-secondary">{t("fitNote")}</p>
+          <p className="mt-auto pt-8 text-sm text-hero-secondary">{t("fitNote")}</p>
         </div>
         <div className="flex flex-col">
           <div className="flex items-baseline justify-between gap-3">
-            <p className="text-sm text-ink-secondary">{must.length ? t("mustHaves") : t("bestEvidenced")}</p>
-            <p className="flex items-center gap-1.5 text-xs text-ink-secondary">
+            <p className="text-sm text-hero-secondary">{must.length ? t("mustHaves") : t("bestEvidenced")}</p>
+            <p className="flex items-center gap-1.5 text-xs text-hero-secondary">
               <span className="inline-block h-3 w-0.5 rounded-full bg-ink-foreground/70" aria-hidden />
               {t("expectedLevel", { level: tl(String(levelBand(expected))) })}
             </p>
@@ -149,7 +149,7 @@ function Verdict({ content }: { content: ReportContent }) {
               <li key={d.key}>
                 <div className="flex items-baseline justify-between gap-3">
                   <span className="truncate text-[15px] font-medium">{d.name}</span>
-                  <span className="shrink-0 text-sm text-ink-secondary">
+                  <span className="shrink-0 text-sm text-hero-secondary">
                     {tl(String(levelBand(d.estimate)))} <bdi dir="ltr" className="tabular">{n.range(d.range[0], d.range[1])}</bdi>
                   </span>
                 </div>
@@ -160,7 +160,7 @@ function Verdict({ content }: { content: ReportContent }) {
           </ul>
           {content.fit.gaps.length ? (
             <div className="mt-8 border-t border-ink-foreground/15 pt-5">
-              <p className="text-sm text-ink-secondary">{t("gapsInterview")}</p>
+              <p className="text-sm text-hero-secondary">{t("gapsInterview")}</p>
               <ul className="mt-2.5 flex flex-wrap gap-2">
                 {content.fit.gaps.slice(0, 4).map((g) => (
                   <li key={g.key} className="rounded-full bg-ink-foreground/10 px-3 py-1 text-sm">{g.name}</li>
@@ -213,10 +213,18 @@ export function HireReport({ content, audience, actions, review }: { content: Re
       <div className="flex min-w-0 flex-col gap-12">
         <header className="flex flex-col gap-6">
           <div className="flex flex-wrap items-end justify-between gap-4">
-            <div className="flex min-w-0 flex-col gap-2">
-              <p className="text-sm text-secondary">{forCandidate ? t("yourReportFor", { role: content.role.title }) : t("candidateReportFor", { role: content.role.title })}</p>
-              <h1 className="text-[2.25rem] font-semibold leading-[1.1] text-text sm:text-[2.75rem]">{content.candidate.name}</h1>
-              <p className="text-sm text-tertiary">{t("generated", { date: new Date(content.generatedAt).toLocaleDateString(locale === "ar" ? "ar" : "en-GB", { year: "numeric", month: "long", day: "numeric" }) })}</p>
+            <div className="flex min-w-0 items-center gap-4">
+              {/* The person, first: an initials tile in the evidence gold. */}
+              <span className="inline-flex size-16 shrink-0 items-center justify-center rounded-[20px] bg-gradient-to-br from-saffron-light to-saffron text-xl font-semibold text-[#15163a] shadow-[0_10px_24px_-12px_rgb(242_181_50/0.8)] print:shadow-none" aria-hidden>
+                {initials(content.candidate.name)}
+              </span>
+              <div className="flex min-w-0 flex-col gap-1">
+                <h1 className="text-[2rem] font-semibold leading-[1.1] text-text sm:text-[2.5rem]">{content.candidate.name}</h1>
+                <p className="text-sm text-secondary">
+                  {forCandidate ? t("yourReportFor", { role: content.role.title }) : t("candidateReportFor", { role: content.role.title })} ·{" "}
+                  {t("generated", { date: new Date(content.generatedAt).toLocaleDateString(locale === "ar" ? "ar" : "en-GB", { year: "numeric", month: "long", day: "numeric" }) })}
+                </p>
+              </div>
             </div>
             {actions ? <div className="flex flex-wrap gap-2 print:hidden">{actions}</div> : null}
           </div>

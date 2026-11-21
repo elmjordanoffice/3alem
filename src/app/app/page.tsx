@@ -14,7 +14,6 @@ import { Button } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { FitPill } from "@/components/report/fit";
 import { INK_PRIMARY } from "@/components/ui/ink";
-import { EvidenceField } from "@/components/brand/evidence-field";
 import { RolePipelineList } from "@/components/recruiter/role-pipeline";
 import { cn } from "@/lib/utils";
 
@@ -65,28 +64,24 @@ export default async function AppHome({ searchParams }: { searchParams: Promise<
   return (
     <PageContainer className="max-w-6xl">
       {/* The brief: what changed and what to do next, before any list (docs/design-references.md). */}
-      <section aria-labelledby="brief-h" className="ink-lit grain relative isolate mb-12 overflow-hidden rounded-[22px] text-ink-foreground shadow-raised">
-        <div className="ink-grid absolute inset-0 -z-10 opacity-50" aria-hidden />
-        <div className="absolute inset-y-0 end-0 -z-10 w-full [mask-image:linear-gradient(to_left,#000_30%,transparent_85%)] sm:w-[70%] rtl:[mask-image:linear-gradient(to_right,#000_30%,transparent_85%)]" aria-hidden>
-          <EvidenceField horizon={0.06} spread={2.6} speed={0.2} intensity={0.8} bloom={0.45} palette="quiet" />
-        </div>
-        <div className="flex flex-col items-start gap-6 p-6 sm:p-8 lg:p-10">
+      <section aria-labelledby="brief-h" className="hero-card mb-8 rounded-[28px] p-6 sm:p-8 lg:p-9">
+        <div className="flex flex-wrap items-end justify-between gap-6">
           <div className="min-w-0 max-w-2xl">
-            <p className="text-sm text-ink-secondary">{org ? t("dateAt", { date: fmt.date, org: org.name }) : fmt.date}</p>
-            <h1 id="brief-h" className="mt-2 text-[2.25rem] font-semibold leading-[1.1] sm:text-[2.75rem]">{t("greeting", { name: firstName })}</h1>
-            <p className="mt-3 text-[15px] leading-relaxed text-ink-secondary">
+            <p className="inline-flex rounded-full bg-white/15 px-3 py-1 text-xs text-hero-foreground">{org ? t("dateAt", { date: fmt.date, org: org.name }) : fmt.date}</p>
+            <h1 id="brief-h" className="mt-4 text-[2.25rem] font-semibold leading-[1.1] sm:text-[2.75rem]">{t("greeting", { name: firstName })}</h1>
+            <p className="mt-3 text-[15px] leading-relaxed text-hero-secondary">
               {hiring ? (summary.length ? summary.join(" ") : t("summary.clear")) : org ? t("orgSubtitle", { org: org.name }) : t("personalSubtitle")}
             </p>
           </div>
           {org && viewerCan(viewer, "assessment.create") ? (
-            <Button asChild size="lg" className={`btn-hero rounded-full px-6 ${INK_PRIMARY}`}>
+            <Button asChild size="lg" className={`btn-hero rounded-[14px] px-6 ${INK_PRIMARY}`}>
               <Link href="/app/assessments/new">
                 <Plus aria-hidden />
                 {t("newAssessment")}
               </Link>
             </Button>
           ) : !hiring ? (
-            <Button asChild size="lg" className={INK_PRIMARY}>
+            <Button asChild size="lg" className={`rounded-[14px] ${INK_PRIMARY}`}>
               <Link href="/app/grow">
                 <Sprout aria-hidden />
                 {grow ? t("grow.ctaActive") : t("grow.ctaNew")}
@@ -95,20 +90,20 @@ export default async function AppHome({ searchParams }: { searchParams: Promise<
           ) : null}
         </div>
         {overview ? (
-          <dl className="grid grid-cols-2 gap-px border-t border-ink-foreground/10 bg-ink-foreground/10 sm:grid-cols-5">
+          <dl className="mt-7 grid grid-cols-3 gap-2.5 sm:grid-cols-5 sm:gap-3">
             {([
               ["unopened", overview.unviewed, "/app/assessments"],
               ["inProgress", overview.totals.inProgress, "/app/assessments"],
               ["completed", overview.totals.completed, "/app/assessments"],
               ["open", overview.totals.open, "/app/assessments"],
             ] as const).map(([k, v, href]) => (
-              <div key={k} className={cn("relative bg-ink transition-colors hover:bg-ink-raised", k === "unopened" && "col-span-2 bg-ink-raised/70")}>
-                <dt className="px-6 pt-5 text-xs text-ink-secondary sm:px-8">{t(`brief.${k}`)}</dt>
-                <dd className="flex items-baseline gap-3 px-6 pb-5 pt-1.5 sm:px-8">
-                  <Link href={href} className={cn("font-display font-semibold leading-none tabular after:absolute after:inset-0 focus-visible:outline-none focus-visible:after:outline-2 focus-visible:after:-outline-offset-2 focus-visible:after:outline-focus", k === "unopened" ? "text-[2.75rem]" : "text-[2rem]")}>
+              <div key={k} className={cn("hero-tile relative px-4 py-3.5 transition-colors hover:bg-white/20 sm:px-5 sm:py-4", k === "unopened" && "col-span-3 bg-white/20 sm:col-span-2")}>
+                <dt className="text-xs text-hero-secondary">{t(`brief.${k}`)}</dt>
+                <dd className="mt-1.5 flex items-baseline gap-3">
+                  <Link href={href} className={cn("font-display font-semibold leading-none tabular after:absolute after:inset-0 after:rounded-[18px] focus-visible:outline-none focus-visible:after:outline-2 focus-visible:after:outline-white", k === "unopened" ? "text-[2.5rem]" : "text-[1.6rem] sm:text-[1.85rem]")}>
                     {fmt.n(v)}
                   </Link>
-                  {k === "unopened" && v > 0 ? <span className="text-sm text-sidebar-accent">{t("brief.reviewCta")}</span> : null}
+                  {k === "unopened" && v > 0 ? <span className="text-sm text-hero-foreground">{t("brief.reviewCta")} →</span> : null}
                 </dd>
               </div>
             ))}

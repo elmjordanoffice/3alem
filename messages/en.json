@@ -2435,10 +2435,10 @@
     },
     "type": {
       "title": "Type",
-      "displayTitle": "Alexandria, for display",
-      "displayBody": "Drawn for Latin and Arabic together, so both languages share one voice. Page titles, verdicts, big numbers.",
-      "textTitle": "IBM Plex Sans and Plex Sans Arabic, for text",
-      "textBody": "One family designed to pair across scripts. Precise without being cold. Everything else.",
+      "displayTitle": "Readex Pro, for everything",
+      "displayBody": "One family drawn for Arabic and Latin together, so both languages share one voice, from page titles and verdicts to body text and numbers.",
+      "textTitle": "Weights, not families",
+      "textBody": "Hierarchy comes from size and weight: 600 for titles and big numbers, 500 for labels, 400 for reading.",
       "sampleDisplay": "See what people can do",
       "sampleText": "Every score in Aalim comes with a range, a confidence and the person’s own words.",
       "rules": "Arabic gets more line height (1.65 for text, 1.32 for display) and no letter spacing. Numbers use Latin digits by default; Arabic-Indic digits are a personal setting."

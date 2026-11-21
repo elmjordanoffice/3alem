@@ -2,12 +2,8 @@ import type { Metadata, Viewport } from "next";
 import { cookies } from "next/headers";
 import { getLocale } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
-import "@fontsource-variable/ibm-plex-sans";
-import "@fontsource-variable/alexandria";
-import "@fontsource/ibm-plex-sans-arabic/400.css";
-import "@fontsource/ibm-plex-sans-arabic/500.css";
-import "@fontsource/ibm-plex-sans-arabic/600.css";
-import "@fontsource/ibm-plex-sans-arabic/700.css";
+// Readex Pro: one family drawn for Arabic and Latin together (direction C).
+import "@fontsource-variable/readex-pro";
 import "./globals.css";
 import { Providers } from "@/components/providers";
 import { NUMERALS_COOKIE, directionOf, isLocale, isNumeralSystem, DEFAULT_LOCALE } from "@/i18n/config";

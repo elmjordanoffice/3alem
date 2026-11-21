@@ -97,3 +97,5 @@ Choices the brief left open, or where I departed from it, with the reason. Newes
 
 **D-046: One query at a time per database connection.** Prisma's query engine can send relation sub-queries concurrently inside an interactive transaction (`withTenant`). pg 8 queues them but warns that pg 9 will stop. `src/lib/db-pool.ts` gives the pool a client that serialises queries in the order they were issued, so behaviour is unchanged and the upgrade path is safe. *(Fix)*
 
+**D-047: Direction C, "bright product", chosen from three mockups.** Instead of another guessed redesign, three directions were mocked on the report screen and the owner chose the bright one. The tokens keep their names, so the whole app re-themed at once: Readex Pro replaced Alexandria and IBM Plex (one family for both scripts), radii grew (12 px controls, 20 px cards), cards lost borders for soft depth, the sidebar became a floating white card, and dark ink panels became indigo gradient hero cards with translucent tiles. Every text pairing, including white on each gradient stop, is checked in `tests/unit/contrast.test.ts`. The marketing page keeps its night scroll film for now. *(UI)*
+

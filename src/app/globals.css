@@ -51,6 +51,12 @@
   --color-sidebar-tertiary: var(--sidebar-tertiary);
   --color-sidebar-accent: var(--sidebar-accent);
   --color-sidebar-border: var(--sidebar-border);
+  --color-hero-from: var(--hero-from);
+  --color-hero-via: var(--hero-via);
+  --color-hero-to: var(--hero-to);
+  --color-hero-foreground: var(--hero-foreground);
+  --color-hero-secondary: var(--hero-secondary);
+  --color-saffron-light: var(--saffron-light);
   --color-night: var(--night);
   --color-night-raised: var(--night-raised);
   --color-glow-indigo: var(--glow-indigo);
@@ -63,9 +69,9 @@
 }
 
 @theme {
-  --font-sans: "IBM Plex Sans Variable", "IBM Plex Sans Arabic", ui-sans-serif, system-ui, sans-serif;
-  /* Display: Alexandria, drawn for Latin and Arabic together, so both languages share one voice. */
-  --font-display: "Alexandria Variable", "IBM Plex Sans Arabic", ui-sans-serif, system-ui, sans-serif;
+  /* Readex Pro: one family for Arabic and Latin, text and display, so both languages share one voice. */
+  --font-sans: "Readex Pro Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Readex Pro Variable", ui-sans-serif, system-ui, sans-serif;
   --font-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
 
   /* Type scale: 12 / 14 / 16 / 20 / 24 / 32 / 40 */
@@ -88,8 +94,8 @@
   --text-5xl: 4.25rem;
   --text-5xl--line-height: 1.02;
 
-  --radius-control: 8px;
-  --radius-card: 12px;
+  --radius-control: 12px;
+  --radius-card: 20px;
 
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   /* Easing grammar: enter fast and settle; leave quicker; move evenly; one overshoot for the hero. */
@@ -128,7 +134,7 @@
 
 @layer base {
   :lang(ar) {
-    --font-sans: "IBM Plex Sans Arabic", "IBM Plex Sans Variable", ui-sans-serif, system-ui, sans-serif;
+    --font-sans: "Readex Pro Variable", ui-sans-serif, system-ui, sans-serif;
   }
   html {
     -webkit-text-size-adjust: 100%;
@@ -157,7 +163,7 @@
   /* Page and section titles carry the brand voice. */
   h1, h2 {
     font-family: var(--font-display);
-    letter-spacing: -0.018em;
+    letter-spacing: -0.022em;
   }
   :lang(ar) h1, :lang(ar) h2, :lang(ar) h3, :lang(ar) h4 {
     letter-spacing: 0;
@@ -537,3 +543,43 @@ html[data-hero="1"] .nav-cta {
 /* During the hero the nav's call to action steps out of the way; for the rest of the film it is a ghost. */
 html[data-hero="1"][data-front="0"] .nav-cta { opacity: 0; pointer-events: none; }
 .nav-cta { transition: opacity 0.4s var(--ease-move), background-color 0.3s var(--ease-move), box-shadow 0.3s var(--ease-move); }
+
+/* ── Direction C ─────────────────────────────────────────────────────────
+   The canvas carries two soft colour washes; hero cards are the one filled
+   object per screen, an indigo gradient with a quiet light in the corner. */
+.app-canvas {
+  background:
+    radial-gradient(50% 42% at 88% 0%, var(--wash-1), transparent 72%),
+    radial-gradient(40% 38% at 0% 100%, var(--wash-2), transparent 70%),
+    var(--background);
+  background-attachment: fixed;
+}
+.hero-card {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  color: var(--hero-foreground);
+  background: linear-gradient(135deg, var(--hero-from) 0%, var(--hero-via) 55%, var(--hero-to) 100%);
+  box-shadow: var(--shadow-raised), inset 0 1px 0 rgb(255 255 255 / 0.14);
+}
+.hero-card::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset-inline-end: -70px;
+  top: -80px;
+  width: 260px;
+  height: 260px;
+  border-radius: 9999px;
+  background: rgb(255 255 255 / 0.1);
+  pointer-events: none;
+}
+/* Translucent tiles inside a hero card (numbers, must-haves). */
+.hero-tile {
+  border-radius: 18px;
+  background: rgb(255 255 255 / 0.13);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.1);
+}
+/* The evidenced range: a warm gold band. */
+.band-gold { background: linear-gradient(90deg, var(--saffron-light), var(--saffron)); }
+[dir="rtl"] .band-gold { background: linear-gradient(270deg, var(--saffron-light), var(--saffron)); }

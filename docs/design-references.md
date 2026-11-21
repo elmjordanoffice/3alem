@@ -103,3 +103,12 @@ What changed, following the cinematic-web playbook:
 
 Each round was scored blind by a fresh reviewer from screenshots, against the Linear and Higgsfield home pages: 5, 5, 6 and 6 out of 10. Fixes that came out of the rounds: the field fades out before a labelled foreground row (a skill with no evidence yet); no saffron until evidence arrives; one range control everywhere (saffron band, ink or white thumb); no card ever covers text; the primary button wins the squint test; template tells removed (glowing eyebrow pill, two-tone headline, gradient text, ghost letterform in the hero, chapter rail, numbered lists, orphan icon tiles); the browser's yellow `<mark>` background no longer shows behind the highlight sweep. The remaining gap the reviewers name is lighting below the film and a shell that still follows a familiar dark-SaaS layout.
 
+## Fifth pass: direction C, chosen by the product owner
+
+After repeated "not good enough" verdicts, three directions were mocked on the same report screen and the owner picked one: **C · Bright product** (A was an editorial "dossier", B a dark "night console"). Their reasons: the previous design felt plain and generic, and they disliked its typography, colours and layout density.
+
+- **Typography:** Readex Pro for everything, Arabic and Latin.
+- **Colour:** a cool lavender-white canvas with soft washes. The one filled object per screen is an indigo gradient hero card (the Home brief, the report verdict, Grow's next step, the candidate briefing, the sign-in panel). Ranges are gold bands with an ink thumb; evidence is a bright highlighter.
+- **Layout:** a floating white sidebar card with the current page as a filled indigo pill, 20 px cards with soft depth, translucent tiles inside hero cards, segmented tabs, and an initials tile on the report.
+- Dark mode is the same system on deep navy.
+

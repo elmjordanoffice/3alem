@@ -12,7 +12,7 @@ const buttonVariants = cva(
         primary:
           "btn-lit bg-accent text-accent-foreground hover:bg-accent-hover active:bg-accent-active disabled:bg-surface-sunken disabled:text-tertiary disabled:opacity-100",
         secondary:
-          "border border-border-strong bg-surface text-text hover:bg-surface-subtle active:bg-surface-sunken",
+          "bg-surface text-text shadow-[0_0_0_1px_rgb(23_24_74/0.07),0_6px_16px_-10px_rgb(23_24_74/0.45)] hover:bg-surface-subtle active:bg-surface-sunken dark:shadow-[0_0_0_1px_rgb(255_255_255/0.08)]",
         ghost: "text-secondary hover:bg-surface-subtle hover:text-text active:bg-surface-sunken",
         destructive: "bg-critical text-white hover:opacity-90 active:opacity-80 dark:text-[#1c0a0a]",
         link: "h-auto px-0 text-accent-text underline-offset-4 hover:underline",
@@ -20,7 +20,7 @@ const buttonVariants = cva(
       size: {
         sm: "h-8 px-3 text-sm [&_svg]:size-4",
         md: "h-10 px-4 text-sm [&_svg]:size-4",
-        lg: "h-12 px-5 text-base [&_svg]:size-5",
+        lg: "h-12 rounded-[14px] px-5 text-base [&_svg]:size-5",
         icon: "size-10 [&_svg]:size-5",
         "icon-sm": "size-8 [&_svg]:size-4",
       },

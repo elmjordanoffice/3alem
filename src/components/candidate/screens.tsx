@@ -210,7 +210,7 @@ export function Briefing({ v, onBegin }: { v: View<"briefing">; onBegin: () => P
               { icon: Wifi, k: "offline" },
             ].map(({ icon: Icon, k }) => (
               <li key={k} className="flex gap-4">
-                <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-full bg-ink text-saffron">
+                <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-full bg-accent-subtle text-accent-text">
                   <Icon className="size-4" strokeWidth={1.75} aria-hidden />
                 </span>
                 <span className="flex flex-col gap-0.5">
@@ -232,12 +232,12 @@ export function Briefing({ v, onBegin }: { v: View<"briefing">; onBegin: () => P
     <CandidateShell branding={v.branding}>
       <article className="mx-auto flex max-w-[960px] flex-col gap-12 px-4 py-10 sm:py-14">
         {/* The opening of the story: the company, the situation, and you in it. */}
-        <header className="animate-rise overflow-hidden rounded-[20px] bg-ink p-7 text-ink-foreground shadow-raised sm:p-12">
-          <p className="text-sm text-ink-secondary">{t("eyebrow")}</p>
+        <header className="animate-rise overflow-hidden hero-card rounded-[28px] p-7 text-ink-foreground shadow-raised sm:p-12">
+          <p className="text-sm text-hero-secondary">{t("eyebrow")}</p>
           <h1 className="mt-3 max-w-3xl text-[2.25rem] font-semibold leading-[1.08] sm:text-[3rem]">{t("title", { company: v.world.companyName })}</h1>
-          <p className="mt-5 max-w-2xl text-lg leading-relaxed text-ink-secondary" dir="auto">{v.world.premise}</p>
-          <div className="mt-8 max-w-2xl rounded-2xl bg-ink-raised p-5">
-            <h2 className="font-sans text-sm font-normal tracking-normal text-ink-secondary">{t("yourRole")}</h2>
+          <p className="mt-5 max-w-2xl text-lg leading-relaxed text-hero-secondary" dir="auto">{v.world.premise}</p>
+          <div className="mt-8 max-w-2xl hero-tile p-5">
+            <h2 className="font-sans text-sm font-normal tracking-normal text-hero-secondary">{t("yourRole")}</h2>
             <p className="mt-1.5 text-[15px] leading-relaxed" dir="auto">
               <span className="font-semibold">{v.world.yourRole}.</span> {v.world.team}
             </p>
@@ -261,7 +261,7 @@ export function Briefing({ v, onBegin }: { v: View<"briefing">; onBegin: () => P
             <span aria-hidden className="absolute inset-x-0 top-[15px] hidden h-px bg-border sm:block" />
             {v.world.chapters.map((c, i) => (
               <li key={c.title} className="relative flex items-start gap-3 sm:flex-col">
-                <span className={cn("relative inline-flex size-8 shrink-0 items-center justify-center rounded-full border text-sm font-semibold tabular", i === 0 ? "border-ink bg-ink text-ink-foreground" : "border-border-strong bg-background text-secondary")}>
+                <span className={cn("relative inline-flex size-8 shrink-0 items-center justify-center rounded-full border text-sm font-semibold tabular", i === 0 ? "border-accent bg-accent text-accent-foreground" : "border-border-strong bg-background text-secondary")}>
                   {n.number(i + 1)}
                 </span>
                 <span className={cn("text-sm leading-snug", i === 0 ? "font-semibold text-text" : "text-secondary")} dir="auto">{c.title}</span>
@@ -296,9 +296,9 @@ export function Transition({ v, onContinue, onPause }: { v: View<"transition">; 
   return (
     <CandidateShell branding={v.branding}>
       <div className="mx-auto flex max-w-[760px] flex-col gap-8 px-4 py-12 sm:py-20">
-        <div className="animate-rise rounded-[20px] bg-ink p-7 text-ink-foreground shadow-raised sm:p-10">
+        <div className="animate-rise hero-card rounded-[28px] p-7 text-ink-foreground shadow-raised sm:p-10">
           <div className="flex items-center justify-between gap-4">
-            <p className="text-sm text-ink-secondary">{t("eyebrow")}</p>
+            <p className="text-sm text-hero-secondary">{t("eyebrow")}</p>
             <span className="flex gap-1" aria-hidden>
               {v.world.chapters.map((_, i) => (
                 <span key={i} className={cn("h-1.5 w-6 rounded-full", i < v.chapterIndex ? "bg-saffron" : i === v.chapterIndex ? "bg-ink-foreground" : "bg-ink-foreground/15")} />
@@ -306,7 +306,7 @@ export function Transition({ v, onContinue, onPause }: { v: View<"transition">; 
             </span>
           </div>
           <h1 className="mt-4 text-[2rem] font-semibold leading-tight sm:text-[2.5rem]" dir="auto">{ch?.title}</h1>
-          <p className="mt-4 text-lg leading-relaxed text-ink-secondary" dir="auto">{ch?.summary}</p>
+          <p className="mt-4 text-lg leading-relaxed text-hero-secondary" dir="auto">{ch?.summary}</p>
         </div>
         {v.recap.length ? (
           <section className="px-1">

@@ -46,7 +46,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/menu";
-import { INK_GHOST } from "@/components/ui/ink";
 import { LanguageToggle, ThemeMenu } from "./preference-controls";
 import { CommandMenu, openCommandMenu, type CommandPage } from "./command-menu";
 
@@ -106,7 +105,7 @@ export function AppShell({ user, organizations, activeOrganizationId, nav, comma
   );
 
   return (
-    <div className="flex min-h-dvh bg-sidebar">
+    <div className="app-canvas flex min-h-dvh">
       <CommandMenu pages={commandPages} canCreateAssessment={canCreateAssessment} />
       <a
         href="#main"
@@ -114,16 +113,16 @@ export function AppShell({ user, organizations, activeOrganizationId, nav, comma
       >
         {t("skipToContent")}
       </a>
-      <aside className="sticky top-0 hidden h-dvh w-64 shrink-0 flex-col bg-sidebar text-sidebar-foreground lg:flex">
-        {sidebar}
+      {/* The sidebar floats as a white card on the canvas. */}
+      <aside className="sticky top-0 hidden h-dvh w-[18.5rem] shrink-0 p-4 lg:block">
+        <div className="flex h-full flex-col overflow-hidden rounded-[24px] bg-sidebar text-sidebar-foreground shadow-[0_0_0_1px_var(--sidebar-border),0_16px_40px_-22px_rgb(23_24_74/0.35)]">{sidebar}</div>
       </aside>
 
-      {/* The work sits on a sheet of paper laid on the ink desk. */}
-      <div className="flex min-w-0 flex-1 flex-col bg-background lg:my-2 lg:me-2 lg:min-h-[calc(100dvh-1rem)] lg:overflow-clip lg:rounded-[16px] lg:shadow-[0_0_0_1px_rgb(245_244_255/0.06),0_8px_32px_-8px_rgb(0_0_0/0.4)]">
-        <header className="sticky top-0 z-30 flex h-14 items-center gap-2 bg-sidebar px-3 text-sidebar-foreground lg:hidden">
+      <div className="flex min-w-0 flex-1 flex-col">
+        <header className="sticky top-0 z-30 flex h-14 items-center gap-2 border-b border-border bg-surface/85 px-3 text-text backdrop-blur-md lg:hidden">
           <DialogPrimitive.Root open={open} onOpenChange={setOpen}>
             <DialogPrimitive.Trigger
-              className="inline-flex size-9 items-center justify-center rounded-control text-sidebar-secondary hover:bg-ink-foreground/10 hover:text-sidebar-foreground focus-visible:outline-2 focus-visible:outline-focus"
+              className="inline-flex size-9 items-center justify-center rounded-control text-secondary hover:bg-surface-subtle hover:text-text focus-visible:outline-2 focus-visible:outline-focus"
               aria-label={t("openMenu")}
             >
               <Menu className="size-5" aria-hidden />
@@ -133,7 +132,7 @@ export function AppShell({ user, organizations, activeOrganizationId, nav, comma
               <DialogPrimitive.Content className="fixed inset-y-0 start-0 z-50 flex w-72 max-w-[85vw] flex-col bg-sidebar text-sidebar-foreground data-[state=open]:animate-fade-in">
                 <DialogPrimitive.Title className="sr-only">{t("menu")}</DialogPrimitive.Title>
                 <DialogPrimitive.Close
-                  className="absolute end-3 top-3.5 inline-flex size-8 items-center justify-center rounded-control text-sidebar-secondary hover:bg-ink-foreground/10 hover:text-sidebar-foreground"
+                  className="absolute end-3 top-4 inline-flex size-8 items-center justify-center rounded-control text-sidebar-secondary hover:bg-sidebar-raised hover:text-sidebar-foreground"
                   aria-label={t("closeMenu")}
                 >
                   <X className="size-4" aria-hidden />
@@ -142,12 +141,12 @@ export function AppShell({ user, organizations, activeOrganizationId, nav, comma
               </DialogPrimitive.Content>
             </DialogPrimitive.Portal>
           </DialogPrimitive.Root>
-          <Logo showArabic={false} reverse />
+          <Logo showArabic={false} />
           <div className="ms-auto flex items-center">
-            <button type="button" onClick={openCommandMenu} className="inline-flex size-9 items-center justify-center rounded-control text-sidebar-secondary hover:bg-ink-foreground/10 hover:text-sidebar-foreground focus-visible:outline-2 focus-visible:outline-focus" aria-label={t("search")}>
+            <button type="button" onClick={openCommandMenu} className="inline-flex size-9 items-center justify-center rounded-control text-secondary hover:bg-surface-subtle hover:text-text focus-visible:outline-2 focus-visible:outline-focus" aria-label={t("search")}>
               <Search className="size-5" aria-hidden />
             </button>
-            <ThemeMenu className={INK_GHOST} />
+            <ThemeMenu />
           </div>
         </header>
         <main id="main" className="flex-1">
@@ -171,16 +170,16 @@ function SidebarContent({ user, organizations, activeOrganizationId, nav }: Pick
 
   return (
     <div className="flex h-full flex-col">
-      <div className="flex h-16 items-center px-5">
+      <div className="flex h-[4.5rem] items-center px-5">
         <Link href="/app" className="rounded-control focus-visible:outline-2 focus-visible:outline-focus">
-          <Logo reverse />
+          <Logo className="text-[21px]" />
         </Link>
       </div>
 
       <div className="px-3 pb-2">
         <DropdownMenu>
-          <DropdownMenuTrigger className="flex w-full items-center gap-2.5 rounded-[10px] bg-sidebar-raised px-2.5 py-2 text-start text-sm shadow-[inset_0_0_0_1px_var(--sidebar-border)] transition-colors hover:bg-sidebar-active focus-visible:outline-2 focus-visible:outline-focus">
-            <span className="inline-flex size-7 shrink-0 items-center justify-center rounded-[7px] bg-ink-foreground font-display text-[13px] font-semibold text-ink" aria-hidden>
+          <DropdownMenuTrigger className="flex w-full items-center gap-2.5 rounded-[14px] bg-sidebar-raised px-2.5 py-2.5 text-start text-sm transition-colors hover:bg-surface-sunken focus-visible:outline-2 focus-visible:outline-focus">
+            <span className="inline-flex size-8 shrink-0 items-center justify-center rounded-[10px] bg-ink font-display text-[13px] font-semibold text-ink-foreground" aria-hidden>
               {active ? active.name.trim().charAt(0).toUpperCase() : <Building2 className="size-3.5" />}
             </span>
             <span className="min-w-0 flex-1">
@@ -220,11 +219,11 @@ function SidebarContent({ user, organizations, activeOrganizationId, nav }: Pick
         <button
           type="button"
           onClick={openCommandMenu}
-          className="flex h-9 w-full items-center gap-2.5 rounded-control px-2.5 text-sm text-sidebar-secondary transition-colors hover:bg-ink-foreground/[0.07] hover:text-sidebar-foreground focus-visible:outline-2 focus-visible:outline-focus"
+          className="flex h-10 w-full items-center gap-2.5 rounded-[12px] px-3 text-sm text-sidebar-secondary shadow-[inset_0_0_0_1px_var(--border)] transition-colors hover:bg-sidebar-raised hover:text-sidebar-foreground focus-visible:outline-2 focus-visible:outline-focus"
         >
           <Search className="size-4" strokeWidth={1.75} aria-hidden />
           <span className="flex-1 text-start">{t("search")}</span>
-          <kbd className="rounded-[5px] bg-ink-foreground/10 px-1.5 py-px font-sans text-[11px] text-sidebar-secondary" dir="ltr">⌘K</kbd>
+          <kbd className="rounded-[6px] bg-sidebar-raised px-1.5 py-px font-sans text-[11px] text-sidebar-tertiary" dir="ltr">⌘K</kbd>
         </button>
       </div>
 
@@ -232,9 +231,9 @@ function SidebarContent({ user, organizations, activeOrganizationId, nav }: Pick
         {nav.map((section) => (
           <div key={section.sectionKey} className="mb-6">
             {section.sectionKey !== "main" ? (
-              <p className="eyebrow px-2.5 pb-2 text-sidebar-tertiary">{t(`sections.${section.sectionKey}`)}</p>
+              <p className="px-3.5 pb-2 text-xs font-medium text-sidebar-tertiary">{t(`sections.${section.sectionKey}`)}</p>
             ) : null}
-            <ul className="flex flex-col gap-0.5">
+            <ul className="flex flex-col gap-1">
               {section.items.map((item) => {
                 const Icon = ICONS[item.icon];
                 const current = item.href === currentHref;
@@ -244,15 +243,14 @@ function SidebarContent({ user, organizations, activeOrganizationId, nav }: Pick
                       href={item.href}
                       aria-current={current ? "page" : undefined}
                       className={cn(
-                        "relative flex h-9 items-center gap-3 rounded-control px-2.5 text-sm transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-focus",
+                        "relative flex h-11 items-center gap-3 rounded-[14px] px-3.5 text-[14.5px] transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-focus",
                         current
-                          ? "bg-sidebar-active font-medium text-sidebar-foreground shadow-[inset_0_1px_0_rgb(245_244_255/0.06)]"
-                          : "text-sidebar-secondary hover:bg-ink-foreground/[0.07] hover:text-sidebar-foreground",
+                          ? "bg-sidebar-active font-medium text-sidebar-accent shadow-[0_10px_24px_-10px_rgb(59_63_216/0.7)]"
+                          : "text-sidebar-secondary hover:bg-sidebar-raised hover:text-sidebar-foreground",
                       )}
                     >
-                      {current ? <span className="absolute inset-y-2 -start-3 w-[3px] rounded-e-full bg-sidebar-accent" aria-hidden /> : null}
-                      <Icon className={cn("size-4", current ? "text-sidebar-accent" : "text-sidebar-tertiary")} strokeWidth={1.75} aria-hidden />
-                      {t(`nav.${item.labelKey}`)}
+                      <Icon className={cn("size-[18px] shrink-0", current ? "text-sidebar-accent" : "text-sidebar-tertiary")} strokeWidth={1.75} aria-hidden />
+                      <span className="truncate">{t(`nav.${item.labelKey}`)}</span>
                     </Link>
                   </li>
                 );
@@ -264,7 +262,7 @@ function SidebarContent({ user, organizations, activeOrganizationId, nav }: Pick
 
       <div className="flex items-center gap-1 border-t border-sidebar-border p-3">
         <DropdownMenu>
-          <DropdownMenuTrigger className="flex min-w-0 flex-1 items-center gap-2.5 rounded-control p-1.5 text-start transition-colors hover:bg-ink-foreground/[0.07] focus-visible:outline-2 focus-visible:outline-focus">
+          <DropdownMenuTrigger className="flex min-w-0 flex-1 items-center gap-2.5 rounded-[14px] p-1.5 text-start transition-colors hover:bg-sidebar-raised focus-visible:outline-2 focus-visible:outline-focus">
             <Avatar name={user.name} />
             <span className="min-w-0 flex-1">
               <span className="block truncate text-sm font-medium text-sidebar-foreground">{user.name}</span>
@@ -291,8 +289,8 @@ function SidebarContent({ user, organizations, activeOrganizationId, nav }: Pick
         </DropdownMenu>
       </div>
       <div className="flex items-center justify-between border-t border-sidebar-border px-3 py-2">
-        <LanguageToggle className={INK_GHOST} />
-        <ThemeMenu className={INK_GHOST} />
+        <LanguageToggle />
+        <ThemeMenu />
       </div>
     </div>
   );
