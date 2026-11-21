@@ -1549,7 +1549,15 @@
     "emptyBody": "Select 2–4 candidates with a ready report on the role page.",
     "note": "Use comparison alongside interviews. People decide.",
     "reviewPendingTitle": "A human review is still pending",
-    "reviewPendingBody": "{names} asked for a person to review every score. Open their report and confirm the review before relying on this comparison."
+    "reviewPendingBody": "{names} asked for a person to review every score. Open their report and confirm the review before relying on this comparison.",
+    "diff": {
+      "title": "Where they really differ",
+      "body": "Only differences larger than the margin of the measurement. One line from each person's own answers.",
+      "ahead": "{leader} ahead of {trailer} by {gap} levels",
+      "within": "Too close to call: {skills}. The ranges overlap there, so don't decide on these.",
+      "none": "No clear differences: the ranges overlap on every skill. Let the interviews decide.",
+      "more": "{n, plural, one {1 more clear difference in the table below.} other {# more clear differences in the table below.}}"
+    }
   },
   "preview": {
     "banner": "Preview: this is what candidates see first. Nothing is saved."

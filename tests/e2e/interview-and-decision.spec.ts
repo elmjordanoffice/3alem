@@ -63,3 +63,23 @@ test("an interviewer scores blind, then sees the assessment and records a decisi
     await clean();
   }
 });
+
+test("compare names only the differences larger than the measurement, with quotes", async ({ page }) => {
+  const ids = await withDb(async (c) =>
+    (
+      await c.query(
+        `SELECT s.id, s."templateId", r.content->'fit'->>'level' AS fit FROM assessment_session s JOIN report r ON r."sessionId" = s.id
+         WHERE s.mode = 'HIRE' AND r.status = 'READY' AND NOT s."humanReviewRequested" AND r.content->'fit'->>'level' IN ('STRONG', 'WEAK')
+         ORDER BY s."templateId", (r.content->'fit'->>'level') LIMIT 20`,
+      )
+    ).rows as { id: string; templateId: string; fit: string }[],
+  );
+  const strong = ids.find((r) => r.fit === "STRONG");
+  const weak = ids.find((r) => r.fit === "WEAK" && r.templateId === strong?.templateId);
+  test.skip(!strong || !weak, "run npm run db:seed:demo first");
+  await signIn(page, "orgadmin@aalim.dev");
+  await page.goto(`/app/assessments/${strong!.templateId}/compare?ids=${strong!.id},${weak!.id}`, { waitUntil: "networkidle" });
+  const diff = page.getByRole("region", { name: "Where they really differ" });
+  await expect(diff.getByRole("heading", { level: 3 }).first()).toBeVisible();
+  await expect(diff.locator("blockquote").first()).toBeVisible();
+});
