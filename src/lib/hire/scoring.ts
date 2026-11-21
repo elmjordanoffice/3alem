@@ -11,7 +11,7 @@ import { anchorsFor } from "@/lib/ai/prompts/shared";
 import { rubricKeysForStage, type ItemMeta } from "./items";
 import { loadRoleProfileForSession, latestModel, saveModel, syncHypotheses } from "./model-store";
 
-export const SCORER_OFFLINE_VERSION = "scorer-offline.v1";
+export const SCORER_OFFLINE_VERSION = "scorer-offline.v2";
 
 /** Normalise for verbatim comparison: whitespace and quote styles only. */
 function norm(s: string) {

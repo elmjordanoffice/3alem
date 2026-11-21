@@ -19,6 +19,8 @@ export interface CandidateRow {
   topStrengths: string[];
   flags: number;
   minutes: number | null;
+  decision: "ADVANCE" | "HIRE" | "HOLD" | "DECLINE" | null;
+  scorecards: number;
 }
 
 function statusOf(inv: { status: string; expiresAt: Date }, session: { status: string } | null, report: { status: string } | null): CandidateStatus {
@@ -65,7 +67,7 @@ export async function assessmentDetail(viewer: Viewer & { activeOrganization: { 
     const invitations = await tx.invitation.findMany({
       where: { templateId: id },
       orderBy: { createdAt: "desc" },
-      include: { session: { include: { report: true, integrityEvents: { select: { id: true } } } } },
+      include: { session: { include: { report: true, integrityEvents: { select: { id: true } }, decision: { select: { outcome: true } }, _count: { select: { scorecards: true } } } } },
     });
     const candidates: CandidateRow[] = invitations.map((inv) => {
       const report = inv.session?.report ?? null;
@@ -83,6 +85,8 @@ export async function assessmentDetail(viewer: Viewer & { activeOrganization: { 
         topStrengths: content?.narrative.strengths.slice(0, 2).map((s) => s.headline) ?? [],
         flags: inv.session?.integrityEvents.length ?? 0,
         minutes: inv.session ? Math.round(inv.session.elapsedSeconds / 60) : null,
+        decision: inv.session?.decision?.outcome ?? null,
+        scorecards: inv.session?._count.scorecards ?? 0,
       };
     });
     const row = t as unknown as TemplateRow;
@@ -152,8 +156,10 @@ export async function dashboardStats(viewer: Viewer & { activeOrganization: { id
 }
 
 export interface HomeOverview {
-  review: { sessionId: string; name: string; role: string; fit: ReportContent["fit"]["level"]; confidence: number; readyAt: string; viewed: boolean }[];
+  review: { sessionId: string; name: string; role: string; fit: ReportContent["fit"]["level"]; confidence: number; readyAt: string; viewed: boolean; decision: "ADVANCE" | "HIRE" | "HOLD" | "DECLINE" | null }[];
   unviewed: number;
+  /** Ready reports with no recorded decision yet. */
+  awaitingDecision: number;
   inProgress: { sessionId: string; name: string; role: string; startedAt: string; minutes: number; budget: number }[];
   roles: Awaited<ReturnType<typeof listAssessments>>;
   totals: { open: number; invited: number; inProgress: number; completed: number };
@@ -170,7 +176,7 @@ export async function homeOverview(viewer: Viewer & { activeOrganization: { id: 
       where: { kind: "HIRE", status: "READY" },
       orderBy: { updatedAt: "desc" },
       take: 60,
-      select: { sessionId: true, content: true, updatedAt: true, session: { select: { template: { select: { title: true } } } } },
+      select: { sessionId: true, content: true, updatedAt: true, session: { select: { template: { select: { title: true } }, decision: { select: { outcome: true } } } } },
     });
     const viewed = new Set(
       (await tx.auditLog.findMany({ where: { action: "report.viewed", targetId: { in: reports.map((r) => r.sessionId) } }, select: { targetId: true }, distinct: ["targetId"] })).map((a) => a.targetId),
@@ -178,7 +184,7 @@ export async function homeOverview(viewer: Viewer & { activeOrganization: { id: 
     const review = reports
       .map((r) => {
         const c = r.content as unknown as ReportContent;
-        return { sessionId: r.sessionId, name: c.candidate.name, role: r.session.template?.title ?? c.role.title, fit: c.fit.level, confidence: c.fit.confidence, readyAt: r.updatedAt.toISOString(), viewed: viewed.has(r.sessionId) };
+        return { sessionId: r.sessionId, name: c.candidate.name, role: r.session.template?.title ?? c.role.title, fit: c.fit.level, confidence: c.fit.confidence, readyAt: r.updatedAt.toISOString(), viewed: viewed.has(r.sessionId), decision: r.session.decision?.outcome ?? null };
       })
       .sort((a, b) => Number(a.viewed) - Number(b.viewed) || b.readyAt.localeCompare(a.readyAt));
     const live = await tx.assessmentSession.findMany({
@@ -190,6 +196,7 @@ export async function homeOverview(viewer: Viewer & { activeOrganization: { id: 
     return {
       review: review.slice(0, 7),
       unviewed: review.filter((r) => !r.viewed).length,
+      awaitingDecision: review.filter((r) => !r.decision).length,
       inProgress: live.map((s) => ({
         sessionId: s.id,
         name: s.invitation?.name ?? s.invitation?.email.split("@")[0] ?? "",

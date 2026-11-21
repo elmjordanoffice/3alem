@@ -19,7 +19,7 @@ const { startTeamSession, markReportSeen } = await import("../src/lib/team");
 const PASSWORD = "aalim-demo-2026";
 
 const CANDIDATES = [
-  { name: "Hana Al-Sayed", strengths: ["critical-thinking", "judgment", "technical"], weaknesses: ["communication"], attention: 0.9 },
+  { name: "Hana Al-Sayed", strengths: ["critical-thinking", "judgment", "technical", "management"], weaknesses: ["communication"], attention: 0.9 },
   { name: "Mateo Fernández", strengths: ["communication", "collaboration", "leadership"], weaknesses: ["critical-thinking"], attention: 0.4 },
   { name: "Priya Raman", strengths: ["management", "judgment", "leadership"], weaknesses: [], attention: 0.7 },
   { name: "Kwame Asante", strengths: [], weaknesses: ["judgment", "management", "adaptability"], attention: 0.2 },

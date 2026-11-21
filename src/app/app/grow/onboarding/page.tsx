@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
+import { DOMAINS } from "@/lib/framework/data";
 import { requireViewer } from "@/lib/auth/session";
 import { getGrowProfile } from "@/lib/grow/profile";
 import { PageContainer, PageHeader } from "@/components/app/page-header";
@@ -14,12 +15,14 @@ export default async function GrowOnboarding() {
   const viewer = await requireViewer();
   const t = await getTranslations("grow.onboarding");
   const p = await getGrowProfile(viewer.user.id);
+  const locale = (await getLocale()) === "ar" ? "ar" : "en";
+  const domains = DOMAINS.filter((d) => d.key !== "technical").map((d) => ({ key: d.key, name: d.name[locale], statement: d.highLevel[locale] }));
   return (
     <PageContainer className="max-w-5xl">
       <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_20rem]">
         <div className="max-w-2xl">
           <PageHeader title={t("title")} description={t("description")} />
-          <GrowOnboardingForm initial={p ? { currentRole: p.currentRole, experienceYears: p.experienceYears, goal: p.goal, hoursPerWeek: p.hoursPerWeek } : null} />
+          <GrowOnboardingForm initial={p ? { currentRole: p.currentRole, experienceYears: p.experienceYears, goal: p.goal, hoursPerWeek: p.hoursPerWeek, selfView: p.selfView as Record<string, number> } : null} domains={domains} />
         </div>
         {/* What happens after this form: a real sequence. */}
         <aside className="self-start hero-card rounded-[28px] p-6 text-ink-foreground lg:sticky lg:top-12">

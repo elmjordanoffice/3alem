@@ -132,7 +132,7 @@ export interface TeamAnalytics {
   named: boolean;
   assessedCount: number;
   domains: { key: string; name: string }[];
-  heatmap: { key: string; label: string; values: Record<string, number | null> }[];
+  heatmap: { key: string; label: string; values: Record<string, number | null>; thin: string[] }[];
   aggregates: { key: string; name: string; mean: number | null; min: number | null; max: number | null; n: number }[];
   gaps: { key: string; name: string; reason: "low_team_level" | "single_point" | "no_one_strong"; detail: number }[];
   pipeline: { memberId: string; name: string; leadership: number; management: number; readiness: "ready" | "emerging"; evidence: number }[];
@@ -227,7 +227,15 @@ export async function teamAnalytics(viewer: OrgViewer, teamId: string, locale: "
       named,
       assessedCount: byMember.length,
       domains,
-      heatmap: named ? byMember.map((x) => ({ key: x.m.id, label: nameOf(x.m), values: Object.fromEntries(domains.map((d) => [d.key, level(x.content, d.key)])) })) : [],
+      heatmap: named
+        ? byMember.map((x) => ({
+            key: x.m.id,
+            label: nameOf(x.m),
+            values: Object.fromEntries(domains.map((d) => [d.key, level(x.content, d.key)])),
+            // Below 0.5 confidence the range is wide: say so on the cell.
+            thin: x.content.domains.filter((d) => d.confidence < 0.5).map((d) => d.key),
+          }))
+        : [],
       aggregates,
       gaps,
       pipeline,

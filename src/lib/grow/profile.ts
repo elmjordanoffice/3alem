@@ -13,7 +13,12 @@ export interface GrowProfileInput {
   experienceYears: number;
   goal: string;
   hoursPerWeek: number;
+  /** Own view per domain, 1–5; domains the person wasn't sure about are absent. */
+  selfView?: Record<string, number>;
 }
+
+/** "How often does this describe you?" answers, as levels on the 1–5 scale. */
+export const SELF_VIEW_LEVELS = { rarely: 1.5, sometimes: 2.5, often: 3.5, almostAlways: 4.5 } as const;
 
 export function detectFamily(text: string): string {
   const t = normalize(text);

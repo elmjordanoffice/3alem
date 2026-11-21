@@ -1,7 +1,8 @@
 "use client";
 import * as React from "react";
+import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { ChevronDown, Info, Lightbulb, ShieldCheck, Sparkles, TrendingUp, MessageSquareQuote, Compass } from "lucide-react";
+import { ArrowRight, ChevronDown, Info, Lightbulb, ShieldCheck, Sparkles, TrendingUp, MessageSquareQuote, Compass } from "lucide-react";
 import { Collapsible } from "radix-ui";
 import type { ReportContent, ReportDomain, ReportSkill } from "@/lib/hire/report-types";
 import { WORK_STYLES } from "@/lib/framework/data";
@@ -321,6 +322,12 @@ export function HireReport({ content, audience, actions, review }: { content: Re
                 </li>
               ))}
             </ol>
+            {review?.editable ? (
+              <Link href={`/app/reports/${review.sessionId}/interview`} className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-accent-text hover:underline print:hidden">
+                {t("openKit")}
+                <ArrowRight className="size-4 flip-rtl" aria-hidden />
+              </Link>
+            ) : null}
           </Section>
         ) : null}
 

@@ -16,6 +16,7 @@ import { anchorsFor } from "@/lib/ai/prompts/shared";
 import { getProvider, runAgent } from "@/lib/ai/run";
 import { trackByKey } from "./tracks";
 import { getGrowProfile } from "./profile";
+import { coachingFor, type Coaching } from "./coaching";
 
 export interface PracticeItem {
   content: ItemContent;
@@ -26,11 +27,16 @@ export interface PracticeItem {
   source: string;
   /** Set when this is a "try again with a twist" round. */
   twistOf?: string;
+  /** Set when this is a second go at the same scenario, with what the first attempt showed. */
+  retryOf?: string;
+  previous?: { scores: { competencyKey: string; level: number }[]; tips: string[] };
   track?: { key: string; index: number };
 }
 
 export interface StoredFeedback extends PracticeFeedback {
   mode: "anthropic" | "offline";
+  /** Habit tips and what the next level looks like (added in both modes). */
+  coaching?: Coaching;
 }
 
 function domainOf(key: string) {
@@ -42,7 +48,12 @@ async function currentLevel(userId: string, key: string): Promise<number> {
   const snap = await withTenant({ userId }, (tx) =>
     tx.candidateModelSnapshot.findFirst({ where: { subjectUserId: userId, session: { mode: "GROW" } }, orderBy: { createdAt: "desc" } }),
   );
-  if (!snap) return 3;
+  if (!snap) {
+    // Before any assessment, start from the person's own view of the domain, if they gave one.
+    const profile = await getGrowProfile(userId);
+    const own = (profile?.selfView as Record<string, number> | undefined)?.[domainOf(key)];
+    return typeof own === "number" ? own : 3;
+  }
   const model = snap.model as unknown as CandidateModel;
   return model.skills[key] ? estimateSkill(model, key).mean : 3;
 }
@@ -54,8 +65,22 @@ function bestType(key: string, preferred?: ItemType): ItemType {
 }
 
 /** Start a practice scenario for a skill, a track session, or a twist on an earlier one. */
-export async function startPractice(userId: string, locale: "en" | "ar", opts: { skillKey?: string; track?: { key: string; index: number }; twistOf?: string }) {
+export async function startPractice(userId: string, locale: "en" | "ar", opts: { skillKey?: string; track?: { key: string; index: number }; twistOf?: string; retryOf?: string }) {
   const profile = await getGrowProfile(userId);
+  if (opts.retryOf) {
+    // Deliberate practice: the same scenario again, with the first attempt's feedback in view.
+    const prev = await withTenant({ userId }, (tx) => tx.practiceSession.findFirst({ where: { id: opts.retryOf, userId } }));
+    if (!prev?.feedback) throw new Error("Not found");
+    const item = prev.item as unknown as PracticeItem;
+    const fb = prev.feedback as unknown as StoredFeedback;
+    const again: PracticeItem = {
+      ...item,
+      retryOf: prev.id,
+      previous: { scores: fb.scores.map((s) => ({ competencyKey: s.competencyKey, level: s.level })), tips: [...(fb.coaching?.tips ?? []), ...fb.expertWouldConsider].slice(0, 4) },
+    };
+    delete again.track;
+    return withTenant({ userId }, (tx) => tx.practiceSession.create({ data: { userId, competencyKeys: prev.competencyKeys, difficulty: prev.difficulty, item: again as unknown as Prisma.InputJsonValue } }));
+  }
   if (opts.twistOf) {
     const prev = await withTenant({ userId }, (tx) => tx.practiceSession.findFirst({ where: { id: opts.twistOf, userId } }));
     if (!prev) throw new Error("Not found");
@@ -166,6 +191,7 @@ export async function submitPractice(userId: string, locale: "en" | "ar", id: st
     }
   }
   feedback ??= offlineFeedback(item, words, locale);
+  feedback.coaching = coachingFor(words, feedback.scores, item.targets, locale);
   const updated = await withTenant({ userId }, (tx) =>
     tx.practiceSession.update({ where: { id }, data: { response: parsed as unknown as Prisma.InputJsonValue, feedback: feedback as unknown as Prisma.InputJsonValue, completedAt: new Date() } }),
   );

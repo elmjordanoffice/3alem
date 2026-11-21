@@ -8,7 +8,6 @@ import type { TeamAnalytics } from "@/lib/team";
 import { TRACKS } from "@/lib/grow/tracks";
 import { assignTrackAction } from "@/app/actions/team";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Alert } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Person } from "@/components/ui/avatar";
@@ -30,7 +29,7 @@ export function TeamOverview({ a, canManage }: { a: TeamAnalytics; canManage: bo
 
   return (
     <div className="flex flex-col gap-8">
-      <Alert tone="info" title={t("devToolTitle")}>{t("devTool")}</Alert>
+      <TeamBrief a={a} />
 
       <Card>
         <CardHeader>
@@ -204,5 +203,42 @@ export function TeamOverview({ a, canManage }: { a: TeamAnalytics; canManage: bo
       </Card>
       <p className={cn("text-xs text-tertiary")}>{t("footer")}</p>
     </div>
+  );
+}
+
+/** The one filled object on the page: what the reports suggest doing next. */
+function TeamBrief({ a }: { a: TeamAnalytics }) {
+  const t = useTranslations("team.brief");
+  const tt = useTranslations("team");
+  const n = useNumbers();
+  const { locale } = useLocaleSettings();
+  const waiting = a.members.filter((m) => m.status === "INVITED" || m.status === "CONSENTED").length;
+  const steps: string[] = [];
+  if (waiting) steps.push(t("notAssessed", { n: waiting }));
+  if (!a.named && a.assessedCount > 0) steps.push(t("anon", { n: a.assessedCount }));
+  const gap = a.gaps[0];
+  const track = gap ? a.suggestedTracks.find((s) => s.reasonDomain === gap.name) : undefined;
+  const trackDef = track ? TRACKS.find((x) => x.key === track.key) : undefined;
+  if (gap && trackDef && !a.assignedTracks.includes(trackDef.key)) steps.push(t("gap", { track: trackDef.name[locale], domain: gap.name }));
+  const pair = a.pairings[0];
+  if (pair) steps.push(t("pair", { mentor: pair.mentor, learner: pair.learner, domain: pair.domainName, gap: n.level(pair.gap) }));
+  const ready = a.pipeline.find((p) => p.readiness === "ready");
+  if (ready) steps.push(t("ready", { name: ready.name }));
+  return (
+    <section aria-labelledby="team-brief" className="hero-card rounded-[28px] p-6 sm:p-8">
+      <h2 id="team-brief" className="font-display text-2xl font-semibold tracking-[-0.02em]">{t("title", { team: a.team.name })}</h2>
+      <p className="mt-1 text-sm text-hero-secondary">{t("body")}</p>
+      <ol className="mt-5 grid gap-2 sm:grid-cols-2">
+        {(steps.length ? steps : [t("none")]).slice(0, 4).map((s, i) => (
+          <li key={s} className="hero-tile flex gap-3 rounded-[16px] p-4 text-sm">
+            <span className="tabular grid size-6 shrink-0 place-items-center rounded-full bg-saffron text-xs font-semibold text-[#15163a]" aria-hidden>{n.number(i + 1)}</span>
+            <span dir="auto">{s}</span>
+          </li>
+        ))}
+      </ol>
+      <p className="mt-5 max-w-3xl text-xs leading-relaxed text-hero-secondary">
+        <span className="font-semibold text-hero-foreground">{tt("devToolTitle")}.</span> {tt("devTool")}
+      </p>
+    </section>
   );
 }

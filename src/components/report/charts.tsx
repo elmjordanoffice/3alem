@@ -167,13 +167,14 @@ export function SkillHeatmap({
   label,
   className,
 }: {
-  rows: { key: string; label: string; values: Record<string, number | null> }[];
+  rows: { key: string; label: string; values: Record<string, number | null>; thin?: string[] }[];
   columns: { key: string; label: string; short: string }[];
   label: string;
   className?: string;
 }) {
   const t = useTranslations("levels");
   const tc = useTranslations("components.heatmap");
+  const anyThin = rows.some((r) => r.thin?.length);
   const n = useNumbers();
   return (
     <div className={cn("overflow-x-auto", className)}>
@@ -201,12 +202,16 @@ export function SkillHeatmap({
               </th>
               {columns.map((c) => {
                 const v = r.values[c.key];
+                const thin = v != null && r.thin?.includes(c.key);
                 return (
                   <td
                     key={c.key}
+                    title={thin ? tc("thin") : undefined}
                     className={cn(
                       "h-10 rounded-[6px] text-center text-xs font-medium tabular",
                       v == null ? "bg-surface-subtle text-tertiary" : levelClasses(v),
+                      // Thin evidence: lighter, with a dashed outline, so nobody over-reads it.
+                      thin && "opacity-60 outline-[1.5px] outline-dashed -outline-offset-[3px] outline-current",
                     )}
                   >
                     {v == null ? (
@@ -217,7 +222,7 @@ export function SkillHeatmap({
                     ) : (
                       <span>
                         {n.level(v)}
-                        <span className="sr-only"> {t(String(levelBand(v)))}</span>
+                        <span className="sr-only"> {t(String(levelBand(v)))}{thin ? `, ${tc("thin")}` : ""}</span>
                       </span>
                     )}
                   </td>
@@ -227,6 +232,12 @@ export function SkillHeatmap({
           ))}
         </tbody>
       </table>
+      {anyThin ? (
+        <p className="mt-2 flex items-center gap-2 text-xs text-secondary">
+          <span className="inline-block h-3.5 w-5 rounded-[4px] bg-level-3 opacity-60 outline-[1.5px] outline-dashed -outline-offset-[3px] outline-text" aria-hidden />
+          {tc("thinLegend")}
+        </p>
+      ) : null}
     </div>
   );
 }

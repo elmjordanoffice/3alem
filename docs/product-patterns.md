@@ -304,7 +304,7 @@ Status against the current build: **✓ exists** · **△ change** · **＋ new*
 4. △ Invite · الدعوة. Add pre-granted extra time per invitation and the candidate-summary switch (P4, P10).
 5. ✓ Candidates and pipeline · المرشّحون ومسار التوظيف.
 6. ✓ Report · التقرير. "Read the full answer" on every quote (the scene and the whole answer, with the quote marked), reviewer adjustments with a required note shown on the report and in the audit log, a human-review banner that keeps sharing and PDF off until confirmed, and "context for the reviewer, never a verdict" (P6, P8). *Built.*
-7. ＋ Interview kit · عُدّة المقابلة. A blind scorecard from the gaps (P9).
+7. ✓ Built: Interview kit · عُدّة المقابلة. A blind scorecard from the gaps, a debrief that shows disagreements, and a recorded decision with its reason (P9; D-049).
 8. ✓ Compare candidates · مقارنة المرشّحين.
 9. ✓ Share link and PDF · رابط المشاركة وملف PDF.
 10. ✓ Fairness monitoring and outcome ratings · مراقبة العدالة وتقييمات النتائج.
@@ -313,18 +313,18 @@ Status against the current build: **✓ exists** · **△ change** · **＋ new*
 ### Manager dashboard · لوحة المدير (`/app/teams`)
 1. ✓ Teams list · قائمة الفرق.
 2. ✓ Consent and invitations · الموافقة والدعوات.
-3. △ Team matrix · مصفوفة الفريق. Add evidence labels on cells, counts by default and names with consent (P14).
+3. ✓ Built (evidence labels): Team matrix · مصفوفة الفريق. Add evidence labels on cells, counts by default and names with consent (P14).
 4. ＋ Target-role view · عرض الدور المستهدف. Covered / thin / missing per area (P14).
 5. ✓ Leadership readiness and pairing suggestions · الجاهزية للقيادة واقتراحات الإقران.
-6. △ Development plan · خطة التطوير. Suggestions are offered to the person, never assigned; guides can be attached (P13, P14).
+6. ✓ Built (offer, not assign): Development plan · خطة التطوير. Suggestions are offered to the person, never assigned; guides can be attached (P13, P14; D-050).
 7. ＋ Reassess cycle · دورة إعادة التقييم. A 90-day reminder and a comparison of ranges over time.
 
 ### Self-training mode · وضع التدريب الذاتي (`/app/grow`)
-1. △ Onboarding · البداية. Role, goal and weekly rhythm, plus "Where are you today?" with "I can…" statements and "I'm not sure" (P1, P12).
+1. ✓ Built (self-view): Onboarding · البداية. Role, goal and weekly rhythm, plus "Where are you today?" with "I can…" statements and "I'm not sure" (P1, P12).
 2. ✓ Adaptive baseline · التقييم المرجعي. Runs only for areas marked "not sure" (P1).
 3. ＋ Adjust your result · عدّل نتيجتك. Move a level and see the range widen (P1).
 4. △ Today · اليوم. One next step plus the weekly rhythm strip (P11, P12).
-5. △ Practice scene and feedback · مشهد التدريب والملاحظات. Three-part feedback (P7).
+5. ✓ Built (coaching, next level, try again): Practice scene and feedback · مشهد التدريب والملاحظات. Three-part feedback (P7; D-050).
 6. △ Tracks · المسارات. Units named by situation, with review steps on the path (P11).
 7. ＋ Guides · الأدلة. Grouped by level; definition → framework table → examples → practise (P13).
 8. △ Progress · التقدّم. "Weeks on track" and ranges over time; no streak counter (P12).

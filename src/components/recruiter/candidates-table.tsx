@@ -31,8 +31,11 @@ const STATUS_TONE: Record<CandidateRow["status"], "neutral" | "accent" | "succes
 
 type Sort = "fit" | "recent" | "name";
 
+const DECISION_TONE = { ADVANCE: "accent", HIRE: "success", HOLD: "neutral", DECLINE: "warning" } as const;
+
 export function CandidatesTable({ templateId, rows, canInvite }: { templateId: string; rows: CandidateRow[]; canInvite: boolean }) {
   const t = useTranslations("role");
+  const td = useTranslations("report.decision");
   const n = useNumbers();
   const router = useRouter();
   const [filter, setFilter] = React.useState<"all" | "ready" | "active">("all");
@@ -125,7 +128,11 @@ export function CandidatesTable({ templateId, rows, canInvite }: { templateId: s
                   )}
                 </td>
                 <td className="px-3 py-3">
-                  <Badge tone={STATUS_TONE[r.status]}>{t(`status.${r.status}`)}</Badge>
+                  <span className="flex flex-col items-start gap-1">
+                    <Badge tone={STATUS_TONE[r.status]}>{t(`status.${r.status}`)}</Badge>
+                    {r.decision ? <Badge tone={DECISION_TONE[r.decision]}>{td(`outcome.${r.decision}`)}</Badge> : null}
+                    {r.scorecards ? <span className="text-xs text-tertiary">{t("scorecards", { n: r.scorecards })}</span> : null}
+                  </span>
                 </td>
                 <td className="px-3 py-3">
                   {r.fit ? (

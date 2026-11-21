@@ -3,7 +3,8 @@ import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { Loader2, Target } from "lucide-react";
 import { requireViewer } from "@/lib/auth/session";
-import { growSessions } from "@/lib/grow/profile";
+import { getGrowProfile, growSessions } from "@/lib/grow/profile";
+import { SelfViewComparison } from "@/components/grow/self-view";
 import type { ReportContent } from "@/lib/hire/report-types";
 import { PageContainer } from "@/components/app/page-header";
 import { HireReport } from "@/components/report/hire-report";
@@ -38,6 +39,8 @@ export default async function GrowProfilePage() {
     );
   }
   const content = latest.report!.content as unknown as ReportContent;
+  const own = ((await getGrowProfile(viewer.user.id))?.selfView ?? {}) as Record<string, number>;
+  const selfRows = content.domains.filter((d) => typeof own[d.key] === "number").map((d) => ({ key: d.key, name: d.name, own: own[d.key]!, estimate: d.estimate, range: d.range }));
   return (
     <PageContainer className="max-w-6xl">
       <HireReport content={{ ...content, candidate: { name: viewer.user.name } }} audience="candidate" actions={<ShareProfile />} />
@@ -46,6 +49,7 @@ export default async function GrowProfilePage() {
           <GrowPlan plan={content.narrative.plan} />
         </div>
       ) : null}
+      <SelfViewComparison rows={selfRows} />
     </PageContainer>
   );
 }

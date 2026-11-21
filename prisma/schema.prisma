@@ -121,16 +121,18 @@ model Organization {
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
 
-  memberships       Membership[]
-  domains           CompetencyDomain[]
-  competencies      Competency[]
-  templates         AssessmentTemplate[]
-  invitations       Invitation[]
-  sessions          AssessmentSession[]
-  teams             Team[]
-  tracks            Track[]
-  auditLogs         AuditLog[]
-  reportAdjustments ReportAdjustment[]
+  memberships         Membership[]
+  domains             CompetencyDomain[]
+  competencies        Competency[]
+  templates           AssessmentTemplate[]
+  invitations         Invitation[]
+  sessions            AssessmentSession[]
+  teams               Team[]
+  tracks              Track[]
+  auditLogs           AuditLog[]
+  reportAdjustments   ReportAdjustment[]
+  hiringDecisions     HiringDecision[]
+  interviewScorecards InterviewScorecard[]
 
   @@map("organization")
 }
@@ -348,6 +350,8 @@ model AssessmentSession {
   report               Report?
   integrityEvents      IntegrityEvent[]
   adjustments          ReportAdjustment[]
+  decision             HiringDecision?
+  scorecards           InterviewScorecard[]
 
   @@index([organizationId, status])
   @@index([subjectUserId])
@@ -719,6 +723,8 @@ model GrowProfile {
   /// Role family the goal points to (drives domain weights and technical skills).
   targetFamily    String
   hoursPerWeek    Int
+  /// The person's own view per domain at onboarding: { [domainKey]: 1–5 }. Domains they weren't sure about are left out.
+  selfView        Json     @default("{}")
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
@@ -935,4 +941,55 @@ model BankItemReview {
   reviewedAt   DateTime @default(now())
 
   @@map("bank_item_review")
+}
+
+/// What the hiring team decided after reading the report. People decide; Aalim records the reason.
+enum HiringOutcome {
+  ADVANCE
+  HIRE
+  HOLD
+  DECLINE
+}
+
+model HiringDecision {
+  id             String            @id @default(cuid())
+  organizationId String
+  sessionId      String            @unique
+  outcome        HiringOutcome
+  /// Why: required, so every decision can be explained later.
+  reason         String
+  decidedById    String
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+  session        AssessmentSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  organization   Organization      @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId, outcome])
+  @@map("hiring_decision")
+}
+
+enum ScorecardRecommendation {
+  STRONG_YES
+  YES
+  NO
+  STRONG_NO
+}
+
+/// One interviewer's structured scorecard for one candidate, filled in before they see the assessment's levels.
+model InterviewScorecard {
+  id             String                  @id @default(cuid())
+  organizationId String
+  sessionId      String
+  interviewerId  String
+  /// [{ skillKey, rating: 1–5 | null, note }]
+  ratings        Json
+  recommendation ScorecardRecommendation
+  summary        String
+  submittedAt    DateTime                @default(now())
+  updatedAt      DateTime                @updatedAt
+  session        AssessmentSession       @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  organization   Organization            @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([sessionId, interviewerId])
+  @@map("interview_scorecard")
 }

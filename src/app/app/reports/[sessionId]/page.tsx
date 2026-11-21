@@ -7,7 +7,8 @@ import { requirePermission, tenantOf, viewerCan } from "@/lib/auth/session";
 import { withTenant } from "@/lib/db";
 import { AfterHire } from "@/components/report/after-hire";
 import { reportForViewer } from "@/lib/hire/recruiter";
-import { reviewForViewer, reviewPending } from "@/lib/hire/review";
+import { decisionForViewer, reviewForViewer, reviewPending } from "@/lib/hire/review";
+import { DecisionPanel } from "@/components/report/decision";
 import { audit } from "@/lib/audit";
 import { PageContainer } from "@/components/app/page-header";
 import { HireReport } from "@/components/report/hire-report";
@@ -29,6 +30,8 @@ export default async function ReportPage({ params }: { params: Promise<{ session
   const t = await getTranslations("report");
   const outcomes = await withTenant(tenantOf(viewer), (tx) => tx.outcomeRating.findMany({ where: { sessionId }, select: { period: true, rating: true } }));
   const rv = await reviewForViewer(viewer, sessionId);
+  const decision = await decisionForViewer(viewer, sessionId);
+  const scorecards = await withTenant(tenantOf(viewer), (tx) => tx.interviewScorecard.count({ where: { sessionId } }));
   if (r.report?.content) await audit({ organizationId: viewer.activeOrganization.id, actorUserId: viewer.user.id, action: "report.viewed", targetType: "session", targetId: sessionId });
 
   return (
@@ -39,6 +42,7 @@ export default async function ReportPage({ params }: { params: Promise<{ session
           {r.template.title}
         </Link>
       ) : null}
+      {r.report?.content ? <DecisionPanel sessionId={sessionId} candidateName={r.candidate.name} decision={decision} scorecards={scorecards} reviewPending={reviewPending(rv?.review)} /> : null}
       {r.report?.content ? (
         <HireReport
           content={r.report.content}

@@ -127,4 +127,17 @@ describe.skipIf(!ready)("row-level security", () => {
       withTenant({ userId: ids.userA, organizationId: ids.orgA }, (tx) => tx.outcomeRating.create({ data: { organizationId: ids.orgB, sessionId: "x", ratedById: ids.userA, period: 6, rating: 3 } })),
     ).rejects.toThrow();
   });
+
+  it("keeps hiring decisions and interview scorecards inside the organisation", async () => {
+    const session = await system.assessmentSession.findFirstOrThrow({ where: { organizationId: ids.orgA } });
+    await system.hiringDecision.create({ data: { organizationId: ids.orgA, sessionId: session.id, outcome: "ADVANCE", reason: "Test the open questions in person.", decidedById: ids.userA } });
+    await system.interviewScorecard.create({ data: { organizationId: ids.orgA, sessionId: session.id, interviewerId: ids.userA, ratings: [], recommendation: "YES", summary: "Clear ownership." } });
+    const asA = await withTenant({ userId: ids.userA, organizationId: ids.orgA }, async (tx) => [await tx.hiringDecision.count(), await tx.interviewScorecard.count()]);
+    const asB = await withTenant({ userId: ids.userB, organizationId: ids.orgB }, async (tx) => [await tx.hiringDecision.count(), await tx.interviewScorecard.count()]);
+    expect(asA).toEqual([1, 1]);
+    expect(asB).toEqual([0, 0]);
+    await expect(
+      withTenant({ userId: ids.userB, organizationId: ids.orgB }, (tx) => tx.hiringDecision.create({ data: { organizationId: ids.orgA, sessionId: session.id, outcome: "DECLINE", reason: "Written from another organisation.", decidedById: ids.userB } })),
+    ).rejects.toThrow();
+  });
 });

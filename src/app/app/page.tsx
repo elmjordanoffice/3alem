@@ -95,7 +95,7 @@ export default async function AppHome({ searchParams }: { searchParams: Promise<
               ["unopened", overview.unviewed, "/app/assessments"],
               ["inProgress", overview.totals.inProgress, "/app/assessments"],
               ["completed", overview.totals.completed, "/app/assessments"],
-              ["open", overview.totals.open, "/app/assessments"],
+              ["decide", overview.awaitingDecision, "/app/assessments"],
             ] as const).map(([k, v, href]) => (
               <div key={k} className={cn("hero-tile relative px-4 py-3.5 transition-colors hover:bg-white/20 sm:px-5 sm:py-4", k === "unopened" && "col-span-3 bg-white/20 sm:col-span-2")}>
                 <dt className="text-xs text-hero-secondary">{t(`brief.${k}`)}</dt>
@@ -229,7 +229,7 @@ function ReviewQueue({ overview, fmt, t }: { overview: HomeOverview; fmt: Fmt; t
                 </span>
                 <span className="flex flex-col items-end gap-1">
                   <FitPill fit={r.fit} label={tf(r.fit)} />
-                  <span className="text-[11px] text-tertiary">{t(`confidence.${r.confidence >= 0.75 ? "high" : r.confidence >= 0.5 ? "moderate" : "low"}`)}</span>
+                  <span className="text-[11px] text-tertiary">{r.decision ? t(`decision.${r.decision}` as "decision.HIRE") : t(`confidence.${r.confidence >= 0.75 ? "high" : r.confidence >= 0.5 ? "moderate" : "low"}`)}</span>
                 </span>
                 <span className="hidden text-end text-xs text-tertiary sm:block">{fmt.ago(r.readyAt)}</span>
               </Link>

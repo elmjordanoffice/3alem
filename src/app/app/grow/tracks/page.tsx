@@ -34,7 +34,7 @@ export default async function TracksPage() {
                   <CardContent className="flex h-full flex-col gap-3">
                     <div className="flex items-start justify-between gap-2">
                       <h2 className="text-base font-semibold text-text">{tr.name[locale]}</h2>
-                      {e?.completedAt ? <Badge tone="success">{t("completed")}</Badge> : e ? <Badge tone="accent">{t("inProgress")}</Badge> : null}
+                      {e?.completedAt ? <Badge tone="success">{t("completed")}</Badge> : e?.assignedByTeamId && e.completedSessions === 0 ? <Badge tone="info">{t("suggested")}</Badge> : e ? <Badge tone="accent">{t("inProgress")}</Badge> : null}
                     </div>
                     <p className="flex-1 text-sm text-secondary">{tr.description[locale]}</p>
                     <div className="flex flex-col gap-1.5">

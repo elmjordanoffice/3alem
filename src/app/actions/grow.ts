@@ -21,6 +21,7 @@ const onboardingSchema = z.object({
   experienceYears: z.number().int().min(0).max(50),
   goal: z.string().trim().min(3).max(300),
   hoursPerWeek: z.number().int().min(1).max(20),
+  selfView: z.record(z.string().max(40), z.number().min(1).max(5)).optional(),
 });
 
 export async function saveOnboardingAction(input: z.input<typeof onboardingSchema>) {
@@ -38,13 +39,14 @@ export async function startBaselineAction() {
   redirect(`/grow/session/${session.id}`);
 }
 
-export async function startPracticeAction(input: { skillKey?: string; trackKey?: string; trackIndex?: number; twistOf?: string }) {
+export async function startPracticeAction(input: { skillKey?: string; trackKey?: string; trackIndex?: number; twistOf?: string; retryOf?: string }) {
   const viewer = await requireViewer();
   if (input.trackKey && !trackByKey(input.trackKey)) throw new Error("Unknown track");
   const session = await startPractice(viewer.user.id, localeOf(viewer), {
     skillKey: input.skillKey,
     track: input.trackKey ? { key: input.trackKey, index: input.trackIndex ?? 0 } : undefined,
     twistOf: input.twistOf,
+    retryOf: input.retryOf,
   });
   redirect(`/app/grow/practice/${session.id}`);
 }

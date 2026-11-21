@@ -1,6 +1,7 @@
 import type { CandidateModel, RoleProfile, roleFit } from "@/lib/engine";
 import type { ReportNarrative } from "@/lib/ai/prompts/report-writer";
 import type { ReportContent, ReportDomain, ReportEvidence, ReportSkill } from "./report-types";
+import { guideFor } from "@/lib/framework/interview-guide";
 
 /**
  * Narrative without a language model: careful templates over the computed
@@ -134,23 +135,31 @@ export function offlineNarrative(x: {
     evidenceIds: adapt?.evidenceIds.slice(0, 2) ?? [],
   };
 
-  const lowConf = x.domains
-    .filter((d) => x.role.critical.includes(d.key) || d.observations > 0)
-    .sort((a, b) => a.confidence - b.confidence)
-    .slice(0, 4);
-  const interviewQuestions = lowConf.map((d) => {
-    const q = QUESTIONS[d.key] ?? QUESTIONS.judgment!;
-    return {
-      question: q[x.locale][0],
-      followUp: q[x.locale][1],
-      skillKey: d.key,
-      why: ar ? `الثقة في ${d.name} أقل من غيرها في هذا التقييم.` : `Confidence in ${d.name.toLowerCase()} is lower than in other areas of this assessment.`,
-    };
-  });
-  while (interviewQuestions.length < 3) {
-    const d = x.domains[interviewQuestions.length]!;
-    const q = QUESTIONS[d.key] ?? QUESTIONS.judgment!;
-    interviewQuestions.push({ question: q[x.locale][0], followUp: q[x.locale][1], skillKey: d.key, why: ar ? "لاستكمال الصورة." : "To round out the picture." });
+  // Interview questions: must-have gaps first, then the least certain areas. Each is aimed at the
+  // sharpest sub-skill in the area and taken from the structured interview guide.
+  const sharpest = (d: ReportDomain): ReportSkill => [...d.subSkills].filter((s) => s.observations > 0).sort((a, b) => a.confidence - b.confidence || a.estimate - b.estimate)[0] ?? d;
+  const gapKeys = new Set(x.fit.gaps.map((g) => g.key));
+  const ordered = [
+    ...x.domains.filter((d) => gapKeys.has(d.key)),
+    ...x.domains.filter((d) => !gapKeys.has(d.key) && (x.role.critical.includes(d.key) || d.observations > 0)).sort((a, b) => a.confidence - b.confidence),
+    ...x.domains,
+  ];
+  const interviewQuestions: ReportNarrative["interviewQuestions"] = [];
+  for (const d of ordered) {
+    if (interviewQuestions.length >= 4) break;
+    if (interviewQuestions.some((q) => q.skillKey.split(".")[0] === d.key)) continue;
+    const s = sharpest(d);
+    const g = guideFor(s.key) ?? guideFor(d.key);
+    const legacy = QUESTIONS[d.key] ?? QUESTIONS.judgment!;
+    const gap = gapKeys.has(d.key);
+    interviewQuestions.push({
+      question: g ? g.question[x.locale] : legacy[x.locale][0],
+      followUp: g ? g.followUps[0][x.locale] : legacy[x.locale][1],
+      skillKey: s.key,
+      why: gap
+        ? ar ? `${d.name} مهارة أساسية للدور وجاءت دون المستوى المتوقع؛ تحقّق منها مباشرة.` : `${d.name} is a must-have that came out below the role's level; check it directly.`
+        : ar ? `الثقة في ${s.name} أقل من غيرها في هذا التقييم.` : `Confidence in ${s.name.toLowerCase()} is lower than in other areas of this assessment.`,
+    });
   }
 
   const top = strong[0]?.name ?? byHigh[0]?.name;

@@ -122,3 +122,18 @@ export async function reviewForViewer(viewer: Viewer, sessionId: string): Promis
 export function reviewPending(r: ReviewState | null | undefined): boolean {
   return Boolean(r?.requested && !r.reviewedAt);
 }
+
+export interface DecisionState {
+  outcome: "ADVANCE" | "HIRE" | "HOLD" | "DECLINE";
+  reason: string;
+  byName: string;
+  at: string;
+}
+
+/** What the hiring team decided for this candidate, if anything yet. */
+export async function decisionForViewer(viewer: Viewer, sessionId: string): Promise<DecisionState | null> {
+  const d = await withTenant(tenantOf(viewer), (tx) => tx.hiringDecision.findUnique({ where: { sessionId } }));
+  if (!d) return null;
+  const u = await systemDb.user.findUnique({ where: { id: d.decidedById }, select: { name: true } });
+  return { outcome: d.outcome, reason: d.reason, byName: u?.name ?? "", at: d.updatedAt.toISOString() };
+}

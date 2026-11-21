@@ -541,7 +541,14 @@
       "inProgress": "In progress",
       "completed": "Finished",
       "open": "Open roles",
-      "reviewCta": "Open the queue"
+      "reviewCta": "Open the queue",
+      "decide": "Awaiting a decision"
+    },
+    "decision": {
+      "ADVANCE": "Invited to interview",
+      "HIRE": "Hired",
+      "HOLD": "On hold",
+      "DECLINE": "Declined"
     }
   },
   "framework": {
@@ -750,7 +757,9 @@
     },
     "heatmap": {
       "member": "Member",
-      "notAssessed": "Not assessed"
+      "notAssessed": "Not assessed",
+      "thin": "Thin evidence: treat as a first impression",
+      "thinLegend": "Dashed, lighter cells rest on thin evidence: treat them as first impressions, not findings."
     }
   },
   "gallery": {
@@ -1424,7 +1433,8 @@
     "revoked": "Invitation revoked.",
     "decisionNote": "Reports inform your decision. Aalim never rejects anyone automatically.",
     "exportCsv": "Export CSV",
-    "candidateDeleted": "The candidate's data was deleted."
+    "candidateDeleted": "The candidate's data was deleted.",
+    "scorecards": "{n, plural, one {1 scorecard} other {# scorecards}}"
   },
   "invite": {
     "button": "Invite candidates",
@@ -1636,7 +1646,40 @@
       "candidate": "Candidate",
       "stakeholder": "Colleague (played by AI)",
       "error": "Couldn't load this answer."
-    }
+    },
+    "decision": {
+      "title": "Decision",
+      "none": "Not recorded yet",
+      "hint": "Use the interview kit to test what the assessment left open, then record what you decided for {name} and why.",
+      "by": "{name} · {date}: {reason}",
+      "kit": "Interview kit",
+      "record": "Record decision",
+      "change": "Change",
+      "dialogTitle": "Your decision on {name}",
+      "dialogBody": "People make hiring decisions; Aalim keeps the reason so the decision can be explained later. The candidate does not see this.",
+      "outcome": {
+        "ADVANCE": "Invite to interview",
+        "HIRE": "Hire",
+        "HOLD": "On hold",
+        "DECLINE": "Decline"
+      },
+      "outcomeHint": {
+        "ADVANCE": "Test the open questions in person",
+        "HIRE": "Make an offer",
+        "HOLD": "Keep for later or another role",
+        "DECLINE": "Not moving forward"
+      },
+      "reasonLabel": "Why (required)",
+      "reasonPlaceholder": "What evidence and interview answers led to this decision?",
+      "reasonHelp": "Refer to skills and evidence, not personal characteristics. At least 10 characters.",
+      "reviewFirst": "The candidate asked for a person to review every score. Confirm the review on the report before a final decision.",
+      "save": "Save decision",
+      "error": {
+        "reviewPending": "Confirm the human review first.",
+        "generic": "Couldn't save the decision. Try again."
+      }
+    },
+    "openKit": "Open the interview kit, with a scorecard"
   },
   "grow": {
     "title": "My development",
@@ -1684,7 +1727,8 @@
       "start": "Start",
       "again": "Practise again",
       "stretch": "Stretch session",
-      "all": "All tracks"
+      "all": "All tracks",
+      "suggested": "Suggested by your team"
     },
     "snapshot": {
       "title": "Your profile",
@@ -1727,6 +1771,16 @@
           "title": "Practice that fits",
           "body": "Short scenarios aimed at your goal, with honest feedback and a twist to try."
         }
+      },
+      "selfTitle": "Where are you today?",
+      "selfHint": "For each area: how often does this describe you at work? Skip any you're not sure about. It only sets where your first practice starts; your assessment will show the evidence.",
+      "selfAria": "How often this describes you: {domain}",
+      "often": {
+        "rarely": "Rarely",
+        "sometimes": "Sometimes",
+        "often": "Often",
+        "almostAlways": "Almost always",
+        "unsure": "I'm not sure"
       }
     },
     "plan": {
@@ -1774,7 +1828,13 @@
       "saveNote": "Save note",
       "noteSaved": "Saved",
       "offlineNote": "This feedback comes from Aalim's built-in coach. With an AI model configured, feedback is more specific to your answer.",
-      "yourAnswer": "Your answer"
+      "yourAnswer": "Your answer",
+      "retryTitle": "Second attempt: same scenario. Last time, the feedback suggested:",
+      "retry": "Try this one again",
+      "tipsTitle": "Make it stronger next time",
+      "nextTitle": "Where you are, and the next level",
+      "nextLooksLike": "{level} looks like:",
+      "topLevel": "Top of the scale here. Try a harder scenario next."
     },
     "progress": {
       "title": "Progress",
@@ -1807,6 +1867,16 @@
     "links": {
       "progress": "How your levels have moved",
       "coach": "Talk through your next step"
+    },
+    "selfView": {
+      "title": "Your view and the evidence",
+      "body": "What you said at the start, next to what your assessment showed. A gap either way is worth a thought.",
+      "note": {
+        "over": "You rated yourself {gap} above the evidence: worth testing in practice",
+        "under": "You rated yourself {gap} below the evidence: a strength you may not be using",
+        "match": "Your view matches the evidence"
+      },
+      "legend": "The band is the assessment's range and the dot its estimate; the tick is where you placed yourself."
     }
   },
   "team": {
@@ -1848,12 +1918,12 @@
     "pairingsNote": "Complementary strengths for mentoring and projects.",
     "noPairings": "No strong mentoring pairs stand out.",
     "plan": "Team development plan",
-    "planNote": "Grow tracks for the team's gaps. Members see assigned tracks in their own private Grow space.",
+    "planNote": "Grow tracks for the team's gaps. Offer one and members see it as a suggestion in their own private Grow space; taking it is their choice.",
     "forGap": "For: {domain}",
-    "assign": "Assign to team",
-    "isAssigned": "Assigned",
-    "assigned": "Assigned to {n} members.",
-    "planPrivacy": "You see that a track was assigned, not anyone's practice or feedback.",
+    "assign": "Offer to the team",
+    "isAssigned": "Offered",
+    "assigned": "Offered to {n} members. Each person chooses whether to take it.",
+    "planPrivacy": "You see that a track was offered, not anyone's practice or feedback.",
     "members": "Members",
     "noMembers": "Invite members to get started.",
     "sharesAnswers": "Shares answers",
@@ -1889,6 +1959,17 @@
       "send": "Send invitations",
       "sent": "{count, plural, one {# invitation sent} other {# invitations sent}}",
       "noEmails": "Add at least one valid email address."
+    },
+    "brief": {
+      "title": "Next steps for {team}",
+      "body": "Suggestions from what the team's reports show. You decide what fits.",
+      "notAssessed": "{n, plural, one {1 person hasn't finished their assessment yet.} other {# people haven't finished their assessment yet.}} The picture fills in as they do.",
+      "anon": "{n} of 5 reports needed before you can see names. Until then, you see the team as a whole.",
+      "gap": "Offer “{track}” to build {domain}.",
+      "pair": "Pair {mentor} with {learner} on {domain}: a {gap}-level difference.",
+      "ready": "{name} looks ready for a stretch assignment in leading others.",
+      "none": "Nothing pressing. Check back after the next assessments.",
+      "note": "A development tool: never for ratings, pay or dismissals."
     }
   },
   "teamInvite": {
@@ -2527,5 +2608,59 @@
       "cta": "Open my report",
       "note": "The link expires on {date}."
     }
+  },
+  "interview": {
+    "title": "Interview kit",
+    "metaTitle": "Interview kit: {name}",
+    "back": "Report for {name}",
+    "description": "Questions for {name} ({role}) on what the assessment couldn't settle. Rate each answer as you go.",
+    "pendingTitle": "The report isn't ready yet",
+    "pendingBody": "The kit is built from the report. It appears here as soon as the report is ready.",
+    "blind": "Rate before you look: the assessment's levels and other interviewers' scorecards appear after you submit yours. {n, plural, =0 {No scorecards yet.} one {1 scorecard submitted.} other {# scorecards submitted.}}",
+    "revealed": "Your scorecard is in: the assessment's levels and the team's ratings are now shown.",
+    "print": "Print kit",
+    "reason": {
+      "gap": "Below what the role needs",
+      "hypothesis": "Not settled yet",
+      "uncertain": "Least certain",
+      "strength": "Confirm a strength"
+    },
+    "mustHave": "Must-have",
+    "situational": "Little work experience? Ask instead:",
+    "followUps": "Follow up",
+    "listenFor": "Listen for",
+    "watchFor": "Watch for",
+    "levels": "What the levels sound like",
+    "yourRating": "Your rating",
+    "notRated": "Not rated: leave it if you didn't cover this",
+    "noteLabel": "Notes",
+    "notePlaceholder": "What they said and did (their words where you can)",
+    "assessmentSaid": "The assessment",
+    "you": "You",
+    "apart": "More than a level apart: discuss in the debrief",
+    "overallTitle": "Your overall view",
+    "overallBody": "Base it on this interview. You'll see how it compares with the assessment once you submit.",
+    "recommendation": "Recommendation",
+    "rec": {
+      "STRONG_YES": "Strong yes",
+      "YES": "Yes",
+      "NO": "No",
+      "STRONG_NO": "Strong no"
+    },
+    "summaryLabel": "Summary for the hiring team",
+    "summaryPlaceholder": "The two or three things that most shaped your view",
+    "submit": "Submit scorecard",
+    "update": "Update scorecard",
+    "edit": "Edit my scorecard",
+    "ratedOf": "{n} of {total} areas rated",
+    "yourRecommendation": "Your recommendation:",
+    "error": "Couldn't save your scorecard. Rate at least one area, choose a recommendation and write a short summary.",
+    "debriefTitle": "Debrief",
+    "debriefBody": "{n} scorecards in. Start with where people disagree.",
+    "debriefSolo": "Only your scorecard so far. Compare it with the assessment below.",
+    "disagreeTitle": "{n, plural, one {1 area to discuss} other {# areas to discuss}}",
+    "disagreeBody": "An interview rating sits more than a level away from the assessment on: {skills}. Look at the evidence together before deciding.",
+    "agree": "Interview ratings sit within the assessment's ranges.",
+    "listSep": ", "
   }
 }

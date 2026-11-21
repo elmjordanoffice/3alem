@@ -3,8 +3,9 @@ import * as React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { ArrowLeft, Check, Lightbulb, Repeat, Sparkles } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Lightbulb, Repeat, Sparkles, TrendingUp } from "lucide-react";
 import type { PracticeItem, StoredFeedback } from "@/lib/grow/practice";
+import type { Coaching } from "@/lib/grow/coaching";
 import type { ResponseContent } from "@/lib/assessment/response-schema";
 import { submitPracticeAction, saveReflectionAction } from "@/app/actions/grow";
 import { Button } from "@/components/ui/button";
@@ -61,6 +62,16 @@ export function PracticeRunner({ id, item, feedback, reflection, answerText }: {
           {c.materials.length ? <DocumentViewer materials={c.materials} label={ti("materials")} /> : null}
         </section>
         <section className="flex min-w-0 flex-col gap-5">
+          {item.previous && !feedback ? (
+            <div className="rounded-[16px] bg-accent-subtle p-4 text-sm">
+              <p className="font-semibold text-accent-text">{t("retryTitle")}</p>
+              <ul className="mt-2 flex list-disc flex-col gap-1 ps-5 text-text marker:text-accent-text">
+                {item.previous.tips.map((x) => (
+                  <li key={x} dir="auto">{x}</li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
           {twist ? <div className="rounded-card border border-warning/30 bg-warning-subtle p-4 text-[15px] text-text" dir="auto">{c.twist!.change}</div> : <p className="text-[15px] font-medium text-text" dir="auto">{c.task.prompt}</p>}
           {feedback && answerText ? (
             <div className="flex flex-col gap-2 rounded-card bg-surface-subtle shadow-[inset_0_0_0_1px_var(--border)] p-4">
@@ -114,6 +125,7 @@ export function PracticeRunner({ id, item, feedback, reflection, answerText }: {
               <p className="text-xs text-tertiary">{t("approachNote")}</p>
             </CardContent>
           </Card>
+          {feedback.coaching ? <CoachingPanel coaching={feedback.coaching} previous={item.previous} /> : null}
           {feedback.scores.length ? (
             <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
               <span className="text-secondary">{t("thisTime")}</span>
@@ -126,7 +138,8 @@ export function PracticeRunner({ id, item, feedback, reflection, answerText }: {
             </div>
           ) : null}
           <div className="flex flex-wrap gap-2">
-            {!item.twistOf && c.twist ? <PracticeLauncher twistOf={id} label={t("tryTwist")} /> : null}
+            {!item.retryOf ? <PracticeLauncher retryOf={id} label={t("retry")} /> : null}
+            {!item.twistOf && c.twist ? <PracticeLauncher twistOf={id} label={t("tryTwist")} variant={item.retryOf ? "primary" : "secondary"} /> : null}
             <PracticeLauncher skillKey={item.targets[0]} label={t("another")} variant="secondary" />
           </div>
           <div className="flex flex-col gap-2 rounded-card bg-surface shadow-card p-5">
@@ -151,5 +164,60 @@ export function PracticeRunner({ id, item, feedback, reflection, answerText }: {
         </section>
       ) : null}
     </PageContainer>
+  );
+}
+
+/** Two concrete habits to try next time, and what the next level up looks like for each skill. */
+function CoachingPanel({ coaching, previous }: { coaching: Coaching; previous?: PracticeItem["previous"] }) {
+  const t = useTranslations("grow.practice");
+  const tl = useTranslations("levels");
+  return (
+    <div className="grid gap-4 lg:grid-cols-2">
+      {coaching.tips.length ? (
+        <div className="flex flex-col gap-3 rounded-[20px] bg-surface p-5 shadow-card">
+          <h3 className="flex items-center gap-2 text-sm font-semibold text-text">
+            <TrendingUp className="size-4 text-accent-text" aria-hidden />
+            {t("tipsTitle")}
+          </h3>
+          <ul className="flex flex-col gap-2">
+            {coaching.tips.map((x) => (
+              <li key={x} className="rounded-[14px] bg-accent-subtle px-3 py-2.5 text-sm text-text" dir="auto">{x}</li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
+      <div className="flex flex-col gap-3 rounded-[20px] bg-surface p-5 shadow-card">
+        <h3 className="text-sm font-semibold text-text">{t("nextTitle")}</h3>
+        <ul className="flex flex-col gap-3">
+          {coaching.next.map((n) => {
+            const before = previous?.scores.find((p) => p.competencyKey === n.competencyKey)?.level;
+            return (
+              <li key={n.competencyKey} className="flex flex-col gap-1 text-sm">
+                <span className="flex flex-wrap items-center gap-2">
+                  <span className="font-medium text-text">{n.name}</span>
+                  <span className="text-secondary">
+                    {before != null && before !== n.level ? (
+                      <>
+                        {tl(String(Math.round(before)))} <ArrowRight className="inline size-3.5 flip-rtl" aria-hidden /> {tl(String(n.level))}
+                      </>
+                    ) : (
+                      tl(String(n.level))
+                    )}
+                  </span>
+                </span>
+                {n.looksLike && n.nextLevel ? (
+                  <span className="text-secondary" dir="auto">
+                    <span className="text-tertiary">{t("nextLooksLike", { level: tl(String(n.nextLevel)) })} </span>
+                    {n.looksLike}
+                  </span>
+                ) : (
+                  <span className="text-secondary">{t("topLevel")}</span>
+                )}
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    </div>
   );
 }

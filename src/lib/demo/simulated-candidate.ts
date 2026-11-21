@@ -63,7 +63,8 @@ function answerText(hidden: ItemHidden, targets: string[], p: SimPersona, r: () 
   for (const key of targets) {
     const strong = p.strengths.includes(domain(key));
     const weak = p.weaknesses.includes(domain(key));
-    const signals = (strong ? hidden.strongIndicators : weak ? hidden.redFlags : hidden.strongIndicators.slice(0, 1)).filter((s) => s.competencyKey === key);
+    // Strong domains show two of the item's strong behaviours, middling ones show one, weak ones a red flag.
+    const signals = (weak ? hidden.redFlags : hidden.strongIndicators).filter((s) => s.competencyKey === key);
     const pool = signals.length ? signals : strong ? hidden.strongIndicators : weak ? hidden.redFlags : [];
     for (const s of pool.slice(0, strong ? 2 : 1)) parts.push(sentenceFor(s, !weak, r, lang));
     if (!pool.length) parts.push(lang === "ar" ? "سأتحدث مع الأشخاص المعنيين وأتخذ قرارًا معقولًا." : "I would talk to the people involved and make a reasonable call.");
