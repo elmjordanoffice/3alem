@@ -112,3 +112,15 @@ After repeated "not good enough" verdicts, three directions were mocked on the s
 - **Layout:** a floating white sidebar card with the current page as a filled indigo pill, 20 px cards with soft depth, translucent tiles inside hero cards, segmented tabs, and an initials tile on the report.
 - Dark mode is the same system on deep navy.
 
+
+## Sixth pass: Range, a complete brand
+
+The owner asked for "a whole brand, a creative logo, colours, and a design that will make people think a professional designer did it". Three identities were designed and shown as full boards (logo, app icons, colour, type, an app screen and a landing hero each): **A · Ayn** (the letter ع drawn as an eye; teal and coral), **B · Seal** (a calligraphic ع in an octagonal scholar's seal; lapis and leaf gold), **C · Range** (bands narrowing into a point; ink, bone and vermilion). The owner chose **Range**.
+
+- **Idea:** every answer narrows the range. The logo is the product's mechanics, not a decoration.
+- **Mark:** three rounded bands of equal height narrowing upward in even steps into a vermilion dot, the band of no width; together an A.
+- **Wordmark:** AALIM in Archivo Expanded ExtraBold, tracked a little open; عالم in Beiruti Black, never tracked; baselines aligned, a hairline between.
+- **Colour:** ink #141414, bone #F2F0EB, vermilion #F04A23, warm stone neutrals. Ink is the action colour; vermilion is the signal.
+- **Type:** Archivo (wide capitals for verdicts and billboards, semi-wide for titles), Beiruti for Arabic display, IBM Plex for reading.
+- **Layout:** flat surfaces, hairlines instead of blur, a white rail, every page opened by a rule with a vermilion tick, one ink panel per screen.
+- **Signature:** the Narrowing, bands tightening into the dot, on the sign-in panel and the landing page.

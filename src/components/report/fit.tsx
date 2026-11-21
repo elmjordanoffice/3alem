@@ -11,5 +11,11 @@ const FIT_STYLE: Record<FitLevel, string> = {
 };
 
 export function FitPill({ fit, label, className }: { fit: FitLevel; label: string; className?: string }) {
-  return <span className={cn("inline-flex h-6 items-center whitespace-nowrap rounded-full px-2.5 text-xs font-medium", FIT_STYLE[fit], className)}>{label}</span>;
+  return (
+    <span className={cn("inline-flex h-6 items-center gap-1.5 whitespace-nowrap rounded-[6px] px-2 text-xs font-semibold", FIT_STYLE[fit], className)}>
+      {/* The strongest match carries the estimate dot. */}
+      {fit === "STRONG" ? <span className="size-1.5 rounded-full bg-saffron" aria-hidden /> : null}
+      {label}
+    </span>
+  );
 }

@@ -218,7 +218,7 @@ function ReviewQueue({ overview, fmt, t }: { overview: HomeOverview; fmt: Fmt; t
               <Link href={`/app/reports/${r.sessionId}`} className="group grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-x-4 gap-y-1 px-4 py-3.5 transition-colors hover:bg-surface-subtle focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus sm:grid-cols-[auto_minmax(0,1fr)_auto_6.5rem] sm:px-5">
                 <span className="relative">
                   <Avatar name={r.name} />
-                  {!r.viewed ? <span className="absolute -end-0.5 -top-0.5 size-2.5 rounded-full bg-accent ring-2 ring-surface" aria-hidden /> : null}
+                  {!r.viewed ? <span className="absolute -end-0.5 -top-0.5 size-2.5 rounded-full bg-saffron ring-2 ring-surface" aria-hidden /> : null}
                 </span>
                 <span className="min-w-0">
                   <span className={cn("block truncate text-sm text-text", !r.viewed && "font-semibold")}>
