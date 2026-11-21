@@ -65,12 +65,15 @@ export function RankingList({ items, onChange, label, disabled }: RankingListPro
     );
   };
 
+  const dndId = React.useId();
   const position = (id: string | number) => n.number(items.findIndex((i) => i.id === id) + 1);
   const name = (id: string | number) => items.find((i) => i.id === id)?.label ?? "";
 
   return (
     <div>
       <DndContext
+        // A stable id keeps the drag library's aria ids the same on the server and the client.
+        id={dndId}
         sensors={sensors}
         collisionDetection={closestCenter}
         modifiers={[restrictToVerticalAxis, restrictToParentElement]}
