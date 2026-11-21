@@ -34,6 +34,8 @@ export interface SlideSpec {
   gate?: boolean;
   /** The hint on the page's "next" control, when it isn't the generic one. */
   nextLabel?: string;
+  /** The card's material: paper (the default), or ink for the scene's cover, which draws edge to edge. */
+  tone?: "paper" | "ink";
 }
 
 export interface TaskResult {

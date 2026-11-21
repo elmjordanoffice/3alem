@@ -107,7 +107,7 @@ function Chat({
 
   return (
     <View style={{ gap: 16, flexGrow: 1 }}>
-      <TaskHeader label={ti("item.yourTask")} prompt={prompt} />
+      <TaskHeader label={ti("item.yourTask")} prompt={prompt} showKind />
       <View style={{ flexDirection: "row", gap: 12, padding: 14, borderRadius: radius.card, backgroundColor: c.surface, borderWidth: hairline, borderColor: c.hairline }}>
         <Avatar name={stakeholder.name} size={44} />
         <View style={{ flex: 1, gap: 3 }}>

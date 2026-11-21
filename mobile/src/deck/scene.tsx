@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Keyboard, View } from "react-native";
+import { Keyboard, View, type StyleProp, type ViewStyle } from "react-native";
 import Animated, { Extrapolation, FadeIn, FadeOut, interpolate, useAnimatedStyle, useSharedValue, withDelay, withSpring, withTiming } from "react-native-reanimated";
 import { Lock, RotateCw, WifiOff } from "lucide-react-native";
 import type { ItemView, ResponseContent, SubmitPayload } from "../api/types";
@@ -7,6 +7,7 @@ import { useLocale, useT } from "../i18n";
 import { radius, spring, useTheme } from "../theme";
 import { haptic } from "../lib/haptics";
 import { newClientId } from "../lib/ids";
+import { kv } from "../lib/storage";
 import { AcceptedContext } from "../state/assessment";
 import type { SaveState } from "../state/drafts";
 import { IntegrityContext, useIntegrity } from "../state/integrity";
@@ -15,16 +16,20 @@ import { DrawnCheck, FADE } from "../ui/motion";
 import { hairline, Notice } from "../ui/primitives";
 import { T } from "../ui/text";
 import { useChoiceTask } from "../tasks/choice";
+import { TaskKindContext } from "../tasks/parts";
 import { useAllocationTask, useRankingTask } from "../tasks/ranking";
 import { useDesignTask, useFollowUp, useWrittenTask } from "../tasks/written";
 import { useChainTask, useForcedChoiceTask } from "../tasks/sequence";
 import { useInboxTask } from "../tasks/inbox";
 import { useRoleplayTask } from "../tasks/roleplay";
 import type { SlideSpec, TaskContext, TaskResult } from "../tasks/types";
-import { Glass, NextHint, QuietTimer, SlideRail, TopBar, useDeckInsets } from "./chrome";
-import { MATERIAL_ICONS, MaterialView } from "./materials";
+import type { CardTone } from "./card-surface";
+import { Glass, NextHint, QuietTimer, SlideRail, TOPBAR_H, TopBar, useDeckInsets } from "./chrome";
+import { Cover } from "./cover";
+import { createIndexStore, useIsCurrentPage, usePageIndex, type IndexStore } from "./index-store";
+import { MaterialCard } from "./materials";
 import { Pager } from "./pager";
-import type { PagerHandle } from "./pager-context";
+import { CARD_PAD, useCardGeometry, type PagerHandle } from "./pager-context";
 import { Slide } from "./slide";
 import { useKeyboardLift } from "./keyboard";
 
@@ -40,16 +45,20 @@ const TASKS: Record<string, (ctx: TaskContext) => TaskResult> = {
   roleplay: useRoleplayTask,
 };
 
+/** Set once the first-card swipe hint has played on this device. */
+const SWIPE_HINT_KEY = "aalim:deck:swipeHint";
+
 export interface SceneActions {
   submit: (p: SubmitPayload) => Promise<{ ok: boolean; offline?: boolean }>;
   sendTurn: (itemId: string, text: string, clientId: string) => Promise<{ ok: boolean; reply?: string; ended?: boolean }>;
 }
 
 /**
- * One scene as a vertical deck of full-screen pages: the situation, each
- * material, then the task. Follow-ups arrive as new pages below and the deck
- * springs to them; the answered task folds into a sealed "Answer sent" page.
- * Within the scene you can swipe back up to reread; earlier scenes are gone.
+ * One scene as a stack of cards you swipe up through: the situation (an ink
+ * card with the scene's art), each material on paper, then the task. Follow-ups
+ * arrive as new cards below and the deck springs to them; the answered task
+ * folds into a sealed "Answer sent" card. Within the scene you can swipe back
+ * down to reread; earlier scenes are gone.
  */
 export function SceneScreen({ view, actions, online }: { view: ItemView; actions: SceneActions; online: boolean }) {
   const { item } = view;
@@ -57,7 +66,7 @@ export function SceneScreen({ view, actions, online }: { view: ItemView; actions
   const t = useT("candidate");
   const tm = useT("mobile.deck");
   const { dir } = useLocale();
-  const { c } = useTheme();
+  const { c, reduceMotion } = useTheme();
   const insets = useDeckInsets();
   const integrity = useIntegrity();
   const pager = React.useRef<PagerHandle>(null);
@@ -71,9 +80,10 @@ export function SceneScreen({ view, actions, online }: { view: ItemView; actions
   const toastTimer = React.useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const keys = React.useRef<string[]>([]);
-  const [index, setIndex] = React.useState(0);
+  // The current page lives outside React state, so paging never re-renders the scene.
+  const pages = React.useMemo(() => createIndexStore(0), []);
 
-  const next = React.useCallback(() => pager.current?.goTo(index + 1), [index]);
+  const next = React.useCallback(() => pager.current?.goTo(pages.get() + 1), [pages]);
   const goToKey = React.useCallback((key: string) => {
     const i = keys.current.indexOf(key);
     if (i >= 0) pager.current?.goTo(i);
@@ -110,13 +120,13 @@ export function SceneScreen({ view, actions, online }: { view: ItemView; actions
     [taskAt],
   );
 
-  // ── The pages ────────────────────────────────────────────────────────────
+  // ── The cards ────────────────────────────────────────────────────────────
+  // The situation and the materials are memoised: they render once per scene.
+  const chapter = view.world.chapters[view.chapterIndex]?.title ?? "";
+  const kinds = content.materials.map((m) => m.kind).join(",");
   const all: SlideSpec[] = [
-    { key: "cover", node: <Cover title={content.title} scenario={content.scenario} materials={content.materials.map((m) => m.kind)} /> },
-    ...content.materials.map((m, i) => ({
-      key: `material-${m.id}`,
-      node: <MaterialPage label={tm("material", { n: i + 1, total: content.materials.length })} kind={m.kind}>{<MaterialView material={m} />}</MaterialPage>,
-    })),
+    { key: "cover", tone: "ink", node: <Cover title={content.title} scenario={content.scenario} kinds={kinds} chapter={chapter} cast={view.world.cast} /> },
+    ...content.materials.map((m, i) => ({ key: `material-${m.id}`, node: <MaterialCard material={m} n={i + 1} total={content.materials.length} company={view.world.companyName} /> })),
   ];
   if (stage === "MAIN") all.push(...main.slides);
   else {
@@ -144,10 +154,29 @@ export function SceneScreen({ view, actions, online }: { view: ItemView; actions
     integrity.reset();
     const sealedAt = keys.current.lastIndexOf(stage === "TWIST" && content.probe ? "sealed-probe" : "sealed-main");
     pager.current?.goTo(Math.max(0, sealedAt), { animated: false });
-    setIndex(Math.max(0, sealedAt));
+    pages.set(Math.max(0, sealedAt));
     const id = setTimeout(() => pager.current?.goTo(keys.current.length - 1), 520);
     return () => clearTimeout(id);
   }, [stage]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // ── The very first card on this device: a one-time "swipe up" nudge, then never again.
+  React.useEffect(() => {
+    if (reduceMotion || stage !== "MAIN") return;
+    let live = true;
+    let timer: ReturnType<typeof setTimeout> | null = null;
+    void kv.get<boolean>(SWIPE_HINT_KEY).then((seen) => {
+      if (seen || !live) return;
+      timer = setTimeout(() => {
+        if (pages.get() !== 0) return;
+        pager.current?.nudge();
+        void kv.set(SWIPE_HINT_KEY, true);
+      }, 1100);
+    });
+    return () => {
+      live = false;
+      if (timer) clearTimeout(timer);
+    };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const showToast = (msg: string) => {
     setToast(msg);
@@ -177,92 +206,61 @@ export function SceneScreen({ view, actions, online }: { view: ItemView; actions
   };
 
   const deadline = stage === "MAIN" && item.timed && content.timeLimitSeconds ? new Date(item.presentedAt).getTime() + content.timeLimitSeconds * 1000 : null;
-  const contentStyle = { paddingTop: insets.top + 6, paddingHorizontal: 20, width: "100%" as const, maxWidth: 640, alignSelf: "center" as const };
+  // The resting card sits just under the floating bar.
+  const cards = React.useMemo(() => ({ top: insets.safeTop + TOPBAR_H + 4 }), [insets.safeTop]);
+  const goTo = React.useCallback((i: number) => pager.current?.goTo(i), []);
 
   return (
     <IntegrityContext.Provider value={integrity}>
-      <View style={{ flex: 1, direction: dir, backgroundColor: c.canvas }}>
-        <Pager ref={pager} onIndexChange={setIndex} onSettle={onSettle} onEdge={onEdge} enabled={paging} testID="deck">
-          {slides.map((s, i) => {
-            const last = i === slides.length - 1;
-            const footer = last && lastIsTask ? <SubmitBar ready={Boolean(value)} label={stage === "MAIN" && content.probe ? t("item.continue") : t("item.submit")} loading={submitting} done={sent} onPress={doSubmit} failure={failure} online={online} /> : null;
-            return (
-              <Slide key={s.key} footer={footer} inactive={i !== index} testID={`slide-${s.key}`} contentStyle={[contentStyle, { paddingBottom: last && lastIsTask ? 190 + insets.bottom : insets.bottom + 8 }]}>
-                <View style={{ flexGrow: 1 }}>{s.node}</View>
-                {!last ? <NextHint first={i === 0} label={tm("next")} onPress={() => pager.current?.goTo(i + 1)} /> : null}
-              </Slide>
-            );
-          })}
-        </Pager>
-        <SlideRail count={slides.length} index={index} pulse={pulse} />
-        <TopBar orgName={view.branding.orgName} chapters={view.world.chapters.map((ch) => ch.title)} chapterIndex={view.chapterIndex} save={online ? save : "offline"} chapterDone={chapterDone} timer={deadline ? <QuietTimer deadline={deadline} onExpire={() => setTimeUp(true)} /> : undefined} />
-        {toast ? (
-          <Animated.View entering={FadeIn.duration(160)} exiting={FadeOut.duration(200)} pointerEvents="none" style={{ position: "absolute", top: insets.top + 8, left: 20, right: 20, alignItems: "center", zIndex: 20 }}>
-            <View accessibilityLiveRegion="polite" style={{ flexDirection: "row", alignItems: "center", gap: 8, paddingHorizontal: 14, paddingVertical: 10, borderRadius: radius.pill, backgroundColor: c.text, maxWidth: 420 }}>
-              <Lock size={14} color={c.canvas} />
-              <T variant="footnote" style={{ color: c.canvas, flexShrink: 1 }}>
-                {toast}
-              </T>
-            </View>
-          </Animated.View>
-        ) : null}
-      </View>
+      <TaskKindContext.Provider value={content.task.kind}>
+        <View style={{ flex: 1, direction: dir, backgroundColor: c.canvas }}>
+          <Pager ref={pager} cards={cards} onIndexChange={pages.set} onSettle={onSettle} onEdge={onEdge} enabled={paging} testID="deck">
+            {slides.map((s, i) => {
+              const last = i === slides.length - 1;
+              const withSubmit = last && lastIsTask;
+              const ink = s.tone === "ink";
+              const footer = withSubmit ? <SubmitBar ready={Boolean(value)} label={stage === "MAIN" && content.probe ? t("item.continue") : t("item.submit")} loading={submitting} done={sent} onPress={doSubmit} failure={failure} online={online} /> : null;
+              const contentStyle: StyleProp<ViewStyle> = ink ? { paddingBottom: 12 } : { paddingTop: CARD_PAD, paddingHorizontal: CARD_PAD, paddingBottom: withSubmit ? 156 : 12 };
+              return (
+                <DeckSlide key={s.key} i={i} pages={pages} tone={s.tone ?? "paper"} footer={footer} testID={`slide-${s.key}`} contentStyle={contentStyle}>
+                  <View style={{ flexGrow: 1 }}>{s.node}</View>
+                  {!last ? <NextHint first={i === 0} onInk={ink} label={tm("next")} onPress={() => goTo(i + 1)} /> : null}
+                </DeckSlide>
+              );
+            })}
+          </Pager>
+          <Rail pages={pages} count={slides.length} pulse={pulse} />
+          <TopBar orgName={view.branding.orgName} chapters={view.world.chapters.map((ch) => ch.title)} chapterIndex={view.chapterIndex} save={online ? save : "offline"} chapterDone={chapterDone} timer={deadline ? <QuietTimer deadline={deadline} onExpire={() => setTimeUp(true)} /> : undefined} />
+          {toast ? (
+            <Animated.View entering={FadeIn.duration(160)} exiting={FadeOut.duration(200)} pointerEvents="none" style={{ position: "absolute", top: insets.top + 8, left: 20, right: 20, alignItems: "center", zIndex: 20 }}>
+              <View accessibilityLiveRegion="polite" style={{ flexDirection: "row", alignItems: "center", gap: 8, paddingHorizontal: 14, paddingVertical: 10, borderRadius: radius.pill, backgroundColor: c.text, maxWidth: 420 }}>
+                <Lock size={14} color={c.canvas} />
+                <T variant="footnote" style={{ color: c.canvas, flexShrink: 1 }}>
+                  {toast}
+                </T>
+              </View>
+            </Animated.View>
+          ) : null}
+        </View>
+      </TaskKindContext.Provider>
     </IntegrityContext.Provider>
   );
 }
 
-function Cover({ title, scenario, materials }: { title: string; scenario: string; materials: string[] }) {
-  const tm = useT("mobile");
-  const { c } = useTheme();
+/** A card of the deck that hides from screen readers unless it is the current one (re-rendering only when that flips). */
+function DeckSlide({ i, pages, tone, footer, contentStyle, testID, children }: { i: number; pages: IndexStore; tone: CardTone; footer: React.ReactNode; contentStyle: StyleProp<ViewStyle>; testID: string; children: React.ReactNode }) {
+  const current = useIsCurrentPage(pages, i);
   return (
-    <View style={{ gap: 18, flexGrow: 1, justifyContent: "center", paddingBottom: 24 }}>
-      <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
-        <View style={{ width: 28, height: 3, borderRadius: 2, backgroundColor: c.signal }} />
-        <T variant="label" tone="secondary">
-          {tm("deck.scenario")}
-        </T>
-      </View>
-      <T variant="title" accessibilityRole="header">
-        {title}
-      </T>
-      <T variant="body">{scenario}</T>
-      {materials.length ? (
-        <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8, marginTop: 4 }}>
-          {materials.map((k, i) => {
-            const Icon = MATERIAL_ICONS[k as keyof typeof MATERIAL_ICONS];
-            return (
-              <View key={i} style={{ flexDirection: "row", alignItems: "center", gap: 6, paddingHorizontal: 10, height: 30, borderRadius: radius.pill, borderWidth: hairline, borderColor: c.hairlineStrong }}>
-                {Icon ? <Icon size={14} color={c.secondary} strokeWidth={1.8} /> : null}
-                <T variant="caption" tone="secondary">
-                  {tm(`materials.${k}`)}
-                </T>
-              </View>
-            );
-          })}
-        </View>
-      ) : null}
-    </View>
+    <Slide tone={tone} footer={footer} inactive={!current} testID={testID} contentStyle={contentStyle}>
+      {children}
+    </Slide>
   );
 }
 
-function MaterialPage({ label, kind, children }: { label: string; kind: string; children: React.ReactNode }) {
-  const { c } = useTheme();
-  const tm = useT("mobile.materials");
-  const Icon = MATERIAL_ICONS[kind as keyof typeof MATERIAL_ICONS];
-  return (
-    <View style={{ gap: 14 }}>
-      <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-        {Icon ? <Icon size={15} color={c.tertiary} strokeWidth={1.8} /> : null}
-        <T variant="label" tone="secondary">
-          {tm(kind)}
-        </T>
-        <T variant="caption" tone="tertiary" style={{ marginStart: "auto" }}>
-          {label}
-        </T>
-      </View>
-      {children}
-    </View>
-  );
+/** The page dots, the only part of the scene that follows every page change. */
+function Rail({ pages, count, pulse }: { pages: IndexStore; count: number; pulse: number }) {
+  const index = usePageIndex(pages);
+  return <SlideRail count={count} index={index} pulse={pulse} />;
 }
 
 /** The answered task, folded: a check, and a digest you can reread. `fresh`: it was sealed just now, so the seal plays. */
@@ -280,7 +278,7 @@ function Sealed({ summary, compact, fresh }: { summary: React.ReactNode; compact
           {tm("sentBody")}
         </T>
       </View>
-      <View style={{ padding: 16, gap: 10, borderRadius: radius.card, backgroundColor: c.surface, borderWidth: hairline, borderColor: c.hairline }}>
+      <View style={{ padding: 16, gap: 10, borderRadius: radius.card, backgroundColor: c.surfaceSubtle, borderWidth: hairline, borderColor: c.hairline }}>
         <T variant="label" tone="tertiary">
           {tm("yourAnswer")}
         </T>
@@ -325,7 +323,7 @@ function Seal({ play }: { play: boolean }) {
       <Animated.View style={[{ width: SEAL, height: SEAL, borderRadius: SEAL / 2, backgroundColor: c.text, alignItems: "center", justifyContent: "center" }, discStyle]}>
         <DrawnCheck size={32} color={c.canvas} strokeWidth={2.4} delay={90} duration={300} still={!play} />
       </Animated.View>
-      <Animated.View style={[{ position: "absolute", top: -2, end: -2, width: SEAL_DOT, height: SEAL_DOT, borderRadius: SEAL_DOT / 2, backgroundColor: c.signal, borderWidth: 2.5, borderColor: c.canvas }, dotStyle]} />
+      <Animated.View style={[{ position: "absolute", top: -2, end: -2, width: SEAL_DOT, height: SEAL_DOT, borderRadius: SEAL_DOT / 2, backgroundColor: c.signal, borderWidth: 2.5, borderColor: c.surface }, dotStyle]} />
     </View>
   );
 }
@@ -334,10 +332,12 @@ function SubmitBar({ ready, label, loading, done, onPress, failure, online }: { 
   const t = useT("candidate.item");
   const tm = useT("mobile.deck");
   const { bottom } = useDeckInsets();
-  const lift = useKeyboardLift(bottom);
+  // Inside a card the bar sits on the card's bottom edge, which is the peek and the gap above the screen's.
+  const card = useCardGeometry();
+  const lift = useKeyboardLift(card ? card.bottomGap : bottom);
   return (
     <Animated.View style={[{ position: "absolute", left: 0, right: 0, bottom: 0 }, lift]}>
-      <Glass edge="top" style={{ paddingTop: 12, paddingBottom: bottom + 8, paddingHorizontal: 20 }}>
+      <Glass edge="top" style={{ paddingTop: 12, paddingBottom: card ? 14 : bottom + 8, paddingHorizontal: card ? CARD_PAD : 20 }}>
         <View style={{ gap: 10, width: "100%", maxWidth: 600, alignSelf: "center" }}>
           {failure ? (
             <Notice tone={failure === "offline" || !online ? "warning" : "critical"} icon={failure === "offline" ? WifiOff : undefined} action={<Button size="sm" variant="secondary" icon={RotateCw} label={t("retry")} onPress={onPress} />}>

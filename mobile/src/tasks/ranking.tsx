@@ -30,7 +30,7 @@ export function useRankingTask(ctx: TaskContext): TaskResult {
       key: "rank",
       node: (
         <View style={{ gap: 18 }}>
-          <TaskHeader label={t("item.yourTask")} prompt={content.task.prompt} />
+          <TaskHeader label={t("item.yourTask")} prompt={content.task.prompt} showKind />
           <T variant="footnote" tone="tertiary">
             {tm("holdToDrag")}
           </T>
@@ -85,7 +85,7 @@ export function useAllocationTask(ctx: TaskContext): TaskResult {
       key: "split",
       node: (
         <View style={{ gap: 18 }}>
-          <TaskHeader label={t("item.yourTask")} prompt={content.task.prompt} />
+          <TaskHeader label={t("item.yourTask")} prompt={content.task.prompt} showKind />
           <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingVertical: 12, paddingHorizontal: 14, borderRadius: radius.control, backgroundColor: c.surfaceSunken }}>
             <T variant="subhead" tone="secondary">
               {ta("total", { total: alloc.total })}

@@ -2,6 +2,7 @@ import * as React from "react";
 import { View, type StyleProp, type ViewStyle } from "react-native";
 import { GestureDetector, useNativeGesture } from "react-native-gesture-handler";
 import Animated, { scrollTo, useAnimatedRef, useAnimatedScrollHandler } from "react-native-reanimated";
+import { CardEdge, useCardSurface, type CardTone } from "./card-surface";
 import { SlideIndexContext, SlideScrollContext, usePagerContext } from "./pager-context";
 
 export interface SlideProps {
@@ -11,6 +12,8 @@ export interface SlideProps {
   contentStyle?: StyleProp<ViewStyle>;
   /** Hidden from screen readers while another page is showing. */
   inactive?: boolean;
+  /** In a card deck: the card's material. Paper takes the surface colour, ink stays ink in both themes. */
+  tone?: CardTone;
   testID?: string;
 }
 
@@ -20,9 +23,10 @@ export interface SlideProps {
  * the pager can take over only at the top or bottom edge, and pins it while
  * the pager owns the drag.
  */
-export function Slide({ children, footer, contentStyle, inactive, testID }: SlideProps) {
+export function Slide({ children, footer, contentStyle, inactive, tone, testID }: SlideProps) {
   const ctx = usePagerContext();
   const i = React.useContext(SlideIndexContext);
+  const surface = useCardSurface(tone);
   const ref = useAnimatedRef<Animated.ScrollView>();
   const native = useNativeGesture({ simultaneousWith: ctx?.pan ?? undefined });
   const offsets = ctx!.offsets;
@@ -67,7 +71,7 @@ export function Slide({ children, footer, contentStyle, inactive, testID }: Slid
 
   return (
     <SlideScrollContext.Provider value={scroller}>
-    <View style={{ flex: 1 }} accessibilityElementsHidden={inactive} importantForAccessibility={inactive ? "no-hide-descendants" : "auto"} testID={testID}>
+    <View style={{ flex: 1, backgroundColor: surface?.bg }} accessibilityElementsHidden={inactive} importantForAccessibility={inactive ? "no-hide-descendants" : "auto"} testID={testID}>
       <GestureDetector gesture={native}>
         <Animated.ScrollView
           ref={ref}
@@ -93,6 +97,7 @@ export function Slide({ children, footer, contentStyle, inactive, testID }: Slid
         </Animated.ScrollView>
       </GestureDetector>
       {footer}
+      {surface ? <CardEdge color={surface.edge} /> : null}
     </View>
     </SlideScrollContext.Provider>
   );

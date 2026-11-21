@@ -22,7 +22,7 @@ export function useWrittenTask(ctx: TaskContext): TaskResult {
       key: "write",
       node: (
         <View style={{ gap: 18 }}>
-          <TaskHeader label={t("item.yourTask")} prompt={content.task.prompt} />
+          <TaskHeader label={t("item.yourTask")} prompt={content.task.prompt} showKind />
           <Editor label={t(`tasks.writtenLabel.${format}`)} hint={t("tasks.writtenHint")} placeholder={content.task.written?.placeholder} value={text} disabled={locked} minHeight={260} onChange={(s) => setDraft({ text: s })} />
         </View>
       ),
@@ -44,7 +44,7 @@ export function useDesignTask(ctx: TaskContext): TaskResult {
     key: `section-${s.id}`,
     node: (
       <View style={{ gap: 18 }}>
-        <TaskHeader label={t("item.yourTask")} prompt={i === 0 ? content.task.prompt : undefined} meta={tm("sectionOf", { n: i + 1, total: sections.length })} />
+        <TaskHeader label={t("item.yourTask")} prompt={i === 0 ? content.task.prompt : undefined} meta={tm("sectionOf", { n: i + 1, total: sections.length })} showKind={i === 0} />
         <Editor label={`${i + 1}. ${s.label}`} hint={s.hint} value={draft[s.id] ?? ""} disabled={locked} minHeight={200} onChange={(v) => setDraft((d) => ({ ...d, [s.id]: v }))} />
       </View>
     ),

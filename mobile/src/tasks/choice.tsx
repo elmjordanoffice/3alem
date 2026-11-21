@@ -23,7 +23,7 @@ export function useChoiceTask(ctx: TaskContext): TaskResult {
       gate: needsWhy && !draft.optionId,
       node: (
         <View style={{ gap: 22 }}>
-          <TaskHeader label={t("item.yourTask")} prompt={content.task.prompt} />
+          <TaskHeader label={t("item.yourTask")} prompt={content.task.prompt} showKind />
           <View accessibilityRole="radiogroup" accessibilityLabel={content.task.prompt} style={{ gap: 10 }}>
             {options.map((o, i) => (
               <OptionCard

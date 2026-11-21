@@ -1,191 +1,315 @@
 import * as React from "react";
-import { ScrollView, useWindowDimensions, View } from "react-native";
-import Svg, { Circle, G, Line, Path, Rect, Text as SvgText } from "react-native-svg";
-import { BarChart3, FileText, Mail, Table2 } from "lucide-react-native";
+import { ScrollView, useWindowDimensions, View, type NativeScrollEvent, type NativeSyntheticEvent } from "react-native";
+import Svg, { Circle, Defs, G, Line, LinearGradient, Path, Rect, Stop, Text as SvgText } from "react-native-svg";
+import { BarChart3, FileText, Mail, MoveHorizontal, Table2 } from "lucide-react-native";
 import type { ChartMaterial, EmailMaterial, Material, MemoMaterial, TableMaterial } from "../api/types";
 import { useLocale, useT } from "../i18n";
 import { fonts, radius, useTheme } from "../theme";
 import { hairline } from "../ui/primitives";
-import { T } from "../ui/text";
+import { Paragraphs, T } from "../ui/text";
 import { Avatar } from "../ui/avatar";
+import { CARD_INSET, CARD_MAX_W, CARD_PAD, useCardGeometry } from "./pager-context";
 
 export const MATERIAL_ICONS = { email: Mail, memo: FileText, table: Table2, chart: BarChart3 } as const;
 
-/** A material rendered to look like the real thing, legible on a phone. */
-export function MaterialView({ material }: { material: Material }) {
-  switch (material.kind) {
-    case "email":
-      return <EmailView email={material} />;
-    case "memo":
-      return <MemoView memo={material} />;
-    case "table":
-      return <TableView table={material} />;
-    case "chart":
-      return <ChartView chart={material} />;
-  }
+/** The width inside a card's padding. */
+function useInnerWidth() {
+  const geo = useCardGeometry();
+  const { width } = useWindowDimensions();
+  return (geo?.width ?? Math.min(width - CARD_INSET * 2, CARD_MAX_W)) - CARD_PAD * 2;
 }
 
-function EmailView({ email }: { email: EmailMaterial }) {
+/**
+ * One material as the content of a paper card, made to look like the real
+ * thing: an email like a mail app, a memo on letterhead, a table like a
+ * spreadsheet, a chart framed like a report. Memoised: it renders once per
+ * scene, never on a page change or a keystroke.
+ */
+export const MaterialCard = React.memo(function MaterialCard({ material, n, total, company }: { material: Material; n: number; total: number; company: string }) {
+  const tm = useT("mobile.deck");
+  const counter = total > 1 ? tm("material", { n, total }) : undefined;
+  switch (material.kind) {
+    case "email":
+      return <EmailCard email={material} counter={counter} />;
+    case "memo":
+      return <MemoCard memo={material} counter={counter} company={company} />;
+    case "table":
+      return <TableCard table={material} counter={counter} />;
+    case "chart":
+      return <ChartCard chart={material} counter={counter} />;
+  }
+});
+
+/** A material card's eyebrow: what it is (icon and kind), and where it falls among the scene's materials. */
+function Eyebrow({ kind, counter }: { kind: keyof typeof MATERIAL_ICONS; counter?: string }) {
   const { c } = useTheme();
-  const t = useT("components.documents");
-  const names = (list: { name: string }[]) => list.map((p) => p.name).join(", ");
+  const tm = useT("mobile.materials");
+  const Icon = MATERIAL_ICONS[kind];
   return (
-    <View style={{ borderRadius: radius.card, backgroundColor: c.surface, borderWidth: hairline, borderColor: c.hairline }}>
-      <View style={{ padding: 18, gap: 14, borderBottomWidth: hairline, borderColor: c.hairline }}>
-        <T variant="title2">{email.subject}</T>
-        <View style={{ flexDirection: "row", gap: 12, alignItems: "flex-start" }}>
-          <Avatar name={email.from.name} size={38} />
-          <View style={{ flex: 1, gap: 2 }}>
-            <View style={{ flexDirection: "row", justifyContent: "space-between", gap: 8, alignItems: "baseline" }}>
-              <T variant="subhead" style={{ color: c.text, flex: 1 }} numberOfLines={1}>
-                {email.from.name}
-              </T>
-              <T variant="caption" tone="tertiary">
-                {email.sentAt}
-              </T>
-            </View>
-            {email.from.role ? (
-              <T variant="caption" tone="secondary">
-                {email.from.role}
-              </T>
-            ) : null}
-            <T variant="footnote" tone="secondary">
-              <T variant="footnote" tone="tertiary">
-                {t("to")}{" "}
-              </T>
-              {names(email.to)}
-            </T>
-            {email.cc?.length ? (
-              <T variant="footnote" tone="secondary">
-                <T variant="footnote" tone="tertiary">
-                  {t("cc")}{" "}
-                </T>
-                {names(email.cc)}
-              </T>
-            ) : null}
-          </View>
-        </View>
+    <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+      <View style={{ width: 28, height: 28, borderRadius: 9, backgroundColor: c.surfaceSunken, alignItems: "center", justifyContent: "center" }}>
+        <Icon size={15} color={c.secondary} strokeWidth={1.9} />
       </View>
-      <View style={{ padding: 18 }}>
-        <T variant="body">{email.body}</T>
-      </View>
-      {email.footnote ? (
-        <View style={{ paddingHorizontal: 18, paddingVertical: 14, borderTopWidth: hairline, borderColor: c.hairline }}>
-          <T variant="footnote" tone="secondary">
-            {email.footnote}
-          </T>
-        </View>
+      <T variant="label" tone="secondary" style={{ flexShrink: 1 }}>
+        {tm(kind)}
+      </T>
+      {counter ? (
+        <T variant="caption" tone="tertiary" style={{ marginStart: "auto" }}>
+          {counter}
+        </T>
       ) : null}
     </View>
   );
 }
 
-function MemoView({ memo }: { memo: MemoMaterial }) {
+function EmailCard({ email, counter }: { email: EmailMaterial; counter?: string }) {
   const { c } = useTheme();
   const t = useT("components.documents");
+  const { rtl } = useLocale();
+  // The Arabic comma between names in Arabic.
+  const names = (list: { name: string }[]) => list.map((p) => p.name).join(rtl ? "، " : ", ");
   return (
-    <View style={{ borderRadius: radius.card, backgroundColor: c.surface, borderWidth: hairline, borderColor: c.hairline, padding: 20, gap: 6 }}>
-      <T variant="label" tone="tertiary">
+    <View style={{ gap: 18 }}>
+      <Eyebrow kind="email" counter={counter} />
+      <T variant="prompt" accessibilityRole="header">
+        {email.subject}
+      </T>
+      <View style={{ flexDirection: "row", gap: 12, alignItems: "center" }}>
+        <Avatar name={email.from.name} size={42} />
+        <View style={{ flex: 1, gap: 1 }}>
+          <View style={{ flexDirection: "row", gap: 8, alignItems: "baseline" }}>
+            <T variant="headline" numberOfLines={1} style={{ flex: 1 }}>
+              {email.from.name}
+            </T>
+            <T variant="caption" tone="tertiary">
+              {email.sentAt}
+            </T>
+          </View>
+          {email.from.role ? (
+            <T variant="footnote" tone="secondary" numberOfLines={2}>
+              {email.from.role}
+            </T>
+          ) : null}
+        </View>
+      </View>
+      <View style={{ gap: 4, paddingVertical: 10, borderTopWidth: hairline, borderBottomWidth: hairline, borderColor: c.hairline }}>
+        <AddressLine label={t("to")} value={names(email.to)} />
+        {email.cc?.length ? <AddressLine label={t("cc")} value={names(email.cc)} /> : null}
+      </View>
+      <Paragraphs text={email.body} variant="body" gap={16} />
+      {email.footnote ? <Quote text={email.footnote} /> : null}
+    </View>
+  );
+}
+
+function AddressLine({ label, value }: { label: string; value: string }) {
+  return (
+    <View style={{ flexDirection: "row", gap: 10 }}>
+      <T variant="footnote" tone="tertiary" style={{ minWidth: 30 }}>
+        {label}
+      </T>
+      <T variant="footnote" tone="secondary" style={{ flex: 1 }}>
+        {value}
+      </T>
+    </View>
+  );
+}
+
+/** A quoted aside (a forwarded line, a signature note): grey, set in from the reading start. */
+function Quote({ text }: { text: string }) {
+  const { c } = useTheme();
+  return (
+    <View style={{ borderStartWidth: 3, borderColor: c.hairlineStrong, backgroundColor: c.surfaceSubtle, borderTopEndRadius: radius.control, borderBottomEndRadius: radius.control, paddingVertical: 12, paddingHorizontal: 14 }}>
+      <T variant="footnote" tone="secondary">
+        {text}
+      </T>
+    </View>
+  );
+}
+
+/** Letterhead: the company, a thin vermilion rule, MEMO in the wide face, then who and when, then the memo. */
+function MemoCard({ memo, counter, company }: { memo: MemoMaterial; counter?: string; company: string }) {
+  const { c } = useTheme();
+  const t = useT("components.documents");
+  const tm = useT("mobile.materials");
+  const { rtl } = useLocale();
+  return (
+    <View>
+      <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
+        <T variant="headline" numberOfLines={1} style={{ flex: 1 }}>
+          {company}
+        </T>
+        {counter ? (
+          <T variant="caption" tone="tertiary">
+            {counter}
+          </T>
+        ) : null}
+      </View>
+      <View style={{ height: 1.5, borderRadius: 1, backgroundColor: c.signal, marginTop: 10 }} />
+      <T variant="display" accessibilityRole="header" style={{ marginTop: 20 }}>
         {t("memo")}
       </T>
-      <T variant="title2" style={{ marginTop: 4 }}>
+      <T variant="title2" style={{ marginTop: 8 }}>
         {memo.title}
       </T>
-      <T variant="footnote" tone="secondary">
-        {memo.author.name}
-        {memo.author.role ? `, ${memo.author.role}` : ""}
-        {memo.date ? ` · ${memo.date}` : ""}
-      </T>
-      <View style={{ height: hairline, backgroundColor: c.hairline, marginVertical: 12 }} />
-      <T variant="body">{memo.body}</T>
-    </View>
-  );
-}
-
-function columnLetter(i: number) {
-  let s = "";
-  let n = i + 1;
-  while (n > 0) {
-    const r = (n - 1) % 26;
-    s = String.fromCharCode(65 + r) + s;
-    n = Math.floor((n - 1) / 26);
-  }
-  return s;
-}
-
-/** A spreadsheet that scrolls sideways inside its page; numbers right-aligned and tabular. Always left to right. */
-function TableView({ table }: { table: TableMaterial }) {
-  const { c } = useTheme();
-  const { n, rtl } = useLocale();
-  const tm = useT("mobile.materials");
-  const cell = (v: string | number | null | undefined) => (typeof v === "number" ? n(v) : (v ?? ""));
-  const widths = table.columns.map((col) => {
-    const longest = Math.max(col.label.length, ...table.rows.map((r) => String(cell(r[col.key])).length));
-    return Math.max(76, Math.min(230, Math.round(longest * (rtl ? 9 : 8.2) + 30)));
-  });
-  const textFont = rtl ? fonts.arabic : fonts.sans;
-  const rowNo = 34;
-  const Cell = ({ w, children, head, numeric, first, grow }: { w: number; children: React.ReactNode; head?: boolean; numeric?: boolean; first?: boolean; grow?: boolean }) => (
-    <View style={{ width: w, flexGrow: grow ? 1 : 0, paddingHorizontal: 10, paddingVertical: 9, borderLeftWidth: first ? 0 : hairline, borderColor: c.hairline, justifyContent: "center", backgroundColor: head ? c.surfaceSubtle : undefined }}>
-      <T latin={false} variant="footnote" numberOfLines={2} style={{ color: c.text, fontFamily: head ? textFont[600] : textFont[400], textAlign: numeric ? "right" : "left", writingDirection: "auto", fontVariant: numeric ? ["tabular-nums"] : undefined }}>
-        {children}
-      </T>
-    </View>
-  );
-  const total = rowNo + widths.reduce((a, b) => a + b, 0);
-  return (
-    <View style={{ gap: 8 }}>
-      <View style={{ borderRadius: radius.card, backgroundColor: c.surface, borderWidth: hairline, borderColor: c.hairline, overflow: "hidden", direction: "ltr" }}>
-        <ScrollView horizontal showsHorizontalScrollIndicator nestedScrollEnabled bounces={false} accessibilityLabel={table.title} contentContainerStyle={{ flexGrow: 1 }}>
-          <View style={{ minWidth: total, flexGrow: 1 }}>
-            <View style={{ flexDirection: "row", backgroundColor: c.surfaceSubtle, borderBottomWidth: hairline, borderColor: c.hairline }} accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
-              <View style={{ width: rowNo }} />
-              {table.columns.map((col, i) => (
-                <View key={col.key} style={{ width: widths[i], flexGrow: i === table.columns.length - 1 ? 1 : 0, paddingVertical: 3, borderLeftWidth: hairline, borderColor: c.hairline, alignItems: "center" }}>
-                  <T variant="caption" latin tone="tertiary" align="center" style={{ fontSize: 10, lineHeight: 13 }}>
-                    {columnLetter(i)}
-                  </T>
-                </View>
-              ))}
-            </View>
-            <View style={{ flexDirection: "row", borderBottomWidth: hairline, borderColor: c.hairline }}>
-              <View style={{ width: rowNo, alignItems: "center", justifyContent: "center", backgroundColor: c.surfaceSubtle }}>
-                <T variant="caption" latin tone="tertiary" align="center" style={{ fontSize: 10 }}>
-                  1
-                </T>
-              </View>
-              {table.columns.map((col, i) => (
-                <Cell key={col.key} w={widths[i]!} head numeric={col.numeric} grow={i === table.columns.length - 1}>
-                  {col.label}
-                </Cell>
-              ))}
-            </View>
-            {table.rows.map((row, ri) => (
-              <View key={ri} style={{ flexDirection: "row", borderBottomWidth: ri === table.rows.length - 1 ? 0 : hairline, borderColor: c.hairline }}>
-                <View style={{ width: rowNo, alignItems: "center", justifyContent: "center", backgroundColor: c.surfaceSubtle }}>
-                  <T variant="caption" latin tone="tertiary" align="center" style={{ fontSize: 10 }}>
-                    {ri + 2}
-                  </T>
-                </View>
-                {table.columns.map((col, i) => (
-                  <Cell key={col.key} w={widths[i]!} numeric={col.numeric} grow={i === table.columns.length - 1}>
-                    {cell(row[col.key])}
-                  </Cell>
-                ))}
-              </View>
-            ))}
-          </View>
-        </ScrollView>
+      <View style={{ marginTop: 16, borderTopWidth: hairline, borderColor: c.hairline }}>
+        <MemoRow label={tm("from")} value={`${memo.author.name}${memo.author.role ? `${rtl ? "، " : ", "}${memo.author.role}` : ""}`} />
+        {memo.date ? <MemoRow label={tm("date")} value={memo.date} /> : null}
       </View>
+      <View style={{ marginTop: 20 }}>
+        <Paragraphs text={memo.body} variant="body" gap={16} />
+      </View>
+    </View>
+  );
+}
+
+function MemoRow({ label, value }: { label: string; value: string }) {
+  const { c } = useTheme();
+  return (
+    <View style={{ flexDirection: "row", gap: 12, paddingVertical: 10, borderBottomWidth: hairline, borderColor: c.hairline }}>
+      <T variant="footnote" tone="tertiary" style={{ width: 64 }}>
+        {label}
+      </T>
+      <T variant="subhead" style={{ flex: 1 }}>
+        {value}
+      </T>
+    </View>
+  );
+}
+
+function TableCard({ table, counter }: { table: TableMaterial; counter?: string }) {
+  return (
+    <View style={{ gap: 16 }}>
+      <Eyebrow kind="table" counter={counter} />
+      <T variant="title2" accessibilityRole="header">
+        {table.title}
+      </T>
+      <Sheet table={table} />
       {table.caption ? (
         <T variant="footnote" tone="secondary">
           {table.caption}
         </T>
       ) : null}
-      {total > 360 ? (
-        <T variant="caption" tone="tertiary">
-          {tm("scrollTable")}
-        </T>
+    </View>
+  );
+}
+
+/** A soft fade at one edge of a sideways scroller, into the card's colour. */
+function EdgeFade({ side, color }: { side: "left" | "right"; color: string }) {
+  const id = `fade${React.useId().replace(/[^a-zA-Z0-9]/g, "")}`;
+  return (
+    <View pointerEvents="none" style={{ position: "absolute", top: 0, bottom: 0, width: 28, [side]: 0 }}>
+      <Svg width="100%" height="100%">
+        <Defs>
+          <LinearGradient id={id} x1={side === "right" ? "0" : "1"} y1="0" x2={side === "right" ? "1" : "0"} y2="0">
+            <Stop offset="0" stopColor={color} stopOpacity={0} />
+            <Stop offset="1" stopColor={color} stopOpacity={0.95} />
+          </LinearGradient>
+        </Defs>
+        <Rect x="0" y="0" width="100%" height="100%" fill={`url(#${id})`} />
+      </Svg>
+    </View>
+  );
+}
+
+/**
+ * A spreadsheet: a header row, zebra rows, numbers right-aligned in tabular
+ * figures. The first column stays put while the rest scroll sideways inside
+ * the card, with a soft fade at the edge that has more and a one-line hint
+ * when it overflows. Always left to right, as spreadsheets are.
+ */
+function Sheet({ table }: { table: TableMaterial }) {
+  const { c } = useTheme();
+  const { n, rtl } = useLocale();
+  const tm = useT("mobile.materials");
+  const inner = useInnerWidth();
+  const cell = (v: string | number | null | undefined) => (typeof v === "number" ? n(v) : (v ?? ""));
+  const charW = rtl ? 8.6 : 7.8;
+  const longest = (key: string, label: string) => Math.max(label.length, ...table.rows.map((r) => String(cell(r[key])).length));
+  const [first, ...rest] = table.columns;
+  const firstW = first ? Math.round(Math.max(96, Math.min(inner * 0.42, longest(first.key, first.label) * charW + 26))) : 0;
+  const widths = rest.map((col) => Math.round(Math.max(78, Math.min(200, longest(col.key, col.label) * charW + 28))));
+  const restW = widths.reduce((a, b) => a + b, 0);
+  const rowH = rtl ? 52 : 44;
+  const textFont = rtl ? fonts.arabic : fonts.sans;
+
+  const [overflow, setOverflow] = React.useState(false);
+  const [edges, setEdges] = React.useState({ start: true, end: false });
+  const viewW = React.useRef(0);
+  const contentW = React.useRef(0);
+  const measure = () => setOverflow(contentW.current > viewW.current + 1);
+  const onScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const { contentOffset, contentSize, layoutMeasurement } = e.nativeEvent;
+    const start = contentOffset.x <= 2;
+    const end = contentOffset.x + layoutMeasurement.width >= contentSize.width - 2;
+    setEdges((p) => (p.start === start && p.end === end ? p : { start, end }));
+  };
+
+  // A plain function, not a component: the cells are never remounted when the fades toggle.
+  const renderCell = ({ w, children, head, numeric, label, zebra, grow }: { w: number; children: React.ReactNode; head?: boolean; numeric?: boolean; label?: boolean; zebra?: boolean; grow?: boolean }) => (
+    <View style={{ width: w, flexGrow: grow ? 1 : 0, height: rowH, paddingHorizontal: 12, justifyContent: "center", backgroundColor: head ? c.surfaceSunken : zebra ? c.surfaceSubtle : c.surface }}>
+      <T
+        latin={false}
+        variant="footnote"
+        numberOfLines={2}
+        style={{ color: head ? c.secondary : c.text, fontFamily: head || label ? textFont[600] : textFont[400], textAlign: numeric ? "right" : "left", writingDirection: "auto", fontVariant: numeric ? ["tabular-nums"] : undefined }}
+      >
+        {children}
+      </T>
+    </View>
+  );
+  const cellAt = (key: React.Key, p: Parameters<typeof renderCell>[0]) => <React.Fragment key={key}>{renderCell(p)}</React.Fragment>;
+
+  if (!first) return null;
+  return (
+    <View style={{ gap: 10 }}>
+      <View accessibilityLabel={table.title} style={{ direction: "ltr", flexDirection: "row", borderRadius: radius.control, borderWidth: hairline, borderColor: c.hairline, overflow: "hidden", backgroundColor: c.surface }}>
+        <View style={{ width: firstW, borderRightWidth: rest.length ? hairline : 0, borderColor: c.hairlineStrong, zIndex: 1 }}>
+          {cellAt("head", { w: firstW, head: true, numeric: first.numeric, children: first.label })}
+          {table.rows.map((r, ri) => cellAt(ri, { w: firstW, label: true, numeric: first.numeric, zebra: ri % 2 === 1, children: cell(r[first.key]) }))}
+        </View>
+        {rest.length ? (
+          <View style={{ flex: 1 }}>
+            <ScrollView
+              horizontal
+              nestedScrollEnabled
+              bounces={false}
+              showsHorizontalScrollIndicator={false}
+              scrollEventThrottle={32}
+              onScroll={onScroll}
+              onLayout={(e) => {
+                viewW.current = e.nativeEvent.layout.width;
+                measure();
+              }}
+              onContentSizeChange={(w) => {
+                contentW.current = w;
+                measure();
+              }}
+              contentContainerStyle={{ flexGrow: 1 }}
+            >
+              <View style={{ minWidth: restW, flexGrow: 1 }}>
+                <View style={{ flexDirection: "row" }}>
+                  {rest.map((col, i) => cellAt(col.key, { w: widths[i]!, head: true, numeric: col.numeric, grow: i === rest.length - 1, children: col.label }))}
+                </View>
+                {table.rows.map((r, ri) => (
+                  <View key={ri} style={{ flexDirection: "row" }}>
+                    {rest.map((col, i) => cellAt(col.key, { w: widths[i]!, numeric: col.numeric, zebra: ri % 2 === 1, grow: i === rest.length - 1, children: cell(r[col.key]) }))}
+                  </View>
+                ))}
+              </View>
+            </ScrollView>
+            {overflow && !edges.start ? <EdgeFade side="left" color={c.surface} /> : null}
+            {overflow && !edges.end ? <EdgeFade side="right" color={c.surface} /> : null}
+          </View>
+        ) : null}
+      </View>
+      {overflow ? (
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
+          <MoveHorizontal size={14} color={c.tertiary} strokeWidth={2} />
+          <T variant="caption" tone="tertiary" numberOfLines={1} style={{ flexShrink: 1 }}>
+            {tm("scrollTable")}
+          </T>
+        </View>
       ) : null}
     </View>
   );
@@ -199,21 +323,50 @@ function niceMax(v: number) {
   return step * p;
 }
 
+function ChartCard({ chart, counter }: { chart: ChartMaterial; counter?: string }) {
+  const { c } = useTheme();
+  return (
+    <View style={{ gap: 16 }}>
+      <Eyebrow kind="chart" counter={counter} />
+      <T variant="title2" accessibilityRole="header">
+        {chart.title}
+      </T>
+      {chart.series.length > 1 ? (
+        <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 14 }}>
+          {chart.series.map((s, i) => (
+            <View key={s.key} style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
+              <View style={{ width: 10, height: 10, borderRadius: 3, backgroundColor: c.chart[i] }} />
+              <T variant="caption" tone="secondary">
+                {s.label}
+              </T>
+            </View>
+          ))}
+        </View>
+      ) : null}
+      <Chart chart={chart} />
+      {chart.caption ? (
+        <T variant="footnote" tone="secondary">
+          {chart.caption}
+        </T>
+      ) : null}
+    </View>
+  );
+}
+
 /** Bars or lines drawn with react-native-svg; time runs right to left in Arabic, as on the web. */
-function ChartView({ chart }: { chart: ChartMaterial }) {
+function Chart({ chart }: { chart: ChartMaterial }) {
   const { c } = useTheme();
   const { n, rtl } = useLocale();
-  const { width: screenW } = useWindowDimensions();
-  const W = Math.min(screenW, 560) - 40 - 32;
-  const H = 210;
-  const padL = rtl ? 8 : 40;
-  const padR = rtl ? 40 : 8;
-  const padT = 10;
+  const W = useInnerWidth();
+  const H = 220;
+  const padL = rtl ? 6 : 38;
+  const padR = rtl ? 38 : 6;
+  const padT = 12;
   const data = rtl ? [...chart.data].reverse() : chart.data;
   // Axis labels never collide. A shared leading word ("Week 1", "Week 2"…) is said once
   // under the axis; whatever still doesn't fit alternates two rows and is trimmed.
   const raw = data.map((d) => String(d[chart.xKey] ?? ""));
-  const bandGuess = (W - 48) / Math.max(1, data.length);
+  const bandGuess = (W - 44) / Math.max(1, data.length);
   const fits = (s: string, w: number) => s.length * 6.1 <= w;
   const words = raw.map((l) => l.split(/\s+/));
   let shared = 0;
@@ -238,32 +391,12 @@ function ChartView({ chart }: { chart: ChartMaterial }) {
   const summary = chart.series.map((s) => `${s.label}: ${data.map((d) => `${d[chart.xKey]} ${d[s.key] ?? ""}`).join(", ")}`).join(". ");
 
   return (
-    <View style={{ borderRadius: radius.card, backgroundColor: c.surface, borderWidth: hairline, borderColor: c.hairline, padding: 16, gap: 10 }}>
-      <View style={{ gap: 2 }}>
-        <T variant="headline">{chart.title}</T>
-        {chart.caption ? (
-          <T variant="footnote" tone="secondary">
-            {chart.caption}
-          </T>
-        ) : null}
-      </View>
-      {chart.series.length > 1 ? (
-        <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 14 }}>
-          {chart.series.map((s, i) => (
-            <View key={s.key} style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
-              <View style={{ width: 10, height: 10, borderRadius: 3, backgroundColor: c.chart[i] }} />
-              <T variant="caption" tone="secondary">
-                {s.label}
-              </T>
-            </View>
-          ))}
-        </View>
-      ) : null}
+    <View style={{ gap: 6 }}>
       <View accessible accessibilityRole="image" accessibilityLabel={`${chart.title}. ${summary}${chart.unit ? ` ${chart.unit}` : ""}`}>
         <Svg width={W} height={H}>
-          {ticks.map((v) => (
+          {ticks.map((v, k) => (
             <G key={v}>
-              <Line x1={x0} x2={x0 + plotW} y1={yOf(v)} y2={yOf(v)} stroke={c.chartGrid} strokeWidth={1} />
+              {k > 0 ? <Line x1={x0} x2={x0 + plotW} y1={yOf(v)} y2={yOf(v)} stroke={c.chartGrid} strokeWidth={1} strokeDasharray="2 4" /> : null}
               <SvgText x={rtl ? x0 + plotW + 6 : x0 - 6} y={yOf(v) + 4} fontSize={10.5} fill={c.tertiary} textAnchor={rtl ? "start" : "end"} fontFamily={fonts.sans[400]}>
                 {compact(v)}
               </SvgText>
@@ -271,7 +404,7 @@ function ChartView({ chart }: { chart: ChartMaterial }) {
           ))}
           {chart.chartType === "bar"
             ? data.map((d, di) => {
-                const groupW = Math.min(band * 0.72, 44 * chart.series.length);
+                const groupW = Math.min(band * 0.68, 40 * chart.series.length);
                 const barW = groupW / chart.series.length;
                 const gx = x0 + di * band + (band - groupW) / 2;
                 return chart.series.map((s, si) => {
@@ -305,7 +438,6 @@ function ChartView({ chart }: { chart: ChartMaterial }) {
               </SvgText>
             ) : null,
           )}
-          <Rect x={0} y={0} width={0} height={0} />
         </Svg>
       </View>
       {chart.unit || axisTitle ? (

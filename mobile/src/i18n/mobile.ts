@@ -57,6 +57,22 @@ export const mobileEn = {
     roleplayStart: "Start the conversation when you're ready.",
     chooseOne: "Choose one",
     pickToContinue: "Choose an option to continue.",
+    /** The people a scene's situation names, under its cover art. */
+    withOne: "With {a}",
+    withTwo: "With {a} and {b}",
+    withThree: "With {a}, {b} and {c}",
+  },
+  /** The chip on a task card: how you answer. Keys are the task kinds. */
+  answerBy: {
+    choice: "Choose one",
+    ranking: "Rank them",
+    allocation: "Split the budget",
+    written: "Write your answer",
+    inbox: "Work through the inbox",
+    roleplay: "Talk it through",
+    design: "Design it",
+    chain: "Decide round by round",
+    forced_choice: "Pick what's more like you",
   },
   materials: {
     email: "Email",
@@ -64,6 +80,8 @@ export const mobileEn = {
     table: "Table",
     chart: "Chart",
     scrollTable: "Scroll sideways to see every column",
+    from: "From",
+    date: "Date",
   },
   briefing: {
     roleTeam: "Your team",
@@ -136,6 +154,21 @@ export const mobileAr: Shape<typeof mobileEn> = {
     roleplayStart: "ابدأ المحادثة عندما تكون مستعدًا.",
     chooseOne: "اختر واحدًا",
     pickToContinue: "اختر خيارًا للمتابعة.",
+    // The conjunction "و" attaches to the name that follows it, without a space.
+    withOne: "مع {a}",
+    withTwo: "مع {a} و{b}",
+    withThree: "مع {a} و{b} و{c}",
+  },
+  answerBy: {
+    choice: "اختر واحدًا",
+    ranking: "رتّبها",
+    allocation: "وزّع الميزانية",
+    written: "اكتب إجابتك",
+    inbox: "تعامل مع البريد الوارد",
+    roleplay: "ناقش الأمر في حوار",
+    design: "صمّم الحل",
+    chain: "قرّر جولةً بجولة",
+    forced_choice: "اختر ما يشبهك أكثر",
   },
   materials: {
     email: "بريد إلكتروني",
@@ -143,6 +176,8 @@ export const mobileAr: Shape<typeof mobileEn> = {
     table: "جدول",
     chart: "رسم بياني",
     scrollTable: "مرّر أفقيًا لرؤية كل الأعمدة",
+    from: "من",
+    date: "التاريخ",
   },
   briefing: {
     roleTeam: "فريقك",

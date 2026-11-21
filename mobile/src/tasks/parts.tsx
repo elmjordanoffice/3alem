@@ -1,31 +1,69 @@
 import * as React from "react";
 import { View } from "react-native";
 import Animated, { useAnimatedStyle, withSpring, withTiming } from "react-native-reanimated";
-import { Check } from "lucide-react-native";
-import { useT } from "../i18n";
+import { ChartPie, Check, CircleDot, Inbox, LayoutTemplate, ListOrdered, MessagesSquare, PenLine, Scale, Signpost, type LucideIcon } from "lucide-react-native";
+import { CARD_PAD } from "../deck/pager-context";
+import { useLocale, useT } from "../i18n";
 import { radius, spring, useTheme } from "../theme";
 import { haptic } from "../lib/haptics";
 import { Press } from "../ui/press";
 import { hairline, TextArea, wordCount } from "../ui/primitives";
-import { T } from "../ui/text";
+import { T, useTypeSpec } from "../ui/text";
 import { usePasteReporter } from "../state/integrity";
 
-/** The top of a task page: a small label, then the instruction. */
-export function TaskHeader({ label, prompt, meta, context, tone = "task" }: { label: string; prompt?: string; meta?: string; context?: string; tone?: "task" | "follow" | "change" }) {
+/** The scene's task kind, for the "how you answer" chip on a task card's header. */
+export const TaskKindContext = React.createContext<string | null>(null);
+
+const ANSWER_ICONS: Record<string, LucideIcon> = {
+  choice: CircleDot,
+  ranking: ListOrdered,
+  allocation: ChartPie,
+  written: PenLine,
+  inbox: Inbox,
+  roleplay: MessagesSquare,
+  design: LayoutTemplate,
+  chain: Signpost,
+  forced_choice: Scale,
+};
+
+/**
+ * The top of a task card: a header band across the card (the vermilion dot,
+ * the label, and on the task's first page a chip saying how you answer), then
+ * the instruction, large. The band bleeds to the card's edges, so it must be
+ * the first thing on the page.
+ */
+export function TaskHeader({ label, prompt, meta, context, tone = "task", showKind }: { label: string; prompt?: string; meta?: string; context?: string; tone?: "task" | "follow" | "change"; showKind?: boolean }) {
   const { c } = useTheme();
+  const kind = React.useContext(TaskKindContext);
+  const ta = useT("mobile.answerBy");
+  const Icon = kind ? (ANSWER_ICONS[kind] ?? PenLine) : null;
+  const chip = showKind && kind && Icon ? { Icon, text: ta(kind) } : null;
   return (
-    <View style={{ gap: 10 }}>
-      <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-        <View style={{ width: 7, height: 7, borderRadius: 4, backgroundColor: tone === "change" ? c.warning : c.text }} />
-        <T variant="label" tone="secondary" accessibilityRole="header" numberOfLines={1} style={{ flexShrink: 0 }}>
+    <View style={{ gap: 14 }}>
+      <View style={{ marginHorizontal: -CARD_PAD, marginTop: -CARD_PAD, paddingHorizontal: CARD_PAD, paddingVertical: 10, minHeight: 54, flexDirection: "row", alignItems: "center", gap: 10, backgroundColor: c.surfaceSubtle, borderBottomWidth: hairline, borderColor: c.hairline }}>
+        <View style={{ width: 9, height: 9, borderRadius: 5, backgroundColor: tone === "change" ? c.warning : c.signal }} />
+        <T variant="label" tone="secondary" accessibilityRole="header" numberOfLines={1} style={{ flexShrink: 1 }}>
           {label}
         </T>
-        {meta ? (
-          <T variant="caption" tone="tertiary" numberOfLines={1} align="end" style={{ flex: 1 }}>
+        <View style={{ flex: 1 }} />
+        {chip ? (
+          <View accessible accessibilityLabel={chip.text} style={{ flexDirection: "row", alignItems: "center", gap: 6, height: 30, paddingHorizontal: 11, borderRadius: radius.pill, backgroundColor: c.surface, borderWidth: hairline, borderColor: c.hairlineStrong, flexShrink: 1 }}>
+            <chip.Icon size={14} color={c.secondary} strokeWidth={2} />
+            <T variant="caption" tone="secondary" numberOfLines={1} style={{ flexShrink: 1 }}>
+              {chip.text}
+            </T>
+          </View>
+        ) : meta ? (
+          <T variant="caption" tone="tertiary" numberOfLines={1} style={{ flexShrink: 1 }}>
             {meta}
           </T>
         ) : null}
       </View>
+      {chip && meta ? (
+        <T variant="caption" tone="tertiary">
+          {meta}
+        </T>
+      ) : null}
       {context ? (
         <View style={{ paddingHorizontal: 12, paddingVertical: 8, borderRadius: radius.control, backgroundColor: c.surfaceSunken }}>
           <T variant="footnote" tone="secondary" numberOfLines={2}>
@@ -33,8 +71,21 @@ export function TaskHeader({ label, prompt, meta, context, tone = "task" }: { la
           </T>
         </View>
       ) : null}
-      {prompt ? <T variant="title2">{prompt}</T> : null}
+      {prompt ? <Prompt text={prompt} /> : null}
     </View>
+  );
+}
+
+/** The instruction, large; a long one steps down a size so it never fills the card on its own. */
+function Prompt({ text }: { text: string }) {
+  const { rtl } = useLocale();
+  const spec = useTypeSpec("prompt");
+  const long = text.length > 170;
+  const k = long ? 19 / 22 : 1;
+  return (
+    <T variant="prompt" style={long ? { fontSize: Math.round(spec.size * k), lineHeight: Math.round(spec.line * (rtl ? 0.9 : 0.88)) } : undefined}>
+      {text}
+    </T>
   );
 }
 

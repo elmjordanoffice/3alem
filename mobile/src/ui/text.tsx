@@ -1,13 +1,15 @@
 import * as React from "react";
-import { Text, type TextProps, type TextStyle } from "react-native";
+import { Text, View, type TextProps, type TextStyle } from "react-native";
 import { useLocale } from "../i18n";
 import { fonts, useTheme } from "../theme";
 
 export type Variant =
   | "display"
+  | "displayMd"
   | "displaySm"
   | "title"
   | "title2"
+  | "prompt"
   | "headline"
   | "body"
   | "bodyStrong"
@@ -37,9 +39,11 @@ interface Spec {
  */
 const LATIN: Record<Variant, Spec> = {
   display: { family: fonts.wide, size: 30, line: 33, tracking: -0.3, upper: true, maxScale: 1.25 },
+  displayMd: { family: fonts.wide, size: 25, line: 29, tracking: -0.2, upper: true, maxScale: 1.25 },
   displaySm: { family: fonts.wide, size: 20, line: 24, tracking: -0.1, upper: true, maxScale: 1.3 },
   title: { family: fonts.sans[600], size: 28, line: 34, tracking: -0.45, maxScale: 1.5 },
   title2: { family: fonts.sans[600], size: 21, line: 27, tracking: -0.2, maxScale: 1.6 },
+  prompt: { family: fonts.sans[600], size: 22, line: 29, tracking: -0.3, maxScale: 1.6 },
   headline: { family: fonts.sans[600], size: 17, line: 23, tracking: -0.1, maxScale: 1.8 },
   body: { family: fonts.sans[400], size: 17, line: 26, maxScale: 2 },
   bodyStrong: { family: fonts.sans[500], size: 17, line: 25, maxScale: 2 },
@@ -53,9 +57,11 @@ const LATIN: Record<Variant, Spec> = {
 
 const ARABIC: Record<Variant, Spec> = {
   display: { family: fonts.arabicDisplay[900], size: 38, line: 52, maxScale: 1.25 },
+  displayMd: { family: fonts.arabicDisplay[900], size: 34, line: 46, maxScale: 1.25 },
   displaySm: { family: fonts.arabicDisplay[700], size: 26, line: 38, maxScale: 1.3 },
   title: { family: fonts.arabicDisplay[700], size: 32, line: 46, maxScale: 1.5 },
   title2: { family: fonts.arabic[600], size: 21, line: 36, maxScale: 1.6 },
+  prompt: { family: fonts.arabic[600], size: 22, line: 38, maxScale: 1.6 },
   headline: { family: fonts.arabic[600], size: 17, line: 29, maxScale: 1.8 },
   body: { family: fonts.arabic[400], size: 18, line: 31, maxScale: 2 },
   bodyStrong: { family: fonts.arabic[500], size: 18, line: 31, maxScale: 2 },
@@ -117,4 +123,47 @@ export function T({ variant = "body", tone = "text", align = "start", latin, sty
       {children}
     </Text>
   );
+}
+
+const BULLET = /^\s*[-•*–]\s+/;
+
+/**
+ * Running text split into its paragraphs (blank lines in the source), with
+ * room between them, and "- " lines set as a list with hanging bullets:
+ * emails, memos and scenarios read like the real thing.
+ */
+export function Paragraphs({ text, gap = 14, ...props }: Omit<TProps, "children"> & { text: string; gap?: number }) {
+  const parts = React.useMemo(() => text.split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean), [text]);
+  const block = (p: string, key: number) => {
+    const lines = p.split("\n");
+    if (!lines.some((l) => BULLET.test(l))) {
+      return (
+        <T key={key} {...props}>
+          {p}
+        </T>
+      );
+    }
+    return (
+      <View key={key} style={{ gap: 8 }}>
+        {lines.map((l, j) =>
+          BULLET.test(l) ? (
+            <View key={j} style={{ flexDirection: "row", gap: 10 }}>
+              <T {...props} style={[props.style, { width: 12 }]}>
+                •
+              </T>
+              <T {...props} style={[props.style, { flex: 1 }]}>
+                {l.replace(BULLET, "")}
+              </T>
+            </View>
+          ) : (
+            <T key={j} {...props}>
+              {l}
+            </T>
+          ),
+        )}
+      </View>
+    );
+  };
+  if (parts.length < 2) return block(text.trim(), 0);
+  return <View style={{ gap }}>{parts.map(block)}</View>;
 }

@@ -45,7 +45,7 @@ export function useInboxTask(ctx: TaskContext): TaskResult {
       key: "inbox",
       node: (
         <View style={{ gap: 18 }}>
-          <TaskHeader label={ti("yourTask")} prompt={content.task.prompt} />
+          <TaskHeader label={ti("yourTask")} prompt={content.task.prompt} showKind />
           {timeUp ? <Notice tone="info">{ti("timeUp")}</Notice> : null}
           <T variant="footnote" tone="secondary" accessibilityLiveRegion="polite">
             {progress}

@@ -1,7 +1,7 @@
 # Aalim mobile (عالم)
 
 The candidate app: a week at a fictional company, one scene at a time, as a
-vertical deck of full-screen pages you swipe up through. Expo SDK 58, React
+vertical stack of cards you swipe up through. Expo SDK 58, React
 Native 0.88 (New Architecture), expo-router, Reanimated 4 and Gesture Handler 3.
 English and Arabic (full RTL), light and dark.
 
@@ -60,13 +60,16 @@ src/
     drafts.ts          per-stage drafts on the device (same keys as the web)
     integrity.ts       context events for reviewers (paste-sized inserts, app backgrounded)
   deck/                the scene deck
-    pager.tsx          native vertical pager (Reanimated + Gesture Handler)
-    pager.web.tsx      web pager (CSS scroll snapping)
-    slide.tsx(.web)    one page; its own scroller, edge hand-off to the pager
+    pager.tsx          native vertical pager, full-bleed or a card stack (Reanimated + Gesture Handler)
+    pager.web.tsx      web pager (CSS scroll snapping; depth from scroll-driven animations)
+    pager-context.ts   the pager's contract and the card geometry (radius, inset, peek)
+    slide.tsx(.web)    one page; its own scroller, edge hand-off to the pager; card surface
     flow.tsx           screen-to-screen motion: the old one slides up, the next rises
-    scene.tsx          builds a scene's pages, follow-ups, sealed answers, submit bar
+    scene.tsx          builds a scene's cards, follow-ups, sealed answers, submit bar
+    cover.tsx, art.tsx the situation card and its scene art (../src/lib/brand/scene-art.ts)
     chrome.tsx         floating top bar, chapter rail, page rail, quiet timer, next hint
-    materials.tsx      email, memo, table (scrolls sideways), chart (react-native-svg)
+    materials.tsx      email, memo (letterhead), table (sticky column), chart (react-native-svg)
+    index-store.ts     the current page outside React state
   tasks/               one hook per task kind, returning its pages and its answer
     choice, ranking (+ allocation), written (+ design, follow-ups), inbox,
     sequence (chain, forced choice), roleplay, rank-list (drag to reorder)
@@ -85,6 +88,30 @@ task's own pages (a choice and its "why", one page per forced-choice pair,
 chain round, design section or inbox message, then the inbox's priority order
 and replies). Each task is a hook (`src/tasks/*`) that returns its pages, its
 answer (or `null` until complete) and a digest for later.
+
+- **Cards.** Each page is a rounded card (radius 22) inset 12pt from the sides,
+  under the floating bar; the next card peeks 20pt at the bottom. The situation
+  is an ink card: the scene's art (`sceneArt(title)` from the web app's
+  `src/lib/brand/scene-art.ts`, imported directly so both draw the same picture;
+  Metro watches that folder), then the chapter, the title, the situation, the
+  materials and the people it names. Materials are paper cards that look like
+  the real thing (a mail app, letterhead, a spreadsheet with a sticky first
+  column, a framed chart). Task cards open with a header band and a chip saying
+  how to answer. Ink stays ink in dark mode (with a hairline); paper takes the
+  dark surface.
+- **Depth.** Every card is placed from the pager's one shared position on the
+  UI thread: the card leaving upward sinks to 0.94, dims toward the canvas and
+  drifts up 28pt under the next card, which grows from 0.95 to full size with
+  its top edge fixed (so the peek never slips off screen). Dimming is an
+  overlay, never transparency, so the card underneath never shows through. The
+  web gets the same from CSS scroll-driven animations where the browser has
+  them. Paging never re-renders the scene: the current page lives in a small
+  store (`index-store.ts`) read only by the page rail and each card's
+  screen-reader visibility; the situation and materials are memoised.
+- **Swipe hint.** The first time a deck appears on a device, its first card
+  lifts 12pt and settles, twice (stored under `aalim:deck:swipeHint`).
+- **Reduced motion.** No scaling, dimming, nudge or art draw-in; cards move
+  only under the finger, and a card reached by a tap simply fades in.
 
 - **Gestures (native).** The pager's pan runs simultaneously with each page's
   native scroller (`useNativeGesture({ simultaneousWith: pan })`). Scroll

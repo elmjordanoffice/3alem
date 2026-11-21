@@ -27,7 +27,7 @@ export function useForcedChoiceTask(ctx: TaskContext): TaskResult {
     gate: !picks[p.id],
     node: (
       <View style={{ gap: 22 }}>
-        <TaskHeader label={t("item.yourTask")} meta={i === pairs.length - 1 || done === pairs.length ? undefined : tm("pairsLeft", { count: pairs.length - done })} />
+        <TaskHeader label={t("item.yourTask")} meta={i === pairs.length - 1 || done === pairs.length ? undefined : tm("pairsLeft", { count: pairs.length - done })} showKind={i === 0} />
         {i === 0 ? (
           <T variant="callout" tone="secondary">
             {content.task.prompt}
@@ -92,7 +92,7 @@ export function useChainTask(ctx: TaskContext): TaskResult {
       gate: !current?.optionId,
       node: (
         <View style={{ gap: 18 }}>
-          <TaskHeader label={ti("yourTask")} prompt={i === 0 ? content.task.prompt : undefined} meta={t("roundOf", { n: i + 1, total: rounds.length })} />
+          <TaskHeader label={ti("yourTask")} prompt={i === 0 ? content.task.prompt : undefined} meta={t("roundOf", { n: i + 1, total: rounds.length })} showKind={i === 0} />
           <View style={{ flexDirection: "row", gap: 4 }} accessibilityLabel={t("rounds")}>
             {rounds.map((r, k) => (
               <View key={r.id} style={{ flex: 1, height: 3, borderRadius: 2, backgroundColor: k < i ? c.text : k === i ? c.signal : c.hairlineStrong }} />
