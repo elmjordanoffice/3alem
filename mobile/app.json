@@ -1,0 +1,63 @@
+{
+  "expo": {
+    "name": "Aalim",
+    "slug": "aalim",
+    "scheme": "aalim",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "backgroundColor": "#F2F0EB",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.aalim.candidate",
+      "config": { "usesNonExemptEncryption": false },
+      "infoPlist": {
+        "CFBundleAllowMixedLocalizations": true,
+        "CFBundleLocalizations": ["en", "ar"]
+      }
+    },
+    "android": {
+      "package": "com.aalim.candidate",
+      "softwareKeyboardLayoutMode": "resize",
+      "adaptiveIcon": {
+        "backgroundColor": "#141414",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "favicon": "./assets/favicon.png",
+      "output": "single",
+      "bundler": "metro",
+      "name": "Aalim",
+      "themeColor": "#F2F0EB",
+      "backgroundColor": "#F2F0EB"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-secure-store",
+      "expo-font",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/splash-icon.png",
+          "imageWidth": 120,
+          "resizeMode": "contain",
+          "backgroundColor": "#141414",
+          "dark": { "image": "./assets/splash-icon.png", "backgroundColor": "#141414" }
+        }
+      ],
+      [
+        "expo-localization",
+        {
+          "supportsRTL": true
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": false
+    }
+  }
+}
