@@ -45,7 +45,7 @@ export function CoachChat({ initial, name }: { initial: Msg[]; name: string }) {
           <div className="flex flex-col gap-3 py-6">
             <p className="text-sm text-secondary">{t("empty")}</p>
             <div className="flex flex-wrap gap-2">
-              {(["s1", "s2", "s3"] as const).map((k) => (
+              {(["s1", "s4", "s5", "s6", "s2", "s3"] as const).map((k) => (
                 <button key={k} type="button" onClick={() => send(t(`suggest.${k}`))} className="rounded-full border border-border-strong px-3 py-1.5 text-sm text-secondary hover:bg-surface-subtle hover:text-text">
                   {t(`suggest.${k}`)}
                 </button>

@@ -1944,7 +1944,10 @@
       "suggest": {
         "s1": "Plan my practice for this week",
         "s2": "Why is my lowest area low?",
-        "s3": "What should I focus on first?"
+        "s3": "What should I focus on first?",
+        "s4": "How am I doing?",
+        "s5": "Do I have any blind spots?",
+        "s6": "Help me prepare for an interview"
       },
       "placeholder": "Ask your coach…",
       "send": "Send",

@@ -133,7 +133,8 @@ for (const [i, m] of TEAM.entries()) {
   const { simulatedAnswer } = await import("../src/lib/demo/simulated-candidate");
   const sara = await db.user.findUniqueOrThrow({ where: { email: "candidate@aalim.dev" } });
   if (!(await getGrowProfile(sara.id))) {
-    await saveGrowProfile(sara.id, { currentRole: "Operations coordinator", experienceYears: 4, goal: "Become a team lead within a year", hoursPerWeek: 2 });
+    // Her own view at the start: sure of her leadership, modest about her judgment (the coach compares both with the evidence).
+    await saveGrowProfile(sara.id, { currentRole: "Operations coordinator", experienceYears: 4, goal: "Become a team lead within a year", hoursPerWeek: 2, selfView: { technical: 3, "critical-thinking": 3, judgment: 2, leadership: 4, management: 3, communication: 3, "product-thinking": 3, collaboration: 3, adaptability: 3 } });
     const persona = { strengths: ["judgment", "collaboration", "critical-thinking"], weaknesses: ["leadership", "management"], attention: 0.7, seed: 3101 };
     const baseline = await startGrowSession(sara.id, "en");
     await simulateSession(baseline.id, persona);

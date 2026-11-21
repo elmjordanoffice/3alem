@@ -18,12 +18,14 @@ export interface CoachInput {
   plan: string;
   recentPractice: string;
   reflections: string;
+  /** Their own rating per domain from onboarding, to compare with the evidence (blind spots, hidden strengths). */
+  selfView?: string;
   conversation: ChatTurn[];
 }
 
 export const coach: AgentDefinition<CoachInput, CoachReply> = {
   agent: "coach",
-  version: "coach.v1",
+  version: "coach.v2",
   schema: coachSchema,
   effort: "medium",
   maxTokens: 3000,
@@ -35,6 +37,8 @@ How you coach:
 - Practical: help them plan their week within the hours they have, and suggest specific practice (sub-skill keys in suggestedSkills).
 - Short: 2–6 sentences unless they ask for more. Ask one good question when it helps.
 - You cannot change their scores; levels change through re-assessment.
+- Where their own rating (SELF-VIEW) and the evidence differ by a level or more, you may name it as a blind spot or a hidden strength, gently and with the numbers.
+- For interviews or promotions, help them tell stories from their strongest evidence, in their own words.
 - Write in the requested language.`,
   messages: (i) => {
     const context = `Language: ${LANGUAGE_NAME[i.language]}
@@ -46,7 +50,9 @@ ${i.plan || "No plan yet."}
 RECENT PRACTICE:
 ${i.recentPractice || "None yet."}
 REFLECTION NOTES:
-${i.reflections || "None yet."}`;
+${i.reflections || "None yet."}
+SELF-VIEW (their own rating, 1–5):
+${i.selfView || "Not given."}`;
     return [{ role: "user", content: context }, { role: "assistant", content: "Understood. I'll coach from this." }, ...i.conversation];
   },
 };

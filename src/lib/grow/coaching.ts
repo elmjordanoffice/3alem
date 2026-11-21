@@ -17,7 +17,7 @@ export interface Coaching {
   next: { competencyKey: string; name: string; level: number; nextLevel: number | null; looksLike: string | null }[];
 }
 
-const TIPS: Record<Habit, { en: string; ar: string }> = {
+export const TIPS: Record<Habit, { en: string; ar: string }> = {
   reasons: { en: "Say why. One “because” turns a choice into a judgement others can check.", ar: "اذكر السبب. كلمة «لأن» واحدة تحوّل الاختيار إلى حكم يستطيع الآخرون فهمه ومراجعته." },
   tradeoffs: { en: "Name what your choice costs, and why it is still worth it.", ar: "سمِّ ما يكلّفه خيارك، ولماذا يستحق ذلك رغم الكلفة." },
   specifics: { en: "Make it concrete: who does what, by when (“I’ll send the summary by 4pm”).", ar: "اجعلها ملموسة: من يفعل ماذا ومتى («سأرسل الملخص قبل الساعة الرابعة»)." },
