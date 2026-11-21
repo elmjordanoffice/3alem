@@ -16,18 +16,6 @@ interface LocaleSettings {
 const LocaleSettingsContext = React.createContext<LocaleSettings>({ locale: "en", numerals: "latn", dir: "ltr" });
 
 export function Providers({ children, ...settings }: LocaleSettings & { children: React.ReactNode }) {
-  // One delegated listener lights lit buttons from where the pointer is.
-  React.useEffect(() => {
-    const onMove = (e: PointerEvent) => {
-      const el = (e.target as Element | null)?.closest?.<HTMLElement>(".btn-lit");
-      if (!el) return;
-      const r = el.getBoundingClientRect();
-      el.style.setProperty("--mx", `${e.clientX - r.left}px`);
-      el.style.setProperty("--my", `${e.clientY - r.top}px`);
-    };
-    document.addEventListener("pointermove", onMove, { passive: true });
-    return () => document.removeEventListener("pointermove", onMove);
-  }, []);
   return (
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
       <LocaleSettingsContext.Provider value={settings}>

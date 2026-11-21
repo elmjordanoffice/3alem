@@ -74,7 +74,7 @@ export default async function AppHome({ searchParams }: { searchParams: Promise<
             </p>
           </div>
           {org && viewerCan(viewer, "assessment.create") ? (
-            <Button asChild size="lg" className={`btn-hero rounded-[10px] px-6 ${INK_PRIMARY}`}>
+            <Button asChild size="lg" className={`rounded-[10px] px-6 ${INK_PRIMARY}`}>
               <Link href="/app/assessments/new">
                 <Plus aria-hidden />
                 {t("newAssessment")}
