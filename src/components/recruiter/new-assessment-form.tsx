@@ -10,11 +10,11 @@ import { Field } from "@/components/ui/field";
 import { Alert } from "@/components/ui/alert";
 import { useNumbers } from "@/components/providers";
 
-export function NewAssessmentForm({ aiMode }: { aiMode: "anthropic" | "offline" }) {
+export function NewAssessmentForm({ aiMode, draft = null }: { aiMode: "anthropic" | "offline"; draft?: { jd: string; team: string; skills: string } | null }) {
   const t = useTranslations("assessments.newPage");
   const n = useNumbers();
   const router = useRouter();
-  const [jd, setJd] = React.useState("");
+  const [jd, setJd] = React.useState(draft?.jd ?? "");
   const [pending, setPending] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
   const tooShort = jd.trim().length < 80;
@@ -34,6 +34,11 @@ export function NewAssessmentForm({ aiMode }: { aiMode: "anthropic" | "offline" 
         }
       }}
     >
+      {draft ? (
+        <Alert tone="info" title={t("fromTeamTitle")}>
+          {t("fromTeam", { team: draft.team, skills: draft.skills })}
+        </Alert>
+      ) : null}
       <Field label={t("jdLabel")} hint={t("jdHint")}>
         {({ id, describedBy }) => (
           <Textarea id={id} aria-describedby={describedBy} value={jd} onChange={(e) => setJd(e.target.value)} className="min-h-[22rem] font-normal" placeholder={t("jdPlaceholder")} disabled={pending} />

@@ -67,3 +67,17 @@ test("a small team stays anonymous and nothing happens without consent", async (
   await expect(page.getByText("Taking part")).toBeVisible();
   await expect(page.getByRole("table")).toHaveCount(0);
 });
+
+test("a team's gaps become a drafted role for the next hire", async ({ page, context, baseURL }) => {
+  const teamId = await withDb(async (c) => (await c.query(`SELECT id FROM team WHERE name = 'Regional Operations' LIMIT 1`)).rows[0]?.id as string | undefined);
+  test.skip(!teamId, "run npm run db:seed:demo first");
+  await signIn(page, "orgadmin@aalim.dev");
+  await setPrefs(context, baseURL!, { locale: "en" });
+  await page.goto(`/app/teams/${teamId}`, { waitUntil: "networkidle" });
+  const brief = page.getByRole("region", { name: /Next steps for Regional Operations/ });
+  await expect(brief).toContainText(/Hiring soon\? Someone strong in/);
+  await brief.getByRole("link", { name: "Draft the role" }).click();
+  await expect(page).toHaveURL(/\/app\/assessments\/new\?team=/);
+  await expect(page.getByText("A first draft for your next hire")).toBeVisible();
+  await expect(page.getByLabel("Job description")).toHaveValue(/^Regional Operations: new team member/);
+});

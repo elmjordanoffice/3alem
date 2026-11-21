@@ -1282,7 +1282,9 @@
           "title": "Publish and invite",
           "body": "Send personal links. Each candidate gets a week at a fictional company, adapted to their answers."
         }
-      }
+      },
+      "fromTeam": "Drafted from {team}'s assessments, asking for {skills}. Edit anything: it is your role.",
+      "fromTeamTitle": "A first draft for your next hire"
     }
   },
   "setup": {
@@ -1991,7 +1993,9 @@
       "pair": "Pair {mentor} with {learner} on {domain}: a {gap}-level difference.",
       "ready": "{name} looks ready for a stretch assignment in leading others.",
       "none": "Nothing pressing. Check back after the next assessments.",
-      "note": "A development tool: never for ratings, pay or dismissals."
+      "note": "A development tool: never for ratings, pay or dismissals.",
+      "hire": "Hiring soon? Someone strong in {skills} would close the team's biggest gaps.",
+      "hireCta": "Draft the role"
     }
   },
   "teamInvite": {

@@ -2,9 +2,10 @@
 import * as React from "react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { AlertTriangle, ArrowRightLeft, Crown, Lock, Route, ShieldCheck, Users } from "lucide-react";
+import { AlertTriangle, ArrowRight, ArrowRightLeft, Crown, Lock, Route, ShieldCheck, Users } from "lucide-react";
 import { toast } from "sonner";
 import type { TeamAnalytics } from "@/lib/team";
+import type { NextHire } from "@/lib/team/next-hire";
 import { TRACKS } from "@/lib/grow/tracks";
 import { assignTrackAction } from "@/app/actions/team";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -19,7 +20,7 @@ import { cn } from "@/lib/utils";
 
 const STATUS_TONE: Record<string, "neutral" | "accent" | "success" | "warning" | "critical"> = { INVITED: "neutral", CONSENTED: "accent", DECLINED: "warning", ASSESSED: "success", REMOVED: "critical" };
 
-export function TeamOverview({ a, canManage }: { a: TeamAnalytics; canManage: boolean }) {
+export function TeamOverview({ a, canManage, hire = null }: { a: TeamAnalytics; canManage: boolean; hire?: NextHire | null }) {
   const t = useTranslations("team");
   const td = useTranslations("domainsShort");
   const n = useNumbers();
@@ -29,7 +30,7 @@ export function TeamOverview({ a, canManage }: { a: TeamAnalytics; canManage: bo
 
   return (
     <div className="flex flex-col gap-8">
-      <TeamBrief a={a} />
+      <TeamBrief a={a} hire={hire} />
 
       <Card>
         <CardHeader>
@@ -207,7 +208,7 @@ export function TeamOverview({ a, canManage }: { a: TeamAnalytics; canManage: bo
 }
 
 /** The one filled object on the page: what the reports suggest doing next. */
-function TeamBrief({ a }: { a: TeamAnalytics }) {
+function TeamBrief({ a, hire }: { a: TeamAnalytics; hire: NextHire | null }) {
   const t = useTranslations("team.brief");
   const tt = useTranslations("team");
   const n = useNumbers();
@@ -236,6 +237,17 @@ function TeamBrief({ a }: { a: TeamAnalytics }) {
           </li>
         ))}
       </ol>
+      {hire ? (
+        <div className="mt-5 flex flex-col gap-3 border-t border-white/15 pt-5 sm:flex-row sm:items-center sm:justify-between">
+          <p className="max-w-2xl text-sm text-hero-foreground" dir="auto">{t("hire", { skills: new Intl.ListFormat(locale, { type: "conjunction" }).format(hire.skills.map((s) => (locale === "en" ? s.name.toLowerCase() : s.name))) })}</p>
+          <Button asChild size="sm" variant="signal" className="shrink-0 self-start sm:self-auto">
+            <Link href={`/app/assessments/new?team=${a.team.id}`}>
+              {t("hireCta")}
+              <ArrowRight className="rtl:-scale-x-100" aria-hidden />
+            </Link>
+          </Button>
+        </div>
+      ) : null}
       <p className="mt-5 max-w-3xl text-xs leading-relaxed text-hero-secondary">
         <span className="font-semibold text-hero-foreground">{tt("devToolTitle")}.</span> {tt("devTool")}
       </p>
