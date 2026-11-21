@@ -124,3 +124,11 @@ Choices the brief left open, or where I departed from it, with the reason. Newes
 - **First 90 days** (`src/lib/hire/first-days.ts`): for people moving forward, where to give early ownership and how to support each gap: a pairing, a Grow track and one habit to look for at the check-in.
 
 Each of these has unit tests. *(Product)*
+
+**D-055: A native candidate app, built on Expo.** `mobile/` is an Expo app (SDK 58, expo-router, Reanimated 4, Gesture Handler 3) that runs a whole invitation over the candidate API (D-052): welcome (paste a link or open `aalim://a/<token>`), landing with consent and accommodations, briefing, the world intro as pages, scenes, chapter breaks, pause, and the finish screen with the recap.
+- **The scene deck:** each scene is a vertical deck: the situation, one page per material, then the task. Follow-ups arrive as new pages and the deck springs to them; an answered task folds into a sealed "Answer sent" page; earlier scenes stay sealed.
+- **Paging:** a custom pager rather than `react-native-pager-view`. It runs on the UI thread and only takes a drag at a page's top or bottom edge, so long pages scroll first. It settles one page at a time on a spring that carries the finger's speed, and it can be caught mid-flight. On the web it uses CSS scroll snapping.
+- **Copy and types:** copy comes straight from `messages/*.json`; item and response types are type-only imports from `src/lib/assessment`.
+- **Answers:** drafts autosave on the device, and submissions go through an offline outbox with backoff.
+- **Repo setup:** the root TypeScript, ESLint and Prettier configs skip `mobile/`.
+- **Testing so far:** the web build was walked through every task kind in both languages and themes. The native gestures, haptics, blur, deep links and screen readers still need testing on real devices. *(Mobile)*

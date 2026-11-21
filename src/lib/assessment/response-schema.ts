@@ -99,34 +99,36 @@ export function candidateWords(content: ResponseContent): string {
   }
 }
 
-/** One-line summary of a decision, fed back into later scenes (consequences carry forward). */
-export function decisionSummary(content: ResponseContent, item: ItemContent): string | null {
+/** One-line summary of a decision, fed back into later scenes (consequences carry forward) and shown at chapter breaks, in the session's language. */
+export function decisionSummary(content: ResponseContent, item: ItemContent, locale: "en" | "ar" = "en"): string | null {
+  const ar = locale === "ar";
   const first = (s: string) => s.split(/(?<=[.!?؟])\s/)[0]?.slice(0, 160) ?? "";
+  const q = (s: string) => (ar ? `«${s}»` : `"${s}"`);
   switch (content.kind) {
     case "choice": {
       const o = item.task.options?.find((x) => x.id === content.optionId);
-      return o ? `${item.title}: chose "${o.label}"` : null;
+      return o ? `${item.title}: ${ar ? "اخترت" : "chose"} ${q(o.label)}` : null;
     }
     case "ranking": {
       const top = item.task.rankItems?.find((x) => x.id === content.order[0]);
-      return top ? `${item.title}: put "${top.label}" first` : null;
+      return top ? (ar ? `${item.title}: وضعت ${q(top.label)} أولًا` : `${item.title}: put ${q(top.label)} first`) : null;
     }
     case "allocation": {
       const rows = item.task.allocation?.rows ?? [];
       const top = [...rows].sort((a, b) => (content.values[b.id] ?? 0) - (content.values[a.id] ?? 0))[0];
-      return top ? `${item.title}: gave most resources to "${top.label}"` : null;
+      return top ? (ar ? `${item.title}: منحت ${q(top.label)} النصيب الأكبر من الموارد` : `${item.title}: gave most resources to ${q(top.label)}`) : null;
     }
     case "chain": {
       const last = content.choices.at(-1);
       const round = item.task.chain?.rounds.find((r) => r.id === last?.roundId);
       const opt = round?.options.find((o) => o.id === last?.optionId);
-      return opt ? `${item.title}: finally chose "${opt.label}"` : null;
+      return opt ? `${item.title}: ${ar ? "اخترت في النهاية" : "finally chose"} ${q(opt.label)}` : null;
     }
     case "written":
     case "design":
       return `${item.title}: ${first(candidateWords(content))}`;
     case "roleplay":
-      return `${item.title}: had a conversation with the stakeholder`;
+      return ar ? `${item.title}: أجريت حوارًا مع الطرف المعني` : `${item.title}: had a conversation with the stakeholder`;
     default:
       return null;
   }

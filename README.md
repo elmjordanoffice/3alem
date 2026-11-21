@@ -78,6 +78,10 @@ In a Claude Code cloud environment, add the key as an environment variable in th
 | `npm run db:migrate` / `db:deploy` / `db:seed` / `db:seed:demo` | Prisma migrations, base seed, demo data |
 | `npm run brand:assets` | Regenerate the logo files, PNGs, social images and in-app wordmark paths from the brand fonts |
 
+## Mobile app
+
+`mobile/` is the native candidate app (Expo, React Native): the same week of scenes as a vertical deck of full-screen pages, in English and Arabic, light and dark, over the candidate API (`/api/m/:token`). See [mobile/README.md](mobile/README.md) to run it in Expo Go or a browser.
+
 ## Docs
 
 - [Brand](docs/brand.md): name, platform, voice, logo, colour, type and assets (the live, bilingual brand book is at **/brand**)

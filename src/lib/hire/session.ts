@@ -372,7 +372,7 @@ export async function submitResponse(sessionId: string, input: SubmitInput) {
       });
     }
     if (input.stage === "MAIN") {
-      const summary = decisionSummary(parsed.data, content);
+      const summary = decisionSummary(parsed.data, content, session.locale === "ar" ? "ar" : "en");
       if (summary) {
         const w = await tx.scenarioWorld.findUniqueOrThrow({ where: { sessionId } });
         const decisions = [...((w.hooks as { decisions?: string[] }).decisions ?? []), summary];
