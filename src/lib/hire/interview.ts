@@ -65,6 +65,7 @@ export interface InterviewKit {
 }
 
 const SUB_SKILLS = new Map(DOMAINS.flatMap((d) => d.subSkills.map((s) => [s.key, s] as const)));
+const DOMAIN_NAMES = new Map(DOMAINS.map((d) => [d.key, d.name] as const));
 
 function anchorsFor(key: string, locale: "en" | "ar"): KitFocus["anchors"] {
   const s = SUB_SKILLS.get(key);
@@ -106,22 +107,32 @@ export function buildFocus(content: ReportContent, locale: "en" | "ar"): KitFocu
   return focusAreas(content).map(({ skill, reason }) => {
     const domain = skill.key.split(".")[0]!;
     const guide = guideFor(skill.key) ?? guideFor(domain);
-    const written = content.narrative.interviewQuestions.find((q) => q.skillKey === skill.key || q.skillKey === domain);
+    // The report's own question is in the report's language; use it only when that matches the reader's.
+    const written = content.language === locale ? content.narrative.interviewQuestions.find((q) => q.skillKey === skill.key || q.skillKey === domain) : undefined;
     const pick = (x: { en: string; ar: string }) => x[locale];
     return {
       skillKey: skill.key,
-      name: skill.name,
+      name: SUB_SKILLS.get(skill.key)?.name[locale] ?? DOMAIN_NAMES.get(skill.key)?.[locale] ?? skill.name,
       reason,
       importance: skill.importance,
       // The report's own question is tailored to this candidate's answers; the guide's is the standard one.
       question: written?.question ?? (guide ? pick(guide.question) : fallbackQuestion(skill.name, locale)),
       situational: guide ? pick(guide.situational) : null,
-      followUps: [...(written?.followUp ? [written.followUp] : []), ...(guide?.followUps.map(pick) ?? [])].slice(0, 3),
+      followUps: unique([...(written?.followUp ? [written.followUp] : []), ...(guide?.followUps.map(pick) ?? [])]).slice(0, 3),
       listenFor: guide?.listenFor.map(pick) ?? [],
       watchFor: guide?.watchFor.map(pick) ?? [],
       anchors: anchorsFor(skill.key, locale),
       assessment: { estimate: skill.estimate, range: skill.range, confidence: skill.confidence },
     };
+  });
+}
+
+/** Drop repeats (the report's own question often comes from the same guide). */
+function unique(xs: string[]): string[] {
+  const seen = new Set<string>();
+  return xs.filter((x) => {
+    const k = x.trim().toLowerCase();
+    return k && !seen.has(k) && (seen.add(k), true);
   });
 }
 

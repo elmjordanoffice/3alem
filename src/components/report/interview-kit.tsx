@@ -110,6 +110,8 @@ export function InterviewKitView({ kit }: { kit: InterviewKit }) {
                   if (!res.ok) return setError(true);
                   setEditing(false);
                   router.refresh();
+                  // The debrief appears at the top: take the interviewer there.
+                  window.scrollTo({ top: 0, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
                 }}
               >
                 <Check aria-hidden />

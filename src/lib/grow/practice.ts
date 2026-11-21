@@ -148,18 +148,30 @@ export async function startPractice(userId: string, locale: "en" | "ar", opts: {
   );
 }
 
+/** "Works out…" → "works out…", leaving names and acronyms ("Line 3", "IT") alone. */
+function lowerFirst(t: string) {
+  return /^[A-Z][a-z]/.test(t) ? t[0]!.toLowerCase() + t.slice(1) : t;
+}
+
 /** Feedback without a model: built from the item's indicators and the person's words. */
 export function offlineFeedback(item: PracticeItem, words: string, locale: "en" | "ar"): StoredFeedback {
   const ar = locale === "ar";
   const hit = item.hidden.strongIndicators.filter((s) => containsAny(words, s.keywords));
   const missed = item.hidden.strongIndicators.filter((s) => !containsAny(words, s.keywords));
-  const didWell = hit.slice(0, 3).map((s) => ({ point: s.text, quote: sentenceWith(words, s.keywords) ?? words.slice(0, 160) }));
+  // One card per quote: two behaviours shown in the same sentence share it.
+  const didWell: StoredFeedback["didWell"] = [];
+  for (const s of hit) {
+    const quote = sentenceWith(words, s.keywords) ?? words.slice(0, 160);
+    const same = didWell.find((d) => d.quote === quote);
+    if (same) same.point = `${same.point.replace(/\.$/, "")}${ar ? "، و" : "; and "}${ar ? s.text : lowerFirst(s.text)}`;
+    else if (didWell.length < 3) didWell.push({ point: s.text, quote });
+  }
   const expert = missed.slice(0, 3).map((s) => s.text);
   if (item.hidden.embeddedDetail && !containsAny(words, item.hidden.embeddedDetail.keywords)) {
     expert.unshift(ar ? `انتبه إلى تفصيلة في المواد: ${item.hidden.embeddedDetail.description}` : `A detail in the materials mattered: ${item.hidden.embeddedDetail.description}`);
   }
   if (expert.length === 0) expert.push(ar ? "اختبر خطتك: ما أول إشارة ستدلك على أنها لا تنجح؟" : "Stress-test your plan: what is the first sign it isn't working?");
-  const approach = (ar ? "أحد الأساليب القوية: " : "One strong approach: ") + item.hidden.strongIndicators.slice(0, 3).map((s) => s.text.replace(/\.$/, "")).join(ar ? "؛ ثم " : "; then ") + ".";
+  const approach = (ar ? "أحد الأساليب القوية: " : "One strong approach: ") + item.hidden.strongIndicators.slice(0, 3).map((s, i) => { const t = s.text.replace(/\.$/, ""); return ar || i === 0 ? t : lowerFirst(t); }).join(ar ? "؛ ثم " : "; then ") + ".";
   const keys = item.hidden.rubric.map((r) => r.competencyKey);
   const scored = offlineScore({ hidden: item.hidden, rubricKeys: keys, stage: "MAIN", response: words });
   return { didWell, expertWouldConsider: expert.slice(0, 4), oneStrongApproach: approach, scores: scored.scores.map((s) => ({ competencyKey: s.competencyKey, level: s.level, confidence: s.confidence })), mode: "offline" };
