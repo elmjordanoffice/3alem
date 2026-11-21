@@ -55,6 +55,9 @@ test("org admin tools: fairness, audit, integrations, library", async ({ page, c
   await expect(page.getByText(url)).toBeVisible();
   const stored = await withDb(async (c) => (await c.query(`SELECT "secretEncrypted" FROM webhook WHERE url = $1`, [url])).rows[0]);
   expect(stored.secretEncrypted).not.toContain("whsec_");
+  // Adding a webhook refreshes the page; check accessibility once it has settled.
+  await page.waitForLoadState("networkidle");
+  await expect(page).toHaveTitle(/Integrations/);
   expect(await axeClean(page)).toEqual([]);
   await page.getByRole("button", { name: `Delete webhook ${url}` }).click({ trial: true });
 

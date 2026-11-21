@@ -44,8 +44,9 @@ function firstPerson(text: string, lang: "en" | "ar") {
  * A sentence a person might write: the behaviour the signal describes, in the
  * first person, plus the specifics (the signal's keywords) that show it.
  */
-function sentenceFor(signal: { text: string; keywords: string[] }, strong: boolean, r: () => number, lang: "en" | "ar") {
-  const ks = signal.keywords.filter((k) => (lang === "en" ? latin(k) : !latin(k))).slice(0, 2);
+function sentenceFor(signal: { text: string; keywords: string[] }, strong: boolean, r: () => number, lang: "en" | "ar", plain = false) {
+  // A plain sentence names the behaviour without the specifics that prove it.
+  const ks = plain ? [] : signal.keywords.filter((k) => (lang === "en" ? latin(k) : !latin(k))).slice(0, 2);
   const pick = <T,>(xs: T[]) => xs[Math.floor(r() * xs.length)]!;
   const act = firstPerson(signal.text, lang);
   if (lang === "ar") {
@@ -63,11 +64,17 @@ function answerText(hidden: ItemHidden, targets: string[], p: SimPersona, r: () 
   for (const key of targets) {
     const strong = p.strengths.includes(domain(key));
     const weak = p.weaknesses.includes(domain(key));
-    // Strong domains show two of the item's strong behaviours, middling ones show one, weak ones a red flag.
+    // Strong domains show two of the item's strong behaviours with specifics, weak ones a red flag.
     const signals = (weak ? hidden.redFlags : hidden.strongIndicators).filter((s) => s.competencyKey === key);
     const pool = signals.length ? signals : strong ? hidden.strongIndicators : weak ? hidden.redFlags : [];
+    const generic = lang === "ar" ? "سأتحدث مع الأشخاص المعنيين وأتخذ قرارًا معقولًا." : "I would talk to the people involved and make a reasonable call.";
+    if (!strong && !weak) {
+      // Middling: the right idea about half the time, without the specifics; otherwise something generic.
+      parts.push(pool[0] && r() < 0.5 ? sentenceFor(pool[0], true, r, lang, true) : generic);
+      continue;
+    }
     for (const s of pool.slice(0, strong ? 2 : 1)) parts.push(sentenceFor(s, !weak, r, lang));
-    if (!pool.length) parts.push(lang === "ar" ? "سأتحدث مع الأشخاص المعنيين وأتخذ قرارًا معقولًا." : "I would talk to the people involved and make a reasonable call.");
+    if (!pool.length) parts.push(generic);
   }
   if (hidden.embeddedDetail && r() < p.attention) {
     // The hidden detail is a fact in the materials; someone who noticed it says so.

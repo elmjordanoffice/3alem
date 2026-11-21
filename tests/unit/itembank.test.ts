@@ -126,3 +126,13 @@ describe("curated worlds", () => {
     }
   });
 });
+
+describe("choosing a bank item", () => {
+  it("prefers generic items over another profession's setting", async () => {
+    const { resolveBankItem } = await import("@/lib/itembank/resolve");
+    const inbox = BANK.find((i) => i.id === "inbox-03-release-afternoon")!;
+    const target = { skills: [inbox.targets[0]!], itemType: inbox.type, difficulty: inbox.difficulty, timed: false };
+    expect(resolveBankItem(target, { usedIds: new Set(), roleFamily: "software-engineering" })?.id).toBe(inbox.id);
+    expect(resolveBankItem(target, { usedIds: new Set(), roleFamily: "sales" })?.roleFamilies).not.toContain("software-engineering");
+  });
+});

@@ -32,6 +32,8 @@ export function resolveBankItem(
     score -= Math.abs(item.difficulty - target.difficulty) * 1.5;
     if (target.timed && item.dials.timePressure >= 4) score += 1;
     if (opts.roleFamily && item.roleFamilies.includes(opts.roleFamily)) score += 2;
+    // Another profession's setting is a last resort: usable, but generic items come first.
+    else if (opts.roleFamily && item.roleFamilies.length) score -= 5;
     if (!best || score > best.score || (score === best.score && item.id < best.item.id)) best = { item, score };
   }
   return best?.item ?? null;
