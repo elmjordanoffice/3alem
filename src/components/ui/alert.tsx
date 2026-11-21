@@ -3,14 +3,14 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { AlertTriangle, CheckCircle2, Info, XCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const alertVariants = cva("flex gap-3 rounded-card border p-4 text-sm [&>svg]:mt-0.5 [&>svg]:size-4 [&>svg]:shrink-0", {
+const alertVariants = cva("flex gap-3 rounded-control border border-s-[3px] p-4 text-sm [&>svg]:mt-0.5 [&>svg]:size-4 [&>svg]:shrink-0", {
   variants: {
     tone: {
-      info: "border-info/25 bg-info-subtle text-text [&>svg]:text-info",
-      success: "border-success/25 bg-success-subtle text-text [&>svg]:text-success",
-      warning: "border-warning/25 bg-warning-subtle text-text [&>svg]:text-warning",
-      critical: "border-critical/25 bg-critical-subtle text-text [&>svg]:text-critical",
-      neutral: "border-border bg-surface-subtle text-text [&>svg]:text-secondary",
+      info: "border-info/25 border-s-info bg-info-subtle text-text [&>svg]:text-info",
+      success: "border-success/25 border-s-success bg-success-subtle text-text [&>svg]:text-success",
+      warning: "border-warning/25 border-s-warning bg-warning-subtle text-text [&>svg]:text-warning",
+      critical: "border-critical/25 border-s-critical bg-critical-subtle text-text [&>svg]:text-critical",
+      neutral: "border-border border-s-text bg-surface text-text [&>svg]:text-secondary",
     },
   },
   defaultVariants: { tone: "info" },

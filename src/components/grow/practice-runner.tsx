@@ -63,7 +63,7 @@ export function PracticeRunner({ id, item, feedback, reflection, answerText }: {
         </section>
         <section className="flex min-w-0 flex-col gap-5">
           {item.previous && !feedback ? (
-            <div className="rounded-[16px] bg-accent-subtle p-4 text-sm">
+            <div className="rounded-[12px] bg-accent-subtle p-4 text-sm">
               <p className="font-semibold text-accent-text">{t("retryTitle")}</p>
               <ul className="mt-2 flex list-disc flex-col gap-1 ps-5 text-text marker:text-accent-text">
                 {item.previous.tips.map((x) => (
@@ -174,19 +174,19 @@ function CoachingPanel({ coaching, previous }: { coaching: Coaching; previous?: 
   return (
     <div className="grid gap-4 lg:grid-cols-2">
       {coaching.tips.length ? (
-        <div className="flex flex-col gap-3 rounded-[20px] bg-surface p-5 shadow-card">
+        <div className="flex flex-col gap-3 rounded-[16px] bg-surface p-5 shadow-card">
           <h3 className="flex items-center gap-2 text-sm font-semibold text-text">
             <TrendingUp className="size-4 text-accent-text" aria-hidden />
             {t("tipsTitle")}
           </h3>
           <ul className="flex flex-col gap-2">
             {coaching.tips.map((x) => (
-              <li key={x} className="rounded-[14px] bg-accent-subtle px-3 py-2.5 text-sm text-text" dir="auto">{x}</li>
+              <li key={x} className="rounded-[10px] bg-accent-subtle px-3 py-2.5 text-sm text-text" dir="auto">{x}</li>
             ))}
           </ul>
         </div>
       ) : null}
-      <div className="flex flex-col gap-3 rounded-[20px] bg-surface p-5 shadow-card">
+      <div className="flex flex-col gap-3 rounded-[16px] bg-surface p-5 shadow-card">
         <h3 className="text-sm font-semibold text-text">{t("nextTitle")}</h3>
         <ul className="flex flex-col gap-3">
           {coaching.next.map((n) => {

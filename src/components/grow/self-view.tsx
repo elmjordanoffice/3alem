@@ -13,7 +13,7 @@ export function SelfViewComparison({ rows }: { rows: { key: string; name: string
   const n = useNumbers();
   if (!rows.length) return null;
   return (
-    <section aria-labelledby="self-view" className="mt-12 rounded-[20px] bg-surface p-5 shadow-card sm:p-6 lg:ms-[13.5rem]">
+    <section aria-labelledby="self-view" className="mt-12 rounded-[16px] bg-surface p-5 shadow-card sm:p-6 lg:ms-[13.5rem]">
       <h2 id="self-view" className="font-display text-lg font-semibold">{t("title")}</h2>
       <p className="mt-1 text-sm text-secondary">{t("body")}</p>
       <ul className="mt-5 flex flex-col gap-4">

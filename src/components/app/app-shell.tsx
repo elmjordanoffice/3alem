@@ -113,13 +113,13 @@ export function AppShell({ user, organizations, activeOrganizationId, nav, comma
       >
         {t("skipToContent")}
       </a>
-      {/* The sidebar floats as a white card on the canvas. */}
-      <aside className="sticky top-0 hidden h-dvh w-[18.5rem] shrink-0 p-4 lg:block">
-        <div className="flex h-full flex-col overflow-hidden rounded-[24px] bg-sidebar text-sidebar-foreground shadow-[0_0_0_1px_var(--sidebar-border),0_16px_40px_-22px_rgb(23_24_74/0.35)]">{sidebar}</div>
+      {/* The rail: white, flush, a hairline on its inner edge. */}
+      <aside className="sticky top-0 hidden h-dvh w-[16.5rem] shrink-0 border-e border-sidebar-border bg-sidebar text-sidebar-foreground lg:block">
+        {sidebar}
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="sticky top-0 z-30 flex h-14 items-center gap-2 border-b border-border bg-surface/85 px-3 text-text backdrop-blur-md lg:hidden">
+        <header className="sticky top-0 z-30 flex h-14 items-center gap-2 border-b border-border bg-surface px-3 text-text lg:hidden">
           <DialogPrimitive.Root open={open} onOpenChange={setOpen}>
             <DialogPrimitive.Trigger
               className="inline-flex size-9 items-center justify-center rounded-control text-secondary hover:bg-surface-subtle hover:text-text focus-visible:outline-2 focus-visible:outline-focus"
@@ -141,7 +141,7 @@ export function AppShell({ user, organizations, activeOrganizationId, nav, comma
               </DialogPrimitive.Content>
             </DialogPrimitive.Portal>
           </DialogPrimitive.Root>
-          <Logo showArabic={false} />
+          <Logo showArabic={false} className="text-[14px]" />
           <div className="ms-auto flex items-center">
             <button type="button" onClick={openCommandMenu} className="inline-flex size-9 items-center justify-center rounded-control text-secondary hover:bg-surface-subtle hover:text-text focus-visible:outline-2 focus-visible:outline-focus" aria-label={t("search")}>
               <Search className="size-5" aria-hidden />
@@ -170,16 +170,16 @@ function SidebarContent({ user, organizations, activeOrganizationId, nav }: Pick
 
   return (
     <div className="flex h-full flex-col">
-      <div className="flex h-[4.5rem] items-center px-5">
+      <div className="flex h-16 items-center border-b border-sidebar-border px-5">
         <Link href="/app" className="rounded-control focus-visible:outline-2 focus-visible:outline-focus">
-          <Logo className="text-[21px]" />
+          <Logo className="text-[15px]" />
         </Link>
       </div>
 
-      <div className="px-3 pb-2">
+      <div className="px-3 pb-2 pt-3">
         <DropdownMenu>
-          <DropdownMenuTrigger className="flex w-full items-center gap-2.5 rounded-[14px] bg-sidebar-raised px-2.5 py-2.5 text-start text-sm transition-colors hover:bg-surface-sunken focus-visible:outline-2 focus-visible:outline-focus">
-            <span className="inline-flex size-8 shrink-0 items-center justify-center rounded-[10px] bg-ink font-display text-[13px] font-semibold text-ink-foreground" aria-hidden>
+          <DropdownMenuTrigger className="flex w-full items-center gap-2.5 rounded-[10px] px-2 py-2 shadow-[inset_0_0_0_1px_var(--sidebar-border)] text-start text-sm transition-colors hover:bg-surface-sunken focus-visible:outline-2 focus-visible:outline-focus">
+            <span className="inline-flex size-8 shrink-0 items-center justify-center rounded-[8px] bg-text font-display text-[13px] font-bold text-background [font-stretch:125%]" aria-hidden>
               {active ? active.name.trim().charAt(0).toUpperCase() : <Building2 className="size-3.5" />}
             </span>
             <span className="min-w-0 flex-1">
@@ -219,11 +219,11 @@ function SidebarContent({ user, organizations, activeOrganizationId, nav }: Pick
         <button
           type="button"
           onClick={openCommandMenu}
-          className="flex h-10 w-full items-center gap-2.5 rounded-[12px] px-3 text-sm text-sidebar-secondary shadow-[inset_0_0_0_1px_var(--border)] transition-colors hover:bg-sidebar-raised hover:text-sidebar-foreground focus-visible:outline-2 focus-visible:outline-focus"
+          className="flex h-9 w-full items-center gap-2.5 rounded-[10px] bg-sidebar-raised px-3 text-sm text-sidebar-secondary transition-colors hover:bg-sidebar-raised hover:text-sidebar-foreground focus-visible:outline-2 focus-visible:outline-focus"
         >
           <Search className="size-4" strokeWidth={1.75} aria-hidden />
           <span className="flex-1 text-start">{t("search")}</span>
-          <kbd className="rounded-[6px] bg-sidebar-raised px-1.5 py-px font-sans text-[11px] text-sidebar-tertiary" dir="ltr">⌘K</kbd>
+          <kbd className="rounded-[5px] bg-sidebar px-1.5 py-px font-sans text-[11px] text-sidebar-tertiary shadow-[inset_0_0_0_1px_var(--sidebar-border)]" dir="ltr">⌘K</kbd>
         </button>
       </div>
 
@@ -231,9 +231,9 @@ function SidebarContent({ user, organizations, activeOrganizationId, nav }: Pick
         {nav.map((section) => (
           <div key={section.sectionKey} className="mb-6">
             {section.sectionKey !== "main" ? (
-              <p className="px-3.5 pb-2 text-xs font-medium text-sidebar-tertiary">{t(`sections.${section.sectionKey}`)}</p>
+              <p className="eyebrow px-3 pb-2 text-sidebar-tertiary">{t(`sections.${section.sectionKey}`)}</p>
             ) : null}
-            <ul className="flex flex-col gap-1">
+            <ul className="flex flex-col gap-0.5">
               {section.items.map((item) => {
                 const Icon = ICONS[item.icon];
                 const current = item.href === currentHref;
@@ -243,13 +243,14 @@ function SidebarContent({ user, organizations, activeOrganizationId, nav }: Pick
                       href={item.href}
                       aria-current={current ? "page" : undefined}
                       className={cn(
-                        "relative flex h-11 items-center gap-3 rounded-[14px] px-3.5 text-[14.5px] transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-focus",
+                        "relative flex h-10 items-center gap-3 rounded-[8px] px-3 text-[14px] transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-focus",
                         current
-                          ? "bg-sidebar-active font-medium text-sidebar-accent shadow-[0_10px_24px_-10px_rgb(59_63_216/0.7)]"
+                          ? "bg-sidebar-active font-semibold text-sidebar-accent"
                           : "text-sidebar-secondary hover:bg-sidebar-raised hover:text-sidebar-foreground",
                       )}
                     >
-                      <Icon className={cn("size-[18px] shrink-0", current ? "text-sidebar-accent" : "text-sidebar-tertiary")} strokeWidth={1.75} aria-hidden />
+                      <Icon className={cn("size-[17px] shrink-0", current ? "text-sidebar-accent" : "text-sidebar-tertiary")} strokeWidth={current ? 2 : 1.75} aria-hidden />
+                      {current ? <span className="absolute end-3 size-1.5 rounded-full bg-saffron" aria-hidden /> : null}
                       <span className="truncate">{t(`nav.${item.labelKey}`)}</span>
                     </Link>
                   </li>
@@ -262,7 +263,7 @@ function SidebarContent({ user, organizations, activeOrganizationId, nav }: Pick
 
       <div className="flex items-center gap-1 border-t border-sidebar-border p-3">
         <DropdownMenu>
-          <DropdownMenuTrigger className="flex min-w-0 flex-1 items-center gap-2.5 rounded-[14px] p-1.5 text-start transition-colors hover:bg-sidebar-raised focus-visible:outline-2 focus-visible:outline-focus">
+          <DropdownMenuTrigger className="flex min-w-0 flex-1 items-center gap-2.5 rounded-[10px] p-1.5 text-start transition-colors hover:bg-sidebar-raised focus-visible:outline-2 focus-visible:outline-focus">
             <Avatar name={user.name} />
             <span className="min-w-0 flex-1">
               <span className="block truncate text-sm font-medium text-sidebar-foreground">{user.name}</span>

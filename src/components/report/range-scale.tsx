@@ -46,7 +46,7 @@ export function RangeScale({
         />
         {expected ? <span className={cn("absolute -inset-y-1.5 w-0.5 rounded-full", tone === "ink" ? "bg-white/80" : "bg-accent")} style={{ insetInlineStart: `calc(${pct(expected)}% - 1px)` }} /> : null}
         <span
-          className={cn("absolute top-1/2 -translate-y-1/2 rounded-full ring-[3px] shadow-[0_1px_3px_rgb(23_24_74/0.3)]", dot, fill, tone === "ink" ? "ring-hero-via" : "ring-surface", animate && "range-dot")}
+          className={cn("absolute top-1/2 -translate-y-1/2 rounded-full ring-[3px] shadow-[0_1px_3px_rgb(20_20_20/0.3)]", dot, fill, tone === "ink" ? "ring-hero-via" : "ring-surface", animate && "range-dot")}
           style={{ insetInlineStart: `calc(${pct(estimate)}% - ${size === "lg" ? 9 : size === "sm" ? 6 : 7}px)` }}
         />
       </div>

@@ -62,17 +62,17 @@ export default async function GrowHome() {
       </header>
 
       {!report ? (
-        <section className="mb-10 hero-card rounded-[28px] p-7 text-ink-foreground shadow-raised sm:p-10">
+        <section className="mb-10 hero-card rounded-[20px] p-7 text-ink-foreground shadow-raised sm:p-10">
           <h2 className="text-[2rem] font-semibold leading-tight">{inProgress ? t("baseline.resumeTitle") : t("baseline.title")}</h2>
           <p className="mt-3 max-w-xl text-hero-secondary">{t("baseline.body")}</p>
           <div className="mt-8">
             {inProgress ? (
-              <Button asChild size="lg" className={`rounded-[14px] ${INK_PRIMARY}`}>
+              <Button asChild size="lg" className={`rounded-[10px] ${INK_PRIMARY}`}>
                 <Link href={`/grow/session/${inProgress.id}`}>{t("baseline.resume")}</Link>
               </Button>
             ) : (
               <form action={startBaselineAction}>
-                <Button size="lg" type="submit" className={`rounded-[14px] ${INK_PRIMARY}`}>
+                <Button size="lg" type="submit" className={`rounded-[10px] ${INK_PRIMARY}`}>
                   <Target aria-hidden />
                   {t("baseline.start")}
                 </Button>
@@ -85,7 +85,7 @@ export default async function GrowHome() {
       <div className="grid gap-x-10 gap-y-12 lg:grid-cols-[minmax(0,1fr)_20rem]">
         <div className="flex min-w-0 flex-col gap-12">
           {/* Today: one clear thing to do. */}
-          <section aria-labelledby="today-h" className="hero-card rounded-[28px] p-7 text-ink-foreground shadow-raised sm:p-9">
+          <section aria-labelledby="today-h" className="hero-card rounded-[20px] p-7 text-ink-foreground shadow-raised sm:p-9">
             <h2 id="today-h" className="font-sans text-sm font-normal tracking-normal text-hero-secondary">{t("today.title")}</h2>
             <p className="mt-2 font-display text-[2rem] font-semibold leading-tight">{report ? nameOf(today) : t("today.fallbackSkill")}</p>
             <p className="mt-2 max-w-xl text-[15px] leading-relaxed text-hero-secondary">{report ? t("today.body", { skill: nameOf(today) }) : t("today.bodyNoReport")}</p>
@@ -99,7 +99,7 @@ export default async function GrowHome() {
               </div>
             ) : null}
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <PracticeLauncher skillKey={today} label={t("today.start")} size="lg" className={`rounded-[14px] ${INK_PRIMARY}`} />
+              <PracticeLauncher skillKey={today} label={t("today.start")} size="lg" className={`rounded-[10px] ${INK_PRIMARY}`} />
               <Link href="/app/grow/practice" className="rounded-control px-3 py-2 text-sm font-medium text-ink-foreground underline-offset-4 hover:underline">{t("today.choose")}</Link>
             </div>
           </section>

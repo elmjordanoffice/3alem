@@ -21,7 +21,7 @@ export default async function NewAssessmentPage() {
           <NewAssessmentForm aiMode={aiMode()} />
         </div>
         {/* What happens after "Analyse": a real sequence. */}
-        <aside className="self-start hero-card rounded-[28px] p-6 text-ink-foreground lg:sticky lg:top-12">
+        <aside className="self-start hero-card rounded-[20px] p-6 text-ink-foreground lg:sticky lg:top-12">
           <h2 className="text-lg font-semibold">{t("steps.title")}</h2>
           <ol className="mt-5 flex flex-col gap-5">
             {(["analyse", "review", "invite"] as const).map((k, i) => (

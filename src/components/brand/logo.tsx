@@ -56,7 +56,8 @@ export function Wordmark({ showArabic = true, className }: { showArabic?: boolea
 
 export function Logo({ className, showArabic = true, reverse = false }: { className?: string; showArabic?: boolean; reverse?: boolean }) {
   return (
-    <span className={cn("inline-flex items-center gap-2 text-[17px]", reverse ? "text-ink-foreground" : "text-text", className)}>
+    // A logo keeps one composition in both directions.
+    <span dir="ltr" className={cn("inline-flex items-center gap-2 text-[17px]", reverse ? "text-ink-foreground" : "text-text", className)}>
       <LogoMark className="size-[1.6em]" />
       <Wordmark showArabic={showArabic} />
     </span>

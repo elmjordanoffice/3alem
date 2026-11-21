@@ -64,7 +64,7 @@ export default async function AppHome({ searchParams }: { searchParams: Promise<
   return (
     <PageContainer className="max-w-6xl">
       {/* The brief: what changed and what to do next, before any list (docs/design-references.md). */}
-      <section aria-labelledby="brief-h" className="hero-card mb-8 rounded-[28px] p-6 sm:p-8 lg:p-9">
+      <section aria-labelledby="brief-h" className="hero-card mb-8 rounded-[20px] p-6 sm:p-8 lg:p-9">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div className="min-w-0 max-w-2xl">
             <p className="inline-flex rounded-full bg-white/15 px-3 py-1 text-xs text-hero-foreground">{org ? t("dateAt", { date: fmt.date, org: org.name }) : fmt.date}</p>
@@ -74,14 +74,14 @@ export default async function AppHome({ searchParams }: { searchParams: Promise<
             </p>
           </div>
           {org && viewerCan(viewer, "assessment.create") ? (
-            <Button asChild size="lg" className={`btn-hero rounded-[14px] px-6 ${INK_PRIMARY}`}>
+            <Button asChild size="lg" className={`btn-hero rounded-[10px] px-6 ${INK_PRIMARY}`}>
               <Link href="/app/assessments/new">
                 <Plus aria-hidden />
                 {t("newAssessment")}
               </Link>
             </Button>
           ) : !hiring ? (
-            <Button asChild size="lg" className={`rounded-[14px] ${INK_PRIMARY}`}>
+            <Button asChild size="lg" className={`rounded-[10px] ${INK_PRIMARY}`}>
               <Link href="/app/grow">
                 <Sprout aria-hidden />
                 {grow ? t("grow.ctaActive") : t("grow.ctaNew")}
@@ -100,7 +100,7 @@ export default async function AppHome({ searchParams }: { searchParams: Promise<
               <div key={k} className={cn("hero-tile relative px-4 py-3.5 transition-colors hover:bg-white/20 sm:px-5 sm:py-4", k === "unopened" && "col-span-3 bg-white/20 sm:col-span-2")}>
                 <dt className="text-xs text-hero-secondary">{t(`brief.${k}`)}</dt>
                 <dd className="mt-1.5 flex items-baseline gap-3">
-                  <Link href={href} className={cn("font-display font-semibold leading-none tabular after:absolute after:inset-0 after:rounded-[18px] focus-visible:outline-none focus-visible:after:outline-2 focus-visible:after:outline-white", k === "unopened" ? "text-[2.5rem]" : "text-[1.6rem] sm:text-[1.85rem]")}>
+                  <Link href={href} className={cn("font-display font-semibold leading-none tabular after:absolute after:inset-0 after:rounded-[14px] focus-visible:outline-none focus-visible:after:outline-2 focus-visible:after:outline-white", k === "unopened" ? "text-[2.5rem]" : "text-[1.6rem] sm:text-[1.85rem]")}>
                     {fmt.n(v)}
                   </Link>
                   {k === "unopened" && v > 0 ? <span className="text-sm text-hero-foreground">{t("brief.reviewCta")} →</span> : null}

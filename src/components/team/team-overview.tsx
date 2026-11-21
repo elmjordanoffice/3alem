@@ -225,12 +225,12 @@ function TeamBrief({ a }: { a: TeamAnalytics }) {
   const ready = a.pipeline.find((p) => p.readiness === "ready");
   if (ready) steps.push(t("ready", { name: ready.name }));
   return (
-    <section aria-labelledby="team-brief" className="hero-card rounded-[28px] p-6 sm:p-8">
+    <section aria-labelledby="team-brief" className="hero-card rounded-[20px] p-6 sm:p-8">
       <h2 id="team-brief" className="font-display text-2xl font-semibold tracking-[-0.02em]">{t("title", { team: a.team.name })}</h2>
       <p className="mt-1 text-sm text-hero-secondary">{t("body")}</p>
       <ol className="mt-5 grid gap-2 sm:grid-cols-2">
         {(steps.length ? steps : [t("none")]).slice(0, 4).map((s, i) => (
-          <li key={s} className="hero-tile flex gap-3 rounded-[16px] p-4 text-sm">
+          <li key={s} className="hero-tile flex gap-3 rounded-[12px] p-4 text-sm">
             <span className="tabular grid size-6 shrink-0 place-items-center rounded-full bg-saffron text-xs font-semibold text-[#15163a]" aria-hidden>{n.number(i + 1)}</span>
             <span dir="auto">{s}</span>
           </li>

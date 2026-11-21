@@ -169,7 +169,7 @@ function ItemStage({ v, token, submit, sendTurn }: ItemScreenProps) {
         ) : null}
         <div className={cn("grid gap-10", wide ? "grid-cols-1" : "lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]")}>
           <div className={cn(stage !== "MAIN" && !showScenario && "hidden lg:block")}>{scenario}</div>
-          <section aria-labelledby="task-label" className="flex min-w-0 flex-col gap-5 rounded-[20px] border border-border bg-surface p-5 shadow-raised sm:p-7 lg:sticky lg:top-24 lg:self-start" key={`${item.id}-${stage}`}>
+          <section aria-labelledby="task-label" className="flex min-w-0 flex-col gap-5 rounded-[16px] border border-border bg-surface p-5 shadow-raised sm:p-7 lg:sticky lg:top-24 lg:self-start" key={`${item.id}-${stage}`}>
             <div className="flex flex-col gap-2 animate-slide-up">
               <p id="task-label" className="text-[13px] font-medium text-accent-text">
                 {label}

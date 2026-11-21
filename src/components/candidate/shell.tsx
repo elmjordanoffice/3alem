@@ -18,7 +18,7 @@ export function CandidateShell({ branding, center, end, children }: { branding?:
             ) : null}
             {branding ? (
               <span className="flex min-w-0 items-center gap-2.5">
-                {!branding.logoUrl ? <span className="inline-flex size-8 shrink-0 items-center justify-center rounded-[10px] bg-ink text-[13px] font-semibold text-ink-foreground" aria-hidden>{branding.orgName.trim().charAt(0).toUpperCase()}</span> : null}
+                {!branding.logoUrl ? <span className="inline-flex size-8 shrink-0 items-center justify-center rounded-[8px] bg-text font-display text-[13px] font-bold text-background [font-stretch:125%]" aria-hidden>{branding.orgName.trim().charAt(0).toUpperCase()}</span> : null}
                 <span className="truncate text-sm font-semibold text-text">{branding.orgName}</span>
               </span>
             ) : (

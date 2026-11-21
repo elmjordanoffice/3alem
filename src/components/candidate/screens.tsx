@@ -200,26 +200,31 @@ export function Briefing({ v, onBegin }: { v: View<"briefing">; onBegin: () => P
     return (
       <CandidateShell branding={v.branding}>
         <div className="mx-auto flex max-w-[680px] flex-col gap-10 px-4 py-12 sm:py-20">
-          <h1 className="text-[2.25rem] font-semibold leading-tight text-text">{t("beforeTitle")}</h1>
-          <ul className="flex flex-col gap-5">
+          <div>
+            <div className="rule-signal mb-5" aria-hidden />
+            <h1 className="text-[2.25rem] leading-tight text-text sm:text-[2.75rem]">{t("beforeTitle")}</h1>
+          </div>
+          {/* A numbered list, ruled like a checklist: the order is the order to read it in. */}
+          <ol className="flex flex-col">
             {[
               { icon: Coffee, k: "quiet" },
               { icon: Clock, k: "time" },
               { icon: PauseCircle, k: "pause" },
               { icon: Route, k: "noBack" },
               { icon: Wifi, k: "offline" },
-            ].map(({ icon: Icon, k }) => (
-              <li key={k} className="flex gap-4">
-                <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-full bg-accent-subtle text-accent-text">
-                  <Icon className="size-4" strokeWidth={1.75} aria-hidden />
+            ].map(({ icon: Icon, k }, i) => (
+              <li key={k} className="grid grid-cols-[3rem_minmax(0,1fr)_auto] items-start gap-4 border-t border-border py-5 last:border-b">
+                <span className="font-display text-2xl font-extrabold leading-none text-text tabular [font-stretch:125%]" aria-hidden>
+                  {n.number(i + 1, { minimumIntegerDigits: 2 })}
                 </span>
-                <span className="flex flex-col gap-0.5">
-                  <span className="font-medium text-text">{t(`before.${k}.title`, { minutes: n.number(v.minutes) })}</span>
-                  <span className="text-sm text-secondary">{t(`before.${k}.body`, { minutes: n.number(v.minutes) })}</span>
+                <span className="flex flex-col gap-1">
+                  <span className="font-semibold text-text">{t(`before.${k}.title`, { minutes: n.number(v.minutes) })}</span>
+                  <span className="text-sm leading-relaxed text-secondary">{t(`before.${k}.body`, { minutes: n.number(v.minutes) })}</span>
                 </span>
+                <Icon className="mt-0.5 size-[18px] text-tertiary" strokeWidth={1.75} aria-hidden />
               </li>
             ))}
-          </ul>
+          </ol>
           <Button size="lg" className="self-start" onClick={() => setStep("story")}>
             {t("ready")}
           </Button>
@@ -232,7 +237,7 @@ export function Briefing({ v, onBegin }: { v: View<"briefing">; onBegin: () => P
     <CandidateShell branding={v.branding}>
       <article className="mx-auto flex max-w-[960px] flex-col gap-12 px-4 py-10 sm:py-14">
         {/* The opening of the story: the company, the situation, and you in it. */}
-        <header className="animate-rise overflow-hidden hero-card rounded-[28px] p-7 text-ink-foreground shadow-raised sm:p-12">
+        <header className="animate-rise overflow-hidden hero-card hero-sign rounded-[20px] p-7 text-ink-foreground shadow-raised [--sign-size:150px] sm:p-12">
           <p className="text-sm text-hero-secondary">{t("eyebrow")}</p>
           <h1 className="mt-3 max-w-3xl text-[2.25rem] font-semibold leading-[1.08] sm:text-[3rem]">{t("title", { company: v.world.companyName })}</h1>
           <p className="mt-5 max-w-2xl text-lg leading-relaxed text-hero-secondary" dir="auto">{v.world.premise}</p>
@@ -296,7 +301,7 @@ export function Transition({ v, onContinue, onPause }: { v: View<"transition">; 
   return (
     <CandidateShell branding={v.branding}>
       <div className="mx-auto flex max-w-[760px] flex-col gap-8 px-4 py-12 sm:py-20">
-        <div className="animate-rise hero-card rounded-[28px] p-7 text-ink-foreground shadow-raised sm:p-10">
+        <div className="animate-rise hero-card rounded-[20px] p-7 text-ink-foreground shadow-raised sm:p-10">
           <div className="flex items-center justify-between gap-4">
             <p className="text-sm text-hero-secondary">{t("eyebrow")}</p>
             <span className="flex gap-1" aria-hidden>

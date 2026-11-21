@@ -39,7 +39,7 @@ export function TabsContent({ className, ...props }: React.ComponentProps<typeof
 export function SegmentedList({ className, ...props }: React.ComponentProps<typeof TabsPrimitive.List>) {
   return (
     <TabsPrimitive.List
-      className={cn("inline-flex items-center gap-0.5 rounded-control bg-surface-sunken p-0.5", className)}
+      className={cn("inline-flex items-center gap-0.5 rounded-control bg-surface p-0.5 shadow-[inset_0_0_0_1px_var(--border)]", className)}
       {...props}
     />
   );
@@ -49,7 +49,7 @@ export function SegmentedTrigger({ className, ...props }: React.ComponentProps<t
   return (
     <TabsPrimitive.Trigger
       className={cn(
-        "inline-flex h-8 items-center gap-1.5 rounded-[6px] px-3 text-sm font-medium text-secondary transition-colors duration-150 hover:text-text focus-visible:outline-2 focus-visible:outline-focus data-[state=active]:bg-surface data-[state=active]:text-text data-[state=active]:shadow-[0_1px_2px_rgb(0_0_0/0.06)] [&_svg]:size-4",
+        "inline-flex h-8 items-center gap-1.5 rounded-[6px] px-3 text-sm font-medium text-secondary transition-colors duration-150 hover:text-text focus-visible:outline-2 focus-visible:outline-focus data-[state=active]:bg-accent data-[state=active]:text-accent-foreground [&_svg]:size-4",
         className,
       )}
       {...props}

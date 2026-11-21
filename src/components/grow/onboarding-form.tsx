@@ -71,7 +71,7 @@ export function GrowOnboardingForm({ initial, domains }: { initial: (Omit<Values
               setV({ ...v, selfView: next });
             };
             return (
-              <li key={d.key} className="rounded-[16px] bg-surface p-3.5 shadow-card">
+              <li key={d.key} className="rounded-[12px] bg-surface p-3.5 shadow-card">
                 <p className="text-sm font-medium text-text">{d.name}</p>
                 <p className="mt-0.5 text-sm text-secondary">“{d.statement}”</p>
                 <div role="radiogroup" aria-label={t("selfAria", { domain: d.name })} className="mt-2.5 flex flex-wrap gap-1.5">

@@ -25,7 +25,7 @@ export default async function GrowOnboarding() {
           <GrowOnboardingForm initial={p ? { currentRole: p.currentRole, experienceYears: p.experienceYears, goal: p.goal, hoursPerWeek: p.hoursPerWeek, selfView: p.selfView as Record<string, number> } : null} domains={domains} />
         </div>
         {/* What happens after this form: a real sequence. */}
-        <aside className="self-start hero-card rounded-[28px] p-6 text-ink-foreground lg:sticky lg:top-12">
+        <aside className="self-start hero-card rounded-[20px] p-6 text-ink-foreground lg:sticky lg:top-12">
           <h2 className="text-lg font-semibold">{t("next.title")}</h2>
           <ol className="mt-5 flex flex-col gap-5">
             {(["baseline", "profile", "practice"] as const).map((k, i) => (

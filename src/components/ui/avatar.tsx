@@ -1,11 +1,12 @@
 import { cn, initials } from "@/lib/utils";
 
+// Range: stone, ink and one vermilion tint. Initials are set in the display face.
 const TONES = [
-  "bg-[#e4e5fb] text-[#2f33ad] dark:bg-[#262849] dark:text-[#b4b6fa]",
-  "bg-[#ddf3ef] text-[#0f5e57] dark:bg-[#12302c] dark:text-[#7fe0d2]",
-  "bg-[#fbeedd] text-[#8a4209] dark:bg-[#33240f] dark:text-[#f8c77a]",
-  "bg-[#f6e4f0] text-[#86275f] dark:bg-[#36182b] dark:text-[#f2b2dc]",
-  "bg-[#e8e6e3] text-[#44403c] dark:bg-[#2e2b28] dark:text-[#d6d3d1]",
+  "bg-[#ebe8e1] text-[#141414] dark:bg-[#2a2826] dark:text-[#f2f0eb]",
+  "bg-[#141414] text-[#f2f0eb] dark:bg-[#f2f0eb] dark:text-[#141414]",
+  "bg-[#ffe8e0] text-[#9e2a0c] dark:bg-[#3b1a10] dark:text-[#ff9472]",
+  "bg-[#d2cbbe] text-[#141414] dark:bg-[#4a4641] dark:text-[#f2f0eb]",
+  "bg-[#f8f7f4] text-[#4f4b45] shadow-[inset_0_0_0_1px_#e2ded5] dark:bg-[#1e1d1b] dark:text-[#c4bfb5] dark:shadow-[inset_0_0_0_1px_#2d2b28]",
 ];
 
 function toneFor(name: string) {
@@ -28,7 +29,7 @@ export function Avatar({
     <span
       aria-hidden
       className={cn(
-        "inline-flex shrink-0 select-none items-center justify-center rounded-full font-semibold uppercase",
+        "inline-flex shrink-0 select-none items-center justify-center rounded-full font-display font-bold uppercase [font-stretch:112%]",
         size === "sm" && "size-6 text-[10px]",
         size === "md" && "size-8 text-xs",
         size === "lg" && "size-10 text-sm",

@@ -49,9 +49,9 @@ export function DecisionPanel({
   const date = (iso: string) => new Date(iso).toLocaleDateString(locale === "ar" ? "ar" : "en-GB", { day: "numeric", month: "long" });
 
   return (
-    <section aria-labelledby="decision-title" className="mb-6 grid gap-3 rounded-[20px] bg-surface p-4 shadow-card sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center sm:p-5">
+    <section aria-labelledby="decision-title" className="mb-6 grid gap-3 rounded-[16px] bg-surface p-4 shadow-card sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center sm:p-5">
       <div className="flex min-w-0 items-start gap-3">
-        <span className="grid size-10 shrink-0 place-items-center rounded-[14px] bg-accent-subtle text-accent-text" aria-hidden>
+        <span className="grid size-10 shrink-0 place-items-center rounded-[10px] bg-accent-subtle text-accent-text" aria-hidden>
           {decision ? <CheckCircle2 className="size-5" /> : <Gavel className="size-5" />}
         </span>
         <div className="min-w-0">
@@ -88,7 +88,7 @@ export function DecisionPanel({
                 <label
                   key={o}
                   className={cn(
-                    "flex cursor-pointer flex-col gap-0.5 rounded-[14px] p-3 text-sm shadow-[inset_0_0_0_1px_var(--border)] transition-colors has-focus-visible:outline-2 has-focus-visible:outline-focus",
+                    "flex cursor-pointer flex-col gap-0.5 rounded-[10px] p-3 text-sm shadow-[inset_0_0_0_1px_var(--border)] transition-colors has-focus-visible:outline-2 has-focus-visible:outline-focus",
                     outcome === o ? "bg-accent-subtle shadow-[inset_0_0_0_2px_var(--accent)]" : "hover:bg-surface-subtle",
                   )}
                 >

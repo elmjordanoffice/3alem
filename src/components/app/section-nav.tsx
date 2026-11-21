@@ -22,13 +22,14 @@ export function SectionNav({ title, icon: Icon, tabs, hideOn = [] }: { title: st
     .filter((t) => (t.exact ? pathname === t.href : pathname === t.href || pathname.startsWith(`${t.href}/`)))
     .sort((a, b) => b.href.length - a.href.length)[0]?.href;
   return (
-    <div className="sticky top-14 z-20 px-4 pt-4 sm:px-8 lg:top-0">
-      <div className="flex max-w-full items-center gap-4 overflow-x-auto rounded-[18px] bg-surface/90 p-1.5 ps-4 shadow-card backdrop-blur-md [scrollbar-width:none] sm:w-fit">
-        <span className="flex shrink-0 items-center gap-2 text-sm font-semibold text-text">
-          {Icon ? <Icon className="size-4 text-accent-text" strokeWidth={1.75} aria-hidden /> : null}
+    <div className="sticky top-14 z-20 border-b border-border bg-background px-4 sm:px-8 lg:top-0">
+      <div className="flex max-w-full items-center gap-6 overflow-x-auto [scrollbar-width:none]">
+        <span className="flex shrink-0 items-center gap-2 py-3 text-sm font-semibold text-text">
+          {Icon ? <Icon className="size-4 text-text" strokeWidth={1.75} aria-hidden /> : null}
           {title}
         </span>
-        <nav aria-label={title} className="flex shrink-0 items-center gap-1">
+        <span className="h-4 w-px shrink-0 bg-border-strong" aria-hidden />
+        <nav aria-label={title} className="flex shrink-0 items-stretch gap-5">
           {tabs.map((t) => {
             const active = t.href === current;
             return (
@@ -37,8 +38,8 @@ export function SectionNav({ title, icon: Icon, tabs, hideOn = [] }: { title: st
                 href={t.href}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "flex h-9 items-center whitespace-nowrap rounded-[12px] px-3.5 text-sm transition-colors duration-150 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus",
-                  active ? "bg-accent font-medium text-accent-foreground shadow-[0_8px_20px_-10px_rgb(59_63_216/0.7)]" : "text-secondary hover:bg-surface-subtle hover:text-text",
+                  "relative flex h-12 items-center whitespace-nowrap text-sm transition-colors duration-150 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus",
+                  active ? "font-semibold text-text after:absolute after:inset-x-0 after:-bottom-px after:h-[2px] after:bg-text" : "text-secondary hover:text-text",
                 )}
               >
                 {t.label}

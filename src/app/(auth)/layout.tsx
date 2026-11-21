@@ -3,6 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { Logo } from "@/components/brand/logo";
 import { LanguageToggle, ThemeMenu } from "@/components/app/preference-controls";
 import { RangeScale } from "@/components/report/range-scale";
+import { Narrowing } from "@/components/brand/narrowing";
 
 export default async function AuthLayout({ children }: { children: React.ReactNode }) {
   const t = await getTranslations("auth.brand");
@@ -23,21 +24,20 @@ export default async function AuthLayout({ children }: { children: React.ReactNo
         </main>
       </div>
 
-      {/* Brand panel: what Aalim is for, shown rather than claimed. */}
-      <aside className="hero-card hidden lg:m-3 lg:flex lg:flex-col lg:justify-between lg:rounded-[28px] lg:p-14 xl:p-16" aria-label={t("label")}>
-        <p className="max-w-md font-display text-[2.75rem] font-semibold leading-[1.06] tracking-[-0.03em]">{t("title")}</p>
-        <figure className="relative max-w-md">
-          <div className="float-in rounded-2xl bg-ink-foreground/[0.06] p-5 shadow-[inset_0_0_0_1px_rgb(245_244_255/0.12)] backdrop-blur-sm" style={{ animationDelay: "200ms" }}>
-            <blockquote className="text-[15px] leading-relaxed">
-              “{t("quoteStart")} <mark className="evidence-mark">{t("quoteEvidence")}</mark> {t("quoteEnd")}”
-            </blockquote>
-          </div>
-          <figcaption className="float-in mt-4 rounded-2xl bg-surface p-5 text-text shadow-window" style={{ animationDelay: "450ms" }}>
+      {/* Brand panel: the idea, at billboard scale. */}
+      <aside className="hero-card hidden lg:m-3 lg:flex lg:flex-col lg:justify-between lg:gap-10 lg:rounded-[20px] lg:p-12 xl:p-14" aria-label={t("label")}>
+        <p className="display-x max-w-lg text-[2.6rem] xl:text-[3.1rem]">{t("title")}</p>
+        <Narrowing rows={5} className="mx-auto w-full max-w-sm" />
+        <figure className="max-w-md">
+          <blockquote className="text-[15px] leading-relaxed text-hero-foreground" dir="auto">
+            “{t("quoteStart")} <mark className="evidence-mark">{t("quoteEvidence")}</mark> {t("quoteEnd")}”
+          </blockquote>
+          <figcaption className="mt-5 border-t border-ink-foreground/15 pt-4">
             <div className="flex items-baseline justify-between gap-3 text-sm">
               <span className="font-medium">{t("skill")}</span>
-              <span className="text-secondary">{t("level")} <bdi dir="ltr" className="tabular text-tertiary">{t("range")}</bdi></span>
+              <span className="text-hero-secondary">{t("level")} <bdi dir="ltr" className="tabular">{t("range")}</bdi></span>
             </div>
-            <RangeScale low={3.3} high={3.9} estimate={3.6} expected={3.5} size="md" animate className="mt-3" />
+            <RangeScale low={3.3} high={3.9} estimate={3.6} expected={3.5} size="md" tone="ink" animate className="mt-3" />
           </figcaption>
         </figure>
         <p className="max-w-md text-sm leading-relaxed text-hero-secondary">{t("footer")}</p>

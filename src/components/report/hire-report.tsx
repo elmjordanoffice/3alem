@@ -123,11 +123,14 @@ function Verdict({ content }: { content: ReportContent }) {
   const shown = (must.length ? must : [...content.domains].sort((a, b) => b.confidence - a.confidence).slice(0, 3)).slice(0, 5);
   const conf = content.fit.confidence >= 0.75 ? "high" : content.fit.confidence >= 0.5 ? "moderate" : "low";
   return (
-    <div className="hero-card rounded-[28px] print:bg-hero-via print:shadow-none">
+    <div className="hero-card rounded-[20px] print:bg-hero-via print:shadow-none">
       <div className="grid gap-10 p-6 sm:p-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:gap-12 lg:p-10">
         <div className="flex flex-col">
-          <p className="text-sm text-hero-secondary">{t("roleFit")}</p>
-          <p className="mt-2 font-display text-[2.5rem] font-semibold leading-none tracking-[-0.02em] sm:text-5xl">{t(`fit.${content.fit.level}`)}</p>
+          <p className="eyebrow text-hero-secondary">{t("roleFit")}</p>
+          <p className="display-x mt-3 text-[2.75rem] sm:text-[3.5rem]">
+            {t(`fit.${content.fit.level}`)}
+            <span className="ms-1 inline-block size-[0.22em] translate-y-[-0.1em] rounded-full bg-saffron align-baseline" aria-hidden />
+          </p>
           <p className="mt-3 flex items-center gap-2 text-sm">
             <span className="flex gap-0.5" aria-hidden>
               {[0, 1, 2].map((i) => <span key={i} className={cn("h-1.5 w-4 rounded-full", i < (conf === "high" ? 3 : conf === "moderate" ? 2 : 1) ? "bg-saffron" : "bg-ink-foreground/15")} />)}
@@ -139,7 +142,7 @@ function Verdict({ content }: { content: ReportContent }) {
         </div>
         <div className="flex flex-col">
           <div className="flex items-baseline justify-between gap-3">
-            <p className="text-sm text-hero-secondary">{must.length ? t("mustHaves") : t("bestEvidenced")}</p>
+            <p className="eyebrow text-hero-secondary">{must.length ? t("mustHaves") : t("bestEvidenced")}</p>
             <p className="flex items-center gap-1.5 text-xs text-hero-secondary">
               <span className="inline-block h-3 w-0.5 rounded-full bg-ink-foreground/70" aria-hidden />
               {t("expectedLevel", { level: tl(String(levelBand(expected))) })}
@@ -164,7 +167,7 @@ function Verdict({ content }: { content: ReportContent }) {
               <p className="text-sm text-hero-secondary">{t("gapsInterview")}</p>
               <ul className="mt-2.5 flex flex-wrap gap-2">
                 {content.fit.gaps.slice(0, 4).map((g) => (
-                  <li key={g.key} className="rounded-full bg-ink-foreground/10 px-3 py-1 text-sm">{g.name}</li>
+                  <li key={g.key} className="rounded-[6px] px-2.5 py-1 text-sm shadow-[inset_0_0_0_1px_rgb(242_240_235/0.25)]">{g.name}</li>
                 ))}
               </ul>
             </div>
@@ -216,7 +219,7 @@ export function HireReport({ content, audience, actions, review }: { content: Re
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div className="flex min-w-0 items-center gap-4">
               {/* The person, first: an initials tile in the evidence gold. */}
-              <span className="inline-flex size-16 shrink-0 items-center justify-center rounded-[20px] bg-gradient-to-br from-saffron-light to-saffron text-xl font-semibold text-[#15163a] shadow-[0_10px_24px_-12px_rgb(242_181_50/0.8)] print:shadow-none" aria-hidden>
+              <span className="relative inline-flex size-16 shrink-0 items-center justify-center rounded-[12px] bg-text font-display text-xl font-bold text-background [font-stretch:125%] print:shadow-none" aria-hidden>
                 {initials(content.candidate.name)}
               </span>
               <div className="flex min-w-0 flex-col gap-1">
@@ -229,7 +232,7 @@ export function HireReport({ content, audience, actions, review }: { content: Re
             </div>
             {actions ? <div className="flex flex-wrap gap-2 print:hidden">{actions}</div> : null}
           </div>
-          {content.earlyVersion ? <Alert tone="info" title={t("earlyTitle")}>{t("earlyBody")}</Alert> : null}
+          {content.earlyVersion ? <Alert tone="neutral" title={t("earlyTitle")}>{t("earlyBody")}</Alert> : null}
           {!forCandidate ? <ReviewBanner candidateName={content.candidate.name} /> : null}
         </header>
 
