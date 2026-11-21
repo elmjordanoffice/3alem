@@ -48,7 +48,9 @@ A ready candidate link: `/a/demo-candidate-token-0001`. Development email is wri
 
 ### AI
 
-With `ANTHROPIC_API_KEY` set, Claude generates worlds, items and role-play replies, scores answers and writes reports. Without a key (or with `AI_PROVIDER=offline`), Aalim runs fully offline: a curated bank of 58 items, a deterministic rubric-based scorer and template-written reports. Offline scoring is coarser (scores cluster in the middle of the scale), so use a key for real assessments.
+With `ANTHROPIC_API_KEY` set, Claude generates worlds, items and role-play replies, scores answers, writes reports and coaches. Without a key (or with `AI_PROVIDER=offline`), Aalim runs fully offline: a curated bank of over 80 bilingual items, a calibrated rubric-and-habit scorer (D-048), template-written reports, and offline versions of the shortlist, job-description reader, coach and planning features (D-054). Offline scoring is coarser than a model's and never reports more than 0.75 confidence, so use a key for real assessments.
+
+In a Claude Code cloud environment, add the key as an environment variable in the environment's settings; network secrets can't be used for Anthropic's API.
 
 ## Configuration
 
