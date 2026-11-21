@@ -1,12 +1,13 @@
 import * as React from "react";
 import { View } from "react-native";
-import Animated, { FadeIn, FadeInDown } from "react-native-reanimated";
+import Animated, { FadeIn } from "react-native-reanimated";
 import type { FairnessAnswers, Recap, View as V } from "../api/types";
 import { useLocale, useT } from "../i18n";
 import { radius, useTheme } from "../theme";
 import { haptic } from "../lib/haptics";
 import { Button } from "../ui/button";
 import { Narrowing } from "../ui/brand";
+import { Entrance, useCountUp } from "../ui/motion";
 import { Card, Chip, hairline, TextArea } from "../ui/primitives";
 import { Press } from "../ui/press";
 import { T } from "../ui/text";
@@ -18,6 +19,10 @@ const FAIRNESS: Record<keyof FairnessAnswers, string[]> = {
   disability: ["yes", "no", "prefer_not"],
   firstLanguage: ["arabic", "english", "other", "prefer_not"],
 };
+
+// The finish, in order: the bands narrow and the dot pops (~1.7 s, a success
+// haptic), the title rises, the recap counts up, the habits fade in.
+const FINISH = { title: 900, count: 1000, habits: 1500, habitStagger: 160 };
 
 /** Done: the signature narrows into its dot; then optional feedback and the voluntary fairness questions. */
 export function Complete({ v, onFeedback, onFairness }: { v: V<"complete">; onFeedback: (f: { rating: number; comment: string }) => Promise<void>; onFairness: (a: FairnessAnswers) => Promise<void> }) {
@@ -34,16 +39,16 @@ export function Complete({ v, onFeedback, onFairness }: { v: V<"complete">; onFe
     <Screen testID="screen-complete" header={<OrgHeader branding={v.branding} />}>
       <View style={{ gap: 22, marginTop: 12 }}>
         <View style={{ alignItems: "flex-start" }}>
-          <Narrowing width={150} rows={5} loop={false} />
+          <Narrowing width={150} rows={5} loop={false} burst onLand={haptic.success} />
         </View>
-        <Animated.View entering={FadeInDown.delay(900).springify().damping(20)} style={{ gap: 12 }}>
+        <Entrance delay={FINISH.title} y={22} style={{ gap: 12 }}>
           <T variant="display" accessibilityRole="header">
             {t("title")}
           </T>
           <T variant="body" tone="secondary">
             {t("body", { org, role: v.roleTitle })}
           </T>
-        </Animated.View>
+        </Entrance>
       </View>
 
       {v.recap ? <RecapCard recap={v.recap} org={org} /> : null}
@@ -161,9 +166,7 @@ function RecapCard({ recap, org }: { recap: Recap; org: string }) {
       <View style={{ flexDirection: "row", flexWrap: "wrap", marginTop: 14, borderTopWidth: hairline, borderColor: c.hairline }}>
         {stats.map((s, i) => (
           <View key={s.k} accessible accessibilityLabel={`${n(s.v)} ${t(s.k, { n: s.v })}`} style={{ width: "50%", paddingHorizontal: 18, paddingVertical: 14, gap: 2, borderColor: c.hairline, borderBottomWidth: i < 2 ? hairline : 0, borderEndWidth: i % 2 === 0 ? hairline : 0 }}>
-            <T variant="index" latin style={{ fontSize: 28, lineHeight: 32 }}>
-              {n(s.v)}
-            </T>
+            <CountUp value={s.v} delay={FINISH.count} />
             <T variant="footnote" tone="secondary">
               {t(s.k, { n: s.v })}
             </T>
@@ -173,8 +176,8 @@ function RecapCard({ recap, org }: { recap: Recap; org: string }) {
       {habits.length ? (
         <View style={{ paddingHorizontal: 18, paddingVertical: 18, gap: 12, borderTopWidth: hairline, borderColor: c.hairline }}>
           <T variant="headline">{t("habitsTitle")}</T>
-          {habits.map((h) => (
-            <View key={h} style={{ flexDirection: "row", gap: 12 }}>
+          {habits.map((h, i) => (
+            <Entrance key={h} delay={FINISH.habits + i * FINISH.habitStagger} y={8} style={{ flexDirection: "row", gap: 12 }}>
               <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: c.signal, marginTop: 9 }} />
               <View style={{ flex: 1, gap: 2 }}>
                 <T variant="subhead" style={{ color: c.text }}>
@@ -184,7 +187,7 @@ function RecapCard({ recap, org }: { recap: Recap; org: string }) {
                   {t(`habits.${h}.body`)}
                 </T>
               </View>
-            </View>
+            </Entrance>
           ))}
         </View>
       ) : null}
@@ -194,6 +197,27 @@ function RecapCard({ recap, org }: { recap: Recap; org: string }) {
         </T>
       </View>
     </Card>
+  );
+}
+
+/**
+ * A recap number counting up from 0, eased, in tabular figures. The final
+ * number, invisible, holds the width, so nothing beside it moves while it
+ * counts. Screen readers get the final value from the cell's label.
+ */
+function CountUp({ value, delay }: { value: number; delay: number }) {
+  const { n } = useLocale();
+  const shown = useCountUp(value, { delay, duration: 900 });
+  const style = { fontSize: 28, lineHeight: 32, fontVariant: ["tabular-nums" as const] };
+  return (
+    <View>
+      <T variant="index" latin style={[style, { opacity: 0 }]} accessibilityElementsHidden importantForAccessibility="no">
+        {n(value)}
+      </T>
+      <T variant="index" latin style={[style, { position: "absolute", top: 0, start: 0 }]} accessibilityElementsHidden importantForAccessibility="no">
+        {n(shown)}
+      </T>
+    </View>
   );
 }
 

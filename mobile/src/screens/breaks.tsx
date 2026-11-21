@@ -1,19 +1,45 @@
 import * as React from "react";
-import { View } from "react-native";
-import Animated, { FadeInDown } from "react-native-reanimated";
+import { StyleSheet, View } from "react-native";
+import Animated, { Extrapolation, interpolate, useAnimatedStyle, useSharedValue, withDelay, withSpring, withTiming } from "react-native-reanimated";
 import { Clock, Link2Off, PauseCircle, WifiOff, type LucideIcon } from "lucide-react-native";
 import type { Branding, View as V } from "../api/types";
-import { useT } from "../i18n";
-import { palette, useTheme } from "../theme";
+import { useLocale, useT } from "../i18n";
+import { palette, spring, useTheme } from "../theme";
+import { haptic } from "../lib/haptics";
 import { Button } from "../ui/button";
 import { Narrowing } from "../ui/brand";
+import { ARRIVE, Entrance, FADE, OUT, useEntrance, useOnce } from "../ui/motion";
 import { T } from "../ui/text";
 import { OrgHeader, Screen } from "./scaffold";
 
-/** A chapter break: what happened, your decisions so far, then pause or go on. */
+/**
+ * "Day 1" out of a chapter title like "Day 1: The brief" (or "اليوم الأول: الإحاطة"),
+ * when the title is in the screen's language and starts with its day.
+ */
+export function dayOf(title: string | undefined, rtl: boolean): string | null {
+  const head = title?.match(/^\s*([^:：]{2,32}?)\s*[:：]/)?.[1];
+  if (!head) return null;
+  return (rtl ? /^(اليوم|اليومان)\s/ : /^days?\s+\d/i).test(head) ? head : null;
+}
+
+// The beats of a chapter break, after the screen has risen into place.
+const BEAT = { stamp: ARRIVE, rail: ARRIVE + 200, title: ARRIVE + 280, decisions: ARRIVE + 560, stagger: 110 };
+
+/**
+ * A chapter break as a story beat: a "Day 1 done" stamp lands (with a light
+ * haptic), the chapter rail fills to the new position, the next chapter's
+ * title rises in and your decisions so far are dealt in one by one from the
+ * reading side. Pause and Continue stay where they always are.
+ */
 export function Transition({ v, onContinue, onPause }: { v: V<"transition">; onContinue: () => Promise<void>; onPause: () => Promise<void> }) {
   const t = useT("candidate.transition");
+  const tm = useT("mobile.breaks");
+  const { rtl } = useLocale();
   const ch = v.world.chapters[v.chapterIndex];
+  const doneAt = v.chapterIndex - 1;
+  const day = dayOf(v.world.chapters[doneAt]?.title, rtl);
+  const stamp = doneAt < 0 ? null : day ? tm("dayDone", { day }) : tm("chapterDone", { n: doneAt + 1 });
+  const decisionsEnd = BEAT.decisions + v.recap.length * BEAT.stagger;
   const [pending, setPending] = React.useState<"go" | "pause" | null>(null);
   const run = (k: "go" | "pause", fn: () => Promise<void>) => async () => {
     setPending(k);
@@ -36,45 +62,136 @@ export function Transition({ v, onContinue, onPause }: { v: V<"transition">; onC
       }
       contentStyle={{ justifyContent: "flex-start" }}
     >
-      <View style={{ gap: 18, marginTop: 24 }}>
-        <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
-          <T variant="subhead" tone="inkSecondary">
-            {t("eyebrow")}
-          </T>
-          <View style={{ flexDirection: "row", gap: 4 }} accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
-            {v.world.chapters.map((_, i) => (
-              <View key={i} style={{ width: 22, height: 4, borderRadius: 2, backgroundColor: i < v.chapterIndex ? palette.signal : i === v.chapterIndex ? palette.bone : "rgba(242,240,235,0.16)" }} />
-            ))}
-          </View>
+      <View style={{ gap: 18, marginTop: 16 }}>
+        {stamp ? <Stamp label={stamp} delay={BEAT.stamp} /> : null}
+        <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
+          <Entrance delay={BEAT.rail} style={{ flexShrink: 1 }}>
+            <T variant="subhead" tone="inkSecondary">
+              {t("eyebrow")}
+            </T>
+          </Entrance>
+          <ChapterFill count={v.world.chapters.length} current={v.chapterIndex} delay={BEAT.rail} />
         </View>
-        <Animated.View entering={FadeInDown.springify().damping(20)} style={{ gap: 14 }}>
+        <Entrance delay={BEAT.title} y={22} style={{ gap: 14 }}>
           <T variant="display" tone="inkForeground" accessibilityRole="header">
             {ch?.title}
           </T>
           <T variant="body" tone="inkSecondary">
             {ch?.summary}
           </T>
-        </Animated.View>
+        </Entrance>
       </View>
       {v.recap.length ? (
-        <View style={{ gap: 12, paddingTop: 22, borderTopWidth: 1, borderColor: "rgba(242,240,235,0.14)" }}>
+        <Entrance delay={BEAT.decisions - 80} style={{ gap: 12, paddingTop: 22, borderTopWidth: 1, borderColor: "rgba(242,240,235,0.14)" }}>
           <T variant="headline" tone="inkForeground">
             {t("soFar")}
           </T>
-          {v.recap.map((r) => (
-            <View key={r} style={{ flexDirection: "row", gap: 12 }}>
-              <View style={{ width: 7, height: 7, borderRadius: 4, backgroundColor: palette.signal, marginTop: 9 }} />
-              <T variant="callout" tone="inkSecondary" style={{ flex: 1 }}>
-                {r}
-              </T>
-            </View>
+          {v.recap.map((r, i) => (
+            <Decision key={r} text={r} delay={BEAT.decisions + i * BEAT.stagger} />
           ))}
-          <T variant="footnote" tone="inkSecondary" style={{ opacity: 0.8 }}>
-            {t("carryForward")}
-          </T>
-        </View>
+          <Entrance delay={decisionsEnd + 60}>
+            <T variant="footnote" tone="inkSecondary" style={{ opacity: 0.8 }}>
+              {t("carryForward")}
+            </T>
+          </Entrance>
+        </Entrance>
       ) : null}
     </Screen>
+  );
+}
+
+/**
+ * The stamp: it comes down from a little above the page, a touch larger and
+ * more turned, and lands at a slight tilt toward the reading start (mirrored
+ * in Arabic), with a light haptic on contact. Bone ink on the ink screen; its
+ * dot is the one vermilion mark.
+ */
+function Stamp({ label, delay }: { label: string; delay: number }) {
+  const { reduceMotion } = useTheme();
+  const { rtl } = useLocale();
+  const p = useSharedValue(0);
+  const tilt = rtl ? 2.5 : -2.5;
+  React.useEffect(() => {
+    p.value = reduceMotion ? withTiming(1, FADE) : withDelay(delay, withSpring(1, spring.land));
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  useOnce(() => {
+    "worklet";
+    return p.value >= 0.96;
+  }, haptic.settle);
+  const style = useAnimatedStyle(() =>
+    reduceMotion
+      ? { opacity: p.value, transform: [{ rotate: `${tilt}deg` }] }
+      : {
+          opacity: interpolate(p.value, [0, 0.3], [0, 1], Extrapolation.CLAMP),
+          transform: [{ scale: 1.55 - 0.55 * p.value }, { rotate: `${tilt * (1 + 1.6 * (1 - p.value))}deg` }],
+        },
+  );
+  return (
+    <Animated.View accessibilityRole="text" style={[{ alignSelf: "flex-start", flexDirection: "row", alignItems: "center", gap: 10, paddingStart: 12, paddingEnd: 14, paddingVertical: rtl ? 4 : 8, borderRadius: 10, borderWidth: 1.5, borderColor: "rgba(242,240,235,0.88)" }, style]}>
+      <View style={{ width: 9, height: 9, borderRadius: 5, backgroundColor: palette.signal }} />
+      <T variant="displaySm" tone="inkForeground">
+        {label}
+      </T>
+    </Animated.View>
+  );
+}
+
+const SEG = 22;
+const FAINT = "rgba(242,240,235,0.16)";
+
+/** The chapter rail on a break: the chapter just finished fills from the reading start; then the next one lights. */
+function ChapterFill({ count, current, delay }: { count: number; current: number; delay: number }) {
+  const { reduceMotion } = useTheme();
+  const fill = useSharedValue(0);
+  const next = useSharedValue(0);
+  React.useEffect(() => {
+    if (reduceMotion) {
+      fill.value = withTiming(1, FADE);
+      next.value = withTiming(1, FADE);
+      return;
+    }
+    fill.value = withDelay(delay, withSpring(1, { ...spring.rise, overshootClamping: true }));
+    next.value = withDelay(delay + 280, withTiming(1, { duration: 280, easing: OUT }));
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  // `start: 0` is the reading start, so in Arabic the fill runs right to left.
+  const fillStyle = useAnimatedStyle(() => (reduceMotion ? { width: SEG, opacity: fill.value } : { width: SEG * fill.value }));
+  const nextStyle = useAnimatedStyle(() => ({ opacity: next.value }));
+  const seg = { width: SEG, height: 4, borderRadius: 2, overflow: "hidden" as const };
+  return (
+    <View style={{ flexDirection: "row", gap: 4 }} accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
+      {Array.from({ length: count }, (_, i) =>
+        i < current - 1 ? (
+          <View key={i} style={[seg, { backgroundColor: palette.signal }]} />
+        ) : i === current - 1 ? (
+          <View key={i} style={[seg, { backgroundColor: palette.bone }]}>
+            <Animated.View style={[{ position: "absolute", top: 0, bottom: 0, start: 0, backgroundColor: palette.signal }, fillStyle]} />
+          </View>
+        ) : i === current ? (
+          <View key={i} style={[seg, { backgroundColor: FAINT }]}>
+            <Animated.View style={[StyleSheet.absoluteFill, { backgroundColor: palette.bone }, nextStyle]} />
+          </View>
+        ) : (
+          <View key={i} style={[seg, { backgroundColor: FAINT }]} />
+        ),
+      )}
+    </View>
+  );
+}
+
+/** One of "your decisions so far": its dot sets down, then the line slides in from the reading start. */
+function Decision({ text, delay }: { text: string; delay: number }) {
+  const { rtl } = useLocale();
+  const dot = useEntrance({ delay, scale: 0.2, config: spring.pop });
+  const line = useEntrance({ delay: delay + 50, x: rtl ? 14 : -14 });
+  return (
+    <View style={{ flexDirection: "row", gap: 12 }}>
+      <Animated.View style={[{ width: 7, height: 7, borderRadius: 4, backgroundColor: palette.signal, marginTop: rtl ? 11 : 9 }, dot]} />
+      <Animated.View style={[{ flex: 1 }, line]}>
+        <T variant="callout" tone="inkSecondary">
+          {text}
+        </T>
+      </Animated.View>
+    </View>
   );
 }
 

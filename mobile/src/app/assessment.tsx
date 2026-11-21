@@ -4,7 +4,7 @@ import { Redirect, router } from "expo-router";
 import { useT } from "../i18n";
 import { useTheme } from "../theme";
 import { useSession } from "../state/session";
-import { useAssessment } from "../state/assessment";
+import { AcceptedContext, useAssessment } from "../state/assessment";
 import { Flow } from "../deck/flow";
 import { SceneScreen, type SceneActions } from "../deck/scene";
 import { Landing } from "../screens/landing";
@@ -83,7 +83,10 @@ export default function Assessment() {
 
   return (
     <View style={{ flex: 1, backgroundColor: c.canvas }}>
-      <Flow flowKey={key}>{node}</Flow>
+      {/* Context, not a prop: the scene leaving the screen keeps hearing it while it slides away. */}
+      <AcceptedContext.Provider value={a.accepted}>
+        <Flow flowKey={key}>{node}</Flow>
+      </AcceptedContext.Provider>
     </View>
   );
 }

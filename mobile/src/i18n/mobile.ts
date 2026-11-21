@@ -72,6 +72,12 @@ export const mobileEn = {
   complete: {
     rating: "Rating {n} of 5",
   },
+  breaks: {
+    /** The stamp on a chapter break. {day} is the head of the chapter's title: "Day 1", "Days 3–4". */
+    dayDone: "{day} done",
+    /** The same stamp when the title doesn't start with its day. */
+    chapterDone: "Chapter {n} done",
+  },
 } as const;
 
 type Shape<T> = { [K in keyof T]: T[K] extends string ? string : Shape<T[K]> };
@@ -144,5 +150,10 @@ export const mobileAr: Shape<typeof mobileEn> = {
   },
   complete: {
     rating: "التقييم {n} من 5",
+  },
+  breaks: {
+    // The verb comes first, so it stays singular for "اليوم الأول" and the dual "اليومان الثالث والرابع" alike.
+    dayDone: "انتهى {day}",
+    chapterDone: "{n, select, 1 {انتهى الفصل الأول} 2 {انتهى الفصل الثاني} 3 {انتهى الفصل الثالث} 4 {انتهى الفصل الرابع} 5 {انتهى الفصل الخامس} other {انتهى الفصل {n}}}",
   },
 };

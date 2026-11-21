@@ -3,6 +3,7 @@ import { View } from "react-native";
 import Svg, { Circle, Rect } from "react-native-svg";
 import Animated, { Easing, interpolate, useAnimatedStyle, useSharedValue, withDelay, withRepeat, withTiming, Extrapolation, type SharedValue } from "react-native-reanimated";
 import { palette, useTheme } from "../theme";
+import { Burst, useOnce } from "./motion";
 
 /** Geometry from src/components/brand/wordmark-paths.ts (MARK). */
 const MARK = { bars: [{ x: 3, y: 48.25, w: 58 }, { x: 11, y: 33.75, w: 42 }, { x: 19, y: 19.25, w: 26 }], h: 11, dot: { cx: 32, cy: 10.25, r: 5.5 } };
@@ -48,8 +49,12 @@ function Band({ t, i, rows, width, height, color }: { t: SharedValue<number>; i:
  * The Narrowing: wide bands of uncertainty tightening, row by row, into one
  * vermilion point. The loading state while a scene is prepared (looping) and
  * the signature on the complete screen (once). Still under reduced motion.
+ *
+ * Played once with `burst`, the dot pops as it lands: a ring and a few
+ * vermilion particles, about a second (none under reduced motion). `onLand`
+ * fires at that moment (at once when still).
  */
-export function Narrowing({ width = 120, rows = 3, loop = true, color, onInk }: { width?: number; rows?: number; loop?: boolean; color?: string; onInk?: boolean }) {
+export function Narrowing({ width = 120, rows = 3, loop = true, color, onInk, burst, onLand }: { width?: number; rows?: number; loop?: boolean; color?: string; onInk?: boolean; burst?: boolean; onLand?: () => void }) {
   const { c, reduceMotion } = useTheme();
   const t = useSharedValue(reduceMotion ? 1 : 0);
   const height = Math.max(8, Math.round((width * 11) / 58));
@@ -67,16 +72,32 @@ export function Narrowing({ width = 120, rows = 3, loop = true, color, onInk }: 
   }, [loop, reduceMotion, t]);
 
   const dotStart = 0.04 + ((rows - 1) * 0.5) / rows + 0.3;
+  const dotEnd = Math.min(0.98, dotStart + 0.22);
   const dotStyle = useAnimatedStyle(() => {
-    const k = interpolate(t.value, [dotStart, Math.min(0.98, dotStart + 0.22)], [0, 1], Extrapolation.CLAMP);
+    const k = interpolate(t.value, [dotStart, dotEnd], [0, 1], Extrapolation.CLAMP);
     // A small overshoot: the estimate lands.
     const s = k < 0.7 ? interpolate(k, [0, 0.7], [0, 1.25]) : interpolate(k, [0.7, 1], [1.25, 1]);
     return { transform: [{ scale: s }], opacity: k > 0 ? 1 : 0 };
   });
 
+  // The pop: at the top of the dot's overshoot, once.
+  const pop = useSharedValue(0);
+  const peak = dotStart + (dotEnd - dotStart) * 0.7;
+  const land = React.useCallback(() => {
+    if (burst && !reduceMotion) pop.value = withTiming(1, { duration: 1000, easing: Easing.out(Easing.quad) });
+    onLand?.();
+  }, [burst, reduceMotion, onLand, pop]);
+  useOnce(() => {
+    "worklet";
+    return !loop && t.value >= peak;
+  }, land);
+
   return (
     <View style={{ width, alignItems: "center", gap }} accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
-      <Animated.View style={[{ width: height, height, borderRadius: height / 2, backgroundColor: c.signal }, dotStyle]} />
+      <View style={{ width: height, height }}>
+        {burst && !reduceMotion ? <Burst t={pop} size={height} color={c.signal} /> : null}
+        <Animated.View style={[{ width: height, height, borderRadius: height / 2, backgroundColor: c.signal }, dotStyle]} />
+      </View>
       {Array.from({ length: rows }, (_, k) => rows - 1 - k).map((i) => (
         <Band key={i} t={t} i={i} rows={rows} width={width} height={height} color={band} />
       ))}

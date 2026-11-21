@@ -3,6 +3,7 @@ import { ActivityIndicator, StyleSheet, View, type StyleProp, type ViewStyle } f
 import type { LucideIcon } from "lucide-react-native";
 import { useLocale } from "../i18n";
 import { HIT, radius, useTheme } from "../theme";
+import { DrawnCheck } from "./motion";
 import { Press } from "./press";
 import { T } from "./text";
 
@@ -19,6 +20,8 @@ interface ButtonProps {
   size?: "lg" | "md" | "sm";
   disabled?: boolean;
   loading?: boolean;
+  /** It worked: the label gives way to a check that draws itself, and the button rests. */
+  done?: boolean;
   icon?: LucideIcon;
   iconEnd?: LucideIcon;
   /** Mirror directional icons in Arabic. */
@@ -30,11 +33,11 @@ interface ButtonProps {
   full?: boolean;
 }
 
-export function Button({ label, onPress, variant = "action", size = "lg", disabled, loading, icon: Icon, iconEnd: IconEnd, flipIcon, style, accessibilityLabel, accessibilityHint, testID, full }: ButtonProps) {
+export function Button({ label, onPress, variant = "action", size = "lg", disabled, loading, done, icon: Icon, iconEnd: IconEnd, flipIcon, style, accessibilityLabel, accessibilityHint, testID, full }: ButtonProps) {
   const { c, dark } = useTheme();
   const { rtl } = useLocale();
   const height = size === "lg" ? 56 : size === "md" ? 48 : 40;
-  const off = disabled || loading;
+  const off = disabled || loading || done;
 
   const palette: Record<ButtonVariant, { bg: string; fg: string; border?: string }> = {
     primary: { bg: c.signal, fg: c.signalText },
@@ -44,7 +47,7 @@ export function Button({ label, onPress, variant = "action", size = "lg", disabl
     onInk: { bg: "rgba(242,240,235,0.1)", fg: "#F2F0EB", border: "rgba(242,240,235,0.22)" },
   };
   let { bg, fg, border } = palette[variant];
-  if (disabled && !loading && (variant === "primary" || variant === "action")) {
+  if (disabled && !loading && !done && (variant === "primary" || variant === "action")) {
     bg = dark ? c.hairline : c.surfaceSunken;
     fg = c.tertiary;
   }
@@ -57,7 +60,7 @@ export function Button({ label, onPress, variant = "action", size = "lg", disabl
       disabled={off}
       accessibilityLabel={accessibilityLabel ?? label}
       accessibilityHint={accessibilityHint}
-      accessibilityState={{ disabled: Boolean(disabled), busy: Boolean(loading) }}
+      accessibilityState={{ disabled: Boolean(disabled || done), busy: Boolean(loading && !done) }}
       hitSlop={height < HIT ? { top: (HIT - height) / 2, bottom: (HIT - height) / 2 } : undefined}
       style={[
         styles.base,
@@ -74,7 +77,9 @@ export function Button({ label, onPress, variant = "action", size = "lg", disabl
         style,
       ]}
     >
-      {loading ? (
+      {done ? (
+        <DrawnCheck size={size === "sm" ? 20 : 26} color={fg} strokeWidth={2.4} duration={320} />
+      ) : loading ? (
         <ActivityIndicator color={fg} />
       ) : (
         <View style={styles.row}>

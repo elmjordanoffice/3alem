@@ -117,4 +117,10 @@ export const spring = {
   scene: { mass: 1, stiffness: 210, damping: 28 },
   pop: { mass: 1, stiffness: 420, damping: 26 },
   sheet: { mass: 1, stiffness: 380, damping: 40 },
+  /** Text and rows arriving: settled, no visible overshoot. */
+  rise: { mass: 1, stiffness: 260, damping: 30 },
+  /** A stamp meeting paper: stiff and quick, a hair of give on contact. */
+  land: { mass: 1, stiffness: 600, damping: 38 },
+  /** A small mark dropping into its place (the vermilion dot). */
+  settle: { mass: 1, stiffness: 480, damping: 30 },
 } as const;

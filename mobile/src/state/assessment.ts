@@ -2,12 +2,29 @@ import * as React from "react";
 import { AppState } from "react-native";
 import NetInfo from "@react-native-community/netinfo";
 import { ApiError, type Api } from "../api/client";
-import type { CandidateView, SubmitPayload } from "../api/types";
+import type { CandidateView, Stage, SubmitPayload } from "../api/types";
 import { kv } from "../lib/storage";
 import { haptic } from "../lib/haptics";
 import { clearDrafts, preloadDrafts } from "./drafts";
 
 const OK_ANYWAY = new Set(["wrong_stage", "not_current"]);
+
+/**
+ * When a chapter's last answer is in, the scene holds this long before the
+ * chapter break rises: long enough to see the chapter rail fill. The answer is
+ * already saved on the server, and the break itself is untimed.
+ */
+const CHAPTER_BEAT = 480;
+
+/** The server has an answer, and what it leads to: a follow-up in the same scene, the next scene, a chapter break, or the end. */
+export interface Accepted {
+  itemId: string;
+  stage: Stage;
+  next: "followUp" | "scene" | "transition" | "complete" | "other";
+}
+
+/** The last accepted answer, for the scene that sent it (provided around the Flow). */
+export const AcceptedContext = React.createContext<Accepted | null>(null);
 
 /**
  * The candidate flow, driven by the server's CandidateView. Owns the offline
@@ -21,6 +38,7 @@ export function useAssessment(api: Api | null, token: string | null) {
   const [online, setOnline] = React.useState(true);
   const [pending, setPending] = React.useState<SubmitPayload | null>(null);
   const [needsRetry, setNeedsRetry] = React.useState(false);
+  const [accepted, setAccepted] = React.useState<Accepted | null>(null);
   const currentItem = React.useRef<string | null>(null);
   const inflight = React.useRef(false);
   const attempt = React.useRef(0);
@@ -107,8 +125,13 @@ export function useAssessment(api: Api | null, token: string | null) {
         setPending(null);
         setNeedsRetry(false);
         attempt.current = 0;
+        const v = res.view;
+        const next: Accepted["next"] = v.view === "item" ? (v.item.id === p.itemId ? "followUp" : "scene") : v.view === "transition" || v.view === "complete" ? v.view : "other";
+        setAccepted({ itemId: p.itemId, stage: p.stage, next });
         haptic.success();
-        await apply(res.view);
+        // A chapter's last answer: a beat for the rail to fill before the break rises.
+        if (next === "transition" || next === "complete") await new Promise((r) => setTimeout(r, CHAPTER_BEAT));
+        await apply(v);
         return { ok: true };
       } catch (e) {
         const offline = e instanceof ApiError ? e.offline || e.status === 429 || e.status >= 500 : true;
@@ -157,5 +180,5 @@ export function useAssessment(api: Api | null, token: string | null) {
     return () => clearTimeout(id);
   }, [pending, online, view, needsRetry, send, outboxKey]);
 
-  return { view, error, online, pending, load, act, submit };
+  return { view, error, online, pending, accepted, load, act, submit };
 }

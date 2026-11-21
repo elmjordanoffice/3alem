@@ -72,7 +72,8 @@ src/
     sequence (chain, forced choice), roleplay, rank-list (drag to reorder)
   screens/             landing, briefing + world intro, chapter break, paused,
                        complete (+ recap, feedback, fairness), state screens, AI sheet
-  ui/                  type scale, buttons, press feedback, sheet, brand mark, primitives
+  ui/                  type scale, buttons, press feedback, sheet, brand mark, primitives,
+                       motion (drawn check, entrances, burst, count-up)
   theme/               Range tokens (light/dark), fonts, reduced motion, larger text
   i18n/                translator over ../messages/*.json + mobile-only copy
 ```
@@ -106,6 +107,31 @@ answer (or `null` until complete) and a digest for later.
 - **Progress.** Chapters on the top rail (never a question count); pages down
   the trailing edge; a quiet, hideable timer only on timed tasks.
 
+### Moments
+
+Small rewards for moving through the story. They never touch the assessment:
+no points, no scores, no streaks, no urgency, and the answer is already on the
+server before any of them plays. All run on the UI thread (Reanimated), on
+springs from `theme/tokens.ts`; under reduced motion each becomes a short fade
+where nothing moves and nothing bursts.
+
+- **Sent.** A freshly sealed "Answer sent" page settles its ink disc, draws its
+  check and drops a vermilion dot into the trailing corner (~530 ms, never
+  holding the deck's spring to the follow-up). When the answer leads out of the
+  scene, the submit button draws the check instead as the scene slides away.
+  The success haptic fires when the server accepts.
+- **Inside a scene.** The first time the deck comes to rest on the task, the
+  page dots ripple down to the current one. A chapter's last answer fills that
+  chapter on the top rail; the chapter break rises after a 480 ms beat
+  (`CHAPTER_BEAT` in `state/assessment.ts`).
+- **Chapter break.** A "Day 1 done" stamp lands (light haptic), tilted toward
+  the reading start; the rail fills to the new chapter; the next title rises;
+  your decisions are dealt in one by one from the reading side. The stamp's day
+  comes from the chapter title ("Day 1: …", "اليوم الأول: …"), else "Chapter N".
+- **Finish.** The Narrowing's dot pops with a ring and a few particles (~1 s,
+  success haptic); the recap counts up from 0 in tabular figures; the habits
+  fade in one by one.
+
 ### Saving and sending
 
 Drafts are written to the device as you type (debounced) under the web's keys
@@ -134,5 +160,9 @@ Every screen sets `direction` on its root, so Arabic mirrors immediately;
 `I18nManager` is updated too, so system surfaces agree from the next launch
 (no forced reload mid-assessment). Layout uses logical `start`/`end`; tables,
 numbers and the 1–5 rating stay left to right; charts run right to left as on
-the web. Arabic reading text is at least 17pt with line height of at least 1.7,
+the web. On web, react-native-web resolves logical styles (`start`/`end`,
+`marginStart`, `textAlign: "start"`) from a `dir` attribute rather than the
+`direction` style, so the root view in `app/_layout.tsx` carries `dir` too.
+Transforms are physical everywhere: a slide in from the reading start passes
+a mirrored x in Arabic. Arabic reading text is at least 17pt with line height of at least 1.7,
 and never letter-spaced.
