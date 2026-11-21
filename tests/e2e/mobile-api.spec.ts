@@ -9,6 +9,8 @@ import { freshInvitation } from "./db";
 
 const TEXT = "First I would check the numbers in the materials and confirm the risk with the people involved. I would tell my manager today and agree who does what by Friday.";
 
+// The item content is read loosely here: the test answers whatever task kind it is given.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 type View = { view: string; item?: { id: string; stage: "MAIN" | "PROBE" | "TWIST"; type: string; content: any } };
 
 function answerFor(v: View) {
