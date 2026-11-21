@@ -384,188 +384,6 @@
   85%, 100% { left: 115%; }
 }
 
-/* ── Masked word reveal ───────────────────────────────────────────────── */
-.word-mask {
-  display: inline-block;
-  overflow: hidden;
-  vertical-align: top;
-  padding-block: 0.14em;
-  margin-block: -0.14em;
-}
-:lang(ar) .word-mask { padding-block: 0.24em; margin-block: -0.24em; }
-.word {
-  display: inline-block;
-  animation: word-in 1s var(--ease-enter) both;
-  animation-delay: calc(var(--i, 0) * 55ms + var(--d, 0ms));
-}
-@keyframes word-in {
-  from { transform: translateY(112%); }
-}
-[data-reveal][data-armed]:not([data-in]) .word { animation: none; transform: translateY(112%); }
-[data-reveal][data-armed]:not([data-in]) .fade-up { opacity: 0; transform: translateY(24px); }
-.fade-up { transition: opacity 0.9s var(--ease-enter), transform 0.9s var(--ease-enter); transition-delay: var(--d, 0ms); }
-
-/* ── Scroll film ──────────────────────────────────────────────────────── */
-.film-atmosphere {
-  background:
-    radial-gradient(48% 38% at 50% 30%, rgb(76 81 232 / calc(0.42 - var(--p) * 0.2)), transparent 70%),
-    radial-gradient(60% 40% at 50% 62%, rgb(143 146 247 / 0.14), transparent 72%),
-    radial-gradient(90% 30% at 50% 100%, rgb(242 181 50 / calc(0.04 + var(--p) * 0.14)), transparent 70%),
-    var(--night);
-}
-.film-vignette { background: radial-gradient(120% 90% at 50% 45%, transparent 55%, rgb(3 3 12 / 0.75) 100%); }
-/* Scrims keep copy readable over the field: centred for the hero, start-side for the beats. */
-.film-scrim-center { opacity: var(--b0); background: radial-gradient(46% 40% at 50% 46%, rgb(7 8 28 / 0.72), transparent 75%); }
-.film-scrim-side { opacity: calc(var(--b1) + var(--b3)); background: linear-gradient(to right, rgb(7 8 28 / 0.85) 0%, rgb(7 8 28 / 0.55) 32%, transparent 58%); }
-.film-scrim-end { opacity: var(--b2); background: linear-gradient(to left, rgb(7 8 28 / 0.85) 0%, rgb(7 8 28 / 0.55) 32%, transparent 58%); }
-[dir="rtl"] .film-scrim-side, [dir="rtl"] .film-scrim-end { transform: scaleX(-1); }
-.film-stage [data-beat-layer] { transition: none; }
-.film-stage .beat-0 { opacity: var(--b0); transform: translateY(calc((1 - var(--b0)) * -48px)) scale(calc(0.97 + var(--b0) * 0.03)); }
-.film-stage .beat-1 { opacity: var(--b1); }
-.film-stage .beat-2 { opacity: var(--b2); }
-.film-stage .beat-3 { opacity: var(--b3); }
-.film-stage .beat-copy-1 { transform: translateY(calc((1 - var(--b1)) * 28px)); }
-.film-stage .beat-copy-2 { transform: translateY(calc((1 - var(--b2)) * 28px)); }
-.film-stage .beat-copy-3 { transform: translateY(calc((1 - var(--b3)) * 28px)); }
-.film-stage[data-beat="0"] .beat-0 a,
-.film-stage[data-beat="0"] .beat-0 button { pointer-events: auto; }
-/* Scenes fly in from depth, one after another. */
-.film-stage .fly { transform: translate3d(0, calc((1 - var(--b1)) * var(--fy, 80px)), 0) scale(calc(0.88 + var(--b1) * 0.12)); opacity: var(--b1); }
-.film-range-band {
-  inset-inline-start: calc(6% + var(--k) * 59.5%);
-  width: calc(88% - var(--k) * 73%);
-  /* Switch quickly from lavender to saffron so the middle never reads as beige. */
-  --kc: clamp(0, calc((var(--k) - 0.3) * 3.4), 1);
-  background: color-mix(in srgb, var(--glow-lavender) calc((1 - var(--kc)) * 100%), var(--saffron));
-}
-.film-range-dot { inset-inline-start: calc(50% + var(--k) * 22.5% - 9px); }
-.film-scene { counter-reset: scene var(--scene); }
-.film-scene::after { content: counter(scene); }
-.film-settled { opacity: clamp(0, calc((var(--k) - 0.85) * 7), 1); }
-.film-narrowing { opacity: calc(1 - clamp(0, calc((var(--k) - 0.75) * 7), 1)); }
-.card-night .film-mark { --highlight: color-mix(in srgb, var(--saffron) 88%, transparent); --highlight-foreground: #17184a; }
-/* The film hands over to the page without a seam. */
-.film-stage::after { content: ""; position: absolute; inset-inline: 0; bottom: 0; height: 18%; pointer-events: none; background: linear-gradient(to bottom, transparent, var(--night)); }
-.dark .film-mark { --highlight: color-mix(in srgb, var(--saffron) 88%, transparent); --highlight-foreground: #17184a; }
-.film-mark {
-  /* <mark> has a yellow UA background; only the sweep should show. */
-  background-color: transparent;
-  background-image: linear-gradient(var(--highlight), var(--highlight));
-  border-radius: 0.25em;
-  background-repeat: no-repeat;
-  background-size: calc(var(--hl) * 100%) 86%;
-  background-position: 0 55%;
-  color: var(--highlight-foreground);
-  box-decoration-break: clone;
-  -webkit-box-decoration-break: clone;
-  padding-inline: 0.14em;
-}
-[dir="rtl"] .film-mark { background-position: 100% 55%; }
-.film-verdict { opacity: clamp(0, calc((var(--hl) - 0.6) * 3), 1); transform: translateY(calc((1 - clamp(0, calc((var(--hl) - 0.6) * 3), 1)) * 12px)); }
-.film-rail-dot { opacity: calc(0.35 + var(--on) * 0.65); width: calc(6px + var(--on) * 22px); }
-
-/* Page grain for the night ground: stepped, so it reads as film, not noise. */
-.night-grain::after {
-  content: "";
-  position: fixed;
-  inset: -50%;
-  z-index: 60;
-  pointer-events: none;
-  opacity: 0.035;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  animation: grain 0.9s steps(4) infinite;
-}
-@keyframes grain {
-  0% { transform: translate(0, 0); }
-  25% { transform: translate(-3%, 2%); }
-  50% { transform: translate(2%, -3%); }
-  75% { transform: translate(-1%, 3%); }
-}
-/* A giant translucent word placed low, so the field overlaps it. */
-.ghost-word {
-  font-family: var(--font-display);
-  font-weight: 700;
-  line-height: 0.8;
-  color: rgb(245 244 255 / 0.035);
-  letter-spacing: -0.04em;
-  user-select: none;
-}
-.showcase-frame {
-  background:
-    radial-gradient(70% 60% at 50% 110%, rgb(76 81 232 / 0.45), transparent 70%),
-    radial-gradient(50% 50% at 85% 0%, rgb(143 146 247 / 0.12), transparent 70%),
-    var(--night-raised);
-  box-shadow: inset 0 0 0 1px rgb(245 244 255 / 0.08), inset 0 1px 0 rgb(245 244 255 / 0.1);
-}
-.showcase-frame::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background-image:
-    linear-gradient(to right, rgb(245 244 255 / 0.05) 1px, transparent 1px),
-    linear-gradient(to bottom, rgb(245 244 255 / 0.05) 1px, transparent 1px);
-  background-size: 40px 40px;
-  mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, #000, transparent 80%);
-}
-/* Glass navigation: links materialise a raised pill on hover. */
-.nav-glass {
-  background: rgb(7 8 28 / 0.97);
-  backdrop-filter: blur(24px) saturate(140%);
-  -webkit-backdrop-filter: blur(24px) saturate(140%);
-  box-shadow: inset 0 0 0 1px rgb(245 244 255 / 0.09), inset 0 1px 0 rgb(245 244 255 / 0.08), 0 12px 32px -12px rgb(0 0 0 / 0.6);
-}
-.nav-pill { transition: background-color 0.3s var(--ease-enter), box-shadow 0.3s var(--ease-enter), color 0.2s var(--ease-move); }
-.nav-pill:hover { background: rgb(245 244 255 / 0.08); box-shadow: inset 0 1px 0 rgb(245 244 255 / 0.1); color: var(--ink-foreground); }
-.scroll-cue { animation: scroll-cue 2.2s var(--ease-move) infinite; }
-@keyframes scroll-cue {
-  0% { transform: scaleY(0); transform-origin: top; }
-  45% { transform: scaleY(1); transform-origin: top; }
-  55% { transform: scaleY(1); transform-origin: bottom; }
-  100% { transform: scaleY(0); transform-origin: bottom; }
-}
-
-/* Surfaces placed in the night scene are lit from above: a top-edge
-   highlight, a gentle fall-off and a shadow tinted by the field's light. */
-.card-lit {
-  background-color: var(--surface);
-  background-image: linear-gradient(180deg, rgb(255 255 255 / 0.04), rgb(23 24 74 / 0.06));
-  box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 0.9),
-    0 0 0 1px rgb(23 24 74 / 0.08),
-    0 2px 4px rgb(3 3 12 / 0.25),
-    0 28px 56px -18px rgb(3 3 12 / 0.7),
-    0 0 90px -30px rgb(143 146 247 / 0.45);
-}
-.dark .card-lit { background-color: #191b47; box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.1), 0 0 0 1px rgb(255 255 255 / 0.06), 0 28px 56px -18px rgb(0 0 0 / 0.75), 0 0 90px -30px rgb(143 146 247 / 0.35); }
-.card-night {
-  background-color: #151744;
-  background-image: linear-gradient(180deg, rgb(245 244 255 / 0.07), rgb(245 244 255 / 0) 40%);
-  box-shadow:
-    inset 0 1px 0 rgb(245 244 255 / 0.16),
-    0 0 0 1px rgb(245 244 255 / 0.09),
-    0 28px 56px -18px rgb(3 3 12 / 0.75),
-    0 0 90px -30px rgb(143 146 247 / 0.4);
-}
-/* The hero's call to action carries a lavender halo so it wins the squint test. */
-.cta-halo { background-color: #fff; box-shadow: inset 0 1px 0 #fff, 0 0 0 1px #fff, 0 0 0 6px rgb(165 168 250 / 0.22), 0 16px 48px -6px rgb(165 168 250 / 0.8); }
-.cta-halo:hover { box-shadow: inset 0 1px 0 #fff, 0 0 0 1px rgb(255 255 255 / 0.5), 0 0 0 9px rgb(143 146 247 / 0.18), 0 18px 54px -8px rgb(143 146 247 / 0.85); }
-/* While the hero's call to action is on screen, the nav's steps back to a ghost. */
-html[data-hero="1"] .nav-cta {
-  background-color: rgb(245 244 255 / 0.06);
-  background-image: none;
-  color: var(--ink-foreground);
-  box-shadow: inset 0 0 0 1px rgb(245 244 255 / 0.2);
-}
-
-/* The hero's foreground row: the closest estimate in the field, labelled, with no evidence yet. */
-.hero-row-band { inset-inline-start: 12%; width: 76%; background: color-mix(in srgb, var(--glow-lavender) 70%, transparent); }
-.hero-row-dot { inset-inline-start: calc(52% - 8px); }
-
-/* During the hero the nav's call to action steps out of the way; for the rest of the film it is a ghost. */
-html[data-hero="1"][data-front="0"] .nav-cta { opacity: 0; pointer-events: none; }
-.nav-cta { transition: opacity 0.4s var(--ease-move), background-color 0.3s var(--ease-move), box-shadow 0.3s var(--ease-move); }
-
 /* ── Range ───────────────────────────────────────────────────────────────
    Flat bone canvas, hairlines instead of blur, and one filled object per
    screen: an ink panel carrying the mark's narrowing bands in its corner. */
@@ -613,3 +431,193 @@ html[data-hero="1"][data-front="0"] .nav-cta { opacity: 0; pointer-events: none;
 @media (prefers-reduced-motion: reduce) {
   .narrow-band, .narrow-dot { animation: none; }
 }
+
+/* ── Range landing ─────────────────────────────────────────────────────────
+   The marketing page is always the Range palette (bone, ink and one vermilion
+   signal), whatever theme the app is set to, so it pins the light values for
+   its own subtree. A strict 12-column grid, hairline rules, wide heavy type,
+   and one motion: bands narrowing, step by step, into the estimate. */
+.range-page {
+  color-scheme: light;
+  --background: #f2f0eb;
+  --surface: #ffffff;
+  --surface-subtle: #f8f7f4;
+  --surface-sunken: #ebe8e1;
+  --border: #e2ded5;
+  --border-strong: #cdc8bd;
+  --text: #141414;
+  --text-secondary: #4f4b45;
+  --text-tertiary: #67635b;
+  --mark-muted: #aca79c;
+  --accent: #141414;
+  --accent-hover: #2b2a28;
+  --accent-active: #000000;
+  --accent-foreground: #ffffff;
+  --accent-subtle: #ffe8e0;
+  --accent-text: #b2300c;
+  --focus-ring: #f04a23;
+  --signal: #f04a23;
+  --signal-hover: #ff6440;
+  --signal-foreground: #141414;
+  --level-1: #ebe7df;
+  --level-2: #d2cbbe;
+  --level-3: #a39b8d;
+  --level-4: #55514a;
+  --level-5: #141414;
+  --level-1-fg: #141414;
+  --level-2-fg: #141414;
+  --level-3-fg: #141414;
+  --level-4-fg: #ffffff;
+  --level-5-fg: #ffffff;
+  --level-empty: #ebe8e1;
+  --highlight: #ffd6c9;
+  --highlight-foreground: #141414;
+  --saffron: #f04a23;
+  --hero-via: #141414;
+  --shadow-card: 0 0 0 1px rgb(20 20 20 / 0.08);
+  background-color: var(--background);
+  color: var(--text);
+  overflow-x: clip;
+}
+html:has(.range-page) { color-scheme: light; background-color: #f2f0eb; }
+html:has(.range-page) body { background-color: #f2f0eb; }
+/* On vermilion the focus ring turns ink so it stays visible; on ink it lightens. */
+.range-page .r-on-signal { --focus-ring: #141414; }
+.range-page .r-on-ink { --focus-ring: #ff6a45; }
+
+.r-wrap {
+  width: 100%;
+  max-width: 90rem;
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 3.4vw, 3rem);
+}
+
+/* Display sizes. Family, width, weight and case come from .display-x. */
+.r-h1 { font-size: clamp(2.875rem, 8vw, 7.25rem); line-height: 0.9; letter-spacing: -0.014em; }
+.r-h2 { font-size: clamp(2.125rem, 5vw, 4.75rem); line-height: 0.94; letter-spacing: -0.01em; }
+.r-h2-xl { font-size: clamp(2.5rem, 5.8vw, 5.5rem); line-height: 0.92; text-wrap: wrap; }
+.r-word { font-size: clamp(3.25rem, 6.2vw, 6rem); line-height: 0.9; letter-spacing: -0.01em; }
+.r-h3 {
+  font-family: var(--font-display);
+  font-stretch: 112%;
+  font-weight: 700;
+  font-size: clamp(1.375rem, 1.9vw, 1.75rem);
+  line-height: 1.12;
+  letter-spacing: -0.012em;
+  text-wrap: balance;
+}
+:lang(ar) .r-h1 { font-size: clamp(3.25rem, 8.6vw, 8.25rem); line-height: 1.26; }
+:lang(ar) .r-h2 { font-size: clamp(2.375rem, 5vw, 4.75rem); line-height: 1.28; }
+:lang(ar) .r-h2-xl { font-size: clamp(2.625rem, 6.2vw, 6.25rem); line-height: 1.26; }
+:lang(ar) .r-word { font-size: clamp(3.25rem, 6vw, 5.75rem); line-height: 1.3; }
+:lang(ar) .r-h3 { font-stretch: 100%; font-size: clamp(1.625rem, 2.1vw, 2rem); line-height: 1.38; letter-spacing: 0; }
+.r-h3-lg { font-size: clamp(1.625rem, 2.3vw, 2.25rem); line-height: 1.05; }
+:lang(ar) .r-h3-lg { font-size: clamp(1.75rem, 2.4vw, 2.5rem); line-height: 1.35; }
+
+/* Reading sizes: Arabic one step larger and looser. */
+.r-lead { font-size: clamp(1.125rem, 1.45vw, 1.3125rem); line-height: 1.5; }
+.r-body { font-size: 1.0625rem; line-height: 1.6; }
+:lang(ar) .r-lead { font-size: clamp(1.1875rem, 1.5vw, 1.375rem); line-height: 1.8; }
+:lang(ar) .r-body { font-size: 1.125rem; line-height: 1.8; }
+
+/* Labels: Archivo wide capitals in English, Plex Arabic semibold in Arabic. */
+.r-label {
+  font-family: var(--font-display);
+  font-stretch: 125%;
+  font-weight: 700;
+  font-size: 0.6875rem;
+  line-height: 1.35;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+:lang(ar) .r-label {
+  font-family: var(--font-sans);
+  font-stretch: 100%;
+  font-weight: 600;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  letter-spacing: 0;
+  text-transform: none;
+}
+/* Section and list numbers: always Archivo, Latin and tabular. */
+.r-index {
+  font-family: "Archivo Variable", ui-sans-serif, system-ui, sans-serif;
+  font-stretch: 125%;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}
+
+/* Navigation: flat bone, a hairline once the page moves. Its call to action
+   is ink while the hero's is on screen, then takes the signal. */
+.r-nav { background-color: var(--background); transition: box-shadow 0.3s var(--ease-move); }
+.r-nav[data-scrolled] { box-shadow: 0 1px 0 rgb(20 20 20 / 0.14); }
+.r-nav-cta { transition: background-color 0.3s var(--ease-move), color 0.3s var(--ease-move), transform 0.2s var(--ease-out); }
+.r-nav[data-cta="signal"] .r-nav-cta { background-color: var(--signal); color: var(--signal-foreground); }
+.r-nav[data-cta="signal"] .r-nav-cta:hover { background-color: var(--signal-hover); }
+
+/* ── The band: a range drawn in three parts (a body that scales and two round
+   caps that slide) so it can narrow with transforms alone and still come to
+   rest crisp. --l and --w are the range's start and width in % of its track;
+   the track is inset by half the band height so the caps fit. Ranges read
+   left to right in both languages. */
+.r-track { position: relative; margin-inline: calc(var(--bh) / 2); }
+.r-band { position: relative; display: block; height: var(--bh); pointer-events: none; }
+.r-band > i { position: absolute; inset: 0; pointer-events: none; }
+.r-band-m {
+  background: currentColor;
+  transform-origin: 0 50%;
+  transform: translateX(calc(var(--l) * 1%)) scaleX(calc(var(--w) / 100));
+}
+.r-band-s { transform: translateX(calc(var(--l) * 1%)); }
+.r-band-e { transform: translateX(calc((var(--l) + var(--w) - 100) * 1%)); }
+.r-band-s::before,
+.r-band-e::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: var(--bh);
+  height: 100%;
+  border-radius: 999px;
+  background: currentColor;
+}
+.r-band-s::before { left: calc(var(--bh) / -2); }
+.r-band-e::before { right: calc(var(--bh) / -2); }
+/* A position on the scale (an estimate, a tick): a full-track layer that slides. */
+.r-at { position: absolute; inset: 0; transform: translateX(calc(var(--x) * 1%)); pointer-events: none; }
+
+/* ── The hero's signature: five ink bands narrowing into the vermilion dot,
+   played once on load, bottom band first. */
+.r-sig { --bh: clamp(1.375rem, 2.15vw, 2.125rem); --gap: calc(var(--bh) * 0.34); }
+.r-sig-grid { display: grid; grid-template-columns: minmax(0, 1fr); row-gap: var(--gap); }
+@media (min-width: 640px) {
+  .r-sig-grid { grid-template-columns: 5.5rem minmax(0, 1fr) 5.25rem; column-gap: 1.25rem; }
+}
+.r-dot { position: absolute; top: 0; left: 0; width: var(--bh); height: var(--bh); margin-left: calc(var(--bh) / -2); border-radius: 999px; background: var(--signal); }
+.r-stem { position: absolute; left: -0.5px; top: calc(var(--bh) / 2); width: 1px; height: calc(5 * (var(--bh) + var(--gap)) + var(--gap) + 0.25rem); background: rgb(20 20 20 / 0.35); transform-origin: 50% 0; }
+@keyframes r-narrow-m { from { transform: translateX(0) scaleX(1); } }
+@keyframes r-narrow-cap { from { transform: translateX(0); } }
+@keyframes r-drop { from { opacity: 0; transform: translateY(-150%) scale(0.5); } }
+@keyframes r-grow-y { from { transform: scaleY(0); } }
+@keyframes r-fade { from { opacity: 0; } }
+.r-sig .r-band > i { animation: 760ms var(--ease-enter) calc(260ms + var(--i) * 150ms) both; }
+.r-sig .r-band > .r-band-m { animation-name: r-narrow-m; }
+.r-sig .r-band > .r-band-s, .r-sig .r-band > .r-band-e { animation-name: r-narrow-cap; }
+.r-sig .r-dot { animation: r-drop 640ms var(--ease-hero) 1.2s both; }
+.r-sig .r-stem { animation: r-grow-y 500ms var(--ease-enter) 1.45s both; }
+.r-sig .r-fade { animation: r-fade 420ms var(--ease-move) calc(640ms + var(--i) * 150ms) both; }
+@media (prefers-reduced-motion: reduce) {
+  .r-sig *, .r-sig *::before { animation: none !important; }
+}
+
+/* ── Narrowing on arrival (How it works, step 2): rows start as the whole
+   scale and tighten in turn when the card scrolls into view. Without
+   JavaScript, or with reduced motion, they simply show their final state. */
+html[data-r-motion] [data-narrow]:not([data-in]) .r-band-m { transform: translateX(0) scaleX(1); }
+html[data-r-motion] [data-narrow]:not([data-in]) .r-band-s,
+html[data-r-motion] [data-narrow]:not([data-in]) .r-band-e { transform: translateX(0); }
+html[data-r-motion] [data-narrow]:not([data-in]) .r-at { transform: translateX(50%); }
+html[data-r-motion] [data-narrow]:not([data-in]) .r-fade { opacity: 0; }
+[data-narrow] .r-band > i,
+[data-narrow] .r-at { transition: transform 900ms var(--ease-enter) calc(160ms + var(--i, 0) * 170ms); }
+[data-narrow] .r-fade { transition: opacity 500ms var(--ease-move) calc(700ms + var(--i, 0) * 170ms); }

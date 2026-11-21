@@ -42,91 +42,150 @@
     "themeDark": "Dark"
   },
   "landing": {
-    "getStarted": "Create an account",
-    "signIn": "Sign in",
-    "openApp": "Open Aalim",
+    "skip": "Skip to content",
     "navLabel": "Site",
     "nav": {
       "how": "How it works",
+      "report": "The report",
       "modes": "Hire, Grow, Team",
-      "trust": "Fairness and privacy"
+      "trust": "Trust"
     },
-    "title": "Hire on evidence, not impressions.",
-    "subtitle": "Candidates spend a realistic week at a fictional company. The scenarios adapt to every answer, and each score is backed by the person’s own words. Your team makes the decision.",
-    "heroNote": "Also for personal development and for teams, with the same engine and the same standard of evidence.",
-    "demo": {
-      "label": "A scene from an assessment",
-      "chapter": "Chapter 2, Tuesday morning",
-      "live": "Adapting as they answer",
-      "fromInitials": "LH",
-      "from": "Layla Haddad",
-      "fromRole": "Head of Operations, Qamar Logistics",
-      "message": "Two of our three trucks are stuck at the port. The Henderson order is due at 4pm and they’ve already complained twice this month. What do you do first?",
-      "answerLabel": "Candidate’s answer",
-      "answerStart": "I’d call Henderson before ten and offer a split delivery:",
-      "answerEvidence": "half today from the Riyadh stock, the rest first thing tomorrow,",
-      "answerEnd": "then rebook the port slot. If they need it all today, I’ll know early enough to hire a third truck.",
-      "skill": "Prioritising under pressure",
-      "level": "Advanced",
-      "range": "3.6–4.2",
-      "scaleLow": "Emerging",
-      "scaleHigh": "Expert",
-      "note": "The band narrows as evidence comes in, and the tick is the level the role needs. The highlighted words are the evidence."
-    },
-    "how": {
-      "title": "From job description to evidence in three steps",
-      "jd": {
-        "title": "Paste a job description",
-        "body": "Aalim finds the skills the role needs, weighs what matters most, and flags requirements that could exclude people unfairly."
+    "getStarted": "Create an account",
+    "navCta": "Get started",
+    "signIn": "Sign in",
+    "openApp": "Open Aalim",
+    "hero": {
+      "eyebrow": "Skills assessment that shows its working",
+      "title": "Hire for what people can do.",
+      "sub": "Candidates spend a realistic week at a fictional company. Every answer narrows what we know about them, and every score rests on their own words. Your team decides.",
+      "seeHow": "See how it works",
+      "facts": {
+        "time": "About 50 minutes per candidate",
+        "languages": "Arabic and English, as equals",
+        "people": "Never rejects anyone automatically"
       },
-      "week": {
-        "title": "Candidates live a week at a fictional company",
-        "body": "About 50 minutes of messages, decisions, documents and conversations. Each answer shapes the next scene, so the time goes where it tells you most."
-      },
-      "evidence": {
-        "title": "Read the evidence, then decide",
-        "body": "Role fit with a confidence, a range for every skill, quotes from the candidate’s own answers, and questions to ask in the interview."
-      },
-      "eyebrow": "How it works",
-      "fig": "Fig.",
-      "jdFig": {
-        "role": "Operations Planner",
-        "weight": "Weight",
-        "s1": "Prioritising under pressure",
-        "s2": "Keeping stakeholders informed",
-        "s3": "Working with numbers",
-        "s4": "Solving problems",
-        "flagTitle": "Could exclude people unfairly",
-        "flagFrom": "Native English speaker",
-        "flagTo": "Fluent written English"
-      },
-      "weekFig": {
-        "d1": "Mon",
-        "d2": "Tue",
-        "d3": "Wed",
-        "d4": "Thu",
-        "d5": "Fri",
-        "inbox": "Inbox",
-        "m1from": "Layla Haddad",
-        "m1subject": "Port delay: the Henderson order",
-        "m2from": "Omar Nasser",
-        "m2subject": "Can we move Thursday’s stock count?",
-        "m3from": "Finance",
-        "m3subject": "Fuel costs are 12% over plan",
-        "m4from": "Sara, driver",
-        "m4subject": "Truck 2 has cleared customs",
-        "adaptive": "New, because of your last answer"
+      "figure": {
+        "label": "One skill, estimated scene by scene: the range narrows from the whole scale to 3.6–4.2, and the estimate settles at 3.9.",
+        "skill": "Prioritising under pressure",
+        "narrowing": "Narrowing with each answer",
+        "start": "Start",
+        "scene": "Scene {n}",
+        "estimate": "Estimate",
+        "low": "Emerging",
+        "high": "Expert"
       }
     },
-    "modesTitle": "One engine, three ways to use it",
-    "modesSubtitle": "The same scenarios and the same standard of evidence, whether you are hiring, growing yourself or developing a team.",
+    "how": {
+      "label": "How it works",
+      "title": "A realistic week. Evidence you can check.",
+      "intro": "Paste a job description. Aalim finds the skills the role needs, flags requirements that could exclude people unfairly, and builds the week around them.",
+      "step": "Step {n}",
+      "fig": "Fig. {n}",
+      "steps": {
+        "week": {
+          "title": "A week at a fictional company",
+          "body": "About 50 minutes of messages, decisions, documents and conversations. Each answer shapes the next scene, so the time goes where it tells you most.",
+          "fig": "A scene from the week"
+        },
+        "range": {
+          "title": "Every answer narrows the range",
+          "body": "Aalim starts unsure and says so. Each scene adds evidence until the estimate is tight enough to trust.",
+          "fig": "One skill, scene by scene"
+        },
+        "evidence": {
+          "title": "Every score shows its working",
+          "body": "The candidate’s own words sit under every score, with the questions to ask next. Your team makes the decision.",
+          "fig": "The words behind a score"
+        }
+      },
+      "scene": {
+        "chapter": "Chapter 2 · Tuesday morning",
+        "progress": "Scene 4 of 9",
+        "from": "Layla Haddad",
+        "fromRole": "Head of Operations, Qamar Logistics",
+        "subject": "Port delay: the Henderson order",
+        "message": "Two of our three trucks are stuck at the port. The Henderson order is due at 4pm and they’ve already complained twice this month. What do you do first?",
+        "adaptive": "New, because of the last answer",
+        "replyLabel": "Your reply",
+        "reply": "I’d call Henderson before ten and offer a split delivery: half today from the Riyadh stock, the rest first thing tomorrow",
+        "saved": "Saved"
+      },
+      "range": {
+        "skill": "Prioritising under pressure",
+        "after": "After scene {n}",
+        "low": "Emerging",
+        "high": "Expert",
+        "level": "Advanced",
+        "expected": "Role needs"
+      },
+      "evidence": {
+        "label": "In the candidate’s words",
+        "source": "Scene 4 · Tuesday, 10:40",
+        "answerStart": "I’d call Henderson before ten and offer a split delivery:",
+        "answerEvidence": "half today from the Riyadh stock, the rest first thing tomorrow,",
+        "answerEnd": "then rebook the port slot.",
+        "skill": "Prioritising under pressure",
+        "level": "Advanced",
+        "askLabel": "Ask in the interview",
+        "ask": "Tell me about a plan you promised that couldn’t hold. Who did you tell first?"
+      }
+    },
+    "report": {
+      "label": "The report",
+      "markers": "ABCD",
+      "title": "The report your panel will actually read.",
+      "body": "Role fit with a confidence, a range for every skill, the candidate’s own words under every score, and the questions to ask in the interview.",
+      "legend": {
+        "fit": "Role fit, and how sure we are",
+        "ranges": "A range for every skill, against the level the role needs",
+        "words": "The candidate’s own words under every score",
+        "ask": "Questions for the interview, drawn from the gaps"
+      },
+      "frame": {
+        "label": "A candidate report in Aalim",
+        "crumb": "Operations Planner",
+        "candidate": "Rania Khalil",
+        "role": "Operations Planner · Qamar Logistics",
+        "share": "Share",
+        "roleFit": "Role fit",
+        "confidence": "High confidence",
+        "summary": "Plans for what can go wrong and says early who it will affect. Writes clearly under time pressure; budgeting was tested less.",
+        "mustHaves": "Must-have skills",
+        "expected": "Role needs Advanced",
+        "skills": {
+          "priorities": "Prioritising under pressure",
+          "stakeholders": "Keeping stakeholders informed",
+          "numbers": "Working with numbers"
+        },
+        "wordsLabel": "In her words",
+        "quoteStart": "I’d tell Omar first, before ten:",
+        "quoteEvidence": "if Thursday’s count moves, the stock report is late, so finance needs to hear it from us today,",
+        "quoteEnd": "not on Friday.",
+        "quoteSource": "Scene 7 · Wednesday, 15:05",
+        "askLabel": "Ask in the interview",
+        "ask1": "Tell me about a plan you promised that couldn’t hold. Who did you tell first?",
+        "ask2": "How would you check a budget you inherited?",
+        "evidenceCount": "23 quotes from 9 scenes"
+      }
+    },
     "modes": {
+      "label": "Hire, Grow, Team",
+      "title": "One engine, three ways to use it.",
+      "sub": "The same scenarios and the same standard of evidence, whether you are hiring, growing yourself or developing a team.",
       "hire": {
-        "title": "Hire",
-        "body": "Compare candidates on what they did in the scenarios, not how well they write a CV."
+        "word": "Hire",
+        "tag": "For hiring teams",
+        "body": "Compare candidates on what they did in the scenarios, not how well they write a CV.",
+        "role": "Operations Planner",
+        "col1": "Priorities",
+        "col2": "Stakeholders",
+        "c1": "Rania Khalil",
+        "c2": "Priya Raman",
+        "c3": "Mateo Fernández"
       },
       "grow": {
-        "title": "Grow",
+        "word": "Grow",
+        "tag": "For individuals",
         "body": "Find your level, practise where it matters and get feedback that names what to do next. Private to you.",
         "wellLabel": "What you did well",
         "well": "You named the trade-off before you decided, and said who would carry the cost.",
@@ -134,152 +193,61 @@
         "expert": "Check who else the delay affects before you promise a new time."
       },
       "team": {
-        "title": "Team",
+        "word": "Team",
+        "tag": "For managers",
         "body": "With each person’s consent, see your team’s strengths, gaps and who is ready to lead.",
         "heatLabel": "A team heatmap: six people across five skill areas",
         "heatCaption": "Six people across five skill areas. Darker is stronger."
       }
     },
     "trust": {
-      "title": "Built to be fair, and to stay fair",
-      "people": {
-        "title": "People decide",
-        "body": "Aalim never rejects anyone automatically. It gives your team evidence and the questions to ask next."
+      "label": "Trust",
+      "title": "Built to be fair, and to stay fair.",
+      "items": {
+        "people": {
+          "title": "People decide",
+          "body": "Aalim never rejects anyone automatically. It gives your team evidence and the questions to ask next."
+        },
+        "review": {
+          "title": "A person reviews, on request",
+          "body": "Any candidate can ask for a person to review every score. Until someone has, the report can’t be shared or exported."
+        },
+        "fairness": {
+          "title": "Checked for fairness",
+          "body": "Optional equal-opportunity answers show outcomes by group, with the four-fifths rule built in and small groups hidden."
+        },
+        "privacy": {
+          "title": "Data that belongs to people",
+          "body": "Personal development stays private. Anyone can download or delete their data, and old assessments are deleted on schedule."
+        },
+        "bilingual": {
+          "title": "Arabic and English, as equals",
+          "body": "Every scenario, report and email is written in both languages, and right to left is done properly."
+        }
       },
-      "fairness": {
-        "title": "Checked for fairness",
-        "body": "Optional equal-opportunity answers show outcomes by group, with the four-fifths rule built in and small groups hidden."
-      },
-      "privacy": {
-        "title": "Data that belongs to people",
-        "body": "Personal development stays private. Anyone can download or delete their data, and old assessments are deleted on schedule."
-      }
-    },
-    "footer": "Early version: use alongside interviews.",
-    "brandLink": "Brand",
-    "seeHow": "See how it works",
-    "hero": {
-      "eyebrow": "Skills assessment that shows its working",
-      "points": {
-        "time": "About 50 minutes per candidate",
-        "languages": "Arabic and English, as equals",
-        "people": "Never rejects anyone automatically"
-      }
-    },
-    "figure": {
-      "label": "A candidate report in Aalim",
-      "crumbRole": "Operations Planner",
-      "candidate": "Rania Khalil",
-      "share": "Share",
-      "role": "Operations Planner · Qamar Logistics",
-      "confidence": "High confidence",
-      "summaryLabel": "Summary",
-      "summary": "Plans for what can go wrong and says early who it will affect. Writes clearly under time pressure; budgeting was tested less.",
-      "skills": {
-        "priorities": "Prioritising under pressure",
-        "stakeholders": "Keeping stakeholders informed",
-        "numbers": "Working with numbers"
-      },
-      "evidenceSource": "Scene 4 · Tuesday, 10:40",
-      "askLabel": "Ask in the interview",
-      "ask1": "Tell me about a plan you promised that couldn’t hold. Who did you tell first?",
-      "ask2": "How would you check a budget you inherited?",
-      "evidenceLabel": "Evidence",
-      "evidenceCount": "23 quotes from 9 scenes",
-      "scene": "Scene 6 of 9",
-      "narrowing": "Narrowing with each answer",
-      "expected": "Role needs"
-    },
-    "promise": {
-      "label": "The promise, in both languages",
-      "caption": "Arabic and English are equals in Aalim, from the first scene to the final report. Every scenario, score and email is written for both."
-    },
-    "bento": {
-      "hire": {
-        "header": "Operations Planner · 18 candidates",
-        "c1": "Rania Khalil",
-        "c2": "Priya Raman",
-        "c3": "Mateo Fernández",
-        "skill1": "Priorities",
-        "skill2": "Stakeholders"
-      },
-      "fairness": {
-        "title": "Fairness you can check",
-        "body": "Selection rates by group, with the four-fifths rule built in and small groups hidden.",
+      "chart": {
+        "title": "Selection rate by group",
         "a": "Group A",
         "b": "Group B",
         "c": "Group C",
         "line": "Four-fifths line",
-        "chart": "Selection rate by group: A 100%, B 92%, C 86%, all above the four-fifths line"
-      },
-      "small": {
-        "voice": {
-          "title": "Spoken role-play",
-          "body": "Candidates can talk through conversations instead of typing them."
-        },
-        "ats": {
-          "title": "Fits your hiring system",
-          "body": "Results reach your ATS by signed webhook, the moment a report is ready."
-        },
-        "bilingual": {
-          "title": "Right to left, done properly",
-          "body": "Every scenario, report and email in Arabic and English."
-        },
-        "privacy": {
-          "title": "Private by default",
-          "body": "Development data stays with the person, who can export or delete it."
-        }
+        "label": "Selection rate by group: A 100%, B 92%, C 86%, all above the four-fifths line"
       }
     },
     "cta": {
       "title": "See what your candidates can actually do.",
       "body": "Set up your first assessment from a job description in a few minutes."
     },
-    "footerNav": {
-      "product": "Product",
-      "more": "More"
-    },
-    "film": {
-      "sub": "A realistic week at a fictional company. Every score backed by the candidate’s own words.",
-      "scroll": "Scroll to see how",
-      "b1title": "A week at a fictional company",
-      "b1body": "Messages, decisions, documents and conversations. About 50 minutes, and every answer shapes the next scene.",
-      "b2title": "Every answer narrows the range",
-      "b2body": "Aalim starts unsure and says so. Each scene adds evidence until the estimate is tight enough to trust.",
-      "b3title": "Every score shows its working",
-      "b3body": "The candidate’s own words sit under every score, with the questions to ask next. Your team decides.",
-      "scene": "Scene",
-      "of9": "of 9",
-      "chatFrom": "Omar Nasser",
-      "chat": "Can we move Thursday’s stock count? Finance needs the room.",
-      "sheetTitle": "Fuel costs, Q3",
-      "sheetNote": "12% over plan",
-      "emailSubject": "Port delay: the Henderson order",
-      "rail": {
-        "one": "The world",
-        "two": "The range",
-        "three": "The evidence"
-      },
-      "noEvidence": "No evidence yet"
-    },
-    "product": {
-      "eyebrow": "The report",
-      "title": "The report your panel will actually read."
-    },
-    "name": {
-      "label": "The name",
-      "title": "In Arabic, عالم is a world, and someone who knows it deeply.",
-      "body": "So we build a world for each candidate, and find out what they know in it.",
+    "footer": {
+      "promise": "Evidence, not impressions.",
+      "nameTitle": "In Arabic, the same four letters spell a world and someone who knows it deeply.",
+      "name": "So we build a world for each candidate, and find out what they know in it.",
       "alam": "a world",
-      "alim": "one who knows"
-    },
-    "showcase": {
-      "hireTag": "For hiring teams",
-      "growTag": "For individuals",
-      "teamTag": "For managers"
-    },
-    "safeguards": {
-      "eyebrow": "Safeguards"
+      "alim": "one who knows",
+      "note": "Early version: use alongside interviews.",
+      "product": "Product",
+      "more": "More",
+      "brand": "Brand"
     }
   },
   "auth": {
