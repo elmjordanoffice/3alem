@@ -517,6 +517,20 @@
       "HIRE": "Hired",
       "HOLD": "On hold",
       "DECLINE": "Declined"
+    },
+    "actions": {
+      "title": "Next actions",
+      "others": " and {n} more",
+      "kind": {
+        "review": "Review requested",
+        "interview": "Ready to interview",
+        "decide": "Waiting for a decision",
+        "nudge": "Not started"
+      },
+      "review": "{name} asked for a person to review every score{others}. Confirm the review before sharing or deciding.",
+      "interview": "{name} is invited to interview{others}: the kit and scorecard are ready.",
+      "decide": "You read {name}'s report {days} days ago{others}. Record a decision so they hear back.",
+      "nudge": "{name} hasn't started after {days} days{others}. Resend the invitation from the role page."
     }
   },
   "framework": {

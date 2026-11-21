@@ -1,9 +1,10 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
-import { ClipboardList, Plus, Sprout } from "lucide-react";
+import { ArrowRight, ClipboardList, Plus, Sprout } from "lucide-react";
 import { requireViewer, viewerCan, tenantOf, type Viewer } from "@/lib/auth/session";
 import { homeOverview, type HomeOverview } from "@/lib/hire/recruiter";
+import { nextActions, type NextAction } from "@/lib/hire/next-actions";
 import { getGrowProfile } from "@/lib/grow/profile";
 import { withTenant } from "@/lib/db";
 import { formatNumber } from "@/lib/i18n/format";
@@ -48,6 +49,7 @@ export default async function AppHome({ searchParams }: { searchParams: Promise<
   const firstName = viewer.user.name.split(" ")[0] ?? viewer.user.name;
   const hiring = Boolean(org) && viewerCan(viewer, "assessment.view");
   const overview = hiring ? await homeOverview(viewer as Parameters<typeof homeOverview>[0]) : null;
+  const actions = hiring && viewerCan(viewer, "report.view") ? await nextActions(viewer as Parameters<typeof nextActions>[0]) : [];
   const teams = org && viewerCan(viewer, "team.view")
     ? await withTenant(tenantOf(viewer), (tx) => tx.team.findMany({ select: { id: true, name: true, members: { select: { status: true } } }, orderBy: { createdAt: "asc" }, take: 4 }))
     : [];
@@ -138,6 +140,7 @@ export default async function AppHome({ searchParams }: { searchParams: Promise<
       {overview ? (
         <div className="grid gap-x-10 gap-y-12 lg:grid-cols-[minmax(0,1fr)_19rem]">
           <div className="flex min-w-0 flex-col gap-12">
+            {actions.length ? <NextActions actions={actions} fmt={fmt} t={t} /> : null}
             <ReviewQueue overview={overview} fmt={fmt} t={t} />
             <Roles overview={overview} fmt={fmt} t={t} canCreate={viewerCan(viewer, "assessment.create")} />
           </div>
@@ -201,6 +204,44 @@ function SectionTitle({ id, title, count, href, linkLabel }: { id: string; title
         </Link>
       ) : null}
     </div>
+  );
+}
+
+/** The pipeline as a to-do list: the most urgent first, each one a link to where it's done. */
+function NextActions({ actions, fmt, t }: { actions: NextAction[]; fmt: Fmt; t: T }) {
+  const line = (a: NextAction) => {
+    const others = a.count > 1 ? t("actions.others", { n: fmt.n(a.count - 1) }) : "";
+    switch (a.kind) {
+      case "review":
+        return t("actions.review", { name: a.name, others });
+      case "interview":
+        return t("actions.interview", { name: a.name, others });
+      case "decide":
+        return t("actions.decide", { name: a.name, days: fmt.n(a.days), others });
+      case "nudge":
+        return t("actions.nudge", { name: a.name, days: fmt.n(a.days), others });
+    }
+  };
+  return (
+    <section aria-labelledby="actions-h">
+      <SectionTitle id="actions-h" title={t("actions.title")} />
+      <ol className="overflow-hidden rounded-card bg-surface shadow-card">
+        {actions.map((a, i) => (
+          <li key={a.kind} className="border-b border-border last:border-b-0">
+            <Link href={a.href} className="group grid grid-cols-[2rem_minmax(0,1fr)_auto] items-center gap-3 px-4 py-3.5 transition-colors hover:bg-surface-subtle focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus sm:px-5">
+              <span className={cn("font-display text-lg font-extrabold tabular [font-stretch:125%]", i === 0 ? "text-text" : "text-tertiary")} aria-hidden>
+                {fmt.n(i + 1)}
+              </span>
+              <span className="min-w-0">
+                <span className="eyebrow block text-tertiary">{t(`actions.kind.${a.kind}`)}</span>
+                <span className="mt-0.5 block text-sm text-text">{line(a)}</span>
+              </span>
+              <ArrowRight className="size-4 text-tertiary transition-transform group-hover:translate-x-0.5 flip-rtl" aria-hidden />
+            </Link>
+          </li>
+        ))}
+      </ol>
+    </section>
   );
 }
 

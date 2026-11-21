@@ -52,6 +52,13 @@ test("an interviewer scores blind, then sees the assessment and records a decisi
 
     const row = await withDb(async (c) => (await c.query(`SELECT outcome FROM hiring_decision WHERE "sessionId" = $1`, [sessionId])).rows[0]);
     expect(row?.outcome).toBe("ADVANCE");
+
+    // Home turns it into a to-do once the scorecard is gone: the kit is ready.
+    await withDb((c) => c.query(`DELETE FROM interview_scorecard WHERE "sessionId" = $1`, [sessionId]));
+    await page.goto("/app", { waitUntil: "networkidle" });
+    const actions = page.getByRole("region", { name: "Next actions" });
+    await expect(actions).toContainText("Ready to interview");
+    await expect(actions).toContainText(/is invited to interview/);
   } finally {
     await clean();
   }
