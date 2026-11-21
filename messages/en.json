@@ -2313,92 +2313,387 @@
     "confirmAction": "Delete permanently"
   },
   "brandbook": {
-    "title": "Aalim brand",
-    "metaDescription": "How Aalim looks, sounds and behaves: the brand platform, logo, colour, type, voice and assets.",
+    "title": "Brand book",
+    "metaDescription": "Range, the Aalim brand: the idea, the mark, lockups, colour, type, the narrowing motif, voice and files, in English and Arabic.",
+    "topbar": {
+      "label": "Brand book",
+      "version": "v1.0",
+      "home": "Aalim home"
+    },
+    "navLabel": "Brand book sections",
     "nav": {
-      "story": "Story",
-      "platform": "Platform",
-      "voice": "Voice",
-      "logo": "Logo",
+      "idea": "The idea",
+      "mark": "The mark",
+      "lockups": "Lockups",
+      "space": "Space and size",
+      "misuse": "Misuse",
       "colour": "Colour",
-      "type": "Type",
-      "signatures": "Signatures",
-      "imagery": "Imagery and motion",
+      "type": "Typography",
+      "motif": "The narrowing",
+      "ui": "Interface",
+      "voice": "Voice",
       "downloads": "Downloads"
     },
-    "hero": {
-      "kicker": "Brand book",
-      "tagline": "Evidence, not impressions.",
-      "intro": "How Aalim looks, sounds and behaves, in English and Arabic. Everything here is built from the same components and tokens as the product, so it can’t drift."
-    },
-    "story": {
-      "title": "One word, two meanings",
-      "letters": "ع ا ل م",
-      "body1": "In Arabic, the same four letters spell ʿālim, someone who knows a subject deeply, and ʿālam, a world.",
-      "body2": "Aalim builds a world for each person, a realistic week at a fictional company, and finds out what they know in it. The name is the product.",
-      "usage": "Write Aalim in English text and عالم in Arabic. The lowercase “aalim” appears only in the wordmark.",
-      "alimLabel": "ʿālim",
-      "alimMeaning": "one who knows deeply",
-      "alamLabel": "ʿālam",
-      "alamMeaning": "a world"
-    },
-    "platform": {
-      "title": "What we stand for",
-      "positioningLabel": "Positioning",
-      "positioning": "For organisations that hire and develop people, Aalim is the skills assessment that shows its working: realistic scenarios that adapt to every answer, and every score backed by the person’s own words.",
-      "promiseLabel": "Promise",
-      "promise": "Evidence, not impressions.",
-      "valuesTitle": "What we hold to",
-      "values": {
-        "evidence": {
-          "title": "Show the evidence",
-          "body": "Every claim links to the person’s own words. If we can’t quote it, we don’t say it."
-        },
-        "certainty": {
-          "title": "Be honest about certainty",
-          "body": "Ranges, not verdicts. We say how sure we are, in plain words."
-        },
-        "people": {
-          "title": "People decide",
-          "body": "Aalim informs decisions about people. It never makes them, and it never rejects anyone."
-        },
-        "fair": {
-          "title": "Fair by design",
-          "body": "Checked for adverse impact, accessible to everyone, private by default."
-        },
-        "bilingual": {
-          "title": "Bilingual from the first line",
-          "body": "Arabic and English are equals. Neither is a translation added later."
-        }
-      },
-      "personalityTitle": "Personality",
-      "weAre": "We are",
-      "weAreNot": "never",
-      "traits": {
-        "rigorous": [
-          "Rigorous",
-          "cold"
-        ],
-        "warm": [
-          "Warm",
-          "cute"
-        ],
-        "direct": [
-          "Direct",
-          "blunt"
-        ],
-        "confident": [
-          "Confident",
-          "certain"
-        ],
-        "modern": [
-          "Modern",
-          "trendy"
-        ]
+    "cover": {
+      "eyebrow": "Aalim brand book",
+      "statement": "Every answer narrows what we know about a person. The mark is that process: wide bands of uncertainty tightening, step by step, into one point. It also reads as an A. Ink, bone and a single vermilion signal.",
+      "contents": "Contents",
+      "poster": "Every answer narrows the range",
+      "meta": {
+        "version": "Version",
+        "versionValue": "1.0",
+        "updated": "Updated",
+        "updatedValue": "November 2026",
+        "scope": "Covers",
+        "scopeValue": "Product, marketing, email"
       }
     },
+    "idea": {
+      "title": "The idea",
+      "lede": "Every answer narrows the range.",
+      "body1": "An assessment starts out knowing almost nothing: the person could be anywhere on the scale. Each answer is evidence, and each piece of evidence rules something out. The band of plausible levels tightens until what is left is an estimate we can stand behind, with the person’s own words underneath it.",
+      "body2": "Range draws exactly that. Wide bands below, narrower above, and one vermilion point at the top: the estimate. Centre the bands and they stack into an A, for Aalim.",
+      "figure": {
+        "after": "After {count, plural, one {# answer} other {# answers}}",
+        "estimate": "Estimate",
+        "low": "Emerging",
+        "high": "Expert",
+        "caption": "One skill, measured. The band is where the level could be, and it narrows with every answer.",
+        "centred": "Centre the same drawing and it becomes the mark."
+      },
+      "nameTitle": "The name",
+      "nameBody": "In Arabic, the same four letters spell ʿālim, someone who knows a subject deeply, and ʿālam, a world. Aalim builds a world for each person, a realistic week at a fictional company, and finds out what they know in it.",
+      "letters": "ع ا ل م",
+      "alim": "عالِم",
+      "alimMeaning": "ʿālim: one who knows",
+      "alam": "عالَم",
+      "alamMeaning": "ʿālam: a world",
+      "usage": "Write Aalim in English text and عالِم in Arabic. The capitals AALIM belong to the wordmark.",
+      "traitsTitle": "Three words",
+      "traits": {
+        "exact": {
+          "title": "Exact",
+          "body": "Measured and aligned. If a line is there, it means something."
+        },
+        "warm": {
+          "title": "Warm",
+          "body": "Bone, not white; stone, not grey. A product about people should feel made by people."
+        },
+        "honest": {
+          "title": "Honest about certainty",
+          "body": "Ranges, not verdicts. We show how sure we are, and why."
+        }
+      }
+    },
+    "mark": {
+      "title": "The mark",
+      "lede": "Four rows on a 64-unit square.",
+      "body": "Every row is 11 units tall, 3.5 apart. The bands step in by 8 units a side, 58, 42, 26, and the fourth row is the step after that: a band too narrow to be a band, the dot. The ends are fully round. A line through the band ends meets just above the dot: the legs of the A.",
+      "figureLabel": "The mark on its 64-unit grid, with its measurements",
+      "labels": {
+        "units": "64",
+        "row": "11",
+        "gap": "3.5",
+        "step": "8",
+        "dot": "⌀ 11",
+        "radius": "r 5.5"
+      },
+      "specs": {
+        "grid": "Grid",
+        "gridValue": "64 × 64 units",
+        "rows": "Rows",
+        "rowsValue": "11 tall, 3.5 apart",
+        "bands": "Bands",
+        "bandsValue": "58 · 42 · 26, centred",
+        "dot": "Dot",
+        "dotValue": "⌀ 11, vermilion",
+        "ends": "Ends",
+        "endsValue": "Fully round, r 5.5",
+        "legs": "Legs",
+        "legsValue": "Tangent to every band end"
+      },
+      "colourTitle": "Colour",
+      "colourBody": "The bands take the opposite of the ground: ink on bone, bone on ink. The dot is vermilion, always, except where only one colour can be printed.",
+      "onBone": "On bone",
+      "onInk": "On ink",
+      "oneColour": "One colour",
+      "onSignal": "On vermilion, app tile only"
+    },
+    "lockups": {
+      "title": "Lockups",
+      "lede": "One drawing, six arrangements. Use the files; never rebuild them.",
+      "items": {
+        "horizontal": {
+          "name": "Horizontal, bilingual",
+          "body": "The primary logo, wherever both languages appear."
+        },
+        "english": {
+          "name": "English",
+          "body": "English-only layouts and tight horizontal spaces."
+        },
+        "arabic": {
+          "name": "Arabic",
+          "body": "Arabic-only layouts."
+        },
+        "mono": {
+          "name": "One colour",
+          "body": "Stamps, embossing and one-colour print. The dot joins the bands."
+        },
+        "reverse": {
+          "name": "Reversed",
+          "body": "On ink. Bands and letters in bone; the dot stays vermilion."
+        },
+        "tile": {
+          "name": "App tile",
+          "body": "The mark at 70% on an ink square with a 22.5% corner. The vermilion tile is for marketing only."
+        }
+      },
+      "wordmarkTitle": "The wordmark",
+      "wordmarkBody": "AALIM in Archivo Expanded ExtraBold, tracked open a little. عالم in Beiruti Black, never tracked, its alif rising 18% above the Latin capitals so both read at the same size. Baselines align, and a hairline at 22% ink separates them. Every file is outlined, so no font is needed to open it.",
+      "guides": {
+        "cap": "Cap height",
+        "baseline": "Baseline",
+        "rise": "Alif +18%"
+      }
+    },
+    "space": {
+      "title": "Space and size",
+      "lede": "Give the logo room, and never draw it smaller than it can be read.",
+      "clearTitle": "Clear space",
+      "clearBody": "Keep x clear on every side, where x is the height of the capitals in AALIM. Around the mark on its own, keep half its width. Text, edges and other logos stay outside.",
+      "x": "x",
+      "minTitle": "Minimum sizes",
+      "minBody": "Shown at actual size. Smaller than this, the bands close up: use the mark alone.",
+      "sizes": {
+        "mark": "Mark",
+        "tile": "App tile",
+        "horizontal": "Horizontal",
+        "english": "English"
+      },
+      "px": "{value} px",
+      "print": "In print: the horizontal lockup at least 30 mm wide, the mark at least 5 mm."
+    },
+    "misuse": {
+      "title": "Misuse",
+      "lede": "The logo is a drawing, not a typeface. Don’t change it.",
+      "dont": "Don’t",
+      "items": {
+        "recolour": "Recolour the bands or the dot",
+        "stretch": "Stretch or squash it",
+        "rotate": "Rotate it",
+        "effects": "Add shadows, glows or gradients",
+        "ground": "Put it on vermilion or a busy picture",
+        "retype": "Retype the wordmark in another font",
+        "rearrange": "Rearrange the parts",
+        "redraw": "Redraw the bands or change their steps"
+      }
+    },
+    "colour": {
+      "title": "Colour",
+      "lede": "Ink, bone and a single vermilion signal. The neutrals are warm stone so the vermilion belongs. Everything is flat: no gradients, no glows.",
+      "shareTitle": "Share of a typical screen",
+      "swatches": {
+        "ink": {
+          "name": "Ink",
+          "role": "Text, the logo, primary actions and the one hero panel on each screen."
+        },
+        "bone": {
+          "name": "Bone",
+          "role": "The canvas. White cards sit on it, edged with a hairline."
+        },
+        "signal": {
+          "name": "Vermilion",
+          "role": "The signal: the estimate, range bands, focus and at most one call to action per screen. Ink text on it, never bone."
+        },
+        "evidence": {
+          "name": "Evidence",
+          "role": "The highlighter behind a person’s own words. Never decoration."
+        },
+        "white": {
+          "name": "White",
+          "role": "Cards and panels on bone."
+        }
+      },
+      "stoneTitle": "Stone",
+      "stoneBody": "Warm neutrals for secondary text, hairlines and borders.",
+      "stone": {
+        "s700": "Secondary text",
+        "s600": "Tertiary text",
+        "s500": "Icons, large text",
+        "s300": "Strong hairlines",
+        "s200": "Hairlines"
+      },
+      "pairsTitle": "Contrast",
+      "pairsBody": "WCAG ratios for every pairing of the core colours. AA needs 4.5:1 for text, and 3:1 for large text (24 px, or 19 px bold) and graphics. Every pairing used in the product is tested in code.",
+      "levels": {
+        "aaa": "AAA",
+        "aa": "AA",
+        "large": "Large",
+        "fail": "Avoid"
+      },
+      "fg": "Text",
+      "bg": "Ground",
+      "ruleTitle": "The vermilion rule",
+      "ruleBody": "Vermilion is a ground or a graphic. Text on it is ink. On bone it is never small text: at {ratio}:1 it passes only for large display and shapes."
+    },
+    "type": {
+      "title": "Typography",
+      "lede": "Archivo, wide and heavy, for what we declare. Beiruti for Arabic display. IBM Plex for everything people read and use.",
+      "archivo": {
+        "name": "Archivo",
+        "role": "Latin display",
+        "spec": "ExtraBold · width 125% · capitals",
+        "sample": "Every answer narrows the range"
+      },
+      "beiruti": {
+        "name": "Beiruti",
+        "role": "Arabic display",
+        "spec": "Black · ExtraBold",
+        "sample": "كل إجابة تضيّق النطاق"
+      },
+      "plex": {
+        "name": "IBM Plex Sans",
+        "role": "Reading and interface, in both scripts",
+        "spec": "Regular · Medium · SemiBold",
+        "sampleEn": "Strongest in diagnosing problems. Ask about stakeholder management in the interview: the evidence there is thin.",
+        "sampleAr": "أقوى ما يكون في تشخيص المشكلات. اسأل عن إدارة الأطراف المعنية في المقابلة، فالأدلة على ذلك قليلة."
+      },
+      "widthTitle": "Width is the voice",
+      "widthBody": "Archivo runs from condensed to expanded. Range uses the widest setting for display, so even short words carry weight.",
+      "scaleTitle": "Scale",
+      "roles": {
+        "display": "Display",
+        "h1": "Page title",
+        "h2": "Section title",
+        "title": "Card title",
+        "body": "Body",
+        "small": "Small",
+        "label": "Label"
+      },
+      "samples": {
+        "display": "Good fit",
+        "h1": "Operations Planner",
+        "h2": "Strengths",
+        "title": "Prioritising under pressure",
+        "body": "Called the client before ten and offered a split delivery.",
+        "small": "Updated two minutes ago",
+        "label": "Role fit"
+      },
+      "arabicTitle": "Rules for Arabic",
+      "arabicRules": [
+        "Arabic display is Beiruti, never Archivo. Arabic has no capitals and is never letter-spaced: tracking breaks the joins.",
+        "Give it room: line height 1.65 for reading and about 1.3 for display, so dots and marks never touch.",
+        "Set Arabic display a step larger than the Latin beside it. In the logo, عالم rises 18% above the capitals.",
+        "Use the fonts’ own weights. Never stretch, slant or fake bold Arabic.",
+        "Mirror the layout, not the content: direction, alignment and range bands flip; logos, numbers, links and code don’t.",
+        "Latin digits by default; Arabic-Indic digits are a personal setting. Use Arabic punctuation: ، ؛ ؟"
+      ],
+      "latinTitle": "Rules for Latin",
+      "latinRules": [
+        "Capitals for display and labels only. Titles and sentences are in sentence case.",
+        "Archivo never sets running text. Reading is Plex, at 16 px or more.",
+        "Labels are tracked open by 14%. Display is set tight and never tracked."
+      ]
+    },
+    "motif": {
+      "title": "The narrowing",
+      "lede": "The mark’s idea, at work in the product.",
+      "bandsTitle": "Range bands",
+      "bandsBody": "Every estimate is a band on the 1–5 scale: wide while the evidence is thin, narrow once it settles. The dot is the estimate and the tick is the level the role expects. Bands are vermilion, horizontal and always data.",
+      "states": {
+        "early": "After 3 answers",
+        "mid": "After 8 answers",
+        "late": "After 15 answers"
+      },
+      "legend": {
+        "band": "Plausible range",
+        "dot": "Estimate",
+        "tick": "Expected for the role"
+      },
+      "heroTitle": "The hero panel",
+      "heroBody": "Each screen has one filled panel, in ink, holding its one verdict. The mark’s bands sit faintly in its corner, and the dot keeps its vermilion.",
+      "hero": {
+        "eyebrow": "Role fit",
+        "verdict": "Good fit",
+        "body": "Strongest in problem diagnosis. Confirm stakeholder management in the interview.",
+        "skills": [
+          [
+            "Judgement",
+            "Advanced"
+          ],
+          [
+            "Management",
+            "Proficient"
+          ],
+          [
+            "Communication",
+            "Advanced"
+          ]
+        ]
+      },
+      "cornerLabel": "Corner mark: bands at 9%, dot in vermilion",
+      "openerTitle": "The section opener",
+      "openerBody": "A hairline with a short vermilion tick at its start opens a section. In Arabic the tick sits on the right.",
+      "evidenceTitle": "The evidence highlight",
+      "evidenceBody": "The person’s own words, marked like a reviewer’s highlighter. Only verbatim quotes get it.",
+      "evidenceSample": "Before I reply to the client, I’d check",
+      "evidenceMark": "whether the delay affects the other two orders on the same route.",
+      "rule": "Bands run horizontally, wider means less certain, and the dot is the conclusion. Outside the logo and the hero corner, bands only ever show data."
+    },
+    "ui": {
+      "title": "Interface",
+      "lede": "The brand in the product, built from the same components.",
+      "buttonsTitle": "Buttons",
+      "buttonsBody": "Ink is the action colour. The vermilion signal button is the screen’s one call to action, if it has one.",
+      "variants": {
+        "primary": "Primary",
+        "signal": "Signal",
+        "secondary": "Secondary",
+        "ghost": "Ghost",
+        "link": "Link"
+      },
+      "buttons": {
+        "primary": "Publish",
+        "signal": "Start the assessment",
+        "secondary": "Preview",
+        "ghost": "Cancel",
+        "link": "See the evidence"
+      },
+      "badgesTitle": "Badges",
+      "badges": {
+        "neutral": "Draft",
+        "accent": "Interview kit",
+        "success": "Ready",
+        "warning": "Needs review",
+        "critical": "Expired",
+        "info": "Shared"
+      },
+      "reportTitle": "A report, in miniature",
+      "candidate": "Operations Team Lead · Grace Mensah",
+      "skills": [
+        [
+          "Prioritising under pressure",
+          "Advanced"
+        ],
+        [
+          "Keeping stakeholders informed",
+          "Proficient"
+        ],
+        [
+          "Working with numbers",
+          "Advanced"
+        ]
+      ],
+      "quoteLabel": "In their words",
+      "quoteBefore": "I’d agree a stop rule with the team:",
+      "quoteMark": "if we see more than five duplicates in a day, we pause and roll back.",
+      "nextLabel": "Next step",
+      "nextBody": "Interview kit ready: 4 focus areas.",
+      "nextCta": "Open the kit"
+    },
     "voice": {
-      "title": "How we sound",
+      "title": "Voice",
+      "lede": "Exact, warm and honest about certainty. We sound like a careful colleague, not a machine or a salesperson.",
       "principles": {
         "plain": {
           "title": "Plain words",
@@ -2406,7 +2701,7 @@
         },
         "specific": {
           "title": "Specific over impressive",
-          "body": "“Spotted that station 2 closes at noon” beats “strong analytical skills”."
+          "body": "“Spotted that station 2 closes at noon”, not “strong analytical skills”."
         },
         "ranges": {
           "title": "Numbers with ranges and reasons",
@@ -2414,23 +2709,23 @@
         },
         "calm": {
           "title": "Calm",
-          "body": "No exclamation marks, no urgency tricks, no hype words like “revolutionary” or “AI-powered”."
+          "body": "No exclamation marks, urgency tricks or hype words like “revolutionary” or “AI-powered”."
         },
         "verbs": {
           "title": "Verbs on buttons",
-          "body": "Sentence case and active voice. A button says what happens: “Publish”, then “Published”."
+          "body": "Sentence case and active voice. The button says what happens: “Publish”, then “Published”."
         }
       },
       "toneTitle": "One voice, three tones",
       "tones": {
         "candidates": {
           "title": "To candidates",
-          "body": "Calm and reassuring, clear about what happens to their data.",
+          "body": "Calm and reassuring, clear about their data.",
           "example": "Take the time you need. Your answers save as you type."
         },
         "teams": {
           "title": "To hiring teams",
-          "body": "Precise and brief. Lead with what to do next.",
+          "body": "Precise and brief. Lead with what to do.",
           "example": "17 reports haven’t been opened yet."
         },
         "growth": {
@@ -2444,121 +2739,54 @@
       "notThat": "Not",
       "examples": [
         [
-          "You were strongest at evaluating evidence.",
+          "You were strongest when weighing evidence.",
           "Congratulations! You’re a top performer!"
         ],
         [
-          "Scenarios adapt as people answer. Every score quotes their own words.",
+          "Scenarios adapt to each answer, and every score quotes the person’s own words.",
           "Our AI-powered engine revolutionises hiring."
         ],
         [
-          "Partial fit. Below the expected level on management: explore it in the interview.",
+          "Partial fit. Below the expected level in management: explore it in the interview.",
           "The candidate failed the assessment."
         ]
       ]
     },
-    "logo": {
-      "title": "Logo",
-      "symbolTitle": "The symbol",
-      "symbolBody": "The narrowing range in miniature: a scale, the band where the person’s level probably lies, and the estimate inside it. The band is saffron because saffron always means evidence.",
-      "anatomy": {
-        "scale": "Scale",
-        "band": "Band of plausible levels",
-        "estimate": "Estimate"
-      },
-      "wordmarkTitle": "The wordmark",
-      "wordmarkBody": "“aalim” in Alexandria Semibold, with the dot of the i in saffron: the evidence, again. عالم is set in the same typeface, on the same baseline, separated by a hairline.",
-      "lockupsTitle": "Lockups",
-      "lockups": {
-        "primary": "Primary, bilingual",
-        "english": "English",
-        "arabic": "Arabic",
-        "reverse": "On ink"
-      },
-      "rulesTitle": "Using the logo",
-      "clearSpace": "Clear space: at least the height of the band on every side.",
-      "minSize": "Minimum size: symbol 16 px; bilingual lockup 120 px wide.",
-      "dontsTitle": "Don’t",
-      "donts": {
-        "recolour": "Recolour the dot or the band",
-        "stretch": "Stretch or condense it",
-        "busy": "Place it on saffron or busy images",
-        "redraw": "Retype the wordmark in another font"
-      }
-    },
-    "colour": {
-      "title": "Colour",
-      "body": "Mostly quiet stone, one deep ink for brand moments, indigo only for actions, saffron only for evidence.",
-      "ratio": "Roughly, on a typical screen",
-      "swatches": {
-        "ink": {
-          "name": "Ink",
-          "role": "Brand surfaces: verdicts, chapter cards, hero panels."
-        },
-        "indigo": {
-          "name": "Indigo",
-          "role": "Primary actions, focus and current selection. Nothing else."
-        },
-        "saffron": {
-          "name": "Saffron",
-          "role": "Evidence and the dot in the logo. Never decoration."
-        },
-        "stone": {
-          "name": "Stone",
-          "role": "Backgrounds, text and borders: most of every screen."
-        },
-        "levels": {
-          "name": "Level ramp",
-          "role": "Skill levels and role fit. One hue, never red and green."
-        }
-      },
-      "darkNote": "Every colour has a dark-mode pair, and every text pairing is tested for WCAG AA contrast."
-    },
-    "type": {
-      "title": "Type",
-      "displayTitle": "Readex Pro, for everything",
-      "displayBody": "One family drawn for Arabic and Latin together, so both languages share one voice, from page titles and verdicts to body text and numbers.",
-      "textTitle": "Weights, not families",
-      "textBody": "Hierarchy comes from size and weight: 600 for titles and big numbers, 500 for labels, 400 for reading.",
-      "sampleDisplay": "See what people can do",
-      "sampleText": "Every score in Aalim comes with a range, a confidence and the person’s own words.",
-      "rules": "Arabic gets more line height (1.65 for text, 1.32 for display) and no letter spacing. Numbers use Latin digits by default; Arabic-Indic digits are a personal setting."
-    },
-    "signatures": {
-      "title": "Signatures",
-      "rangeTitle": "The narrowing range",
-      "rangeBody": "Every estimate is drawn as a band on the 1–5 scale. It narrows as evidence comes in, and a tick marks the level the role expects. It is the brand’s one moving idea.",
-      "evidenceTitle": "The evidence highlighter",
-      "evidenceBody": "The candidate’s verbatim words are marked in saffron, the way a careful reviewer marks a quote.",
-      "evidenceSample": "Before I answer the client, I’d check",
-      "evidenceMark": "whether the delay affects the other two orders on the same route.",
-      "fieldTitle": "The range field",
-      "fieldBody": "Rows of estimates narrowing from lavender (uncertain) to saffron (evidenced). A texture for brand surfaces and social images, never inside the product."
-    },
-    "imagery": {
-      "title": "Imagery, icons and motion",
-      "imageryTitle": "Imagery",
-      "imageryBody": "Show the product and the range field. If you show people, show real workplaces in the region, in natural light, doing work rather than posing. Never robots, brains or circuit boards for “AI”.",
-      "iconsTitle": "Icons",
-      "iconsBody": "Lucide, 1.75 stroke, 16 or 20 px, in text or secondary colour. Never multicolour.",
-      "motionTitle": "Motion",
-      "motionBody": "One orchestrated moment per page at most: the band narrowing. Everything else responds to the person in 150–250 ms, and all of it stops under reduced motion."
-    },
     "downloads": {
       "title": "Downloads",
-      "body": "Outlined vector files (no font needed) and PNG renders, generated from the brand fonts by npm run brand:assets.",
+      "lede": "Outlined vectors (no fonts needed) and PNG renders, generated from the brand fonts by <code>npm run brand:assets</code>.",
+      "groups": {
+        "logos": "Logos",
+        "marks": "Mark, tiles and wordmarks",
+        "raster": "PNG renders",
+        "social": "Social images"
+      },
       "items": {
-        "logo": "Bilingual logo",
-        "logoReverse": "Bilingual logo, on ink",
-        "logoEn": "English logo",
-        "logoAr": "Arabic logo",
-        "symbol": "Symbol (app icon)",
+        "logo": "Horizontal, bilingual",
+        "logoReverse": "Horizontal, reversed",
+        "logoEn": "English",
+        "logoEnReverse": "English, reversed",
+        "logoAr": "Arabic",
+        "logoArReverse": "Arabic, reversed",
+        "logoMono": "One colour",
+        "mark": "Mark",
+        "markReverse": "Mark, reversed",
+        "symbol": "App tile",
+        "symbolSignal": "App tile, vermilion",
         "wordmark": "Wordmark",
         "wordmarkAr": "Arabic wordmark",
-        "field": "Range field",
-        "og": "Social image (English)",
-        "ogAr": "Social image (Arabic)"
-      }
+        "logoPng": "Horizontal",
+        "logoReversePng": "Horizontal, reversed",
+        "symbolPng": "App tile, 1024 px",
+        "ogEn": "Social image, English",
+        "ogAr": "Social image, Arabic",
+        "email": "Email header"
+      },
+      "download": "Download {name}"
+    },
+    "footer": {
+      "line": "Range is the Aalim brand. Version 1.0, November 2026.",
+      "back": "Back to Aalim"
     }
   },
   "emails": {
