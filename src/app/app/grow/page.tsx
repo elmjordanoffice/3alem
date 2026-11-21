@@ -18,6 +18,8 @@ import { PageContainer } from "@/components/app/page-header";
 import { Button } from "@/components/ui/button";
 import { SkillRadar } from "@/components/report/charts";
 import { PracticeLauncher } from "@/components/grow/practice-launcher";
+import { MomentumCard } from "@/components/grow/momentum";
+import { momentumFor, momentumView } from "@/lib/grow/momentum-data";
 
 function daysAgo(d: Date) {
   return Math.floor((Date.now() - d.getTime()) / 86400_000);
@@ -37,6 +39,7 @@ export default async function GrowHome() {
   const profile = await getGrowProfile(viewer.user.id);
   if (!profile) redirect("/app/grow/onboarding");
   const sessions = await growSessions(viewer.user.id);
+  const momentum = momentumView(await momentumFor(viewer.user.id, locale));
   const inProgress = sessions.find((s) => ["STARTED", "IN_PROGRESS", "PAUSED"].includes(s.status));
   const latest = sessions.find((s) => s.report?.status === "READY");
   const report = (latest?.report?.content as unknown as ReportContent) ?? null;
@@ -176,6 +179,7 @@ export default async function GrowHome() {
         </div>
 
         <aside className="flex flex-col gap-8">
+          {report ? <MomentumCard m={momentum} /> : null}
           {report ? (
             <section aria-labelledby="snap-h" className="rounded-card bg-surface shadow-card p-5">
               <h2 id="snap-h" className="text-lg font-semibold text-text">{t("snapshot.title")}</h2>

@@ -22,9 +22,10 @@ import { ChainTask } from "@/components/candidate/tasks/chain-task";
 import { EvidenceCard } from "@/components/report/evidence-card";
 import { LevelLabel } from "@/components/report/level";
 import { PracticeLauncher } from "./practice-launcher";
+import { PracticeCelebration, type CelebrationView } from "./momentum";
 import { PageContainer } from "@/components/app/page-header";
 
-export function PracticeRunner({ id, item, feedback, reflection, answerText }: { id: string; item: PracticeItem; feedback: StoredFeedback | null; response: unknown; reflection: string; answerText: string | null }) {
+export function PracticeRunner({ id, item, feedback, reflection, answerText, celebration = null }: { id: string; item: PracticeItem; feedback: StoredFeedback | null; response: unknown; reflection: string; answerText: string | null; celebration?: CelebrationView | null }) {
   const t = useTranslations("grow.practice");
   const ti = useTranslations("candidate.item");
   const router = useRouter();
@@ -103,6 +104,7 @@ export function PracticeRunner({ id, item, feedback, reflection, answerText }: {
 
       {feedback ? (
         <section aria-labelledby="fb" className="mt-12 flex flex-col gap-6 border-t border-border pt-10 animate-slide-up">
+          {celebration ? <PracticeCelebration c={celebration} /> : null}
           <h2 id="fb" className="text-lg font-semibold text-text">{t("feedbackTitle")}</h2>
           <div className="grid gap-6 lg:grid-cols-2">
             <div className="flex flex-col gap-3">

@@ -1993,6 +1993,58 @@
         "match": "Your view matches the evidence"
       },
       "legend": "The band is the assessment's range and the dot its estimate; the tick is where you placed yourself."
+    },
+    "momentum": {
+      "title": "Your momentum",
+      "week": "{done} of {target} sessions this week",
+      "weekLabel": "Sessions this week",
+      "goalMet": "Week goal met",
+      "streak": "{n, plural, =0 {Start a streak this week} one {1-week streak} other {#-week streak}}",
+      "nextUp": "Next milestone · {unlocked} of {total}",
+      "milestonesTitle": "Milestones",
+      "milestonesBody": "Small firsts along the way. Each one comes from something you did, and only you can see them.",
+      "unlockedOn": "Unlocked {date}",
+      "celebrate": {
+        "levelUp": "Up a level",
+        "unlocked": "Milestone unlocked",
+        "goalBody": "That's every session you planned this week. Anything more is a bonus.",
+        "done": "Session done"
+      },
+      "milestones": {
+        "first": {
+          "title": "First rep",
+          "how": "Finish your first practice scenario."
+        },
+        "reflective": {
+          "title": "Noted",
+          "how": "Write a reflection after a practice."
+        },
+        "comeback": {
+          "title": "Comeback",
+          "how": "Try a scenario again and beat your first attempt."
+        },
+        "weekGoal": {
+          "title": "Week goal",
+          "how": "Reach your goal of {target} sessions in a week."
+        },
+        "advanced": {
+          "title": "Advanced moment",
+          "how": "Reach Advanced in a practice."
+        },
+        "streak3": {
+          "title": "Three weeks running",
+          "how": "Practise in three weeks in a row."
+        },
+        "fullCircle": {
+          "title": "Full circle",
+          "how": "Practise every skill in your plan."
+        },
+        "ten": {
+          "title": "Ten reps",
+          "how": "Finish ten practice sessions."
+        }
+      },
+      "weekOver": "{done} this week, {extra} over your goal"
     }
   },
   "team": {

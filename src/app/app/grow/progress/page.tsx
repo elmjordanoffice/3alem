@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
+import { isLocale } from "@/i18n/config";
+import { MilestoneShelf } from "@/components/grow/momentum";
+import { momentumFor, momentumView } from "@/lib/grow/momentum-data";
 import { LineChart as LineIcon } from "lucide-react";
 import { requireViewer } from "@/lib/auth/session";
 import { withTenant } from "@/lib/db";
@@ -39,10 +42,15 @@ export default async function ProgressPage() {
     const k = monday.toISOString().slice(0, 10);
     practiceByWeek.set(k, (practiceByWeek.get(k) ?? 0) + 1);
   }
+  const raw = await getLocale();
+  const momentum = momentumView(await momentumFor(viewer.user.id, isLocale(raw) ? raw : "en"));
   return (
     <PageContainer className="max-w-5xl">
       <PageHeader title={t("title")} description={t("description")} />
-      <ProgressCharts assessments={assessments} practiceWeeks={[...practiceByWeek.entries()].map(([week, n]) => ({ week, n }))} />
+      <div className="flex flex-col gap-12">
+        <MilestoneShelf m={momentum} />
+        <ProgressCharts assessments={assessments} practiceWeeks={[...practiceByWeek.entries()].map(([week, n]) => ({ week, n }))} />
+      </div>
     </PageContainer>
   );
 }

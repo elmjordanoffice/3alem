@@ -5,6 +5,8 @@ import { withTenant } from "@/lib/db";
 import type { PracticeItem, StoredFeedback } from "@/lib/grow/practice";
 import { PracticeRunner } from "@/components/grow/practice-runner";
 import { responseContentSchema, responseText } from "@/lib/assessment/response-schema";
+import { getLocale } from "next-intl/server";
+import { celebrationFor } from "@/lib/grow/momentum-data";
 
 export const metadata: Metadata = { title: "Practice" };
 export const dynamic = "force-dynamic";
@@ -14,8 +16,11 @@ export default async function PracticePage({ params }: { params: Promise<{ id: s
   const { id } = await params;
   const s = await withTenant({ userId: viewer.user.id }, (tx) => tx.practiceSession.findFirst({ where: { id, userId: viewer.user.id } }));
   if (!s) notFound();
+  // A fresh result gets its moment: a level gained, milestones unlocked, the week moving.
+  const celebration = s.completedAt ? await celebrationFor(viewer.user.id, s.id, (await getLocale()) === "ar" ? "ar" : "en") : null;
   return (
     <PracticeRunner
+      celebration={celebration}
       id={s.id}
       item={s.item as unknown as PracticeItem}
       feedback={(s.feedback as unknown as StoredFeedback) ?? null}

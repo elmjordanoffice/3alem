@@ -548,3 +548,30 @@ html[data-r-motion] [data-narrow]:not([data-in]) .r-fade { opacity: 0; }
 @media (prefers-reduced-motion: reduce) {
   .animate-deck-in, .deck-hint svg { animation: none; }
 }
+
+/* ---------------------------------------------------------------------------
+   Delight: small rewarding moments (Grow momentum, practice results, the
+   candidate's "sent" and finish, a recorded decision). Springs over tweens,
+   nothing cartoonish, and all of it still under reduced motion.
+   --------------------------------------------------------------------------- */
+@keyframes joy-pop { 0% { opacity: 0; transform: scale(0.6); } 60% { opacity: 1; transform: scale(1.08); } 100% { transform: scale(1); } }
+@keyframes joy-rise { from { opacity: 0; transform: translateY(10px); } }
+@keyframes joy-burst { 0% { opacity: 1; transform: translate(-50%, -50%) rotate(var(--a)) translateY(0) scale(1); } 100% { opacity: 0; transform: translate(-50%, -50%) rotate(var(--a)) translateY(calc(var(--d, 34px) * -1)) scale(0.4); } }
+@keyframes joy-draw { from { stroke-dashoffset: var(--len, 24); } }
+@keyframes joy-stamp { 0% { opacity: 0; transform: scale(1.6) rotate(-8deg); } 70% { opacity: 1; transform: scale(0.96) rotate(-3deg); } 100% { transform: scale(1) rotate(-3deg); } }
+@keyframes joy-sweep { from { transform: scaleX(0); } }
+.joy-pop { animation: joy-pop 520ms var(--ease-hero) both; animation-delay: calc(var(--i, 0) * 90ms); }
+.joy-rise { animation: joy-rise 480ms var(--ease-out) both; animation-delay: calc(var(--i, 0) * 80ms); }
+.joy-draw { stroke-dasharray: var(--len, 24); animation: joy-draw 420ms var(--ease-out) 120ms both; }
+.joy-stamp { animation: joy-stamp 520ms var(--ease-hero) both; transform: rotate(-3deg); }
+.joy-sweep { transform-origin: left center; animation: joy-sweep 700ms var(--ease-enter) both; }
+[dir="rtl"] .joy-sweep { transform-origin: right center; }
+.joy-burst { position: absolute; inset: 0; pointer-events: none; }
+.joy-burst > i { position: absolute; left: 50%; top: 50%; width: 6px; height: 6px; border-radius: 9999px; background: var(--signal); animation: joy-burst 760ms var(--ease-out) var(--delay, 200ms) both; }
+.ring-arc { transition: stroke-dashoffset 1100ms var(--ease-enter); }
+@media (prefers-reduced-motion: reduce) {
+  .joy-pop, .joy-rise, .joy-draw, .joy-stamp, .joy-sweep { animation: none; }
+  .joy-stamp { transform: rotate(-3deg); }
+  .joy-burst { display: none; }
+  .ring-arc { transition: none; }
+}

@@ -55,6 +55,9 @@ test("an individual onboards, takes a baseline, practises and talks to the coach
   await page.getByRole("button", { name: "Get feedback" }).click();
   await expect(page.getByRole("heading", { name: "Feedback" })).toBeVisible({ timeout: 20_000 });
   await expect(page.getByText("One strong approach", { exact: true })).toBeVisible();
+  // A first practice is a milestone, and the week's ring moves.
+  const moment = page.getByRole("region", { name: /Milestone unlocked|Up a level|Week goal met/ });
+  await expect(moment).toContainText("First rep");
   await page.getByLabel("Reflection note").fill("Next time I will quantify the risk before deciding.");
   await page.getByRole("button", { name: "Save note" }).click();
   await expect(page.getByRole("button", { name: "Saved" })).toBeVisible();
