@@ -22,6 +22,8 @@ test("an individual onboards, takes a baseline, practises and talks to the coach
   await page.getByLabel("Your current role").fill("Software engineer");
   await page.getByLabel("Your goal").fill("Move from engineer to team lead");
   await page.getByRole("radio", { name: "3 hours" }).click();
+  // Their own view of one area; the rest left as "I'm not sure".
+  await page.getByRole("radiogroup", { name: /Decision-making and judgment/ }).getByRole("radio", { name: "Often" }).click();
   await page.getByRole("button", { name: "Save and continue" }).click();
   await expect(page.getByRole("heading", { name: /Your development, Layla/ })).toBeVisible();
   await expect(page.getByText(/Everything here is private to you/)).toBeVisible();
@@ -34,6 +36,7 @@ test("an individual onboards, takes a baseline, practises and talks to the coach
   await runSession(page, /Your profile is on its way/);
   await page.getByRole("link", { name: "See my profile" }).click();
   await expect(page.getByRole("heading", { name: "Your development plan" })).toBeVisible({ timeout: 30_000 });
+  await expect(page.getByRole("heading", { name: "Your view and the evidence" })).toBeVisible();
   // The candidate view hides hiring-only sections.
   await expect(page.getByRole("heading", { name: "Interview questions" })).toHaveCount(0);
 
@@ -55,6 +58,13 @@ test("an individual onboards, takes a baseline, practises and talks to the coach
   await page.getByLabel("Reflection note").fill("Next time I will quantify the risk before deciding.");
   await page.getByRole("button", { name: "Save note" }).click();
   await expect(page.getByRole("button", { name: "Saved" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Where you are, and the next level" })).toBeVisible();
+
+  // Deliberate practice: the same scenario again, with the first attempt's advice in view.
+  const firstUrl = page.url();
+  await page.getByRole("button", { name: "Try this one again" }).click();
+  await expect(page).not.toHaveURL(firstUrl);
+  await expect(page.getByText(/Second attempt: same scenario/)).toBeVisible();
 
   // Coach.
   await page.goto("/app/grow/coach");
