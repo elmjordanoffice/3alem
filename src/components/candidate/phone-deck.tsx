@@ -1,22 +1,22 @@
 "use client";
 import * as React from "react";
 import { useTranslations } from "next-intl";
-import { BarChart3, ChevronDown, FileText, Mail, RotateCw, Table2 } from "lucide-react";
+import { ChevronDown, RotateCw } from "lucide-react";
 import type { CandidateView, Branding } from "@/lib/hire/candidate-state";
-import { MaterialView } from "@/components/assessment/document-viewer";
 import { QuietTimer } from "@/components/assessment/quiet-timer";
 import { Button } from "@/components/ui/button";
 import { Alert } from "@/components/ui/alert";
 import { useNumbers } from "@/components/providers";
 import { cn } from "@/lib/utils";
 import { brandStyle } from "./brand";
+import { CoverCard, MaterialCard, TaskHeader } from "./deck-cards";
 
 type ItemView = Extract<CandidateView, { view: "item" }>;
-const ICONS = { email: Mail, memo: FileText, table: Table2, chart: BarChart3 } as const;
 
 /**
- * The scene as a vertical deck on phones, like a feed: one full-screen slide
- * for the scenario, one per document, then the task. Paging uses the
+ * The scene as a vertical deck of cards on phones, like a feed: an ink cover
+ * for the situation (with art drawn from the scene), one card per document,
+ * then the task. The next card peeks in at the bottom. Paging uses the
  * browser's own scroll snapping (smooth, with native momentum on iOS);
  * a slide taller than the screen scrolls inside itself before the next
  * one snaps in. Follow-ups arrive as the last slide and the deck glides to
@@ -54,26 +54,33 @@ export function PhoneDeck({
 }) {
   const t = useTranslations("candidate.deck");
   const ti = useTranslations("candidate.item");
-  const n = useNumbers();
   const { item } = v;
   const content = item.content;
   const stage = item.stage;
   const deckRef = React.useRef<HTMLDivElement>(null);
   const [current, setCurrent] = React.useState(0);
   const [typing, setTyping] = React.useState(false);
+  const [hint, setHint] = React.useState(false);
 
   const slides = 1 + content.materials.length + 1;
   const taskIndex = slides - 1;
+  const chapter = v.world.chapters[v.chapterIndex]?.title ?? "";
 
-  // Follow-ups open on the task slide; a new scene opens on its scenario.
+  const go = React.useCallback(
+    (i: number) => {
+      const el = deckRef.current?.querySelector<HTMLElement>(`[data-slide="${Math.max(0, Math.min(taskIndex, i))}"]`);
+      el?.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
+    },
+    [taskIndex],
+  );
+
+  // Follow-ups open on the task card; a new scene opens on its cover.
   React.useEffect(() => {
     if (stage === "MAIN") return;
-    const el = deckRef.current?.querySelector<HTMLElement>(`[data-slide="${taskIndex}"]`);
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    requestAnimationFrame(() => el?.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" }));
-  }, [stage, taskIndex]);
+    requestAnimationFrame(() => go(taskIndex));
+  }, [stage, taskIndex, go]);
 
-  // Which slide is on screen, for the rail and the hint (no work on every scroll frame).
+  // Which card is on screen, for the rail (no work on every scroll frame).
   React.useEffect(() => {
     const root = deckRef.current;
     if (!root) return;
@@ -81,15 +88,34 @@ export function PhoneDeck({
       (entries) => {
         for (const e of entries) if (e.isIntersecting) setCurrent(Number((e.target as HTMLElement).dataset.slide));
       },
-      { root, threshold: 0.55 },
+      { root, threshold: 0.6 },
     );
     root.querySelectorAll("[data-slide]").forEach((el) => io.observe(el));
     return () => io.disconnect();
   }, [slides]);
 
-  const go = (i: number) => {
-    const el = deckRef.current?.querySelector<HTMLElement>(`[data-slide="${Math.max(0, Math.min(taskIndex, i))}"]`);
-    el?.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
+  // The first time anyone opens a deck on this device, the cover nudges up twice to show it moves.
+  React.useEffect(() => {
+    try {
+      if (localStorage.getItem("aalim:deck-hint")) return;
+      localStorage.setItem("aalim:deck-hint", "1");
+    } catch {
+      return;
+    }
+    const id = window.setTimeout(() => setHint(true), 900);
+    return () => window.clearTimeout(id);
+  }, []);
+
+  // Arrow keys, Page keys and Space page through the cards (not while typing).
+  const onKeyDown = (e: React.KeyboardEvent) => {
+    if ((e.target as HTMLElement).closest("textarea, input, select, [contenteditable='true'], [role='radiogroup'], [role='listbox']")) return;
+    if (e.key === "ArrowDown" || e.key === "PageDown" || (e.key === " " && !e.shiftKey)) {
+      e.preventDefault();
+      go(current + 1);
+    } else if (e.key === "ArrowUp" || e.key === "PageUp" || (e.key === " " && e.shiftKey)) {
+      e.preventDefault();
+      go(current - 1);
+    }
   };
 
   return (
@@ -99,53 +125,33 @@ export function PhoneDeck({
       {/* While typing, snapping steps aside so the keyboard and caret never fight the pager. */}
       <div
         ref={deckRef}
+        tabIndex={-1}
+        onKeyDown={onKeyDown}
         onFocusCapture={(e) => {
           if ((e.target as HTMLElement).matches("textarea, input, [contenteditable='true']")) setTyping(true);
         }}
         onBlurCapture={() => setTyping(false)}
-        className={cn("deck animate-deck-in relative flex-1 overflow-y-auto overscroll-contain", typing ? "snap-none" : "snap-y snap-mandatory")}
+        role="region"
+        aria-label={t("deckLabel")}
+        className={cn("deck animate-deck-in relative flex-1 overflow-y-auto overscroll-contain outline-none", typing ? "snap-none" : "snap-y snap-mandatory")}
       >
-        <Slide index={0} className="justify-between">
-          <div className="flex flex-col gap-5 pt-2">
-            <p className="eyebrow text-tertiary">{t("scene", { chapter: v.world.chapters[v.chapterIndex]?.title ?? "" })}</p>
-            <h1 className="font-display text-[2.25rem] font-extrabold leading-[1.02] tracking-[-0.01em] text-text [font-stretch:112%]" dir="auto">
-              {content.title}
-            </h1>
-            <p className="whitespace-pre-line text-[17px] leading-[1.6] text-text" dir="auto">
-              {content.scenario}
-            </p>
-          </div>
-          <NextHint onClick={() => go(1)} label={content.materials.length ? t("toMaterials", { count: content.materials.length }) : t("toTask")} />
+        <Slide index={0} tone="ink" nudge={hint}>
+          <CoverCard title={content.title} scenario={content.scenario} eyebrow={chapter} materials={content.materials} cast={v.world.cast} />
+          <NextHint onClick={() => go(1)} label={content.materials.length ? t("toMaterials", { count: content.materials.length }) : t("toTask")} tone="ink" />
         </Slide>
 
-        {content.materials.map((m, i) => {
-          const Icon = ICONS[m.kind];
-          const index = i + 1;
-          return (
-            <Slide key={m.id} index={index}>
-              <div className="flex items-center gap-2.5 pt-2 text-sm text-secondary">
-                <span className="grid size-8 place-items-center rounded-full bg-surface shadow-card">
-                  <Icon className="size-4 text-text" strokeWidth={1.75} aria-hidden />
-                </span>
-                <span className="eyebrow text-tertiary">{t("document", { n: n.number(i + 1), total: n.number(content.materials.length) })}</span>
-              </div>
-              <h2 className="mt-3 text-[1.5rem] leading-tight text-text" dir="auto">{m.title}</h2>
-              <div className="mt-4 [&_table]:text-[13px]">
-                <MaterialView material={m} />
-              </div>
-              <NextHint onClick={() => go(index + 1)} label={index + 1 === taskIndex ? t("toTask") : t("next")} className="mt-auto pt-8" />
-            </Slide>
-          );
-        })}
+        {content.materials.map((m, i) => (
+          <Slide key={m.id} index={i + 1}>
+            <MaterialCard material={m} index={i + 1} total={content.materials.length} org={v.world.companyName} />
+            <NextHint onClick={() => go(i + 2)} label={i + 2 === taskIndex ? t("toTask") : t("next")} />
+          </Slide>
+        ))}
 
         <Slide index={taskIndex} task>
-          <div className="flex flex-col gap-3 pt-2">
-            <p className="eyebrow flex items-center gap-2 text-text">
-              <span className="size-1.5 rounded-full bg-saffron" aria-hidden />
-              {label}
-            </p>
+          <TaskHeader kind={content.task.kind} label={label} stage={stage} />
+          <div className="mt-4 flex flex-col gap-3">
             {stage === "TWIST" && content.twist?.change ? (
-              <div className="rounded-[14px] border-s-[3px] border-saffron bg-surface p-4 text-[16px] leading-relaxed text-text shadow-card" dir="auto">
+              <div className="rounded-[14px] border-s-[3px] border-saffron bg-surface-subtle p-4 text-[16px] leading-relaxed text-text" dir="auto">
                 {content.twist.change}
               </div>
             ) : null}
@@ -171,18 +177,20 @@ export function PhoneDeck({
               {error}
             </Alert>
           ) : null}
-          {/* The action rides at the bottom of the screen while you work on the task. */}
-          <div className="sticky bottom-0 -mx-5 mt-6 border-t border-border bg-background/90 px-5 pb-[max(16px,env(safe-area-inset-bottom))] pt-3 backdrop-blur-md">
+          {/* The action rides at the bottom of the card while you work on the task. */}
+          <div className="sticky bottom-0 -mx-5 mt-6 border-t border-border bg-surface/90 px-5 pb-[max(16px,env(safe-area-inset-bottom))] pt-3 backdrop-blur-md">
             <Button size="lg" className="h-[52px] w-full rounded-[14px] text-[16px]" onClick={onSubmit} disabled={!value} loading={submitting}>
               {submitLabel}
             </Button>
             <p className="mt-2 text-center text-xs text-tertiary">{value ? ti("readyHint") : ti("incompleteHint")}</p>
           </div>
         </Slide>
+        {/* Room for the last card to settle at the top. */}
+        <div className="h-8" aria-hidden />
       </div>
 
       {/* The rail: where you are in this scene. */}
-      <ol className="pointer-events-none fixed end-2 top-1/2 z-50 flex -translate-y-1/2 flex-col gap-1.5" aria-hidden>
+      <ol className="pointer-events-none fixed end-[3px] top-1/2 z-50 flex -translate-y-1/2 flex-col gap-1.5" aria-hidden>
         {Array.from({ length: slides }, (_, i) => (
           <li key={i} className={cn("w-1 rounded-full transition-all duration-300 ease-[var(--ease-out)]", i === current ? "h-5 bg-text" : "h-1 bg-text/25", i === taskIndex && i !== current && "bg-saffron")} />
         ))}
@@ -191,26 +199,38 @@ export function PhoneDeck({
   );
 }
 
-function Slide({ index, task = false, className, children }: { index: number; task?: boolean; className?: string; children: React.ReactNode }) {
+/**
+ * One card in the stack. The section snaps; the face inside is the card
+ * (it scrolls on its own when it is long, then hands the swipe back to the
+ * deck). The next card peeks in at the bottom.
+ */
+function Slide({ index, tone = "paper", task = false, nudge = false, children }: { index: number; tone?: "ink" | "paper"; task?: boolean; nudge?: boolean; children: React.ReactNode }) {
   return (
-    <section
-      data-slide={index}
-      className={cn(
-        "deck-slide flex min-h-full snap-start snap-always flex-col px-5 pb-8 pe-7 pt-4",
-        task && "pb-0",
-        className,
-      )}
-    >
-      {children}
+    <section data-slide={index} className={cn("deck-card snap-start snap-always px-3 pt-3", nudge && "deck-nudge")}>
+      <div
+        // Inline, so the ink card's own overflow rule can't stop a long card from scrolling.
+        style={{ overflowY: "auto" }}
+        className={cn(
+          "deck-face flex h-full flex-col overscroll-auto rounded-[22px] p-5",
+          tone === "ink" ? "hero-card" : "bg-surface shadow-card ring-1 ring-border/60",
+          task && "pb-0",
+        )}
+      >
+        {children}
+      </div>
     </section>
   );
 }
 
-function NextHint({ onClick, label, className }: { onClick: () => void; label: string; className?: string }) {
+function NextHint({ onClick, label, tone = "paper" }: { onClick: () => void; label: string; tone?: "ink" | "paper" }) {
   return (
-    <button type="button" onClick={onClick} className={cn("deck-hint mx-auto flex flex-col items-center gap-1 py-3 text-sm font-medium text-secondary", className)}>
+    <button
+      type="button"
+      onClick={onClick}
+      className={cn("deck-hint mx-auto mt-auto flex flex-col items-center gap-1 pt-8 text-sm font-medium", tone === "ink" ? "text-hero-secondary" : "text-secondary")}
+    >
       {label}
-      <ChevronDown className="size-5 text-text" aria-hidden />
+      <ChevronDown className={cn("size-5", tone === "ink" ? "text-hero-foreground" : "text-text")} aria-hidden />
     </button>
   );
 }

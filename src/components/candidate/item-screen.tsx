@@ -180,7 +180,7 @@ function ItemStage({ v, token, submit, sendTurn }: ItemScreenProps) {
       <div className="reading whitespace-pre-line text-[15px] leading-relaxed text-text" dir="auto">
         {content.scenario}
       </div>
-      {content.materials.length ? <DocumentViewer materials={content.materials} label={t("materials")} /> : null}
+      {content.materials.length ? <DocumentViewer materials={content.materials} label={t("materials")} org={v.world.companyName} /> : null}
     </section>
   );
 

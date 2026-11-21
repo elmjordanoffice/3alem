@@ -579,3 +579,29 @@ html[data-r-motion] [data-narrow]:not([data-in]) .r-fade { opacity: 0; }
 @keyframes sent-toast-still { 0%, 80% { opacity: 1; } 100% { opacity: 0; } }
 .sent-toast { animation: sent-toast 1500ms var(--ease-out) both; }
 @media (prefers-reduced-motion: reduce) { .sent-toast { animation: sent-toast-still 1500ms linear both; } }
+
+/* The phone deck as a stack of cards: each card is the screen minus a peek of
+   the next one; leaving cards shrink and dim as they go, arriving ones rise.
+   Scroll-driven where the browser supports it; still under reduced motion. */
+.deck-card { height: calc(100% - 32px); }
+.deck-face { transform-origin: 50% 0%; will-change: transform, opacity; }
+@keyframes deck-depth {
+  0% { transform: scale(0.95); opacity: 0.9; }
+  50% { transform: none; opacity: 1; }
+  100% { transform: translateY(-5%) scale(0.92); opacity: 0.4; }
+}
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .deck-face { animation: deck-depth linear both; animation-timeline: view(); animation-range: cover; }
+  }
+}
+@keyframes deck-nudge { 0%, 100% { transform: translateY(0); } 30% { transform: translateY(-16px); } 55% { transform: translateY(0); } 72% { transform: translateY(-6px); } }
+.deck-nudge { animation: deck-nudge 1.1s var(--ease-out) 2; }
+/* Scene art: each band arrives wide and settles to its own width, then the dot lands. */
+@keyframes art-band { from { transform: scaleX(1.7); opacity: 0; } }
+@keyframes art-dot { 0% { transform: translateY(-24px) scale(0.4); opacity: 0; } 70% { transform: translateY(2px) scale(1.1); opacity: 1; } 100% { transform: none; } }
+.art-band { transform-box: fill-box; transform-origin: center; animation: art-band 900ms var(--ease-enter) both; }
+.art-dot { transform-box: fill-box; transform-origin: center; animation: art-dot 620ms var(--ease-hero) both; }
+@media (prefers-reduced-motion: reduce) {
+  .deck-nudge, .art-band, .art-dot { animation: none; }
+}

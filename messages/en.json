@@ -699,7 +699,11 @@
     "documents": {
       "to": "To",
       "cc": "Cc",
-      "memo": "Memo"
+      "memo": "Memo",
+      "scrollSideways": "Scroll sideways to see every column →",
+      "email": "Email",
+      "table": "Table",
+      "chart": "Chart"
     },
     "timer": {
       "minutesLeft": "{count, plural, one {{formatted} minute left in this task} other {{formatted} minutes left in this task}}",
@@ -1272,7 +1276,21 @@
       "toMaterials": "{count, plural, one {Swipe up for the document} other {Swipe up for the # documents}}",
       "toTask": "Swipe up for your task",
       "next": "Swipe up for the next document",
-      "document": "Document {n} of {total}"
+      "document": "Document {n} of {total}",
+      "with": "With {names}",
+      "how": {
+        "choice": "Choose one",
+        "ranking": "Rank them",
+        "allocation": "Split the budget",
+        "written": "Write your answer",
+        "inbox": "Work through the inbox",
+        "roleplay": "Talk it through",
+        "design": "Design it",
+        "chain": "Decide round by round",
+        "forced_choice": "Pick what's more like you"
+      },
+      "swipe": "Swipe up",
+      "deckLabel": "Scene cards"
     },
     "delight": {
       "sent": "Sent",
