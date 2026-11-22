@@ -605,3 +605,20 @@ html[data-r-motion] [data-narrow]:not([data-in]) .r-fade { opacity: 0; }
 @media (prefers-reduced-motion: reduce) {
   .deck-nudge, .art-band, .art-dot { animation: none; }
 }
+
+/* The week, alive (src/components/candidate/story.tsx). */
+@keyframes clock-tick { from { opacity: 0; transform: translateY(60%); } }
+.clock-tick { animation: clock-tick 420ms var(--ease-out) both; }
+@keyframes note-in { from { opacity: 0; transform: translateX(-18px); } }
+@keyframes note-in-rtl { from { opacity: 0; transform: translateX(18px); } }
+@keyframes note-fade { from { opacity: 0; } }
+.note-in { animation: note-in 520ms var(--ease-hero) 650ms both; }
+[dir="rtl"] .note-in { animation-name: note-in-rtl; }
+@keyframes loading-band { 0%, 100% { transform: scaleX(1); opacity: 1; } 50% { transform: scaleX(1.25); opacity: 0.55; } }
+.loading-narrow > span { animation: loading-band 1.8s var(--ease-move) infinite; animation-delay: calc(var(--i) * 140ms); }
+@keyframes loading-dot { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.35); } }
+.loading-narrow > span:last-child { animation-name: loading-dot; }
+@media (prefers-reduced-motion: reduce) {
+  .clock-tick, .loading-narrow > span { animation: none; }
+  .note-in { animation: note-fade 300ms linear 300ms both; }
+}

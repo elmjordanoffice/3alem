@@ -6,6 +6,8 @@ import type { Material } from "@/lib/assessment/materials";
 import { castIn, sceneArt } from "@/lib/brand/scene-art";
 import { MaterialView } from "@/components/assessment/document-viewer";
 import { initials, cn } from "@/lib/utils";
+import type { StoryNote } from "@/lib/hire/story";
+import { ColleagueNote } from "./story";
 
 /**
  * The cards of the phone deck. Every card has its own face: the situation is
@@ -79,12 +81,14 @@ export function CoverCard({
   eyebrow,
   materials,
   cast,
+  note = null,
 }: {
   title: string;
   scenario: string;
   eyebrow: string;
   materials: Material[];
   cast: { name: string; role: string }[];
+  note?: StoryNote | null;
 }) {
   const t = useTranslations("candidate.deck");
   const td = useTranslations("components.documents");
@@ -92,10 +96,11 @@ export function CoverCard({
   const list = new Intl.ListFormat(undefined, { type: "conjunction" });
   return (
     <div className="flex min-h-full flex-col">
-      <div className="relative -mx-5 -mt-5 h-[28vh] max-h-60 min-h-40 overflow-hidden">
+      <div className={cn("relative -mx-5 -mt-5 overflow-hidden", note ? "h-[20vh] max-h-44 min-h-32" : "h-[28vh] max-h-60 min-h-40")}>
         <SceneArt seed={title} className="absolute inset-0 size-full" />
         <span className="absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-[var(--hero-from)] to-transparent" aria-hidden />
       </div>
+      {note ? <ColleagueNote note={note} tone="ink" className="mb-5" /> : null}
       <p className="eyebrow text-hero-secondary">{eyebrow}</p>
       <h1 className="mt-2 font-display text-[2rem] font-extrabold leading-[1.04] tracking-[-0.01em] text-hero-foreground [font-stretch:112%]" dir="auto">
         {title}

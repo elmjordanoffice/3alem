@@ -21,6 +21,7 @@ import { ChainTask } from "./tasks/chain-task";
 import { ForcedChoiceTask } from "./tasks/forced-choice-task";
 import { cn } from "@/lib/utils";
 import { PhoneDeck } from "./phone-deck";
+import { ColleagueNote, StoryClockLabel } from "./story";
 
 /** Phones get the vertical deck; the query is read on the client only. */
 const PHONE = "(max-width: 767px)";
@@ -174,6 +175,12 @@ function ItemStage({ v, token, submit, sendTurn }: ItemScreenProps) {
 
   const scenario = (
     <section aria-labelledby="scenario-title" className="flex min-w-0 flex-col gap-5">
+      {v.story?.note && stage === "MAIN" ? <ColleagueNote note={v.story.note} className="max-w-xl" /> : null}
+      {v.story ? (
+        <p className="eyebrow -mb-3 text-tertiary">
+          {v.world.chapters[v.chapterIndex]?.title} · <StoryClockLabel clock={v.story.clock} long />
+        </p>
+      ) : null}
       <h1 id="scenario-title" tabIndex={-1} className="text-[1.75rem] font-semibold leading-tight text-text outline-none" dir="auto">
         {content.title}
       </h1>
@@ -190,6 +197,7 @@ function ItemStage({ v, token, submit, sendTurn }: ItemScreenProps) {
       center={<ChapterProgress chapters={v.world.chapters.map((c) => c.title)} current={v.chapterIndex} />}
       end={
         <span className="flex items-center gap-3">
+          {v.story ? <StoryClockLabel clock={v.story.clock} className="hidden text-sm font-medium text-text md:inline-flex" /> : null}
           {deadline ? <QuietTimer deadline={deadline} onExpire={() => setTimeUp(true)} /> : null}
           <AutosaveIndicator state={online ? save : "offline"} className="hidden sm:inline-flex" />
         </span>

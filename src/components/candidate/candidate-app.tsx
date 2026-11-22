@@ -2,13 +2,14 @@
 import * as React from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { Clock, Link2Off, Loader2 } from "lucide-react";
+import { Clock, Link2Off } from "lucide-react";
 import type { CandidateView } from "@/lib/hire/candidate-state";
 import type { SubmitPayload } from "./item-screen";
 import { Briefing, Complete, Landing, Paused, StateScreen, Transition } from "./screens";
 import { ItemScreen } from "./item-screen";
 import { CandidateShell } from "./shell";
 import { SentToast } from "./delight";
+import { StoryLoading } from "./story";
 
 /** Server actions the app drives, already bound to a candidate token or a Grow session. */
 export interface CandidateApi {
@@ -65,10 +66,7 @@ export function CandidateApp({ token, initial, api, completeSlot }: { token: str
       case "preparing":
         return (
           <CandidateShell branding={view.branding}>
-            <div className="flex flex-col items-center gap-3 py-32 text-secondary" role="status">
-              <Loader2 className="size-5 animate-spin" aria-hidden />
-              {t("preparing")}
-            </div>
+            <StoryLoading />
           </CandidateShell>
         );
       case "landing":

@@ -149,7 +149,7 @@ export async function viewForSession(session: SessionLike, brand: Branding, role
   if (acc.untimed) delete content.timeLimitSeconds;
 
   // The week, alive: the scene's moment, and a note about the previous scene when this one is new.
-  const sceneInChapter = await systemDb.item.count({ where: { sessionId: session.id, chapter: item.chapter, sequence: { lte: item.sequence } } });
+  const sceneInChapter = await systemDb.item.count({ where: { sessionId: session.id, chapter: item.chapter, sequence: { lte: item.sequence }, status: { in: ["PRESENTED", "ANSWERED"] } } });
   const storyStage = stage === "DONE" ? "TWIST" : stage;
   const clock = clockFor(world.chapters[chapterIndex]?.title ?? "", chapterIndex, sceneInChapter, storyStage);
   let note: StoryNote | null = null;

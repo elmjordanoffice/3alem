@@ -10,6 +10,7 @@ import { useNumbers } from "@/components/providers";
 import { cn } from "@/lib/utils";
 import { brandStyle } from "./brand";
 import { CoverCard, MaterialCard, TaskHeader } from "./deck-cards";
+import { StoryClockLabel, useStoryTime } from "./story";
 
 type ItemView = Extract<CandidateView, { view: "item" }>;
 
@@ -65,6 +66,8 @@ export function PhoneDeck({
   const slides = 1 + content.materials.length + 1;
   const taskIndex = slides - 1;
   const chapter = v.world.chapters[v.chapterIndex]?.title ?? "";
+  const fmt = useStoryTime();
+  const moment = v.story ? fmt(v.story.clock.minutes, v.story.clock.day) : null;
 
   const go = React.useCallback(
     (i: number) => {
@@ -120,7 +123,7 @@ export function PhoneDeck({
 
   return (
     <div ref={containerRef} className="fixed inset-0 z-40 flex flex-col bg-background text-text" style={brandStyle(v.branding.brandColor)}>
-      <DeckBar branding={v.branding} chapters={v.world.chapters.map((c) => c.title)} chapter={v.chapterIndex} deadline={deadline} onExpire={onExpire} online={online} />
+      <DeckBar branding={v.branding} chapters={v.world.chapters.map((c) => c.title)} chapter={v.chapterIndex} deadline={deadline} onExpire={onExpire} online={online} clock={v.story?.clock ?? null} />
 
       {/* While typing, snapping steps aside so the keyboard and caret never fight the pager. */}
       <div
@@ -136,7 +139,7 @@ export function PhoneDeck({
         className={cn("deck animate-deck-in relative flex-1 overflow-y-auto overscroll-contain outline-none", typing ? "snap-none" : "snap-y snap-mandatory")}
       >
         <Slide index={0} tone="ink" nudge={hint}>
-          <CoverCard title={content.title} scenario={content.scenario} eyebrow={chapter} materials={content.materials} cast={v.world.cast} />
+          <CoverCard title={content.title} scenario={content.scenario} eyebrow={moment ? `${chapter} · ${moment.long} ${moment.time}` : chapter} materials={content.materials} cast={v.world.cast} note={v.story?.note ?? null} />
           <NextHint onClick={() => go(1)} label={content.materials.length ? t("toMaterials", { count: content.materials.length }) : t("toTask")} tone="ink" />
         </Slide>
 
@@ -235,7 +238,7 @@ function NextHint({ onClick, label, tone = "paper" }: { onClick: () => void; lab
   );
 }
 
-function DeckBar({ branding, chapters, chapter, deadline, onExpire, online }: { branding: Branding; chapters: string[]; chapter: number; deadline: number | null; onExpire: () => void; online: boolean }) {
+function DeckBar({ branding, chapters, chapter, deadline, onExpire, online, clock }: { branding: Branding; chapters: string[]; chapter: number; deadline: number | null; onExpire: () => void; online: boolean; clock: { day: number; minutes: number } | null }) {
   const t = useTranslations("components.chapters");
   const n = useNumbers();
   return (
@@ -249,7 +252,7 @@ function DeckBar({ branding, chapters, chapter, deadline, onExpire, online }: { 
         </span>
         <span className="flex shrink-0 items-center gap-2 text-[13px] text-secondary">
           {deadline ? <QuietTimer deadline={deadline} onExpire={onExpire} /> : null}
-          <span className="tabular">{t("chapterOf", { current: n.number(chapter + 1), total: n.number(chapters.length) })}</span>
+          {clock ? <StoryClockLabel clock={clock} className="font-medium text-text" /> : <span className="tabular">{t("chapterOf", { current: n.number(chapter + 1), total: n.number(chapters.length) })}</span>}
           <span className={cn("size-1.5 rounded-full", online ? "bg-success" : "bg-warning")} aria-hidden />
         </span>
       </div>
