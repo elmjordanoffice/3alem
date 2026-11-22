@@ -1,6 +1,7 @@
 import "server-only";
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
+import type { Transporter } from "nodemailer";
 
 export interface Mail {
   to: string;
@@ -11,11 +12,30 @@ export interface Mail {
 }
 
 /**
- * Mail transport. Development and tests write each message to `.mail/` and the
- * console; production will use an SMTP / provider transport (see
- * docs/decisions.md, D-012). Nothing is ever sent to an external service here.
+ * Mail transport (D-012, D-060).
+ *
+ * - With `SMTP_URL` set (any provider's SMTP: Resend, Postmark, Amazon SES,
+ *   Mailgun, Google Workspace…), messages are sent for real, from `MAIL_FROM`.
+ * - Without it (development and tests), each message is written to `.mail/`
+ *   and the console, and nothing leaves the machine.
  */
+let transporter: Transporter | null = null;
+
+async function smtp(): Promise<Transporter> {
+  if (!transporter) {
+    const mod = await import("nodemailer");
+    const create = mod.createTransport ?? (mod as unknown as { default: typeof mod }).default.createTransport;
+    transporter = create(process.env.SMTP_URL!);
+  }
+  return transporter;
+}
+
 export async function sendMail(mail: Mail): Promise<void> {
+  if (process.env.SMTP_URL) {
+    const from = process.env.MAIL_FROM ?? "Aalim <no-reply@localhost>";
+    await (await smtp()).sendMail({ from, to: mail.to, subject: mail.subject, text: mail.text, html: mail.html });
+    return;
+  }
   const dir = path.join(process.cwd(), ".mail");
   await mkdir(dir, { recursive: true });
   const file = path.join(dir, `${Date.now()}-${mail.to.replace(/[^a-z0-9@.]/gi, "_")}.json`);

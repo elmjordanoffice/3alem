@@ -186,3 +186,5 @@ All motion is CSS or Reanimated, uses springs and short eases, and goes still un
 - **The reward:** every scenario practised becomes a collectible card drawn with its scene art (`src/lib/grow/collection.ts`). New cards turn over in the result, and the shelf shows "N of all scenes" with best levels and attempts. Collecting gives a reason to try new scenarios, which also widens practice.
 - **The streak:** counts days (`src/lib/grow/habit.ts`), but one missed day a week is forgiven on its own as a rest day, and an unfinished today never breaks it.
 - **What we left out on purpose:** penalties, countdowns, fake scarcity, leaderboards and guilt. *(Grow)*
+
+**D-060: Real email through any provider's SMTP.** `sendMail` sends through `SMTP_URL` (from `MAIL_FROM`) when set, using nodemailer, which covers Resend, Postmark, SES, Mailgun and Google Workspace. Without it, development keeps writing to `.mail/`. The launch steps are in [deploy.md](deploy.md). *(Ops)*

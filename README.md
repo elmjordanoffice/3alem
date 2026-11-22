@@ -61,6 +61,7 @@ In a Claude Code cloud environment, add the key as an environment variable in th
 | `BETTER_AUTH_TRUSTED_ORIGINS` | Extra allowed origins (comma-separated) |
 | `APP_URL` | Public base URL used in emails, webhooks and CSV exports (defaults to `BETTER_AUTH_URL`) |
 | `ANTHROPIC_API_KEY` | Enables Claude. `AI_PROVIDER=offline` forces offline mode; `AALIM_MODEL` overrides the model |
+| `SMTP_URL` / `MAIL_FROM` | Sends email through your provider's SMTP; without it, mail is written to `.mail/` |
 | `REDIS_URL` | Moves background jobs to BullMQ; run `npm run worker` alongside the web server |
 | `CRON_SECRET` | Lets an external scheduler `POST /api/cron/retention` (nightly) and `POST /api/cron/reminders` (hourly, for opt-in Grow reminders) |
 | `CHROMIUM_PATH` | Chromium for PDF export, if not the Playwright default |
@@ -81,6 +82,10 @@ In a Claude Code cloud environment, add the key as an environment variable in th
 ## Mobile app
 
 `mobile/` is the native candidate app (Expo, React Native): the same week of scenes as a vertical deck of full-screen pages, in English and Arabic, light and dark, over the candidate API (`/api/m/:token`). See [mobile/README.md](mobile/README.md) to run it in Expo Go or a browser.
+
+## Going live
+
+See [docs/deploy.md](docs/deploy.md) for a step-by-step launch: hosting, database roles, environment, email, scheduled jobs, the first admin, the domain and the mobile app.
 
 ## Docs
 
