@@ -87,7 +87,7 @@ export function GrowOnboardingForm({ initial, domains }: { initial: (Omit<Values
         </div>
         <Textarea value={v.cvText} onChange={(e) => setV((x) => ({ ...x, cvText: e.target.value }))} onBlur={(e) => readPasted(e.target.value)} placeholder={t("cv.placeholder")} className="min-h-32 text-sm" aria-label={t("cv.title")} dir="auto" />
         {cvState === "error" ? <p className="text-sm text-critical">{t("cv.error")}</p> : null}
-        {career ? <CvReading career={career} /> : null}
+        {career ? <CvReading career={career} names={Object.fromEntries(domains.map((d) => [d.key, d.name]))} /> : null}
         <p className="text-xs text-tertiary">{t("cv.private")}</p>
       </section>
       <Field label={t("currentRole")} hint={t("currentRoleHint")}>
@@ -151,15 +151,14 @@ export function GrowOnboardingForm({ initial, domains }: { initial: (Omit<Values
 }
 
 /** What the CV reader found, plainly, so the person can see what shapes their practice. */
-function CvReading({ career }: { career: Career }) {
+function CvReading({ career, names }: { career: Career; names: Record<string, string> }) {
   const t = useTranslations("grow.onboarding.cv");
-  const td = useTranslations("domainsShort");
   const items = [
     career.titles.length ? t("read.titles", { titles: career.titles.join(" · ") }) : null,
     career.years ? t("read.years", { n: career.years }) : null,
     career.worldId ? t(`read.industry.${career.worldId}` as "read.industry.northwind-logistics") : null,
     career.managesPeople ? (career.teamSize ? t("read.team", { n: career.teamSize }) : t("read.managed")) : null,
-    career.shows.length ? t("read.shows", { skills: career.shows.map((d) => td(d)).join(", ") }) : null,
+    career.shows.length ? t("read.shows", { skills: new Intl.ListFormat(undefined, { type: "conjunction" }).format(career.shows.map((d) => names[d] ?? d)) }) : null,
   ].filter((x): x is string => Boolean(x));
   if (!items.length) return null;
   return (

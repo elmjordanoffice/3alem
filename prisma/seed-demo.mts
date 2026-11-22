@@ -4,6 +4,17 @@
  *
  *   npm run db:seed:demo        (after npm run db:seed)
  */
+
+/** The demo Grow learner's CV: Grow sets her practice in logistics and pitches it at her experience. */
+const SARA_CV = `Sara Mansour
+Operations Coordinator, Gulf Freight Logistics | 2022 – present
+- Coordinate daily dispatch across two warehouses and the courier schedule.
+- Analysed delivery data to find the root cause of late shipments; cut misses by 18%.
+- Work with customers and carriers on delays; write the weekly service report.
+Warehouse Supervisor at Al Noor Distribution, 2019–2022
+- Led a team of 12 pickers and packers on the afternoon shift.
+- Planned rotas and prioritised orders against courier cut-offs.
+Logistics Assistant, 2017 - 2019`;
 import "dotenv/config";
 process.env.JOBS_MODE = "sync";
 process.env.AI_PROVIDER = "offline";
@@ -134,7 +145,7 @@ for (const [i, m] of TEAM.entries()) {
   const sara = await db.user.findUniqueOrThrow({ where: { email: "candidate@aalim.dev" } });
   if (!(await getGrowProfile(sara.id))) {
     // Her own view at the start: sure of her leadership, modest about her judgment (the coach compares both with the evidence).
-    await saveGrowProfile(sara.id, { currentRole: "Operations coordinator", experienceYears: 4, goal: "Become a team lead within a year", hoursPerWeek: 2, selfView: { technical: 3, "critical-thinking": 3, judgment: 2, leadership: 4, management: 3, communication: 3, "product-thinking": 3, collaboration: 3, adaptability: 3 } });
+    await saveGrowProfile(sara.id, { currentRole: "Operations coordinator", experienceYears: 4, goal: "Become a team lead within a year", hoursPerWeek: 2, cvText: SARA_CV, selfView: { technical: 3, "critical-thinking": 3, judgment: 2, leadership: 4, management: 3, communication: 3, "product-thinking": 3, collaboration: 3, adaptability: 3 } });
     const persona = { strengths: ["judgment", "collaboration", "critical-thinking"], weaknesses: ["leadership", "management"], attention: 0.7, seed: 3101 };
     const baseline = await startGrowSession(sara.id, "en");
     await simulateSession(baseline.id, persona);
