@@ -6,6 +6,7 @@ import { candidateContext, currentItem, currentStage, minutesLeft, roleplayTrans
 import { templateAccommodations, templateAnalysis, type TemplateRow } from "./templates";
 import type { ItemMeta } from "./items";
 import { recapFrom, type Recap } from "./recap";
+import { clockFor, noteFor, type StoryClock, type StoryNote } from "./story";
 
 export interface PublicWorld {
   companyName: string;
@@ -60,6 +61,8 @@ export type CandidateView =
         presentedAt: string;
         roleplay?: { transcript: { from: "candidate" | "stakeholder"; text: string }[] };
       };
+      /** Where the scene sits in the in-story week, and a colleague's note about the last one (see story.ts). */
+      story?: { clock: StoryClock; note: StoryNote | null };
     }
   | { view: "paused"; branding: Branding; world: PublicWorld; chapterIndex: number; minutesLeft: number }
   | { view: "complete"; branding: Branding; roleTitle: string; recap?: Recap };
@@ -111,7 +114,7 @@ export async function candidateView(token: string): Promise<CandidateView> {
   return viewForSession(session, brand, roleTitle);
 }
 
-type SessionLike = { id: string; status: string; currentChapter: number; timeBudgetMinutes: number; elapsedSeconds: number; accommodations: unknown };
+type SessionLike = { id: string; status: string; currentChapter: number; timeBudgetMinutes: number; elapsedSeconds: number; accommodations: unknown; locale?: string };
 
 /** The view for an existing session (shared by Hire candidates and Grow). */
 export async function viewForSession(session: SessionLike, brand: Branding, roleTitle: string): Promise<CandidateView> {
@@ -145,12 +148,24 @@ export async function viewForSession(session: SessionLike, brand: Branding, role
   if (content.timeLimitSeconds && acc.extraTime) content.timeLimitSeconds = Math.round(content.timeLimitSeconds * acc.extraTime);
   if (acc.untimed) delete content.timeLimitSeconds;
 
+  // The week, alive: the scene's moment, and a note about the previous scene when this one is new.
+  const sceneInChapter = await systemDb.item.count({ where: { sessionId: session.id, chapter: item.chapter, sequence: { lte: item.sequence } } });
+  const storyStage = stage === "DONE" ? "TWIST" : stage;
+  const clock = clockFor(world.chapters[chapterIndex]?.title ?? "", chapterIndex, sceneInChapter, storyStage);
+  let note: StoryNote | null = null;
+  if (storyStage === "MAIN") {
+    const prev = await systemDb.item.findFirst({ where: { sessionId: session.id, sequence: { lt: item.sequence }, status: "ANSWERED" }, orderBy: { sequence: "desc" }, select: { content: true } });
+    const pc = prev ? itemContentSchema.safeParse(prev.content) : null;
+    note = pc?.success ? noteFor({ title: pc.data.title, scenario: pc.data.scenario }, world.cast, session.locale === "ar" ? "ar" : "en", clock.minutes) : null;
+  }
+
   return {
     view: "item",
     branding: brand,
     world,
     chapterIndex,
     minutesLeft: Math.round(left),
+    story: { clock, note },
     untimed: Boolean(acc.untimed),
     item: {
       id: item.id,

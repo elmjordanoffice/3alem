@@ -1295,6 +1295,22 @@
     "delight": {
       "sent": "Sent",
       "chapterDone": "Chapter {n} done"
+    },
+    "story": {
+      "at": "{weekday} {time}",
+      "message": "New message",
+      "from": "{name} · {time}"
+    },
+    "loading": {
+      "title": "Setting up your week",
+      "lines": {
+        "l1": "Unlocking the office…",
+        "l2": "Printing this week's rota…",
+        "l3": "Introducing your colleagues…",
+        "l4": "Filling the inbox…",
+        "l5": "Putting the coffee on…",
+        "l6": "Almost there…"
+      }
     }
   },
   "assessments": {
