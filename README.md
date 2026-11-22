@@ -62,7 +62,7 @@ In a Claude Code cloud environment, add the key as an environment variable in th
 | `APP_URL` | Public base URL used in emails, webhooks and CSV exports (defaults to `BETTER_AUTH_URL`) |
 | `ANTHROPIC_API_KEY` | Enables Claude. `AI_PROVIDER=offline` forces offline mode; `AALIM_MODEL` overrides the model |
 | `REDIS_URL` | Moves background jobs to BullMQ; run `npm run worker` alongside the web server |
-| `CRON_SECRET` | Lets an external scheduler `POST /api/cron/retention` |
+| `CRON_SECRET` | Lets an external scheduler `POST /api/cron/retention` (nightly) and `POST /api/cron/reminders` (hourly, for opt-in Grow reminders) |
 | `CHROMIUM_PATH` | Chromium for PDF export, if not the Playwright default |
 
 ## Scripts

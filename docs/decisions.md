@@ -179,3 +179,10 @@ All motion is CSS or Reanimated, uses springs and short eases, and goes still un
   - **With a model configured:** the scenario writer gets a short summary of all of this. Baseline assessments use the goal's role family and the same summary.
 - **"Why this one":** every practice scenario says why it was chosen (roadmap step, target role, industry).
 - **The overview:** shows a numbered roadmap to the person's goal, with sessions and the best level so far for each step. *(Grow)*
+
+**D-059: A habit loop for Grow, healthy by design.** The owner asked for the app to be more fun and addictive. In Grow (the part people return to) we built a habit loop that people are glad to keep, and left hiring untouched, since candidates take an assessment once and it must stay fair.
+- **The cue:** an opt-in daily reminder at a local hour the person picks (`src/lib/grow/reminders.ts`, run hourly by `POST /api/cron/reminders`). It is one friendly email, only if they haven't practised that day, at most once a day, and can be turned off in one click. It never uses loss or urgency language; a test checks the wording.
+- **The action:** a "2-minute rep", one quick decision on today's roadmap skill, pitched where the person is rather than above.
+- **The reward:** every scenario practised becomes a collectible card drawn with its scene art (`src/lib/grow/collection.ts`). New cards turn over in the result, and the shelf shows "N of all scenes" with best levels and attempts. Collecting gives a reason to try new scenarios, which also widens practice.
+- **The streak:** counts days (`src/lib/grow/habit.ts`), but one missed day a week is forgiven on its own as a rest day, and an unfinished today never breaks it.
+- **What we left out on purpose:** penalties, countdowns, fake scarcity, leaderboards and guilt. *(Grow)*
