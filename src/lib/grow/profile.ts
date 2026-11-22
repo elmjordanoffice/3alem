@@ -7,6 +7,8 @@ import { ENGINE_VERSION, buildRoleProfile, createModel, type RoleProfileInput } 
 import { curatedWorld } from "@/lib/hire/world";
 import { enqueue } from "@/lib/jobs";
 import { normalize } from "@/lib/ai/offline/text";
+import { WORLDS } from "@/lib/itembank";
+import { readCv, targetTitle, type Career } from "./cv";
 
 export interface GrowProfileInput {
   currentRole: string;
@@ -15,6 +17,8 @@ export interface GrowProfileInput {
   hoursPerWeek: number;
   /** Own view per domain, 1–5; domains the person wasn't sure about are absent. */
   selfView?: Record<string, number>;
+  /** The CV as text (pasted, or extracted from an upload). */
+  cvText?: string | null;
 }
 
 /** "How often does this describe you?" answers, as levels on the 1–5 scale. */
@@ -52,13 +56,37 @@ export async function getGrowProfile(userId: string) {
 
 export async function saveGrowProfile(userId: string, input: GrowProfileInput) {
   const targetFamily = detectFamily(`${input.goal} ${input.currentRole}`);
-  return withTenant({ userId }, (tx) =>
-    tx.growProfile.upsert({
-      where: { userId },
-      create: { userId, ...input, targetFamily },
-      update: { ...input, targetFamily },
-    }),
-  );
+  const cvText = input.cvText?.trim() ? input.cvText.trim().slice(0, 40_000) : null;
+  const career = (cvText ? readCv(cvText, WORLDS) : {}) as unknown as Prisma.InputJsonValue;
+  const data = { ...input, cvText, career, targetFamily };
+  return withTenant({ userId }, (tx) => tx.growProfile.upsert({ where: { userId }, create: { userId, ...data }, update: data }));
+}
+
+type ProfileRow = { currentRole: string; experienceYears: number; goal: string; targetFamily: string; career?: unknown; cvText?: string | null };
+
+/**
+ * What makes practice feel like the person's own work: scenes set in the
+ * industry their CV (or current role) points to, them in the role they are
+ * aiming for, a starting difficulty from their experience, and a short
+ * summary of all of it for the scenario writer when a model is configured.
+ */
+export function growContext(p: ProfileRow, locale: "en" | "ar") {
+  const career = (p.career ?? {}) as Partial<Career>;
+  const picked = career.worldId ? WORLDS.find((w) => w.id === career.worldId) : undefined;
+  const base = picked ? { id: picked.id, world: picked[locale] } : curatedWorld(`${p.currentRole} ${p.goal}`, locale);
+  const target = targetTitle(p.goal, p.currentRole);
+  const years = Math.max(p.experienceYears, career.years ?? 0);
+  // Before any assessment: a starting level from experience (entry 2.5 … lead 4).
+  const startLevel = years < 2 ? 2.5 : years < 5 ? 3 : years < 9 ? 3.5 : 4;
+  const summary = [
+    `Current role: ${p.currentRole}${career.titles?.length ? ` (CV: ${career.titles.join("; ")})` : ""}, about ${years} years of experience.`,
+    career.managesPeople ? `Has managed people${career.teamSize ? ` (a team of up to ${career.teamSize})` : ""}.` : "Has not managed people yet, per the CV.",
+    picked ? `Industry from the CV: ${picked[locale].industry}.` : "",
+    `Goal: ${p.goal} (target role: ${target}).`,
+  ]
+    .filter(Boolean)
+    .join(" ");
+  return { worldId: base.id, world: base.world, industryFromCv: Boolean(picked), target, years, startLevel, summary, career };
 }
 
 /**
@@ -85,7 +113,7 @@ export async function startGrowSession(userId: string, locale: "en" | "ar") {
     },
   });
   await systemDb.candidateModelSnapshot.create({ data: { sessionId: session.id, sequence: 0, model: createModel(role) as unknown as Prisma.InputJsonValue, subjectUserId: userId } });
-  const { id, world } = curatedWorld(profile.currentRole, locale);
+  const { worldId: id, world } = growContext(profile, locale);
   await systemDb.scenarioWorld.create({
     data: {
       sessionId: session.id,

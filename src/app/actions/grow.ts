@@ -22,6 +22,7 @@ const onboardingSchema = z.object({
   goal: z.string().trim().min(3).max(300),
   hoursPerWeek: z.number().int().min(1).max(20),
   selfView: z.record(z.string().max(40), z.number().min(1).max(5)).optional(),
+  cvText: z.string().max(40_000).nullable().optional(),
 });
 
 export async function saveOnboardingAction(input: z.input<typeof onboardingSchema>) {

@@ -725,6 +725,10 @@ model GrowProfile {
   hoursPerWeek    Int
   /// The person's own view per domain at onboarding: { [domainKey]: 1–5 }. Domains they weren't sure about are left out.
   selfView        Json     @default("{}")
+  /// The person's CV as plain text (pasted or extracted from an upload). Private to them.
+  cvText          String?
+  /// What the CV reader found: recent titles, years, industries, managing people, skills the CV shows (src/lib/grow/cv.ts).
+  career          Json     @default("{}")
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 

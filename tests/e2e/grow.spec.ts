@@ -19,6 +19,14 @@ test("an individual onboards, takes a baseline, practises and talks to the coach
 
   await page.goto("/app/grow");
   await expect(page).toHaveURL(/\/app\/grow\/onboarding/);
+  // The CV shapes practice: we show what was read from it before anything is saved.
+  await page.getByRole("textbox", { name: /Your CV/ }).fill(
+    "Layla Nasser\nSoftware Engineer, Lumen Apps | 2021 - present\n- Built the mobile app's release pipeline and on-call rota.\n- Analysed crash data to find the root cause of failed releases.\nJunior Developer at Byte Studio, 2018-2021\n- Worked with product and design on new features for customers.",
+  );
+  await page.getByRole("textbox", { name: /Your CV/ }).blur();
+  await expect(page.getByText("What we read from your CV")).toBeVisible();
+  await expect(page.getByText(/Recent roles: Software Engineer/)).toBeVisible();
+  await expect(page.getByText(/Industry: software and technology/)).toBeVisible();
   await page.getByLabel("Your current role").fill("Software engineer");
   await page.getByLabel("Your goal").fill("Move from engineer to team lead");
   await page.getByRole("radio", { name: "3 hours" }).click();
@@ -43,6 +51,11 @@ test("an individual onboards, takes a baseline, practises and talks to the coach
   // Practice with feedback, then a twist round.
   await page.getByRole("button", { name: "Practise this" }).first().click();
   await expect(page).toHaveURL(/\/app\/grow\/practice\//);
+  // Personal: tied to the roadmap, the role they're aiming for and their industry.
+  const why = page.getByRole("region", { name: "Why this one" });
+  await expect(why).toContainText(/roadmap to “Move from engineer to team lead”|which your goal needs/);
+  await expect(why).toContainText("Team lead");
+  await expect(why).toContainText(/software/i);
   const editor = page.locator(".ProseMirror");
   if (await editor.count()) {
     await editor.click();

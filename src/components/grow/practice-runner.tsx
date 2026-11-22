@@ -24,6 +24,9 @@ import { LevelLabel } from "@/components/report/level";
 import { PracticeLauncher } from "./practice-launcher";
 import { PracticeCelebration, type CelebrationView } from "./momentum";
 import { PageContainer } from "@/components/app/page-header";
+import { DOMAINS } from "@/lib/framework/data";
+import { useLocaleSettings } from "@/components/providers";
+import { cn } from "@/lib/utils";
 
 export function PracticeRunner({ id, item, feedback, reflection, answerText, celebration = null }: { id: string; item: PracticeItem; feedback: StoredFeedback | null; response: unknown; reflection: string; answerText: string | null; celebration?: CelebrationView | null }) {
   const t = useTranslations("grow.practice");
@@ -55,6 +58,7 @@ export function PracticeRunner({ id, item, feedback, reflection, answerText, cel
         </Link>
         {!feedback ? <AutosaveIndicator state={save} /> : null}
       </div>
+      {item.why && !feedback ? <WhyThisOne why={item.why} /> : null}
       <div className="grid gap-10 lg:grid-cols-2">
         <section className="flex min-w-0 flex-col gap-5">
           <p className="text-[13px] font-medium text-tertiary">{twist ? t("twistRound") : t("scenario")}</p>
@@ -221,5 +225,30 @@ function CoachingPanel({ coaching, previous }: { coaching: Coaching; previous?: 
         </ul>
       </div>
     </div>
+  );
+}
+
+/** Why this scenario, for this person: their industry, the role they want, the roadmap step it serves. */
+function WhyThisOne({ why }: { why: NonNullable<PracticeItem["why"]> }) {
+  const t = useTranslations("grow.practice.why");
+  const { locale } = useLocaleSettings();
+  const skill = DOMAINS.flatMap((d) => d.subSkills).find((x) => x.key === why.skillKey)?.name[locale] ?? why.skillKey;
+  const lines = [
+    why.step ? t("step", { step: why.step, steps: why.steps, goal: why.goal }) : t("skill", { skill: locale === "en" ? skill.toLowerCase() : skill }),
+    t("role", { role: why.role }),
+    why.industry ? t("industry", { industry: locale === "en" ? why.industry.toLowerCase() : why.industry }) : null,
+  ].filter((x): x is string => Boolean(x));
+  return (
+    <section aria-labelledby="why-h" className="mb-8 flex flex-col gap-2 rounded-card border border-border bg-surface p-4 sm:flex-row sm:items-center sm:gap-5">
+      <h2 id="why-h" className="eyebrow shrink-0 text-tertiary">{t("title")}</h2>
+      <ul className="flex flex-wrap gap-x-5 gap-y-1.5 text-sm text-text">
+        {lines.map((l, i) => (
+          <li key={l} className="flex items-center gap-2" dir="auto">
+            <span className={cn("size-1.5 shrink-0 rounded-full", i === 0 ? "bg-saffron" : "bg-text/30")} aria-hidden />
+            {l}
+          </li>
+        ))}
+      </ul>
+    </section>
   );
 }

@@ -1936,6 +1936,30 @@
         "often": "Often",
         "almostAlways": "Almost always",
         "unsure": "I'm not sure"
+      },
+      "cv": {
+        "title": "Your CV (optional, recommended)",
+        "body": "Paste it or upload a PDF or Word file. We use it so practice feels like your work: scenes in your industry, pitched at your experience, aimed at the role you want.",
+        "upload": "Upload CV",
+        "placeholder": "Paste your CV here…",
+        "error": "We couldn't read that file. Try a PDF, Word (.docx) or text file, or paste the text.",
+        "private": "Private to you. Never shared with any employer or team, and you can delete it any time.",
+        "read": {
+          "title": "What we read from your CV",
+          "titles": "Recent roles: {titles}",
+          "years": "About {n, plural, one {1 year} other {# years}} of experience",
+          "team": "You've managed people (a team of up to {n})",
+          "managed": "You've managed people",
+          "shows": "Clear evidence of: {skills}",
+          "industry": {
+            "northwind-logistics": "Industry: logistics and supply chain. Scenes will be set there.",
+            "lumen-software": "Industry: software and technology. Scenes will be set there.",
+            "cedar-health": "Industry: healthcare. Scenes will be set there.",
+            "harbor-finance": "Industry: financial services. Scenes will be set there.",
+            "meridian-retail": "Industry: retail. Scenes will be set there.",
+            "solace-energy": "Industry: energy and utilities. Scenes will be set there."
+          }
+        }
       }
     },
     "plan": {
@@ -1989,7 +2013,14 @@
       "tipsTitle": "Make it stronger next time",
       "nextTitle": "Where you are, and the next level",
       "nextLooksLike": "{level} looks like:",
-      "topLevel": "Top of the scale here. Try a harder scenario next."
+      "topLevel": "Top of the scale here. Try a harder scenario next.",
+      "why": {
+        "title": "Why this one",
+        "industry": "Set in {industry}, like your experience",
+        "role": "You play the {role}, the role you're aiming for",
+        "step": "Step {step} of {steps} on your roadmap to “{goal}”",
+        "skill": "Practises {skill}, which your goal needs"
+      }
     },
     "progress": {
       "title": "Progress",
@@ -2115,6 +2146,13 @@
           "how": "Take two scenarios on with a twist: same situation, new information."
         }
       }
+    },
+    "roadmap": {
+      "title": "Your roadmap to “{goal}”",
+      "body": "Built from your assessment, your CV and your goal. Each step is a skill to build; every practice scenario is chosen to move one.",
+      "step": "Step {n}",
+      "notStarted": "Not started yet",
+      "progress": "{n, plural, one {1 session} other {# sessions}} · best so far: {level}"
     }
   },
   "team": {

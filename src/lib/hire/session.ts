@@ -27,6 +27,7 @@ import { loadRoleProfileForSession, latestModel, saveModel } from "./model-store
 import { roleProfileFor, templateAnalysis, technicalSkills, type TemplateRow } from "./templates";
 import { withModelLock } from "./scoring";
 import { dispatchWebhook } from "@/lib/webhooks";
+import { getGrowProfile, growContext } from "@/lib/grow/profile";
 
 export const CONSENT_TEXT_VERSION = "candidate-consent.v1";
 /** Longest time one stage can add to the clock (a tab left open doesn't eat the budget). */
@@ -144,11 +145,14 @@ async function prepareContext(sessionId: string): Promise<PrepareContext> {
   const tech = template ? technicalSkills(template) : [];
   const chapterNo = chapterFor(await sessionBudget(session));
   const ch = world.chapters[chapterNo - 1] ?? world.chapters[0]!;
+  // Grow: the person's own context (goal's role family, CV, experience) instead of a job description.
+  const grow = session.mode === "GROW" && session.subjectUserId ? await getGrowProfile(session.subjectUserId) : null;
+  const gctx = grow ? growContext(grow, locale) : null;
   return {
     world,
     locale,
-    roleFamily: analysis?.roleFamily ?? null,
-    roleSummary: analysis ? `${analysis.roleTitle}: ${analysis.summary}` : "",
+    roleFamily: analysis?.roleFamily ?? grow?.targetFamily ?? null,
+    roleSummary: analysis ? `${analysis.roleTitle}: ${analysis.summary}` : (gctx?.summary ?? ""),
     chapter: { number: chapterNo, title: ch.title, summary: ch.summary },
     history: decisions,
     usedBankIds: new Set([...usedBankIds(items), ...retired.map((r) => r.itemKey)]),

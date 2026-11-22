@@ -18,6 +18,7 @@ import { PageContainer } from "@/components/app/page-header";
 import { Button } from "@/components/ui/button";
 import { SkillRadar } from "@/components/report/charts";
 import { PracticeLauncher } from "@/components/grow/practice-launcher";
+import { cn } from "@/lib/utils";
 import { ChallengeCard, MomentumCard } from "@/components/grow/momentum";
 import { challengeFor, momentumFor, momentumView } from "@/lib/grow/momentum-data";
 
@@ -58,6 +59,7 @@ export default async function GrowHome() {
   );
   const today = next?.skillKey ?? plan[0]?.skillKey ?? "judgment.trade-off-reasoning";
   const tl = await getTranslations("levels");
+  const tm = await getTranslations("grow.roadmap");
 
   // Every skill's estimate from the latest report, for the ranges below.
   const skills = new Map((report?.domains ?? []).flatMap((d) => d.subSkills.map((x) => [x.key, x] as const)));
@@ -132,15 +134,23 @@ export default async function GrowHome() {
 
           {plan.length ? (
             <section aria-labelledby="focus-h">
-              <h2 id="focus-h" className="text-xl font-semibold text-text">{t("focus.title")}</h2>
-              <p className="mt-1 text-sm text-secondary">{t("focus.body")}</p>
+              <h2 id="focus-h" className="text-xl font-semibold text-text" dir="auto">{tm("title", { goal: profile.goal })}</h2>
+              <p className="mt-1 text-sm text-secondary">{tm("body")}</p>
               <ol className="mt-6 flex flex-col divide-y divide-border overflow-hidden rounded-card bg-surface shadow-card">
-                {plan.map((p) => {
+                {plan.map((p, i) => {
                   const sk = skills.get(p.skillKey);
+                  // How far this step has come in practice.
+                  const done = practice.filter((x) => x.competencyKeys.includes(p.skillKey));
+                  const best = Math.max(0, ...done.flatMap((x) => ((x.feedback as { scores?: { competencyKey: string; level: number }[] } | null)?.scores ?? []).filter((sc) => sc.competencyKey === p.skillKey).map((sc) => sc.level)));
                   return (
                     <li key={p.skillKey} className="grid gap-4 p-5 sm:grid-cols-[minmax(0,1fr)_12rem] sm:items-start">
                       <div className="min-w-0">
-                        <p className="font-semibold text-text">{nameOf(p.skillKey)}</p>
+                        <p className="eyebrow flex items-center gap-2 text-tertiary">
+                          <span className={cn("grid size-5 place-items-center rounded-full text-[11px] font-bold tabular", done.length ? "bg-text text-background" : "ring-1 ring-inset ring-border-strong text-secondary")}>{i + 1}</span>
+                          {tm("step", { n: i + 1 })}
+                        </p>
+                        <p className="mt-1.5 font-semibold text-text">{nameOf(p.skillKey)}</p>
+                        <p className="mt-0.5 text-xs text-secondary">{done.length ? tm("progress", { n: done.length, level: tl(String(Math.round(best || 1))) }) : tm("notStarted")}</p>
                         <p className="mt-1 text-sm leading-relaxed text-secondary" dir="auto">{p.why}</p>
                         <p className="mt-2 text-sm leading-relaxed text-text" dir="auto"><span className="text-tertiary">{t("focus.thirty")} </span>{p.days30}</p>
                       </div>

@@ -22,7 +22,7 @@ export default async function GrowOnboarding() {
       <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_20rem]">
         <div className="max-w-2xl">
           <PageHeader title={t("title")} description={t("description")} />
-          <GrowOnboardingForm initial={p ? { currentRole: p.currentRole, experienceYears: p.experienceYears, goal: p.goal, hoursPerWeek: p.hoursPerWeek, selfView: p.selfView as Record<string, number> } : null} domains={domains} />
+          <GrowOnboardingForm initial={p ? { currentRole: p.currentRole, experienceYears: p.experienceYears, goal: p.goal, hoursPerWeek: p.hoursPerWeek, selfView: p.selfView as Record<string, number>, cvText: p.cvText ?? "" } : null} domains={domains} />
         </div>
         {/* What happens after this form: a real sequence. */}
         <aside className="self-start hero-card rounded-[20px] p-6 text-ink-foreground lg:sticky lg:top-12">

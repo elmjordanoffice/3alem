@@ -160,3 +160,22 @@ All motion is CSS or Reanimated, uses springs and short eases, and goes still un
   - The task card says how to answer before the prompt.
 - **Getting around:** long cards scroll inside before handing the swipe to the deck. Keys page through cards on the web. A single nudge on a device's first deck shows that it moves.
 - **Reduced motion:** removes all of it but short fades. *(Mobile)*
+
+**D-058: Grow practice is personal: CV, experience, goal and roadmap.** In Grow, questions should be about the person's own work. Hire stays the same for every applicant to a role, which is what makes a hiring assessment fair to compare.
+- **The CV:** optional, pasted or uploaded as PDF, Word or text through `/api/grow/cv`, which extracts the text and saves nothing itself. It is kept private on the Grow profile.
+- **The offline reader** (`src/lib/grow/cv.ts`) finds:
+  - recent job titles;
+  - years of experience (from date ranges with overlaps merged, or from "N years");
+  - the industry, matched to a scene world;
+  - the role family;
+  - whether the person has managed people, and the team size;
+  - which skills the CV clearly shows.
+
+  Onboarding shows what was read before anything is saved.
+- **What shapes each question:**
+  - **Scene:** set in the industry from the CV, with the person in the role named by their goal ("Move from engineer to team lead" makes them the Team lead).
+  - **Difficulty:** before any assessment, it starts from their experience (entry 2.5, mid 3, senior 3.5, lead 4).
+  - **Skill:** the next step of their roadmap (the plan from their latest assessment); before a roadmap exists, the skill their target role needs most that the CV doesn't show.
+  - **With a model configured:** the scenario writer gets a short summary of all of this. Baseline assessments use the goal's role family and the same summary.
+- **"Why this one":** every practice scenario says why it was chosen (roadmap step, target role, industry).
+- **The overview:** shows a numbered roadmap to the person's goal, with sessions and the best level so far for each step. *(Grow)*

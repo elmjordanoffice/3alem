@@ -15,7 +15,8 @@ import { practiceFeedback, type PracticeFeedback } from "@/lib/ai/prompts/practi
 import { anchorsFor } from "@/lib/ai/prompts/shared";
 import { getProvider, runAgent } from "@/lib/ai/run";
 import { trackByKey } from "./tracks";
-import { getGrowProfile } from "./profile";
+import { getGrowProfile, growContext } from "./profile";
+import { ROLE_FAMILIES } from "@/lib/framework/role-families";
 import { coachingFor, type Coaching } from "./coaching";
 
 export interface PracticeItem {
@@ -31,6 +32,8 @@ export interface PracticeItem {
   retryOf?: string;
   previous?: { scores: { competencyKey: string; level: number }[]; tips: string[] };
   track?: { key: string; index: number };
+  /** Why this scenario, for this person: their industry, the role they're aiming for, the roadmap step it serves. */
+  why?: { industry: string | null; role: string; skillKey: string; goal: string; step: number | null; steps: number };
 }
 
 export interface StoredFeedback extends PracticeFeedback {
@@ -43,8 +46,24 @@ function domainOf(key: string) {
   return key.split(".")[0]!;
 }
 
+/** The roadmap: the plan's skills from the person's latest Grow report, most important first. */
+async function roadmapSkills(userId: string): Promise<string[]> {
+  const r = await withTenant({ userId }, (tx) => tx.report.findFirst({ where: { subjectUserId: userId, kind: "GROW", status: "READY" }, orderBy: { createdAt: "desc" }, select: { content: true } }));
+  return ((r?.content as { narrative?: { plan?: { skillKey: string }[] } } | null)?.narrative?.plan ?? []).map((p) => p.skillKey);
+}
+
+/** Before a roadmap exists: a skill the goal's role needs most that the CV doesn't show yet. */
+function gapSkill(family: string | undefined, shows: string[]): string | null {
+  const f = ROLE_FAMILIES.find((x) => x.key === family);
+  if (!f) return null;
+  const domain = Object.entries(f.domainWeights)
+    .filter(([d]) => d !== "technical" && !shows.includes(d))
+    .sort((a, b) => b[1] - a[1])[0]?.[0];
+  return DOMAINS.find((d) => d.key === domain)?.subSkills[0]?.key ?? null;
+}
+
 /** The person's latest assessed level for a skill (from their newest Grow model). */
-async function currentLevel(userId: string, key: string): Promise<number> {
+async function currentLevel(userId: string, key: string, startLevel = 3): Promise<number> {
   const snap = await withTenant({ userId }, (tx) =>
     tx.candidateModelSnapshot.findFirst({ where: { subjectUserId: userId, session: { mode: "GROW" } }, orderBy: { createdAt: "desc" } }),
   );
@@ -52,7 +71,7 @@ async function currentLevel(userId: string, key: string): Promise<number> {
     // Before any assessment, start from the person's own view of the domain, if they gave one.
     const profile = await getGrowProfile(userId);
     const own = (profile?.selfView as Record<string, number> | undefined)?.[domainOf(key)];
-    return typeof own === "number" ? own : 3;
+    return typeof own === "number" ? own : startLevel;
   }
   const model = snap.model as unknown as CandidateModel;
   return model.skills[key] ? estimateSkill(model, key).mean : 3;
@@ -91,6 +110,9 @@ export async function startPractice(userId: string, locale: "en" | "ar", opts: {
     );
   }
 
+  // Who this is for: their industry, the role they're aiming for, their experience, their roadmap.
+  const ctx = profile ? growContext(profile, locale) : null;
+  const plan = await roadmapSkills(userId);
   let skills: string[];
   let preferred: ItemType | undefined;
   let stretch = 0;
@@ -101,15 +123,16 @@ export async function startPractice(userId: string, locale: "en" | "ar", opts: {
     preferred = def.itemType;
     stretch = def.stretch;
   } else {
-    skills = [opts.skillKey ?? "judgment.trade-off-reasoning"];
+    skills = [opts.skillKey ?? plan[0] ?? gapSkill(profile?.targetFamily, ctx?.career.shows ?? []) ?? "judgment.trade-off-reasoning"];
   }
-  const level = await currentLevel(userId, skills[0]!);
+  const level = await currentLevel(userId, skills[0]!, ctx?.startLevel ?? 3);
   // Practise just above where you are now.
   const difficulty = Math.min(5, Math.max(2, Math.round(level + 0.5 + stretch)));
   const used = new Set(
     (await withTenant({ userId }, (tx) => tx.practiceSession.findMany({ where: { userId }, select: { item: true } }))).map((p) => (p.item as unknown as PracticeItem).source.replace(/^bank:/, "")),
   );
-  const { world } = curatedWorld(profile?.currentRole ?? "", locale);
+  // Scenes set in their industry, with them in the role they're aiming for.
+  const world = ctx ? { ...ctx.world, yourRole: ctx.target } : curatedWorld("", locale).world;
   const target = { skills, itemType: bestType(skills[0]!, preferred), difficulty, timed: false };
 
   let item: PracticeItem | null = null;
@@ -120,7 +143,7 @@ export async function startPractice(userId: string, locale: "en" | "ar", opts: {
         world,
         locale,
         roleFamily: profile?.targetFamily ?? null,
-        roleSummary: profile ? `${profile.currentRole}, aiming for: ${profile.goal}` : "",
+        roleSummary: ctx ? `${ctx.summary}${plan.length ? ` Roadmap focus: ${plan.join(", ")}.` : ""}` : "",
         chapter: { number: 1, title: world.chapters[0]!.title, summary: world.chapters[0]!.summary },
         history: [],
         usedBankIds: used,
@@ -143,6 +166,10 @@ export async function startPractice(userId: string, locale: "en" | "ar", opts: {
     };
   }
   if (opts.track) item.track = opts.track;
+  if (ctx && profile) {
+    const step = plan.indexOf(skills[0]!);
+    item.why = { industry: ctx.industryFromCv ? world.industry : null, role: ctx.target, skillKey: skills[0]!, goal: profile.goal, step: step >= 0 ? step + 1 : null, steps: plan.length };
+  }
   return withTenant({ userId }, (tx) =>
     tx.practiceSession.create({ data: { userId, competencyKeys: item!.targets, difficulty: item!.difficulty, item: item as unknown as Prisma.InputJsonValue } }),
   );
