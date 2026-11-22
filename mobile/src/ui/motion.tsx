@@ -179,6 +179,68 @@ export function useCountUp(target: number, { delay = 0, duration = 900 }: { dela
   return shown;
 }
 
+function SwapSlot({ t, k, sign, travel, children }: { t: SharedValue<number>; k: SharedValue<number>; sign: SharedValue<number>; travel: number; children: React.ReactNode }) {
+  const { reduceMotion } = useTheme();
+  const style = useAnimatedStyle(() => {
+    // Where this slot's value stands: -1 waiting below, 0 in place, 1 gone above.
+    const r = t.value - k.value;
+    if (reduceMotion) return { opacity: interpolate(r, [-1, 0, 1], [0, 1, 0], Extrapolation.CLAMP) };
+    const at = Math.max(-1, Math.min(1, r));
+    // The old one is all but gone before the new one is solid, so the two never sit on top of each other at half
+    // strength; a spring's last hair of overshoot stays fully visible.
+    return { opacity: interpolate(r, [-1, -0.55, -0.15, 0.05, 0.5], [0, 0, 1, 1, 0], Extrapolation.CLAMP), transform: [{ translateY: -at * travel * sign.value }] };
+  });
+  return <Animated.View style={[{ position: "absolute", top: 0, left: 0, right: 0 }, style]}>{children}</Animated.View>;
+}
+
+/**
+ * A value that changes in place: the old one slides up and fades, then the
+ * new one rises into its place, on a spring (`back`: the other way, for a
+ * value going back). Under reduced motion, a crossfade. Two slots take turns,
+ * and a slot gets its new text only while it is out of sight, so nothing ever
+ * flashes. Hidden from screen readers: label the parent.
+ */
+export function Swap({ value, render, travel = 10, delay = 0, back = false, config = spring.rise }: { value: string; render: (value: string) => React.ReactNode; travel?: number; delay?: number; back?: boolean; config?: WithSpringConfig }) {
+  const { reduceMotion } = useTheme();
+  const [s, setS] = React.useState({ slots: [value, null] as [string, string | null], k: 0, latest: value, back: false });
+  if (s.latest !== value) {
+    // A new value: into the slot that is out of sight (React's "adjust state while rendering").
+    const k = s.k + 1;
+    const slots: [string, string | null] = [s.slots[0], s.slots[1]];
+    slots[k % 2] = value;
+    setS({ slots, k, latest: value, back });
+  }
+  const t = useSharedValue(0);
+  const k0 = useSharedValue(0);
+  const k1 = useSharedValue(-1);
+  const sign = useSharedValue(1);
+  React.useLayoutEffect(() => {
+    if (!s.k) return;
+    (s.k % 2 ? k1 : k0).value = s.k;
+    sign.value = s.back ? -1 : 1;
+    t.value = reduceMotion ? withDelay(Math.min(delay, REDUCED_DELAY), withTiming(s.k, FADE)) : withDelay(delay, withSpring(s.k, config));
+  }, [s.k]); // eslint-disable-line react-hooks/exhaustive-deps
+  const other = s.k % 2 ? s.slots[0] : s.slots[1];
+  return (
+    <View accessibilityElementsHidden importantForAccessibility="no-hide-descendants" pointerEvents="none">
+      {/* Sizes the box: as tall as the current value, as wide as the wider of the two, so the one on its way out
+          ("Mon" giving way to "Tue") never wraps. The slots draw over it. */}
+      <View style={{ opacity: 0 }}>
+        {render(s.latest)}
+        {other !== null && other !== s.latest ? <View style={{ height: 0, overflow: "hidden" }}>{render(other)}</View> : null}
+      </View>
+      <SwapSlot t={t} k={k0} sign={sign} travel={travel}>
+        {render(s.slots[0])}
+      </SwapSlot>
+      {s.slots[1] !== null ? (
+        <SwapSlot t={t} k={k1} sign={sign} travel={travel}>
+          {render(s.slots[1])}
+        </SwapSlot>
+      ) : null}
+    </View>
+  );
+}
+
 /** Fires `fn` on the JS thread once, the first time `when` turns true on the UI thread. */
 export function useOnce(when: () => boolean, fn: () => void) {
   const fired = useSharedValue(0);

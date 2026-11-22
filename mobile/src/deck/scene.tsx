@@ -2,7 +2,7 @@ import * as React from "react";
 import { Keyboard, View, type StyleProp, type ViewStyle } from "react-native";
 import Animated, { Extrapolation, FadeIn, FadeOut, interpolate, useAnimatedStyle, useSharedValue, withDelay, withSpring, withTiming } from "react-native-reanimated";
 import { Lock, RotateCw, WifiOff } from "lucide-react-native";
-import type { ItemView, ResponseContent, SubmitPayload } from "../api/types";
+import type { ItemView, ResponseContent, Stage, SubmitPayload } from "../api/types";
 import { useLocale, useT } from "../i18n";
 import { radius, spring, useTheme } from "../theme";
 import { haptic } from "../lib/haptics";
@@ -32,6 +32,7 @@ import { Pager } from "./pager";
 import { CARD_PAD, useCardGeometry, type PagerHandle } from "./pager-context";
 import { Slide } from "./slide";
 import { useKeyboardLift } from "./keyboard";
+import { BarClock, useStoryTime } from "./story";
 
 const TASKS: Record<string, (ctx: TaskContext) => TaskResult> = {
   choice: useChoiceTask,
@@ -120,25 +121,39 @@ export function SceneScreen({ view, actions, online }: { view: ItemView; actions
     [taskAt],
   );
 
+  // ── The week, alive ──────────────────────────────────────────────────────
+  // The scene's moment, by stage: a follow-up moves the clock on, and each page
+  // keeps the moment it belongs to (the situation and the first answer, the
+  // opening one; a follow-up, its own). The colleague's note comes with the
+  // scene's opening view and stays on the cover through its follow-ups.
+  const story = view.story;
+  const storyTime = useStoryTime();
+  const moments = React.useRef<Partial<Record<Stage, number>>>({});
+  if (story) moments.current[stage] = story.clock.minutes;
+  const [note] = React.useState(() => (stage === "MAIN" ? (view.story?.note ?? null) : null));
+  const moment = story ? storyTime.at({ day: story.clock.day, minutes: moments.current.MAIN ?? story.clock.minutes }, "long") : undefined;
+
   // ── The cards ────────────────────────────────────────────────────────────
   // The situation and the materials are memoised: they render once per scene.
   const chapter = view.world.chapters[view.chapterIndex]?.title ?? "";
   const kinds = content.materials.map((m) => m.kind).join(",");
-  const all: SlideSpec[] = [
-    { key: "cover", tone: "ink", node: <Cover title={content.title} scenario={content.scenario} kinds={kinds} chapter={chapter} cast={view.world.cast} /> },
-    ...content.materials.map((m, i) => ({ key: `material-${m.id}`, node: <MaterialCard material={m} n={i + 1} total={content.materials.length} company={view.world.companyName} /> })),
+  const at = (specs: SlideSpec[], s: Stage) => specs.map((spec) => ({ ...spec, at: s }));
+  const all: (SlideSpec & { at: Stage })[] = [
+    { key: "cover", tone: "ink", at: "MAIN", node: <Cover title={content.title} scenario={content.scenario} kinds={kinds} chapter={chapter} cast={view.world.cast} moment={moment} note={note} /> },
+    ...content.materials.map((m, i) => ({ key: `material-${m.id}`, at: "MAIN" as const, node: <MaterialCard material={m} n={i + 1} total={content.materials.length} company={view.world.companyName} /> })),
   ];
-  if (stage === "MAIN") all.push(...main.slides);
+  if (stage === "MAIN") all.push(...at(main.slides, "MAIN"));
   else {
-    all.push({ key: "sealed-main", node: <Sealed summary={main.summary} fresh={!firstStage.current} /> });
-    if (stage === "TWIST" && content.probe) all.push({ key: "sealed-probe", node: <Sealed summary={probe.summary} compact fresh={!firstStage.current} /> });
-    all.push(...(stage === "PROBE" ? probe.slides : twist.slides));
+    all.push({ key: "sealed-main", at: "MAIN", node: <Sealed summary={main.summary} fresh={!firstStage.current} /> });
+    if (stage === "TWIST" && content.probe) all.push({ key: "sealed-probe", at: "PROBE", node: <Sealed summary={probe.summary} compact fresh={!firstStage.current} /> });
+    all.push(...at(stage === "PROBE" ? probe.slides : twist.slides, stage));
   }
   // A gate hides everything after it until it's answered.
   const gateAt = all.findIndex((s) => s.gate);
   const slides = gateAt >= 0 ? all.slice(0, gateAt + 1) : all;
   keys.current = slides.map((s) => s.key);
   const lastIsTask = gateAt < 0;
+  const times = story ? slides.map((s) => moments.current[s.at] ?? story.clock.minutes) : null;
 
   // ── A new stage of the same scene: fold the answer in, spring to the follow-up.
   React.useLayoutEffect(() => {
@@ -230,7 +245,15 @@ export function SceneScreen({ view, actions, online }: { view: ItemView; actions
             })}
           </Pager>
           <Rail pages={pages} count={slides.length} pulse={pulse} />
-          <TopBar orgName={view.branding.orgName} chapters={view.world.chapters.map((ch) => ch.title)} chapterIndex={view.chapterIndex} save={online ? save : "offline"} chapterDone={chapterDone} timer={deadline ? <QuietTimer deadline={deadline} onExpire={() => setTimeUp(true)} /> : undefined} />
+          <TopBar
+            orgName={view.branding.orgName}
+            chapters={view.world.chapters.map((ch) => ch.title)}
+            chapterIndex={view.chapterIndex}
+            save={online ? save : "offline"}
+            chapterDone={chapterDone}
+            clock={story && times ? <PageClock pages={pages} day={story.clock.day} times={times} /> : undefined}
+            timer={deadline ? <QuietTimer deadline={deadline} onExpire={() => setTimeUp(true)} /> : undefined}
+          />
           {toast ? (
             <Animated.View entering={FadeIn.duration(160)} exiting={FadeOut.duration(200)} pointerEvents="none" style={{ position: "absolute", top: insets.top + 8, left: 20, right: 20, alignItems: "center", zIndex: 20 }}>
               <View accessibilityLiveRegion="polite" style={{ flexDirection: "row", alignItems: "center", gap: 8, paddingHorizontal: 14, paddingVertical: 10, borderRadius: radius.pill, backgroundColor: c.text, maxWidth: 420 }}>
@@ -261,6 +284,12 @@ function DeckSlide({ i, pages, tone, footer, contentStyle, testID, children }: {
 function Rail({ pages, count, pulse }: { pages: IndexStore; count: number; pulse: number }) {
   const index = usePageIndex(pages);
   return <SlideRail count={count} index={index} pulse={pulse} />;
+}
+
+/** The bar's clock at the moment of the current page; like the rail, it follows page changes without re-rendering the scene. */
+function PageClock({ pages, day, times }: { pages: IndexStore; day: number; times: number[] }) {
+  const index = usePageIndex(pages);
+  return <BarClock day={day} minutes={times[Math.min(index, times.length - 1)] ?? times[times.length - 1] ?? 0} />;
 }
 
 /** The answered task, folded: a check, and a digest you can reread. `fresh`: it was sealed just now, so the seal plays. */

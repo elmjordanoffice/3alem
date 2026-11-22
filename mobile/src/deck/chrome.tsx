@@ -126,8 +126,8 @@ export function QuietTimer({ deadline, onExpire }: { deadline: number; onExpire?
   );
 }
 
-/** The floating bar over the deck: who it's for, which chapter, save state, the timer. */
-export function TopBar({ orgName, chapters, chapterIndex, save, timer, chapterDone }: { orgName: string; chapters: string[]; chapterIndex: number; save: SaveState; timer?: React.ReactNode; chapterDone?: boolean }) {
+/** The floating bar over the deck: who it's for, which chapter and the moment in the week, save state, the timer. */
+export function TopBar({ orgName, chapters, chapterIndex, save, timer, chapterDone, clock }: { orgName: string; chapters: string[]; chapterIndex: number; save: SaveState; timer?: React.ReactNode; chapterDone?: boolean; clock?: React.ReactNode }) {
   const { c } = useTheme();
   const { safeTop } = useDeckInsets();
   const t = useT("components.chapters");
@@ -149,6 +149,7 @@ export function TopBar({ orgName, chapters, chapterIndex, save, timer, chapterDo
               {chapters[chapterIndex]}
             </T>
           </T>
+          {clock}
           {timer}
           <SaveDot state={save} />
         </View>

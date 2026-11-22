@@ -8,7 +8,7 @@ import { palette, spring, useTheme } from "../theme";
 import { haptic } from "../lib/haptics";
 import { Button } from "../ui/button";
 import { Narrowing } from "../ui/brand";
-import { ARRIVE, Entrance, FADE, OUT, useEntrance, useOnce } from "../ui/motion";
+import { ARRIVE, Entrance, FADE, OUT, Swap, useEntrance, useOnce } from "../ui/motion";
 import { T } from "../ui/text";
 import { OrgHeader, Screen } from "./scaffold";
 
@@ -272,16 +272,67 @@ export function StateScreen({ branding, kind, onBack, onRetry, message }: { bran
   );
 }
 
-/** While the first scene is written: the bands narrow, over and over, into the dot. */
+/** How long each line of the loading screen stays. */
+const LINE_EVERY = 1800;
+/** A line arriving: soft and slow, no overshoot. */
+const LINE_SPRING = { mass: 1, stiffness: 140, damping: 22 } as const;
+
+/** Shuffled, in place (Fisher–Yates). */
+function shuffle<X>(xs: X[]): X[] {
+  for (let i = xs.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [xs[i], xs[j]] = [xs[j]!, xs[i]!];
+  }
+  return xs;
+}
+
+/**
+ * The loading line: "Unlocking the office…" first, the middle ones in a fresh
+ * order (each once, so never the same twice in a row), then "Almost there…"
+ * for as long as it takes. It never holds anything up: when the view changes
+ * the screen goes, timers and all.
+ */
+function useLoadingLine() {
+  const order = React.useMemo(() => ["l1", ...shuffle(["l2", "l3", "l4", "l5"]), "l6"], []);
+  const [i, setI] = React.useState(0);
+  React.useEffect(() => {
+    if (i >= order.length - 1) return;
+    const id = setTimeout(() => setI(i + 1), LINE_EVERY);
+    return () => clearTimeout(id);
+  }, [i, order.length]);
+  return order[i]!;
+}
+
+/**
+ * While the week is set up (the world, then the first scene): the bands
+ * narrow, over and over, into the dot; the title; and a playful line about
+ * what's happening, changing every couple of seconds with a soft rise. Under
+ * reduced motion the Narrowing is still and the lines crossfade.
+ */
 export function Preparing({ branding }: { branding?: Branding }) {
-  const t = useT("candidate");
+  const t = useT("candidate.loading");
+  const { rtl } = useLocale();
+  const line = useLoadingLine();
   return (
     <Screen testID="screen-preparing" header={<OrgHeader branding={branding} />} scroll={false}>
-      <View accessibilityRole="progressbar" accessibilityLabel={t("preparing")} style={{ flexGrow: 1, alignItems: "center", justifyContent: "center", gap: 28, paddingBottom: 60 }}>
+      <View accessibilityRole="progressbar" accessibilityLabel={t("title")} style={{ flexGrow: 1, alignItems: "center", justifyContent: "center", gap: 32, paddingBottom: 60 }}>
         <Narrowing width={132} rows={3} loop />
-        <T variant="callout" tone="secondary" align="center">
-          {t("preparing")}
-        </T>
+        <View style={{ alignSelf: "stretch", gap: 10 }}>
+          {/* Beiruti's narrow word space all but vanishes in "نجهّز أسبوعك" (ز then أ); Plex Arabic keeps the words apart. */}
+          <T variant={rtl ? "title2" : "displaySm"} align="center" accessibilityRole="header">
+            {t("title")}
+          </T>
+          <Swap
+            value={line}
+            travel={14}
+            config={LINE_SPRING}
+            render={(k) => (
+              <T testID="loading-line" variant="callout" tone="secondary" align="center">
+                {t(`lines.${k}`)}
+              </T>
+            )}
+          />
+        </View>
       </View>
     </Screen>
   );

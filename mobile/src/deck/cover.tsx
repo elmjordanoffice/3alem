@@ -1,6 +1,7 @@
 import * as React from "react";
 import { useWindowDimensions, View } from "react-native";
 import { castIn } from "../../../src/lib/brand/scene-art";
+import type { StoryNote } from "../api/types";
 import { useT } from "../i18n";
 import { palette, radius } from "../theme";
 import { Avatar } from "../ui/avatar";
@@ -8,6 +9,7 @@ import { Paragraphs, T } from "../ui/text";
 import { SceneArt } from "./art";
 import { MATERIAL_ICONS } from "./materials";
 import { CARD_INSET, CARD_MAX_W, CARD_PAD, useCardGeometry } from "./pager-context";
+import { ColleagueNote } from "./story";
 
 const ON_INK = { text: palette.inkForeground, reading: "rgba(242,240,235,0.88)", soft: palette.inkSecondary, line: "rgba(242,240,235,0.22)" } as const;
 /** Stone tints for the people in the face pile, so overlapping discs stay apart. */
@@ -15,25 +17,29 @@ const DISCS = ["#F2F0EB", "#D9D4CA", "#B9B4AA"] as const;
 
 /**
  * The situation: an ink card. The scene's art across the top (about 28% of the
- * screen, at most 240pt), then the chapter, the title in the wide display face,
- * the situation itself, the materials that follow, and the people it names.
- * Memoised: it renders once per scene, never on a page change.
+ * screen, at most 240pt; a little less when a colleague's note comes in under
+ * it), then the chapter and the scene's moment in the week, the title in the
+ * wide display face, the situation itself, the materials that follow, and the
+ * people it names. Memoised: it renders once per scene, never on a page change.
  */
-export const Cover = React.memo(function Cover({ title, scenario, kinds, chapter, cast }: { title: string; scenario: string; kinds: string; chapter: string; cast: { name: string; role: string }[] }) {
+export const Cover = React.memo(function Cover({ title, scenario, kinds, chapter, cast, moment, note }: { title: string; scenario: string; kinds: string; chapter: string; cast: { name: string; role: string }[]; moment?: string; note?: StoryNote | null }) {
   const tm = useT("mobile");
   const geo = useCardGeometry();
   const { width: screenW, height: screenH } = useWindowDimensions();
   const artW = geo?.width ?? Math.min(screenW - CARD_INSET * 2, CARD_MAX_W);
-  const artH = Math.round(Math.min(240, screenH * 0.28));
+  const artH = Math.round(note ? Math.min(200, screenH * 0.22) : Math.min(240, screenH * 0.28));
   const people = React.useMemo(() => castIn(scenario, cast, 3), [scenario, cast]);
   const materials = kinds ? kinds.split(",") : [];
+  // "Day 1: The brief · Monday 09:10", the moment kept on one line.
+  const eyebrow = [chapter, moment?.replace(/ /g, "\u00a0")].filter(Boolean).join(" · ");
   return (
     <View style={{ flexGrow: 1 }}>
       <SceneArt seed={title} width={artW} height={artH} />
-      <View style={{ paddingHorizontal: CARD_PAD, paddingTop: 20, gap: 14 }}>
-        {chapter ? (
-          <T variant="label" numberOfLines={2} style={{ color: ON_INK.soft }}>
-            {chapter}
+      {note ? <ColleagueNote note={note} travel={artW} /> : null}
+      <View style={{ paddingHorizontal: CARD_PAD, paddingTop: note ? 24 : 20, gap: 14 }}>
+        {eyebrow ? (
+          <T testID="cover-eyebrow" variant="label" numberOfLines={2} style={{ color: ON_INK.soft }}>
+            {eyebrow}
           </T>
         ) : null}
         <T variant="displayMd" accessibilityRole="header" style={{ color: ON_INK.text }}>

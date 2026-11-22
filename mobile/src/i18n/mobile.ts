@@ -96,6 +96,10 @@ export const mobileEn = {
     /** The same stamp when the title doesn't start with its day. */
     chapterDone: "Chapter {n} done",
   },
+  story: {
+    /** The in-story day, only where the device can't name weekdays. */
+    day: "Day {n}",
+  },
 } as const;
 
 type Shape<T> = { [K in keyof T]: T[K] extends string ? string : Shape<T[K]> };
@@ -190,5 +194,8 @@ export const mobileAr: Shape<typeof mobileEn> = {
     // The verb comes first, so it stays singular for "اليوم الأول" and the dual "اليومان الثالث والرابع" alike.
     dayDone: "انتهى {day}",
     chapterDone: "{n, select, 1 {انتهى الفصل الأول} 2 {انتهى الفصل الثاني} 3 {انتهى الفصل الثالث} 4 {انتهى الفصل الرابع} 5 {انتهى الفصل الخامس} other {انتهى الفصل {n}}}",
+  },
+  story: {
+    day: "{n, select, 1 {اليوم الأول} 2 {اليوم الثاني} 3 {اليوم الثالث} 4 {اليوم الرابع} 5 {اليوم الخامس} other {اليوم {n}}}",
   },
 };

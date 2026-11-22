@@ -30,6 +30,21 @@ export interface Branding {
 
 export type TranscriptTurn = { from: "candidate" | "stakeholder"; text: string };
 
+/** Where a scene sits in the in-story week (src/lib/hire/story.ts). */
+export interface StoryClock {
+  /** 1-based day of the week; Day 1 is the first working day. */
+  day: number;
+  /** Minutes after midnight (09:10 to 17:40). */
+  minutes: number;
+}
+
+/** A colleague's short, neutral note about the previous scene, already in the session's language. */
+export interface StoryNote {
+  from: { name: string; role: string };
+  text: string;
+  minutes: number;
+}
+
 export type CandidateView =
   | { view: "invalid" }
   | { view: "expired" | "revoked"; branding: Branding }
@@ -61,6 +76,8 @@ export type CandidateView =
         presentedAt: string;
         roleplay?: { transcript: TranscriptTurn[] };
       };
+      /** The scene's moment, and a note about the last scene when this one has just opened. Optional: older servers don't send it. */
+      story?: { clock: StoryClock; note: StoryNote | null };
     }
   | { view: "paused"; branding: Branding; world: PublicWorld; chapterIndex: number; minutesLeft: number }
   | { view: "complete"; branding: Branding; roleTitle: string; recap?: Recap };

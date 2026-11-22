@@ -67,6 +67,7 @@ src/
     flow.tsx           screen-to-screen motion: the old one slides up, the next rises
     scene.tsx          builds a scene's cards, follow-ups, sealed answers, submit bar
     cover.tsx, art.tsx the situation card and its scene art (../src/lib/brand/scene-art.ts)
+    story.tsx          the week, alive: the in-story clock in the bar, a colleague's note on the cover
     chrome.tsx         floating top bar, chapter rail, page rail, quiet timer, next hint
     materials.tsx      email, memo (letterhead), table (sticky column), chart (react-native-svg)
     index-store.ts     the current page outside React state
@@ -158,6 +159,41 @@ where nothing moves and nothing bursts.
 - **Finish.** The Narrowing's dot pops with a ring and a few particles (~1 s,
   success haptic); the recap counts up from 0 in tabular figures; the habits
   fade in one by one.
+
+### The week, alive
+
+The item view's optional `story` (`src/lib/hire/story.ts`; older servers don't
+send it, and then none of this shows) places each scene in the in-story week
+and can open it with a note from a colleague. Nothing here reacts to answers:
+the note's text comes from the server as it is, with no added reactions,
+emoji or colour, and there is no copy that evaluates.
+
+- **The clock.** "Mon 09:10" in the top bar, after the chapter; "Day 1: The
+  brief · Monday 09:10" on the cover's eyebrow. Day 1 is Monday in English and
+  Sunday in Arabic (a Sunday–Thursday week), weekday from `Intl.DateTimeFormat`
+  (short in the bar, long on the cover), 24-hour time in the app's numerals,
+  always left to right. Each page keeps its own moment: the situation, the
+  materials and the first answer stay at the scene's opening time, a
+  follow-up at its own, so the bar moves on as the follow-up card arrives
+  and goes back if you swipe up to reread. When it changes, the changed
+  characters tick over (`Swap` in `ui/motion.tsx`: the old slide up and fade,
+  the new rise, digits carrying from the last one); a new scene's bar starts
+  at the last scene's moment and ticks over once it has risen, so a chapter
+  break turns Monday into Tuesday. Under reduced motion, a crossfade.
+- **The note.** Sent only as a new scene opens (after a previous one); it stays
+  on the cover through the scene's follow-ups. Between the art and the title:
+  a "New message" eyebrow, initials, name · time, role, then the text in a
+  bubble (bone at 8% on ink, a hairline, a tail on the start side). Its space
+  is kept from the start; about half a second after the cover settles
+  (`NOTE_DELAY`) it slides in from the reading start with a light haptic.
+  Under reduced motion it fades in. The art is a little shorter on a cover
+  with a note (22% of the screen, at most 200pt).
+- **Loading.** While the week is set up (and while the app first reaches the
+  server), the Narrowing loops, "Setting up your week", and a line about what
+  is happening changes every 1.8 s with a soft rise: "Unlocking the office…"
+  first, the middle lines in a fresh order, then "Almost there…" for as long as
+  it takes. It holds nothing up: when the view changes it goes. Under reduced
+  motion the Narrowing is still and the lines crossfade.
 
 ### Saving and sending
 
