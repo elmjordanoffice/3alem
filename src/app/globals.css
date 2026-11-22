@@ -622,3 +622,8 @@ html[data-r-motion] [data-narrow]:not([data-in]) .r-fade { opacity: 0; }
   .clock-tick, .loading-narrow > span { animation: none; }
   .note-in { animation: note-fade 300ms linear 300ms both; }
 }
+
+/* A new card turns over once (src/components/grow/momentum.tsx). */
+@keyframes card-reveal { 0% { opacity: 0; transform: perspective(700px) rotateY(80deg) scale(0.9); } 60% { opacity: 1; transform: perspective(700px) rotateY(-8deg) scale(1.02); } 100% { transform: none; } }
+.card-reveal { animation: card-reveal 900ms var(--ease-hero) 450ms both; }
+@media (prefers-reduced-motion: reduce) { .card-reveal { animation: none; } }

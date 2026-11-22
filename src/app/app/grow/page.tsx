@@ -19,8 +19,8 @@ import { Button } from "@/components/ui/button";
 import { SkillRadar } from "@/components/report/charts";
 import { PracticeLauncher } from "@/components/grow/practice-launcher";
 import { cn } from "@/lib/utils";
-import { ChallengeCard, MomentumCard } from "@/components/grow/momentum";
-import { challengeFor, momentumFor, momentumView } from "@/lib/grow/momentum-data";
+import { ChallengeCard, MomentumCard, RepCard } from "@/components/grow/momentum";
+import { challengeFor, habitFor, momentumFor, momentumView } from "@/lib/grow/momentum-data";
 
 function daysAgo(d: Date) {
   return Math.floor((Date.now() - d.getTime()) / 86400_000);
@@ -42,6 +42,7 @@ export default async function GrowHome() {
   const sessions = await growSessions(viewer.user.id);
   const momentum = momentumView(await momentumFor(viewer.user.id, locale));
   const challenge = await challengeFor(viewer.user.id, locale);
+  const daily = await habitFor(viewer.user.id, locale);
   const inProgress = sessions.find((s) => ["STARTED", "IN_PROGRESS", "PAUSED"].includes(s.status));
   const latest = sessions.find((s) => s.report?.status === "READY");
   const report = (latest?.report?.content as unknown as ReportContent) ?? null;
@@ -130,6 +131,7 @@ export default async function GrowHome() {
             </div>
           </section>
 
+          {report ? <RepCard habit={daily} skillKey={today} skillName={nameOf(today)} reminderHour={profile.reminderHour ?? null} /> : null}
           {report ? <ChallengeCard c={challenge} /> : null}
 
           {plan.length ? (

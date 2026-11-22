@@ -2020,7 +2020,8 @@
         "role": "You play the {role}, the role you're aiming for",
         "step": "Step {step} of {steps} on your roadmap to “{goal}”",
         "skill": "Practises {skill}, which your goal needs"
-      }
+      },
+      "quickRep": "Today's 2-minute rep"
     },
     "progress": {
       "title": "Progress",
@@ -2081,7 +2082,10 @@
         "levelUp": "Up a level",
         "unlocked": "Milestone unlocked",
         "goalBody": "That's every session you planned this week. Anything more is a bonus.",
-        "done": "Session done"
+        "done": "Session done",
+        "newCard": "New card",
+        "repStreak": "{n, plural, one {Day 1 of your streak} other {Day # of your streak}}",
+        "collected": "{n, plural, one {1 card collected} other {# cards collected}}"
       },
       "milestones": {
         "first": {
@@ -2153,6 +2157,32 @@
       "step": "Step {n}",
       "notStarted": "Not started yet",
       "progress": "{n, plural, one {1 session} other {# sessions}} · best so far: {level}"
+    },
+    "rep": {
+      "streak": "{n, plural, one {1-day streak} other {#-day streak}}",
+      "start": "Start a daily streak",
+      "weekLabel": "This week",
+      "cta": "2-minute rep",
+      "hint": "One quick decision on {skill}.",
+      "doneToday": "Today's rep done",
+      "doneHint": "See you tomorrow. One rest day a week is on us.",
+      "state": {
+        "done": "Practised",
+        "rest": "Rest day (forgiven)",
+        "missed": "Missed",
+        "today": "Today",
+        "future": "Coming up"
+      },
+      "reminder": {
+        "label": "Daily reminder",
+        "off": "Off",
+        "saved": "Saved"
+      }
+    },
+    "collection": {
+      "title": "Your collection",
+      "count": "{n} of {total} scenes",
+      "body": "Every scenario you take on becomes a card. Try new ones to fill the shelf; take one on again to raise its level."
     }
   },
   "team": {
@@ -3113,6 +3143,19 @@
       "p1": "{org} has shared your assessment report for the {role} role with you. It shows your strengths and what to develop, with quotes from your own answers.",
       "cta": "Open my report",
       "note": "The link expires on {date}."
+    },
+    "rep": {
+      "subject": "Your 2-minute rep is ready",
+      "preheader": "One quick decision on {skill}.",
+      "heading": "Ready when you are, {name}",
+      "p1": "Today's rep is one quick decision on {skill}, set in your kind of work. It takes about two minutes.",
+      "p2": "{streak}",
+      "cta": "Do today's rep",
+      "note": "You asked for this reminder. Turn it off any time from your Grow page."
+    },
+    "repStreak": {
+      "keep": "Keep your {n}-day streak going.",
+      "start": "A good day to start a streak."
     }
   },
   "interview": {

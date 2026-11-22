@@ -71,6 +71,8 @@ test("an individual onboards, takes a baseline, practises and talks to the coach
   // A first practice is a milestone, and the week's ring moves.
   const moment = page.getByRole("region", { name: /Milestone unlocked|Up a level|Week goal met/ });
   await expect(moment).toContainText("First rep");
+  // Every new scenario is a card for the collection.
+  await expect(moment).toContainText("1 card collected");
   await page.getByLabel("Reflection note").fill("Next time I will quantify the risk before deciding.");
   await page.getByRole("button", { name: "Save note" }).click();
   await expect(page.getByRole("button", { name: "Saved" })).toBeVisible();
@@ -81,6 +83,12 @@ test("an individual onboards, takes a baseline, practises and talks to the coach
   await page.getByRole("button", { name: "Try this one again" }).click();
   await expect(page).not.toHaveURL(firstUrl);
   await expect(page.getByText(/Second attempt: same scenario/)).toBeVisible();
+
+  // The daily rep: today's is done, and the scenarios practised are on the shelf.
+  await page.goto("/app/grow");
+  await expect(page.getByRole("region", { name: /day streak/ })).toContainText("Today's rep done");
+  await page.goto("/app/grow/progress");
+  await expect(page.getByRole("region", { name: "Your collection" })).toContainText(/\d+ of \d+ scenes/);
 
   // Coach.
   await page.goto("/app/grow/coach");

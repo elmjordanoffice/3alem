@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 import { isLocale } from "@/i18n/config";
-import { MilestoneShelf } from "@/components/grow/momentum";
-import { momentumFor, momentumView } from "@/lib/grow/momentum-data";
+import { CollectionShelf, MilestoneShelf } from "@/components/grow/momentum";
+import { collectionFor, momentumFor, momentumView } from "@/lib/grow/momentum-data";
 import { LineChart as LineIcon } from "lucide-react";
 import { requireViewer } from "@/lib/auth/session";
 import { withTenant } from "@/lib/db";
@@ -44,10 +44,12 @@ export default async function ProgressPage() {
   }
   const raw = await getLocale();
   const momentum = momentumView(await momentumFor(viewer.user.id, isLocale(raw) ? raw : "en"));
+  const shelf = await collectionFor(viewer.user.id);
   return (
     <PageContainer className="max-w-5xl">
       <PageHeader title={t("title")} description={t("description")} />
       <div className="flex flex-col gap-12">
+        <CollectionShelf cards={shelf.cards} total={shelf.total} />
         <MilestoneShelf m={momentum} />
         <ProgressCharts assessments={assessments} practiceWeeks={[...practiceByWeek.entries()].map(([week, n]) => ({ week, n }))} />
       </div>

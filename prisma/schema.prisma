@@ -729,6 +729,9 @@ model GrowProfile {
   cvText          String?
   /// What the CV reader found: recent titles, years, industries, managing people, skills the CV shows (src/lib/grow/cv.ts).
   career          Json     @default("{}")
+  /// Opt-in daily reminder: the hour in UTC (0–23) the person chose; null is off.
+  reminderHour    Int?
+  lastRemindedAt  DateTime?
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 

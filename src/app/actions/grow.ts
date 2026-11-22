@@ -40,7 +40,7 @@ export async function startBaselineAction() {
   redirect(`/grow/session/${session.id}`);
 }
 
-export async function startPracticeAction(input: { skillKey?: string; trackKey?: string; trackIndex?: number; twistOf?: string; retryOf?: string }) {
+export async function startPracticeAction(input: { skillKey?: string; trackKey?: string; trackIndex?: number; twistOf?: string; retryOf?: string; quick?: boolean }) {
   const viewer = await requireViewer();
   if (input.trackKey && !trackByKey(input.trackKey)) throw new Error("Unknown track");
   const session = await startPractice(viewer.user.id, localeOf(viewer), {
@@ -48,6 +48,7 @@ export async function startPracticeAction(input: { skillKey?: string; trackKey?:
     track: input.trackKey ? { key: input.trackKey, index: input.trackIndex ?? 0 } : undefined,
     twistOf: input.twistOf,
     retryOf: input.retryOf,
+    quick: input.quick,
   });
   redirect(`/app/grow/practice/${session.id}`);
 }
@@ -85,4 +86,13 @@ export async function shareProfileAction(days: 7 | 14 | 30) {
   if (!report) return { ok: false as const, error: "noReport" };
   await audit({ actorUserId: viewer.user.id, action: "grow.profile_shared", targetType: "report", targetId: report.id, metadata: { days } });
   return { ok: true as const, link: `${appUrl()}/r/${token}`, expiresAt: expiresAt.toISOString() };
+}
+
+/** The opt-in daily reminder: an hour in UTC (the browser converts from local time), or null to turn it off. */
+export async function setReminderAction(hourUtc: number | null) {
+  const viewer = await requireViewer();
+  if (hourUtc !== null && (!Number.isInteger(hourUtc) || hourUtc < 0 || hourUtc > 23)) return { ok: false as const };
+  await withTenant({ userId: viewer.user.id }, (tx) => tx.growProfile.update({ where: { userId: viewer.user.id }, data: { reminderHour: hourUtc } }));
+  revalidatePath("/app/grow");
+  return { ok: true as const };
 }

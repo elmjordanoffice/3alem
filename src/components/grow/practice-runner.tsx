@@ -61,7 +61,7 @@ export function PracticeRunner({ id, item, feedback, reflection, answerText, cel
       {item.why && !feedback ? <WhyThisOne why={item.why} /> : null}
       <div className="grid gap-10 lg:grid-cols-2">
         <section className="flex min-w-0 flex-col gap-5">
-          <p className="text-[13px] font-medium text-tertiary">{twist ? t("twistRound") : t("scenario")}</p>
+          <p className="text-[13px] font-medium text-tertiary">{twist ? t("twistRound") : item.quick ? t("quickRep") : t("scenario")}</p>
           <h1 className="text-xl font-semibold text-text" dir="auto">{c.title}</h1>
           <p className="reading whitespace-pre-line text-[15px] leading-relaxed text-text" dir="auto">{c.scenario}</p>
           {c.materials.length ? <DocumentViewer materials={c.materials} label={ti("materials")} /> : null}

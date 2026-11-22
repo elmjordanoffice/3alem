@@ -32,6 +32,8 @@ export interface PracticeItem {
   retryOf?: string;
   previous?: { scores: { competencyKey: string; level: number }[]; tips: string[] };
   track?: { key: string; index: number };
+  /** The daily 2-minute rep: one quick decision. */
+  quick?: boolean;
   /** Why this scenario, for this person: their industry, the role they're aiming for, the roadmap step it serves. */
   why?: { industry: string | null; role: string; skillKey: string; goal: string; step: number | null; steps: number };
 }
@@ -84,7 +86,7 @@ function bestType(key: string, preferred?: ItemType): ItemType {
 }
 
 /** Start a practice scenario for a skill, a track session, or a twist on an earlier one. */
-export async function startPractice(userId: string, locale: "en" | "ar", opts: { skillKey?: string; track?: { key: string; index: number }; twistOf?: string; retryOf?: string }) {
+export async function startPractice(userId: string, locale: "en" | "ar", opts: { skillKey?: string; track?: { key: string; index: number }; twistOf?: string; retryOf?: string; quick?: boolean }) {
   const profile = await getGrowProfile(userId);
   if (opts.retryOf) {
     // Deliberate practice: the same scenario again, with the first attempt's feedback in view.
@@ -125,9 +127,11 @@ export async function startPractice(userId: string, locale: "en" | "ar", opts: {
   } else {
     skills = [opts.skillKey ?? plan[0] ?? gapSkill(profile?.targetFamily, ctx?.career.shows ?? []) ?? "judgment.trade-off-reasoning"];
   }
+  // The daily rep is one quick decision, pitched at where you are rather than above it.
+  if (opts.quick) preferred = "TRADE_OFF_DILEMMA";
   const level = await currentLevel(userId, skills[0]!, ctx?.startLevel ?? 3);
   // Practise just above where you are now.
-  const difficulty = Math.min(5, Math.max(2, Math.round(level + 0.5 + stretch)));
+  const difficulty = Math.min(5, Math.max(2, Math.round(level + (opts.quick ? 0 : 0.5) + stretch)));
   const used = new Set(
     (await withTenant({ userId }, (tx) => tx.practiceSession.findMany({ where: { userId }, select: { item: true } }))).map((p) => (p.item as unknown as PracticeItem).source.replace(/^bank:/, "")),
   );
@@ -166,6 +170,7 @@ export async function startPractice(userId: string, locale: "en" | "ar", opts: {
     };
   }
   if (opts.track) item.track = opts.track;
+  if (opts.quick) item.quick = true;
   if (ctx && profile) {
     const step = plan.indexOf(skills[0]!);
     item.why = { industry: ctx.industryFromCv ? world.industry : null, role: ctx.target, skillKey: skills[0]!, goal: profile.goal, step: step >= 0 ? step + 1 : null, steps: plan.length };

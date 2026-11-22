@@ -2,11 +2,15 @@
 import * as React from "react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { ArrowRight, Award, Check, CalendarCheck, Flame, Footprints, Mountain, NotebookPen, Orbit, Undo2, type LucideIcon } from "lucide-react";
+import { ArrowRight, Award, Bell, Check, Moon, CalendarCheck, Flame, Footprints, Mountain, NotebookPen, Orbit, Undo2, type LucideIcon } from "lucide-react";
 import type { MilestoneKey } from "@/lib/grow/momentum";
 import { useLocaleSettings, useNumbers } from "@/components/providers";
 import { cn } from "@/lib/utils";
 import { Burst } from "@/components/brand/burst";
+import { SceneArt } from "@/components/candidate/deck-cards";
+import { DOMAINS } from "@/lib/framework/data";
+import { PracticeLauncher } from "./practice-launcher";
+import { setReminderAction } from "@/app/actions/grow";
 
 /** Momentum as it crosses to the browser (dates as ISO strings). */
 export interface MomentumView {
@@ -22,6 +26,21 @@ export interface CelebrationView {
   unlocked: MilestoneKey[];
   week: { done: number; target: number; days: boolean[] };
   streakWeeks: number;
+  repStreak?: number;
+  firstToday?: boolean;
+  newCard?: SceneCardView | null;
+  collected?: number;
+}
+
+export interface SceneCardView {
+  id: string;
+  title: string;
+  industry: string | null;
+  skillKey: string;
+  best: number;
+  attempts: number;
+  firstAt: string;
+  difficulty: number;
 }
 
 export const MILESTONE_ICON: Record<MilestoneKey, LucideIcon> = {
@@ -210,7 +229,7 @@ export function PracticeCelebration({ c }: { c: CelebrationView }) {
   const weekText = useWeekText();
   const tl = useTranslations("levels");
   const goalJustMet = c.week.done === c.week.target;
-  const big = Boolean(c.improved || c.unlocked.length || goalJustMet);
+  const big = Boolean(c.improved || c.unlocked.length || goalJustMet || c.newCard);
   // An ordinary session still closes part of the ring: a light moment on paper.
   if (!big) {
     return (
@@ -233,8 +252,9 @@ export function PracticeCelebration({ c }: { c: CelebrationView }) {
         </div>
         <div className="flex min-w-0 flex-1 flex-col gap-2">
           <h2 id="celebrate-h" className="font-display text-[1.75rem] font-extrabold leading-tight [font-stretch:112%]">
-            {c.improved ? t("celebrate.levelUp") : goalJustMet ? t("goalMet") : t("celebrate.unlocked")}
+            {c.improved ? t("celebrate.levelUp") : goalJustMet ? t("goalMet") : c.unlocked.length ? t("celebrate.unlocked") : t("celebrate.newCard")}
           </h2>
+          {c.repStreak && c.firstToday ? <p className="text-sm font-semibold text-hero-foreground">{t("celebrate.repStreak", { n: c.repStreak })}</p> : null}
           {c.improved ? (
             <p className="flex flex-wrap items-center gap-2 text-sm text-hero-secondary">
               <span className="rounded-full px-2.5 py-0.5 shadow-[inset_0_0_0_1px_rgb(242_240_235/0.3)]">{tl(String(c.improved.from))}</span>
@@ -257,6 +277,14 @@ export function PracticeCelebration({ c }: { c: CelebrationView }) {
             </ul>
           ) : null}
         </div>
+        {c.newCard ? (
+          <div className="flex flex-col items-center gap-2">
+            <div className="card-reveal">
+              <SceneCardFace card={c.newCard} size="sm" />
+            </div>
+            <p className="text-xs text-hero-secondary">{t("celebrate.collected", { n: c.collected ?? 1 })}</p>
+          </div>
+        ) : null}
       </div>
     </section>
   );
@@ -282,6 +310,145 @@ export function ChallengeCard({ c }: { c: { key: string; target: number; done: n
           {c.complete ? <Burst count={8} distance={26} delay={300} /> : null}
         </div>
       </div>
+    </section>
+  );
+}
+
+/** One collected scenario: its scene art, title, skill and best level. */
+export function SceneCardFace({ card, size = "md" }: { card: SceneCardView; size?: "sm" | "md" }) {
+  const tl = useTranslations("levels");
+  const { locale } = useLocaleSettings();
+  const skill = DOMAINS.flatMap((d) => d.subSkills).find((x) => x.key === card.skillKey)?.name[locale] ?? "";
+  return (
+    <article className={cn("hero-card flex flex-col overflow-hidden rounded-[14px] ring-1 ring-white/10", size === "sm" ? "w-36" : "w-full")}>
+      <div className={cn("relative", size === "sm" ? "h-20" : "h-28")}>
+        <SceneArt seed={card.title} className="absolute inset-0 size-full" />
+      </div>
+      <div className="flex flex-1 flex-col gap-1 p-3">
+        <p className={cn("font-semibold leading-snug text-hero-foreground", size === "sm" ? "line-clamp-2 text-xs" : "line-clamp-2 text-sm")} dir="auto">{card.title}</p>
+        <p className="line-clamp-1 text-[11px] text-hero-secondary">{skill}</p>
+        {card.best ? (
+          <p className="mt-auto flex items-center justify-between pt-1 text-[11px] text-hero-secondary">
+            <span className="rounded-full bg-hero-foreground/10 px-1.5 py-0.5 text-hero-foreground">{tl(String(Math.round(card.best)))}</span>
+            {card.attempts > 1 ? <span>×{card.attempts}</span> : null}
+          </p>
+        ) : null}
+      </div>
+    </article>
+  );
+}
+
+/** Today's 2-minute rep, the streak, and this week as a strip (rest days forgiven). */
+export function RepCard({ habit, skillKey, skillName, reminderHour = null }: { habit: { streak: number; doneToday: boolean; best: number; week: { date: string; state: "done" | "rest" | "missed" | "today" | "future" }[] }; skillKey: string; skillName: string; reminderHour?: number | null }) {
+  const t = useTranslations("grow.rep");
+  const { locale } = useLocaleSettings();
+  const fmt = new Intl.DateTimeFormat(locale, { weekday: "narrow", timeZone: "UTC" });
+  return (
+    <section aria-labelledby="rep-h" className="flex flex-col gap-4 rounded-card bg-surface p-5 shadow-card sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex items-center gap-4">
+        <span className="relative grid size-14 shrink-0 place-items-center rounded-full bg-text text-background">
+          <span className="font-display text-xl font-extrabold tabular [font-stretch:112%]">{habit.streak}</span>
+          {habit.doneToday ? <span className="absolute -end-0.5 -top-0.5 size-3 rounded-full bg-saffron ring-2 ring-surface" aria-hidden /> : null}
+        </span>
+        <div className="min-w-0">
+          <h2 id="rep-h" className="text-base font-semibold text-text">{habit.streak ? t("streak", { n: habit.streak }) : t("start")}</h2>
+          <ol className="mt-2 flex gap-1.5" aria-label={t("weekLabel")}>
+            {habit.week.map((d) => (
+              <li key={d.date} className="flex flex-col items-center gap-1" title={t(`state.${d.state}`)}>
+                <span
+                  className={cn(
+                    "grid size-5 place-items-center rounded-full",
+                    d.state === "done" ? "bg-text text-background" : d.state === "rest" ? "bg-surface-sunken text-secondary" : d.state === "today" ? "ring-[1.5px] ring-inset ring-saffron" : d.state === "missed" ? "bg-level-empty" : "ring-1 ring-inset ring-border",
+                  )}
+                >
+                  {d.state === "done" ? <Check className="size-3" strokeWidth={3} aria-hidden /> : d.state === "rest" ? <Moon className="size-3" aria-hidden /> : null}
+                </span>
+                <span className="text-[10px] text-tertiary">{fmt.format(new Date(d.date))}</span>
+                <span className="sr-only">{t(`state.${d.state}`)}</span>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </div>
+      <div className="flex flex-col items-start gap-1 sm:items-end">
+        {habit.doneToday ? (
+          <p className="flex items-center gap-1.5 text-sm font-medium text-text"><Check className="size-4" aria-hidden />{t("doneToday")}</p>
+        ) : (
+          <PracticeLauncher quick skillKey={skillKey} label={t("cta")} variant="primary" />
+        )}
+        <p className="text-xs text-tertiary">{habit.doneToday ? t("doneHint") : t("hint", { skill: skillName })}</p>
+        <ReminderPicker hourUtc={reminderHour} />
+      </div>
+    </section>
+  );
+}
+
+const LOCAL_HOURS = [7, 8, 9, 12, 17, 18, 20, 21];
+
+/** The opt-in reminder, in the person's own time; stored as an hour in UTC. */
+function ReminderPicker({ hourUtc }: { hourUtc: number | null }) {
+  const t = useTranslations("grow.rep.reminder");
+  const n = useNumbers();
+  const [value, setValue] = React.useState<number | null>(hourUtc);
+  const [saved, setSaved] = React.useState(false);
+  // Whole-hour offset of this browser (half-hour zones round to the nearest hour); UTC while rendering on the server.
+  const offset = React.useSyncExternalStore(
+    () => () => {},
+    () => Math.round(-new Date().getTimezoneOffset() / 60),
+    () => 0,
+  );
+  const toLocal = (u: number) => (((u + offset) % 24) + 24) % 24;
+  const toUtc = (l: number) => (((l - offset) % 24) + 24) % 24;
+  const local = value === null ? "off" : String(toLocal(value));
+  return (
+    <label className="mt-1 flex items-center gap-2 text-xs text-secondary">
+      <Bell className="size-3.5" aria-hidden />
+      {t("label")}
+      <select
+        value={local}
+        onChange={async (e) => {
+          const next = e.target.value === "off" ? null : toUtc(Number(e.target.value));
+          setValue(next);
+          setSaved(false);
+          const r = await setReminderAction(next);
+          if (r.ok) setSaved(true);
+        }}
+        className="h-7 rounded-control border border-border-strong bg-surface px-1.5 text-xs text-text"
+      >
+        <option value="off">{t("off")}</option>
+        {[...new Set([...LOCAL_HOURS, ...(value === null ? [] : [toLocal(value)])])].sort((a, b) => a - b).map((h) => (
+          <option key={h} value={String(h)}>{`${n.number(h, { minimumIntegerDigits: 2 })}:00`}</option>
+        ))}
+      </select>
+      {saved ? <span className="text-tertiary" role="status">{t("saved")}</span> : null}
+    </label>
+  );
+}
+
+/** Every scenario you've practised, as cards; the rest of the library waits face down. */
+export function CollectionShelf({ cards, total }: { cards: SceneCardView[]; total: number }) {
+  const t = useTranslations("grow.collection");
+  const shown = cards.slice(0, 15);
+  const hidden = Math.max(0, Math.min(5, total - cards.length));
+  return (
+    <section aria-labelledby="collection-h">
+      <div className="flex items-baseline justify-between gap-4">
+        <h2 id="collection-h" className="text-xl font-semibold text-text">{t("title")}</h2>
+        <p className="text-sm text-secondary tabular">{t("count", { n: cards.length, total })}</p>
+      </div>
+      <p className="mt-1 text-sm text-secondary">{t("body")}</p>
+      <ul className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+        {shown.map((c, i) => (
+          <li key={c.id} className="joy-rise" style={{ "--i": i } as React.CSSProperties}>
+            <SceneCardFace card={c} />
+          </li>
+        ))}
+        {Array.from({ length: hidden }, (_, i) => (
+          <li key={`h${i}`} className="grid min-h-48 place-items-center rounded-[14px] border border-dashed border-border-strong text-tertiary" aria-hidden>
+            <span className="font-display text-2xl font-extrabold [font-stretch:112%]">?</span>
+          </li>
+        ))}
+      </ul>
     </section>
   );
 }
