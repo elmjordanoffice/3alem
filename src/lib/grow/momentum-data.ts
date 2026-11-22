@@ -4,6 +4,7 @@ import type { ReportContent } from "@/lib/hire/report-types";
 import type { PracticeItem } from "./practice";
 import { getGrowProfile } from "./profile";
 import { momentum, unlockedBy, type Momentum, type MilestoneKey, type PracticeEvent } from "./momentum";
+import { weeklyChallenge } from "./challenge";
 
 /** Completed practice as momentum events (oldest first). */
 export async function practiceEvents(userId: string): Promise<PracticeEvent[]> {
@@ -14,7 +15,7 @@ export async function practiceEvents(userId: string): Promise<PracticeEvent[]> {
     const item = r.item as unknown as PracticeItem;
     const levels = ((r.feedback as { scores?: { level: number }[] } | null)?.scores ?? []).map((s) => s.level);
     const prev = item.retryOf && item.previous?.scores.length ? Math.max(...item.previous.scores.map((s) => s.level)) : null;
-    return { id: r.id, completedAt: r.completedAt!, skillKeys: r.competencyKeys, levels, previousBest: prev, reflected: Boolean(r.reflectionNote?.trim()) };
+    return { id: r.id, completedAt: r.completedAt!, skillKeys: r.competencyKeys, levels, previousBest: prev, reflected: Boolean(r.reflectionNote?.trim()), twist: Boolean(item.twistOf) };
   });
 }
 
@@ -49,4 +50,10 @@ export async function celebrationFor(userId: string, sessionId: string, locale: 
 /** Momentum for the browser (dates as ISO strings). */
 export function momentumView(m: Momentum) {
   return { ...m, milestones: m.milestones.map((x) => ({ key: x.key, unlockedAt: x.unlockedAt ? x.unlockedAt.toISOString() : null })) };
+}
+
+/** This week's challenge and how far along it is. */
+export async function challengeFor(userId: string, locale: "en" | "ar") {
+  const s = weeklyChallenge(await practiceEvents(userId), { locale });
+  return { ...s, completedAt: s.completedAt ? s.completedAt.toISOString() : null };
 }

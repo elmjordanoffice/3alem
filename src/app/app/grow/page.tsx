@@ -18,8 +18,8 @@ import { PageContainer } from "@/components/app/page-header";
 import { Button } from "@/components/ui/button";
 import { SkillRadar } from "@/components/report/charts";
 import { PracticeLauncher } from "@/components/grow/practice-launcher";
-import { MomentumCard } from "@/components/grow/momentum";
-import { momentumFor, momentumView } from "@/lib/grow/momentum-data";
+import { ChallengeCard, MomentumCard } from "@/components/grow/momentum";
+import { challengeFor, momentumFor, momentumView } from "@/lib/grow/momentum-data";
 
 function daysAgo(d: Date) {
   return Math.floor((Date.now() - d.getTime()) / 86400_000);
@@ -40,6 +40,7 @@ export default async function GrowHome() {
   if (!profile) redirect("/app/grow/onboarding");
   const sessions = await growSessions(viewer.user.id);
   const momentum = momentumView(await momentumFor(viewer.user.id, locale));
+  const challenge = await challengeFor(viewer.user.id, locale);
   const inProgress = sessions.find((s) => ["STARTED", "IN_PROGRESS", "PAUSED"].includes(s.status));
   const latest = sessions.find((s) => s.report?.status === "READY");
   const report = (latest?.report?.content as unknown as ReportContent) ?? null;
@@ -126,6 +127,8 @@ export default async function GrowHome() {
               <Link href="/app/grow/practice" className="rounded-control px-3 py-2 text-sm font-medium text-ink-foreground underline-offset-4 hover:underline">{t("today.choose")}</Link>
             </div>
           </section>
+
+          {report ? <ChallengeCard c={challenge} /> : null}
 
           {plan.length ? (
             <section aria-labelledby="focus-h">

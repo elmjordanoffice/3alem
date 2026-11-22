@@ -24,6 +24,8 @@ export interface PracticeEvent {
   /** For a retry: the best level of the first attempt. */
   previousBest: number | null;
   reflected: boolean;
+  /** A "try again with a twist" round. */
+  twist?: boolean;
 }
 
 export interface Momentum {

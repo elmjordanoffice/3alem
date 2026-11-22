@@ -261,3 +261,27 @@ export function PracticeCelebration({ c }: { c: CelebrationView }) {
     </section>
   );
 }
+
+/** This week's challenge: one varied goal, dots for progress, a small moment when it's done. */
+export function ChallengeCard({ c }: { c: { key: string; target: number; done: number; complete: boolean } }) {
+  const t = useTranslations("grow.challenge");
+  return (
+    <section aria-labelledby="challenge-h" className="relative overflow-hidden rounded-card bg-surface p-5 shadow-card">
+      <div className="flex items-start justify-between gap-4">
+        <div className="min-w-0">
+          <h2 id="challenge-h" className="eyebrow text-tertiary">{t("title")}</h2>
+          <p className="mt-1.5 text-lg font-semibold text-text">{c.complete ? t("done") : t(`items.${c.key}.title`)}</p>
+          <p className="mt-0.5 text-sm text-secondary">{c.complete ? t("doneBody") : t(`items.${c.key}.how`)}</p>
+        </div>
+        <div className="relative shrink-0">
+          <ol className="flex gap-1.5" aria-label={t("progress", { done: c.done, target: c.target })}>
+            {Array.from({ length: c.target }, (_, i) => (
+              <li key={i} style={{ "--i": i } as React.CSSProperties} className={cn("size-3.5 rounded-full", i < c.done ? "joy-pop bg-text" : "ring-[1.5px] ring-inset ring-border-strong")} />
+            ))}
+          </ol>
+          {c.complete ? <Burst count={8} distance={26} delay={300} /> : null}
+        </div>
+      </div>
+    </section>
+  );
+}

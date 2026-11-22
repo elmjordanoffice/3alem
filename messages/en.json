@@ -2087,6 +2087,34 @@
         }
       },
       "weekOver": "{done} this week, {extra} over your goal"
+    },
+    "challenge": {
+      "title": "This week's challenge",
+      "done": "Challenge complete",
+      "doneBody": "Nicely varied week. A new challenge starts next week.",
+      "progress": "{done} of {target}",
+      "items": {
+        "threeDays": {
+          "title": "Three different days",
+          "how": "Practise on three different days this week. Spacing it out is what makes it stick."
+        },
+        "twoComebacks": {
+          "title": "Two comebacks",
+          "how": "Try two scenarios again and beat your first attempt."
+        },
+        "reflectThree": {
+          "title": "Three reflections",
+          "how": "Write a short reflection after three sessions."
+        },
+        "newSkills": {
+          "title": "Two new skills",
+          "how": "Practise two skills you haven't tried before."
+        },
+        "twoTwists": {
+          "title": "Two twists",
+          "how": "Take two scenarios on with a twist: same situation, new information."
+        }
+      }
     }
   },
   "team": {
