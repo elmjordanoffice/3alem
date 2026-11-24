@@ -221,7 +221,7 @@ function ChartView({ chart, bare }: { chart: ChartMaterial; bare?: boolean }) {
         <ul className="flex flex-wrap gap-4 text-xs text-secondary">
           {chart.series.map((s, i) => (
             <li key={s.key} className="flex items-center gap-1.5">
-              <span className="size-2.5 rounded-[3px]" style={{ background: SERIES_COLORS[i] }} aria-hidden />
+              <span className="size-2.5 rounded-full" style={{ background: SERIES_COLORS[i] }} aria-hidden />
               {s.label}
             </li>
           ))}
@@ -230,11 +230,11 @@ function ChartView({ chart, bare }: { chart: ChartMaterial; bare?: boolean }) {
       <div className="h-64 w-full" dir="ltr">
         <ResponsiveContainer width="100%" height="100%">
           <Chart data={chart.data} margin={{ top: 8, right: 8, bottom: 0, left: 0 }}>
-            <CartesianGrid stroke="var(--chart-grid)" vertical={false} />
+            <CartesianGrid stroke="var(--chart-grid)" strokeDasharray="4 6" vertical={false} />
             <XAxis
               dataKey={chart.xKey}
               tick={{ fill: "var(--text-secondary)", fontSize: 12 }}
-              axisLine={{ stroke: "var(--border)" }}
+              axisLine={false}
               tickLine={false}
               reversed={dir === "rtl"}
             />
@@ -251,7 +251,7 @@ function ChartView({ chart, bare }: { chart: ChartMaterial; bare?: boolean }) {
               contentStyle={{
                 background: "var(--surface)",
                 border: "1px solid var(--border)",
-                borderRadius: 8,
+                borderRadius: 14,
                 boxShadow: "var(--shadow-popover)",
                 fontSize: 12,
                 color: "var(--text)",
@@ -260,9 +260,9 @@ function ChartView({ chart, bare }: { chart: ChartMaterial; bare?: boolean }) {
             />
             {chart.series.map((s, i) =>
               chart.chartType === "bar" ? (
-                <Bar key={s.key} dataKey={s.key} name={s.label} fill={SERIES_COLORS[i]} radius={[4, 4, 0, 0]} maxBarSize={36} isAnimationActive={false} />
+                <Bar key={s.key} dataKey={s.key} name={s.label} fill={SERIES_COLORS[i]} radius={[8, 8, 0, 0]} maxBarSize={36} isAnimationActive={false} />
               ) : (
-                <Line key={s.key} dataKey={s.key} name={s.label} stroke={SERIES_COLORS[i]} strokeWidth={2} dot={{ r: 3 }} isAnimationActive={false} />
+                <Line key={s.key} type="monotone" dataKey={s.key} name={s.label} stroke={SERIES_COLORS[i]} strokeWidth={2.5} dot={{ r: 3.5, fill: SERIES_COLORS[i], strokeWidth: 0 }} activeDot={{ r: 5, stroke: "var(--surface)", strokeWidth: 2 }} style={{ filter: `drop-shadow(0 6px 10px ${SERIES_COLORS[i]})` }} isAnimationActive={false} />
               ),
             )}
           </Chart>
