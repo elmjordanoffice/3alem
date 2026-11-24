@@ -1,220 +1,231 @@
 /*
- * Aalim design tokens: "Range".
+ * Aalim design tokens: "Night".
  *
- * Direction: ink, bone and a single vermilion signal. Swiss, exact, warm.
- * Accent (actions, selection) is ink; vermilion is the signal: the estimate
- * dot, the evidence band, the one hero call to action, focus. Neutrals are
- * warm stone so the vermilion belongs. Flat surfaces with hairlines, no blur.
+ * Direction (D-061, from the owner's reference): a deep indigo canvas,
+ * violet as the action and highlight colour, glowing blue and teal for data,
+ * and a coral signal for the estimate dot and the one call to action that
+ * matters. Cards are soft, rounded and lifted with light rather than lines;
+ * the raised violet card marks what to look at first. Dark is the default;
+ * the light theme is the same system on lavender and white.
  *
  * One source of truth for colour, shadow and light. Components use these
  * through Tailwind utilities (bg-surface, text-secondary, ...). Every
  * text/background pair is checked for WCAG AA in tests/unit/contrast.test.ts.
- * Some names are historical (saffron = the signal colour, hero-* = the one
- * filled object per screen); the values are the Range brand.
+ * Some names are historical (saffron = the signal colour, hero-* = the raised
+ * highlight card, ink = the logo ground).
  */
 
 :root {
   color-scheme: light;
 
-  /* Neutrals: bone and warm stone. */
-  --background: #f2f0eb;
+  /* Neutrals: lavender canvas, white cards. */
+  --background: #efedfb;
   --surface: #ffffff;
-  --surface-subtle: #f8f7f4;
-  --surface-sunken: #ebe8e1;
-  --border: #e2ded5;
-  --border-strong: #cdc8bd;
-  --text: #141414;
-  --text-secondary: #4f4b45;
-  --text-tertiary: #67635b;
+  --surface-subtle: #f7f6fe;
+  --surface-sunken: #e6e3f8;
+  --border: #e1ddf5;
+  --border-strong: #c3bcec;
+  --text: #1b1840;
+  --text-secondary: #4a4575;
+  --text-tertiary: #5f5a8c;
   /* Non-text marks only: disabled icons, dividers, chart grid. */
-  --mark-muted: #aca79c;
+  --mark-muted: #a9a3d4;
 
-  /* Accent: ink. Primary actions, current selection. */
-  --accent: #141414;
-  --accent-hover: #2b2a28;
-  --accent-active: #000000;
+  /* Accent: violet. Primary actions, current selection. */
+  --accent: #5847d6;
+  --accent-hover: #4c3bcc;
+  --accent-active: #4030b8;
   --accent-foreground: #ffffff;
-  /* Accent tints and links carry the signal hue. */
-  --accent-subtle: #ffe8e0;
-  --accent-text: #b2300c;
-  --focus-ring: #f04a23;
+  --accent-subtle: #ebe8ff;
+  --accent-text: #4636c2;
+  --focus-ring: #6c5ce7;
 
-  /* The signal: vermilion. */
-  --signal: #f04a23;
-  --signal-hover: #ff6440;
-  --signal-foreground: #141414;
-  --signal-subtle: #ffe8e0;
+  /* The signal: coral. The estimate dot, the evidence band, the one hero call to action. */
+  --signal: #d6345d;
+  --signal-hover: #c22a51;
+  --signal-foreground: #ffffff;
+  --signal-subtle: #fde8ee;
+
+  /* Data: glowing blue and teal (stat tiles, chart lines). */
+  --blue: #2f6bff;
+  --blue-deep: #2350e0;
+  --teal: #12a597;
+  --teal-deep: #0b8579;
 
   /* Semantic */
-  --success: #1a7a47;
-  --success-subtle: #e8f5ec;
-  --warning: #9a5600;
+  --success: #14784f;
+  --success-subtle: #e3f6ee;
+  --warning: #8a5600;
   --warning-subtle: #fdf1df;
-  --critical: #b42318;
-  --critical-subtle: #fdeceb;
-  --info: #1f5fbf;
-  --info-subtle: #eaf1fc;
+  --critical: #b4233c;
+  --critical-subtle: #fde8ec;
+  --info: #2a5bd7;
+  --info-subtle: #e8efff;
 
-  /* Skill levels: one hue, stone to ink. Never red/green. */
-  --level-1: #ebe7df;
-  --level-2: #d2cbbe;
-  --level-3: #a39b8d;
-  --level-4: #55514a;
-  --level-5: #141414;
-  --level-1-fg: #141414;
-  --level-2-fg: #141414;
-  --level-3-fg: #141414;
+  /* Skill levels: one violet hue, light to deep. Never red/green. */
+  --level-1: #e6e3f8;
+  --level-2: #c9c3ec;
+  --level-3: #9283f2;
+  --level-4: #5847d6;
+  --level-5: #2b2273;
+  --level-1-fg: #1b1840;
+  --level-2-fg: #1b1840;
+  --level-3-fg: #1b1840;
   --level-4-fg: #ffffff;
   --level-5-fg: #ffffff;
-  --level-empty: #ebe8e1;
+  --level-empty: #e6e3f8;
 
   /* Charts: categorical, for comparing up to 4 candidates. */
-  --chart-1: #141414;
-  --chart-2: #f04a23;
-  --chart-3: #0e7c66;
-  --chart-4: #6b5b95;
-  --chart-grid: #e2ded5;
+  --chart-1: #5847d6;
+  --chart-2: #2f6bff;
+  --chart-3: #12a597;
+  --chart-4: #d6345d;
+  --chart-grid: #e6e3f8;
 
-  /* Ink: the logo, the hero objects and the marketing page. */
-  --ink: #141414;
-  --ink-raised: #232220;
-  --ink-foreground: #f2f0eb;
-  --ink-secondary: #b9b4aa;
+  /* Ink: the logo ground, the marketing page. */
+  --ink: #1b1840;
+  --ink-raised: #26224f;
+  --ink-foreground: #ffffff;
+  --ink-secondary: #bdb8e3;
   /* Evidence: the person's own words, highlighted. Never decoration. */
-  --highlight: #ffd6c9;
-  --highlight-foreground: #141414;
-  /* Range bands: the signal. */
-  --saffron: #f04a23;
-  --saffron-light: #ff7b55;
+  --highlight: #ddd7ff;
+  --highlight-foreground: #1b1840;
+  /* Range bands and the estimate dot: the signal. */
+  --saffron: #e8436b;
+  --saffron-light: #ff5c7c;
 
-  /* Hero objects: the one filled object per screen, flat ink. */
-  --hero-from: #141414;
-  --hero-via: #141414;
-  --hero-to: #1c1b1a;
-  --hero-foreground: #f2f0eb;
-  --hero-secondary: #c9c4ba;
+  /* The raised highlight card: violet, lit from above. */
+  --hero-from: #5847d6;
+  --hero-via: #5040ce;
+  --hero-to: #4836c4;
+  --hero-foreground: #ffffff;
+  --hero-secondary: #e3dfff;
 
-  /* App chrome: a white rail with a hairline. */
+  /* App chrome: a white floating rail, the active item a violet circle. */
   --sidebar: #ffffff;
-  --sidebar-raised: #f8f7f4;
-  --sidebar-active: #141414;
-  --sidebar-foreground: #141414;
-  --sidebar-secondary: #4f4b45;
-  --sidebar-tertiary: #67635b;
+  --sidebar-raised: #f7f6fe;
+  --sidebar-active: #5847d6;
+  --sidebar-foreground: #1b1840;
+  --sidebar-secondary: #4a4575;
+  --sidebar-tertiary: #5f5a8c;
   --sidebar-accent: #ffffff;
-  --sidebar-border: #e2ded5;
+  --sidebar-border: #e1ddf5;
 
-  /* No washes in Range: the canvas is flat bone. Kept so older classes resolve. */
-  --wash-1: transparent;
-  --wash-2: transparent;
+  --wash-1: rgb(108 92 231 / 0.1);
+  --wash-2: rgb(47 107 255 / 0.06);
 
-  --glow-indigo: #f04a23;
-  --glow-lavender: #ff7b55;
-  /* The marketing page's dark ground. */
-  --night: #0e0e0d;
-  --night-raised: #1a1918;
+  --glow-indigo: #6c5ce7;
+  --glow-lavender: #b8adf7;
+  /* The marketing page's ground. */
+  --night: #141235;
+  --night-raised: #221e4a;
 
-  --shadow-popover: 0 0 0 1px rgb(20 20 20 / 0.08), 0 18px 40px -16px rgb(20 20 20 / 0.28);
-  /* The hero object sits flat; a faint drop keeps it off the canvas. */
-  --shadow-raised: 0 24px 48px -32px rgb(20 20 20 / 0.55);
-  /* Cards: a hairline, no blur. Hover lifts a little. */
-  --shadow-card: 0 0 0 1px rgb(20 20 20 / 0.08);
-  --shadow-card-hover: 0 0 0 1px rgb(20 20 20 / 0.14), 0 12px 28px -18px rgb(20 20 20 / 0.35);
-  --shadow-window: 0 0 0 1px rgb(20 20 20 / 0.1), 0 30px 60px -30px rgb(20 20 20 / 0.45);
-  --overlay: rgb(20 20 20 / 0.5);
+  --shadow-popover: 0 0 0 1px rgb(27 24 64 / 0.06), 0 24px 48px -18px rgb(43 31 122 / 0.35);
+  /* The raised card glows violet. */
+  --shadow-raised: 0 26px 50px -22px rgb(88 71 214 / 0.55);
+  /* Cards: lifted with soft light, no lines. */
+  --shadow-card: 0 1px 2px rgb(27 24 64 / 0.04), 0 14px 32px -20px rgb(43 31 122 / 0.28);
+  --shadow-card-hover: 0 1px 2px rgb(27 24 64 / 0.05), 0 22px 44px -22px rgb(43 31 122 / 0.4);
+  --shadow-window: 0 0 0 1px rgb(27 24 64 / 0.06), 0 40px 80px -36px rgb(43 31 122 / 0.5);
+  --overlay: rgb(20 18 53 / 0.55);
 }
 
 .dark {
   color-scheme: dark;
 
-  --background: #0f0f0e;
-  --surface: #191817;
-  --surface-subtle: #1e1d1b;
-  --surface-sunken: #0b0b0a;
-  --border: #2d2b28;
-  --border-strong: #423f3a;
-  --text: #f2f0eb;
-  --text-secondary: #c4bfb5;
-  --text-tertiary: #a29d93;
-  --mark-muted: #5e5a54;
+  /* Neutrals: deep indigo canvas, raised indigo cards. */
+  --background: #1b1840;
+  --surface: #26224f;
+  --surface-subtle: #2c2858;
+  --surface-sunken: #141233;
+  --border: #332e66;
+  --border-strong: #4a4485;
+  --text: #ffffff;
+  --text-secondary: #bdb8e3;
+  --text-tertiary: #a09bcb;
+  --mark-muted: #5a548f;
 
-  /* Inverted: bone becomes the action colour. */
-  --accent: #f2f0eb;
-  --accent-hover: #ffffff;
-  --accent-active: #dedad2;
-  --accent-foreground: #141414;
-  --accent-subtle: #3b1a10;
-  --accent-text: #ff9472;
-  --focus-ring: #ff6a45;
+  --accent: #6c5ce7;
+  --accent-hover: #6251de;
+  --accent-active: #5847d6;
+  --accent-foreground: #ffffff;
+  --accent-subtle: #342e72;
+  --accent-text: #b3a8ff;
+  --focus-ring: #a99dff;
 
-  --signal: #ff5a33;
-  --signal-hover: #ff6f4c;
-  --signal-foreground: #141414;
-  --signal-subtle: #3b1a10;
+  --signal: #ff5c7c;
+  --signal-hover: #ff7590;
+  --signal-foreground: #1b1840;
+  --signal-subtle: #3e1f40;
 
-  --success: #5fd08f;
-  --success-subtle: #12261a;
-  --warning: #f5b84a;
-  --warning-subtle: #2b2010;
-  --critical: #ff8578;
-  --critical-subtle: #2d1513;
-  --info: #7fb0f5;
-  --info-subtle: #13213a;
+  --blue: #3b78ff;
+  --blue-deep: #2456f0;
+  --teal: #25c6b6;
+  --teal-deep: #119c90;
 
-  --level-1: #2a2826;
-  --level-2: #4a4641;
-  --level-3: #938d83;
-  --level-4: #c4bfb5;
-  --level-5: #f2f0eb;
-  --level-1-fg: #f2f0eb;
-  --level-2-fg: #f2f0eb;
-  --level-3-fg: #0f0f0e;
-  --level-4-fg: #0f0f0e;
-  --level-5-fg: #0f0f0e;
-  --level-empty: #24221f;
+  --success: #4ade9b;
+  --success-subtle: #173a35;
+  --warning: #ffc562;
+  --warning-subtle: #3a3020;
+  --critical: #ff8a96;
+  --critical-subtle: #3e1f36;
+  --info: #82adff;
+  --info-subtle: #1e2a5e;
 
-  --chart-1: #f2f0eb;
-  --chart-2: #ff6a45;
-  --chart-3: #3fc1a3;
-  --chart-4: #b3a3e0;
-  --chart-grid: #2d2b28;
+  --level-1: #36306e;
+  --level-2: #4c43a0;
+  --level-3: #6c5ce7;
+  --level-4: #a497ff;
+  --level-5: #d9d3ff;
+  --level-1-fg: #ffffff;
+  --level-2-fg: #ffffff;
+  --level-3-fg: #ffffff;
+  --level-4-fg: #1b1840;
+  --level-5-fg: #1b1840;
+  --level-empty: #2f2a5e;
 
-  --ink: #141414;
-  --ink-raised: #232220;
-  --ink-foreground: #f2f0eb;
-  --ink-secondary: #b9b4aa;
-  --highlight: #5a2414;
-  --highlight-foreground: #ffe8e0;
-  --saffron: #ff5a33;
-  --saffron-light: #ff8a66;
+  --chart-1: #8b7cff;
+  --chart-2: #4c86ff;
+  --chart-3: #25c6b6;
+  --chart-4: #ff5c7c;
+  --chart-grid: #2f2a5e;
 
-  --hero-from: #232220;
-  --hero-via: #232220;
-  --hero-to: #2a2826;
-  --hero-foreground: #f2f0eb;
-  --hero-secondary: #c9c4ba;
+  --ink: #141233;
+  --ink-raised: #221e4a;
+  --ink-foreground: #ffffff;
+  --ink-secondary: #bdb8e3;
+  --highlight: #4a3ea8;
+  --highlight-foreground: #ffffff;
+  --saffron: #ff5c7c;
+  --saffron-light: #ff8aa0;
 
-  --sidebar: #141413;
-  --sidebar-raised: #1e1d1b;
-  --sidebar-active: #f2f0eb;
-  --sidebar-foreground: #f2f0eb;
-  --sidebar-secondary: #c4bfb5;
-  --sidebar-tertiary: #a29d93;
-  --sidebar-accent: #141414;
-  --sidebar-border: #2d2b28;
+  --hero-from: #5847d6;
+  --hero-via: #5040ce;
+  --hero-to: #4836c4;
+  --hero-foreground: #ffffff;
+  --hero-secondary: #e3dfff;
 
-  --wash-1: transparent;
-  --wash-2: transparent;
+  --sidebar: #221e4a;
+  --sidebar-raised: #2a2658;
+  --sidebar-active: #6c5ce7;
+  --sidebar-foreground: #ffffff;
+  --sidebar-secondary: #bdb8e3;
+  --sidebar-tertiary: #a09bcb;
+  --sidebar-accent: #ffffff;
+  --sidebar-border: #2f2a5e;
 
-  --glow-indigo: #ff5a33;
-  --glow-lavender: #ff8a66;
-  --night: #0e0e0d;
-  --night-raised: #1a1918;
+  --wash-1: rgb(108 92 231 / 0.18);
+  --wash-2: rgb(47 107 255 / 0.1);
 
-  --shadow-popover: 0 0 0 1px rgb(255 255 255 / 0.08), 0 18px 40px -16px rgb(0 0 0 / 0.7);
-  --shadow-raised: 0 24px 48px -32px rgb(0 0 0 / 0.8);
-  --shadow-card: 0 0 0 1px rgb(255 255 255 / 0.07);
-  --shadow-card-hover: 0 0 0 1px rgb(255 255 255 / 0.12), 0 12px 28px -18px rgb(0 0 0 / 0.7);
-  --shadow-window: 0 0 0 1px rgb(255 255 255 / 0.08), 0 30px 60px -30px rgb(0 0 0 / 0.8);
-  --overlay: rgb(0 0 0 / 0.6);
+  --glow-indigo: #6c5ce7;
+  --glow-lavender: #8b7cff;
+  --night: #141235;
+  --night-raised: #221e4a;
+
+  --shadow-popover: 0 0 0 1px rgb(255 255 255 / 0.06), 0 24px 48px -18px rgb(6 4 30 / 0.8);
+  --shadow-raised: 0 26px 54px -22px rgb(108 92 231 / 0.65);
+  --shadow-card: inset 0 1px 0 rgb(255 255 255 / 0.04), 0 18px 40px -26px rgb(6 4 30 / 0.85);
+  --shadow-card-hover: inset 0 1px 0 rgb(255 255 255 / 0.06), 0 24px 48px -24px rgb(6 4 30 / 0.95);
+  --shadow-window: 0 0 0 1px rgb(255 255 255 / 0.06), 0 40px 80px -36px rgb(6 4 30 / 0.9);
+  --overlay: rgb(10 8 30 / 0.7);
 }

@@ -3,13 +3,9 @@ import { cookies } from "next/headers";
 import { getLocale } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
 // Range: IBM Plex Sans (+ Arabic) for reading, Archivo (expanded) and Beiruti for display.
-import "@fontsource-variable/ibm-plex-sans";
-import "@fontsource/ibm-plex-sans-arabic/arabic-400.css";
-import "@fontsource/ibm-plex-sans-arabic/arabic-500.css";
-import "@fontsource/ibm-plex-sans-arabic/arabic-600.css";
-import "@fontsource/ibm-plex-sans-arabic/arabic-700.css";
-import "@fontsource-variable/archivo/standard.css";
-import "@fontsource-variable/beiruti";
+import "@fontsource-variable/plus-jakarta-sans";
+import "@fontsource-variable/readex-pro";
+// The brand wordmark files still use Archivo and Beiruti (drawn as paths); the type in the UI is Night.
 import "./globals.css";
 import { Providers } from "@/components/providers";
 import { NUMERALS_COOKIE, directionOf, isLocale, isNumeralSystem, DEFAULT_LOCALE } from "@/i18n/config";

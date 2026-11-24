@@ -1,6 +1,6 @@
 "use client";
 import { useTranslations } from "next-intl";
-import { Bar, BarChart, CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { Area, AreaChart, Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert } from "@/components/ui/alert";
 import { LevelMeter } from "@/components/report/level";
@@ -20,7 +20,10 @@ export function ProgressCharts({
   const { dir } = useLocaleSettings();
   const first = assessments[0];
   const last = assessments.at(-1);
-  const tooltip = { contentStyle: { background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 8, fontSize: 12, color: "var(--text)" } };
+  const tooltip = {
+    contentStyle: { background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 14, fontSize: 12, color: "var(--text)", boxShadow: "var(--shadow-popover)" },
+    cursor: { stroke: "var(--accent)", strokeOpacity: 0.35, strokeDasharray: "4 4" },
+  };
   return (
     <div className="flex flex-col gap-6">
       {assessments.length < 2 ? <Alert tone="neutral">{t("oneAssessment")}</Alert> : null}
@@ -34,15 +37,35 @@ export function ProgressCharts({
             {assessments.length >= 2 ? (
               <div className="h-72" dir="ltr">
                 <ResponsiveContainer>
-                  <LineChart data={assessments.map((a) => ({ date: a.date, ...Object.fromEntries(a.domains.map((d) => [d.key, d.estimate])) }))}>
-                    <CartesianGrid stroke="var(--chart-grid)" vertical={false} />
-                    <XAxis dataKey="date" tick={{ fill: "var(--text-secondary)", fontSize: 12 }} reversed={dir === "rtl"} />
-                    <YAxis domain={[1, 5]} ticks={[1, 2, 3, 4, 5]} tick={{ fill: "var(--text-secondary)", fontSize: 12 }} width={28} orientation={dir === "rtl" ? "right" : "left"} />
+                  <AreaChart data={assessments.map((a) => ({ date: a.date, ...Object.fromEntries(a.domains.map((d) => [d.key, d.estimate])) }))}>
+                    <defs>
+                      {COLORS.map((c, i) => (
+                        <linearGradient key={c} id={`grow-area-${i}`} x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stopColor={c} stopOpacity={0.4} />
+                          <stop offset="100%" stopColor={c} stopOpacity={0} />
+                        </linearGradient>
+                      ))}
+                    </defs>
+                    <CartesianGrid stroke="var(--chart-grid)" strokeDasharray="4 6" vertical={false} />
+                    <XAxis dataKey="date" tick={{ fill: "var(--text-tertiary)", fontSize: 12 }} axisLine={false} tickLine={false} reversed={dir === "rtl"} />
+                    <YAxis domain={[1, 5]} ticks={[1, 2, 3, 4, 5]} tick={{ fill: "var(--text-tertiary)", fontSize: 12 }} axisLine={false} tickLine={false} width={28} orientation={dir === "rtl" ? "right" : "left"} />
                     <Tooltip {...tooltip} />
                     {last.domains.slice(0, 4).map((d, i) => (
-                      <Line key={d.key} dataKey={d.key} name={d.name} stroke={COLORS[i]} strokeWidth={2} dot isAnimationActive={false} />
+                      <Area
+                        key={d.key}
+                        type="monotone"
+                        dataKey={d.key}
+                        name={d.name}
+                        stroke={COLORS[i]}
+                        strokeWidth={2.5}
+                        fill={`url(#grow-area-${i})`}
+                        dot={{ r: 3, fill: COLORS[i], strokeWidth: 0 }}
+                        activeDot={{ r: 5, stroke: "var(--surface)", strokeWidth: 2 }}
+                        style={{ filter: `drop-shadow(0 6px 10px ${COLORS[i]})` }}
+                        isAnimationActive={false}
+                      />
                     ))}
-                  </LineChart>
+                  </AreaChart>
                 </ResponsiveContainer>
               </div>
             ) : null}
@@ -84,11 +107,17 @@ export function ProgressCharts({
             <div className="h-48" dir="ltr">
               <ResponsiveContainer>
                 <BarChart data={practiceWeeks}>
-                  <CartesianGrid stroke="var(--chart-grid)" vertical={false} />
-                  <XAxis dataKey="week" tick={{ fill: "var(--text-secondary)", fontSize: 12 }} reversed={dir === "rtl"} />
-                  <YAxis allowDecimals={false} tick={{ fill: "var(--text-secondary)", fontSize: 12 }} width={28} orientation={dir === "rtl" ? "right" : "left"} />
-                  <Tooltip {...tooltip} />
-                  <Bar dataKey="n" name={t("sessions")} fill="var(--chart-1)" radius={[4, 4, 0, 0]} maxBarSize={32} isAnimationActive={false} />
+                  <defs>
+                    <linearGradient id="grow-bar" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="var(--chart-1)" stopOpacity={1} />
+                      <stop offset="100%" stopColor="var(--chart-1)" stopOpacity={0.45} />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid stroke="var(--chart-grid)" strokeDasharray="4 6" vertical={false} />
+                  <XAxis dataKey="week" tick={{ fill: "var(--text-tertiary)", fontSize: 12 }} axisLine={false} tickLine={false} reversed={dir === "rtl"} />
+                  <YAxis allowDecimals={false} tick={{ fill: "var(--text-tertiary)", fontSize: 12 }} axisLine={false} tickLine={false} width={28} orientation={dir === "rtl" ? "right" : "left"} />
+                  <Tooltip {...tooltip} cursor={{ fill: "var(--accent)", fillOpacity: 0.08 }} />
+                  <Bar dataKey="n" name={t("sessions")} fill="url(#grow-bar)" radius={[10, 10, 10, 10]} maxBarSize={28} isAnimationActive={false} />
                 </BarChart>
               </ResponsiveContainer>
             </div>

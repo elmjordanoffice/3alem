@@ -17,7 +17,7 @@ const LocaleSettingsContext = React.createContext<LocaleSettings>({ locale: "en"
 
 export function Providers({ children, ...settings }: LocaleSettings & { children: React.ReactNode }) {
   return (
-    <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+    <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
       <LocaleSettingsContext.Provider value={settings}>
         <Direction.Provider dir={settings.dir}>
           <TooltipProvider>

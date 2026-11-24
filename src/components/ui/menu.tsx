@@ -8,7 +8,7 @@ import {
 import { cn } from "@/lib/utils";
 
 const floating =
-  "z-50 rounded-control border border-border bg-surface shadow-popover data-[state=open]:animate-fade-in";
+  "z-50 rounded-2xl border border-border bg-surface shadow-popover data-[state=open]:animate-fade-in";
 
 export const DropdownMenu = DropdownPrimitive.Root;
 export const DropdownMenuTrigger = DropdownPrimitive.Trigger;
@@ -27,7 +27,7 @@ export function DropdownMenuItem({ className, destructive, ...props }: React.Com
   return (
     <DropdownPrimitive.Item
       className={cn(
-        "flex cursor-default select-none items-center gap-2 rounded-[6px] px-2.5 py-2 text-sm text-text outline-none data-[disabled]:opacity-50 data-[highlighted]:bg-surface-subtle [&_svg]:size-4 [&_svg]:text-secondary",
+        "flex cursor-default select-none items-center gap-2 rounded-xl px-2.5 py-2 text-sm text-text outline-none data-[disabled]:opacity-50 data-[highlighted]:bg-surface-subtle [&_svg]:size-4 [&_svg]:text-secondary",
         destructive && "text-critical [&_svg]:text-critical",
         className,
       )}
@@ -40,7 +40,7 @@ export function DropdownMenuRadioItem({ className, children, ...props }: React.C
   return (
     <DropdownPrimitive.RadioItem
       className={cn(
-        "relative flex cursor-default select-none items-center rounded-[6px] py-2 pe-2.5 ps-7 text-sm text-text outline-none data-[highlighted]:bg-surface-subtle",
+        "relative flex cursor-default select-none items-center rounded-xl py-2 pe-2.5 ps-7 text-sm text-text outline-none data-[highlighted]:bg-surface-subtle",
         className,
       )}
       {...props}
@@ -80,7 +80,7 @@ export function Tooltip({ content, children, side = "top" }: { content: React.Re
         <TooltipPrimitive.Content
           side={side}
           sideOffset={6}
-          className="z-50 max-w-64 rounded-[6px] bg-text px-2.5 py-1.5 text-xs text-background data-[state=delayed-open]:animate-fade-in"
+          className="z-50 max-w-64 rounded-lg bg-text px-2.5 py-1.5 text-xs text-background data-[state=delayed-open]:animate-fade-in"
         >
           {content}
         </TooltipPrimitive.Content>

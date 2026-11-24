@@ -36,7 +36,7 @@ import {
 import { authClient } from "@/lib/auth/client";
 import { switchOrganization } from "@/app/actions/organizations";
 import { cn } from "@/lib/utils";
-import { Logo } from "@/components/brand/logo";
+import { Logo, LogoTile, Wordmark } from "@/components/brand/logo";
 import { Avatar } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -113,13 +113,13 @@ export function AppShell({ user, organizations, activeOrganizationId, nav, comma
       >
         {t("skipToContent")}
       </a>
-      {/* The rail: white, flush, a hairline on its inner edge. */}
-      <aside className="sticky top-0 hidden h-dvh w-[16.5rem] shrink-0 border-e border-sidebar-border bg-sidebar text-sidebar-foreground lg:block">
-        {sidebar}
+      {/* The rail: a floating rounded panel; the current page is a glowing violet pill. */}
+      <aside className="sticky top-0 hidden h-dvh w-[17.5rem] shrink-0 p-4 pe-0 lg:block">
+        <div className="h-full overflow-hidden rounded-[28px] bg-sidebar text-sidebar-foreground shadow-card">{sidebar}</div>
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="sticky top-0 z-30 flex h-14 items-center gap-2 border-b border-border bg-surface px-3 text-text lg:hidden">
+        <header className="sticky top-0 z-30 flex h-16 items-center gap-2 bg-background/80 px-3 text-text backdrop-blur-xl lg:hidden">
           <DialogPrimitive.Root open={open} onOpenChange={setOpen}>
             <DialogPrimitive.Trigger
               className="inline-flex size-9 items-center justify-center rounded-control text-secondary hover:bg-surface-subtle hover:text-text focus-visible:outline-2 focus-visible:outline-focus"
@@ -142,11 +142,30 @@ export function AppShell({ user, organizations, activeOrganizationId, nav, comma
             </DialogPrimitive.Portal>
           </DialogPrimitive.Root>
           <Logo showArabic={false} className="text-[14px]" />
-          <div className="ms-auto flex items-center">
+          <div className="ms-auto flex items-center gap-1">
             <button type="button" onClick={openCommandMenu} className="inline-flex size-9 items-center justify-center rounded-control text-secondary hover:bg-surface-subtle hover:text-text focus-visible:outline-2 focus-visible:outline-focus" aria-label={t("search")}>
               <Search className="size-5" aria-hidden />
             </button>
             <ThemeMenu />
+          </div>
+        </header>
+        {/* Desktop top bar: the search pill and round controls. */}
+        <header className="sticky top-0 z-30 hidden h-24 items-center gap-4 bg-gradient-to-b from-background via-background/90 to-transparent px-8 lg:flex">
+          <button
+            type="button"
+            onClick={openCommandMenu}
+            className="flex h-12 w-full max-w-[30rem] items-center gap-3 rounded-[16px] bg-surface px-5 text-sm text-tertiary shadow-card transition-colors hover:text-text focus-visible:outline-2 focus-visible:outline-focus"
+          >
+            <Search className="size-[18px]" strokeWidth={2} aria-hidden />
+            <span className="flex-1 text-start">{t("search")}</span>
+            <kbd className="rounded-[7px] bg-surface-sunken px-1.5 py-0.5 font-sans text-[11px] text-tertiary" dir="ltr">⌘K</kbd>
+          </button>
+          <div className="ms-auto flex items-center gap-3">
+            <LanguageToggle className="h-11 rounded-full px-4" />
+            <ThemeMenu className="size-11 rounded-full shadow-[inset_0_0_0_1px_var(--border-strong)]" />
+            <Link href="/app/settings" aria-label={t("nav.settings")} className="rounded-full focus-visible:outline-2 focus-visible:outline-focus">
+              <Avatar name={user.name} className="size-11 text-sm" />
+            </Link>
           </div>
         </header>
         <main id="main" className="flex-1">
@@ -170,16 +189,17 @@ function SidebarContent({ user, organizations, activeOrganizationId, nav }: Pick
 
   return (
     <div className="flex h-full flex-col">
-      <div className="flex h-16 items-center border-b border-sidebar-border px-5">
-        <Link href="/app" className="rounded-control focus-visible:outline-2 focus-visible:outline-focus">
-          <Logo className="text-[15px]" />
+      <div className="flex h-20 items-center px-5">
+        <Link href="/app" className="flex items-center gap-3 rounded-full focus-visible:outline-2 focus-visible:outline-focus">
+          <LogoTile className="size-11" />
+          <Wordmark className="h-[15px] text-sidebar-foreground" />
         </Link>
       </div>
 
       <div className="px-3 pb-2 pt-3">
         <DropdownMenu>
-          <DropdownMenuTrigger className="flex w-full items-center gap-2.5 rounded-[10px] px-2 py-2 shadow-[inset_0_0_0_1px_var(--sidebar-border)] text-start text-sm transition-colors hover:bg-surface-sunken focus-visible:outline-2 focus-visible:outline-focus">
-            <span className="inline-flex size-8 shrink-0 items-center justify-center rounded-[8px] bg-text font-display text-[13px] font-bold text-background [font-stretch:125%]" aria-hidden>
+          <DropdownMenuTrigger className="flex w-full items-center gap-2.5 rounded-[18px] bg-sidebar-raised px-2.5 py-2.5 text-start text-sm transition-colors hover:bg-surface-sunken focus-visible:outline-2 focus-visible:outline-focus">
+            <span className="inline-flex size-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#7b6cf0] to-[#5040ce] font-display text-[13px] font-bold text-white" aria-hidden>
               {active ? active.name.trim().charAt(0).toUpperCase() : <Building2 className="size-3.5" />}
             </span>
             <span className="min-w-0 flex-1">
@@ -215,11 +235,11 @@ function SidebarContent({ user, organizations, activeOrganizationId, nav }: Pick
         </DropdownMenu>
       </div>
 
-      <div className="px-3 pb-3">
+      <div className="px-3 pb-3 lg:hidden">
         <button
           type="button"
           onClick={openCommandMenu}
-          className="flex h-9 w-full items-center gap-2.5 rounded-[10px] bg-sidebar-raised px-3 text-sm text-sidebar-secondary transition-colors hover:bg-sidebar-raised hover:text-sidebar-foreground focus-visible:outline-2 focus-visible:outline-focus"
+          className="flex h-11 w-full items-center gap-2.5 rounded-[16px] bg-sidebar-raised px-4 text-sm text-sidebar-secondary transition-colors hover:bg-sidebar-raised hover:text-sidebar-foreground focus-visible:outline-2 focus-visible:outline-focus"
         >
           <Search className="size-4" strokeWidth={1.75} aria-hidden />
           <span className="flex-1 text-start">{t("search")}</span>
@@ -243,14 +263,15 @@ function SidebarContent({ user, organizations, activeOrganizationId, nav }: Pick
                       href={item.href}
                       aria-current={current ? "page" : undefined}
                       className={cn(
-                        "relative flex h-10 items-center gap-3 rounded-[8px] px-3 text-[14px] transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-focus",
+                        "relative flex h-12 items-center gap-3 rounded-full ps-1.5 pe-4 text-[14px] font-medium transition-[background-color,color,box-shadow] duration-200 focus-visible:outline-2 focus-visible:outline-focus",
                         current
-                          ? "bg-sidebar-active font-semibold text-sidebar-accent"
+                          ? "bg-sidebar-active font-semibold text-sidebar-accent shadow-[0_12px_26px_-10px_rgb(108_92_231/0.75)]"
                           : "text-sidebar-secondary hover:bg-sidebar-raised hover:text-sidebar-foreground",
                       )}
                     >
-                      <Icon className={cn("size-[17px] shrink-0", current ? "text-sidebar-accent" : "text-sidebar-tertiary")} strokeWidth={current ? 2 : 1.75} aria-hidden />
-                      {current ? <span className="absolute end-3 size-1.5 rounded-full bg-saffron" aria-hidden /> : null}
+                      <span className={cn("grid size-9 shrink-0 place-items-center rounded-full", current ? "bg-white/15" : "")}>
+                        <Icon className={cn("size-[18px]", current ? "text-sidebar-accent" : "text-sidebar-tertiary")} strokeWidth={current ? 2.25 : 1.85} aria-hidden />
+                      </span>
                       <span className="truncate">{t(`nav.${item.labelKey}`)}</span>
                     </Link>
                   </li>
@@ -261,7 +282,7 @@ function SidebarContent({ user, organizations, activeOrganizationId, nav }: Pick
         ))}
       </nav>
 
-      <div className="flex items-center gap-1 border-t border-sidebar-border p-3">
+      <div className="flex items-center gap-1 p-3 lg:hidden">
         <DropdownMenu>
           <DropdownMenuTrigger className="flex min-w-0 flex-1 items-center gap-2.5 rounded-[10px] p-1.5 text-start transition-colors hover:bg-sidebar-raised focus-visible:outline-2 focus-visible:outline-focus">
             <Avatar name={user.name} />
@@ -289,9 +310,24 @@ function SidebarContent({ user, organizations, activeOrganizationId, nav }: Pick
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <div className="flex items-center justify-between border-t border-sidebar-border px-3 py-2">
+      <div className="flex items-center justify-between px-3 pb-3 lg:hidden">
         <LanguageToggle />
         <ThemeMenu />
+      </div>
+      {/* Desktop: the account lives in the top bar; the rail ends with sign out. */}
+      <div className="hidden p-3 lg:block">
+        <button
+          type="button"
+          onClick={async () => {
+            await authClient.signOut();
+            router.replace("/sign-in");
+            router.refresh();
+          }}
+          className="flex h-12 w-full items-center gap-3 rounded-full ps-1.5 pe-4 text-[14px] font-medium text-sidebar-secondary transition-colors hover:bg-sidebar-raised hover:text-sidebar-foreground focus-visible:outline-2 focus-visible:outline-focus"
+        >
+          <span className="grid size-9 place-items-center rounded-full"><LogOut className="size-[18px] flip-rtl" aria-hidden /></span>
+          {t("signOut")}
+        </button>
       </div>
     </div>
   );

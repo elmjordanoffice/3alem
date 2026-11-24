@@ -22,14 +22,17 @@ export function SectionNav({ title, icon: Icon, tabs, hideOn = [] }: { title: st
     .filter((t) => (t.exact ? pathname === t.href : pathname === t.href || pathname.startsWith(`${t.href}/`)))
     .sort((a, b) => b.href.length - a.href.length)[0]?.href;
   return (
-    <div className="sticky top-14 z-20 border-b border-border bg-background px-4 sm:px-8 lg:top-0">
-      <div className="flex max-w-full items-center gap-6 overflow-x-auto [scrollbar-width:none]">
-        <span className="flex shrink-0 items-center gap-2 py-3 text-sm font-semibold text-text">
-          {Icon ? <Icon className="size-4 text-text" strokeWidth={1.75} aria-hidden /> : null}
+    <div className="sticky top-14 z-20 bg-background/80 px-4 py-2 backdrop-blur-xl sm:px-8 lg:top-0">
+      <div className="mx-auto flex max-w-5xl items-center gap-4 overflow-x-auto [scrollbar-width:none]">
+        <span className="flex shrink-0 items-center gap-2.5 py-2 text-sm font-bold text-text">
+          {Icon ? (
+            <span className="grid size-8 place-items-center rounded-full bg-accent text-accent-foreground shadow-[0_6px_16px_-6px_var(--accent)]">
+              <Icon className="size-4" strokeWidth={2} aria-hidden />
+            </span>
+          ) : null}
           {title}
         </span>
-        <span className="h-4 w-px shrink-0 bg-border-strong" aria-hidden />
-        <nav aria-label={title} className="flex shrink-0 items-stretch gap-5">
+        <nav aria-label={title} className="flex shrink-0 items-center gap-1 rounded-full bg-surface p-1 shadow-card">
           {tabs.map((t) => {
             const active = t.href === current;
             return (
@@ -38,8 +41,8 @@ export function SectionNav({ title, icon: Icon, tabs, hideOn = [] }: { title: st
                 href={t.href}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "relative flex h-12 items-center whitespace-nowrap text-sm transition-colors duration-150 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus",
-                  active ? "font-semibold text-text after:absolute after:inset-x-0 after:-bottom-px after:h-[2px] after:bg-text" : "text-secondary hover:text-text",
+                  "flex h-9 items-center whitespace-nowrap rounded-full px-4 text-sm font-medium transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus",
+                  active ? "bg-accent font-semibold text-accent-foreground shadow-[0_6px_16px_-6px_var(--accent)]" : "text-secondary hover:bg-surface-subtle hover:text-text",
                 )}
               >
                 {t.label}

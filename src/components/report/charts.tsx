@@ -53,6 +53,14 @@ export function SkillRadar({
       <div className="aspect-square w-full max-w-[420px] self-center" aria-hidden>
         <ResponsiveContainer width="100%" height="100%">
           <RadarChart data={rows} outerRadius="72%" accessibilityLayer={false}>
+            <defs>
+              {SERIES.map((c, i) => (
+                <radialGradient key={c} id={`radar-fill-${i}`}>
+                  <stop offset="0%" stopColor={c} stopOpacity={0.1} />
+                  <stop offset="100%" stopColor={c} stopOpacity={0.45} />
+                </radialGradient>
+              ))}
+            </defs>
             <PolarGrid stroke="var(--chart-grid)" />
             <PolarAngleAxis dataKey="label" tick={{ fill: "var(--text-secondary)", fontSize: 11 }} />
             <PolarRadiusAxis domain={[0, 5]} tickCount={6} tick={false} axisLine={false} />
@@ -60,7 +68,7 @@ export function SkillRadar({
               contentStyle={{
                 background: "var(--surface)",
                 border: "1px solid var(--border)",
-                borderRadius: 8,
+                borderRadius: 14,
                 boxShadow: "var(--shadow-popover)",
                 fontSize: 12,
                 color: "var(--text)",
@@ -73,9 +81,11 @@ export function SkillRadar({
                 dataKey={s.key}
                 name={s.label}
                 stroke={SERIES[i]}
-                fill={SERIES[i]}
-                fillOpacity={series.length > 1 ? 0.06 : 0.14}
-                strokeWidth={1.75}
+                fill={series.length > 1 ? SERIES[i] : `url(#radar-fill-${i})`}
+                fillOpacity={series.length > 1 ? 0.1 : 1}
+                strokeWidth={2.25}
+                dot={{ r: 3, fill: SERIES[i], strokeWidth: 0 }}
+                style={{ filter: `drop-shadow(0 4px 10px ${SERIES[i]})` }}
                 isAnimationActive={false}
               />
             ))}
@@ -142,9 +152,9 @@ export function SkillBars({
             <li key={d.key} className="grid grid-cols-[minmax(7rem,12rem)_1fr] items-center gap-3 py-1.5 sm:grid-cols-[12rem_1fr]">
               <span className="truncate text-sm text-text">{d.label}</span>
               <span className="relative h-6" role="img" aria-label={`${d.label}: ${t(String(levelBand(d.estimate)))} (${n.range(lo, hi)})`}>
-                <span className="absolute inset-y-[9px] inset-x-0 rounded-full bg-level-empty" />
+                <span className="absolute inset-y-[8px] inset-x-0 rounded-full bg-level-empty" />
                 <span
-                  className={cn("absolute inset-y-[7px] start-0 rounded-full", levelClasses(d.estimate))}
+                  className={cn("absolute inset-y-[6px] start-0 rounded-full shadow-[0_4px_12px_-4px_var(--accent)]", levelClasses(d.estimate))}
                   style={{ width: `max(8px, ${pct(d.estimate)}%)` }}
                 />
                 <span
@@ -208,7 +218,7 @@ export function SkillHeatmap({
                     key={c.key}
                     title={thin ? tc("thin") : undefined}
                     className={cn(
-                      "h-10 rounded-[6px] text-center text-xs font-medium tabular",
+                      "h-10 rounded-xl text-center text-xs font-semibold tabular",
                       v == null ? "bg-surface-subtle text-tertiary" : levelClasses(v),
                       // Thin evidence: lighter, with a dashed outline, so nobody over-reads it.
                       thin && "opacity-60 outline-[1.5px] outline-dashed -outline-offset-[3px] outline-current",

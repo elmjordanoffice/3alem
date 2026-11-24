@@ -17,11 +17,11 @@ export function LogoMark({ className, mono = false }: { className?: string; mono
   );
 }
 
-/** The app tile: the mark on ink, as on home screens and in the browser tab. */
+/** The app tile: the mark in white on a glowing blue disc (Night), the dot in the signal. */
 export function LogoTile({ className }: { className?: string }) {
   return (
-    <span className={cn("grid size-9 shrink-0 place-items-center rounded-[22.5%] bg-ink text-ink-foreground", className)} aria-hidden>
-      <LogoMark className="size-[70%]" />
+    <span className={cn("grid size-9 shrink-0 place-items-center rounded-full bg-gradient-to-br from-[#4c86ff] to-[#2350e0] text-white shadow-[0_10px_24px_-8px_rgb(47_107_255/0.7)]", className)} aria-hidden>
+      <LogoMark className="size-[62%]" />
     </span>
   );
 }

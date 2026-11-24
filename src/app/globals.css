@@ -58,6 +58,10 @@
   --color-hero-secondary: var(--hero-secondary);
   --color-saffron-light: var(--saffron-light);
   --color-night: var(--night);
+  --color-blue: var(--blue);
+  --color-blue-deep: var(--blue-deep);
+  --color-teal: var(--teal);
+  --color-teal-deep: var(--teal-deep);
   --color-night-raised: var(--night-raised);
   --color-glow-indigo: var(--glow-indigo);
   --color-glow-lavender: var(--glow-lavender);
@@ -69,10 +73,10 @@
 }
 
 @theme {
-  /* Range: IBM Plex for reading and interface (Latin and Arabic drawn as one family);
-     Archivo, often expanded, for display; Beiruti for Arabic display. */
-  --font-sans: "IBM Plex Sans Variable", "IBM Plex Sans Arabic", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Archivo Variable", "Beiruti Variable", ui-sans-serif, system-ui, sans-serif;
+  /* Night: Plus Jakarta Sans for everything Latin (bold and geometric for display),
+     Readex Pro for Arabic, drawn to sit with it. */
+  --font-sans: "Plus Jakarta Sans Variable", "Readex Pro Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Plus Jakarta Sans Variable", "Readex Pro Variable", ui-sans-serif, system-ui, sans-serif;
   --font-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
 
   /* Type scale: 12 / 14 / 16 / 20 / 24 / 32 / 40 */
@@ -95,8 +99,8 @@
   --text-5xl: 4.25rem;
   --text-5xl--line-height: 1.02;
 
-  --radius-control: 10px;
-  --radius-card: 16px;
+  --radius-control: 12px;
+  --radius-card: 24px;
 
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   /* Easing grammar: enter fast and settle; leave quicker; move evenly; one overshoot for the hero. */
@@ -135,8 +139,8 @@
 
 @layer base {
   :lang(ar) {
-    --font-sans: "IBM Plex Sans Arabic", "IBM Plex Sans Variable", ui-sans-serif, system-ui, sans-serif;
-    --font-display: "Beiruti Variable", "Archivo Variable", ui-sans-serif, system-ui, sans-serif;
+    --font-sans: "Readex Pro Variable", "Plus Jakarta Sans Variable", ui-sans-serif, system-ui, sans-serif;
+    --font-display: "Readex Pro Variable", "Plus Jakarta Sans Variable", ui-sans-serif, system-ui, sans-serif;
   }
   html {
     -webkit-text-size-adjust: 100%;
@@ -162,12 +166,11 @@
     letter-spacing: -0.006em;
     text-wrap: balance;
   }
-  /* Page and section titles carry the brand voice: Archivo, a little wide. */
+  /* Page and section titles: Plus Jakarta, heavy and tight. */
   h1, h2 {
     font-family: var(--font-display);
-    font-stretch: 112%;
-    font-weight: 700;
-    letter-spacing: -0.012em;
+    font-weight: 750;
+    letter-spacing: -0.02em;
   }
   :lang(ar) h1, :lang(ar) h2, :lang(ar) h3, :lang(ar) h4 {
     letter-spacing: 0;
@@ -193,14 +196,12 @@
   .tabular { font-variant-numeric: tabular-nums; }
   .reading { max-width: var(--container-reading); }
   .font-display { font-family: var(--font-display); }
-  /* Range display: Archivo at full width, heavy, in capitals. Arabic keeps its own shapes. */
+  /* Display: heavy and tight (no capitals in Night). Arabic keeps its own shapes. */
   .display-x {
     font-family: var(--font-display);
-    font-stretch: 125%;
     font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.004em;
-    line-height: 0.98;
+    letter-spacing: -0.03em;
+    line-height: 1;
   }
   .display-x:where(:lang(ar), :lang(ar) *) {
     text-transform: none;
@@ -231,11 +232,10 @@
   }
   .eyebrow {
     font-family: var(--font-display);
-    font-stretch: 125%;
-    font-size: 0.6875rem;
+    font-size: 0.75rem;
     line-height: 1.4;
     font-weight: 700;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
   }
   .eyebrow:where(:lang(ar), :lang(ar) *) {
@@ -303,14 +303,17 @@
 /* ── Range ───────────────────────────────────────────────────────────────
    Flat bone canvas, hairlines instead of blur, and one filled object per
    screen: an ink panel carrying the mark's narrowing bands in its corner. */
-.app-canvas { background: var(--background); }
+.app-canvas {
+  background: radial-gradient(60% 50% at 0% 0%, var(--wash-1), transparent 60%), radial-gradient(50% 45% at 100% 100%, var(--wash-2), transparent 62%), var(--background);
+  background-attachment: fixed;
+}
 .hero-card {
   position: relative;
   isolation: isolate;
   overflow: hidden;
   color: var(--hero-foreground);
-  background: var(--hero-from);
-  box-shadow: var(--shadow-raised);
+  background: radial-gradient(120% 90% at 20% 0%, rgb(255 255 255 / 0.12), transparent 55%), linear-gradient(160deg, var(--hero-from), var(--hero-via) 55%, var(--hero-to));
+  box-shadow: var(--shadow-raised), inset 0 1px 0 rgb(255 255 255 / 0.18);
 }
 /* The signature, opt-in: the mark's bands, faint, in a corner of an ink panel; the estimate dot stays vermilion. */
 .hero-sign::after {
@@ -326,9 +329,30 @@
 }
 /* Tiles inside a hero (numbers, must-haves): a hairline on ink. */
 .hero-tile {
-  border-radius: 12px;
-  background: rgb(242 240 235 / 0.05);
-  box-shadow: inset 0 0 0 1px rgb(242 240 235 / 0.12);
+  border-radius: 16px;
+  background: rgb(255 255 255 / 0.1);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.14);
+}
+/* Stat tiles: bold gradient blocks with a soft wave of light across the top. */
+.tile-blue, .tile-teal, .tile-violet, .tile-coral {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  color: #ffffff;
+  border-radius: 20px;
+}
+.tile-blue { background: linear-gradient(180deg, var(--blue), var(--blue-deep)); box-shadow: 0 18px 36px -20px rgb(47 107 255 / 0.7); }
+.tile-teal { background: linear-gradient(180deg, var(--teal), var(--teal-deep)); box-shadow: 0 18px 36px -20px rgb(18 165 151 / 0.7); }
+.tile-violet { background: linear-gradient(180deg, #7b6cf0, #5040ce); box-shadow: 0 18px 36px -20px rgb(108 92 231 / 0.7); }
+.tile-coral { background: linear-gradient(180deg, #ff6d8a, #e03a62); box-shadow: 0 18px 36px -20px rgb(255 92 124 / 0.6); }
+.tile-blue::before, .tile-teal::before, .tile-violet::before, .tile-coral::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: -40% -15% auto -15%;
+  height: 75%;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 0.16);
 }
 /* The evidenced range: the signal, solid. */
 .band-gold { background: var(--saffron); }

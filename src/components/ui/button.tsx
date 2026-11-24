@@ -9,20 +9,21 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
+        /** Night: violet, lit from above, with a soft glow. */
         primary:
-          "bg-accent text-accent-foreground hover:bg-accent-hover active:scale-[0.98] active:bg-accent-active disabled:bg-surface-sunken disabled:text-tertiary disabled:opacity-100",
-        /** The signal: one per screen at most (the hero call to action). Ink text on vermilion. */
-        signal: "bg-[var(--signal)] text-[var(--signal-foreground)] hover:bg-[var(--signal-hover)] active:scale-[0.98] font-semibold",
+          "bg-accent text-accent-foreground font-semibold shadow-[0_12px_26px_-12px_rgb(108_92_231/0.8),inset_0_1px_0_rgb(255_255_255/0.18)] hover:bg-accent-hover active:scale-[0.98] active:bg-accent-active disabled:bg-surface-sunken disabled:text-tertiary disabled:opacity-100 disabled:shadow-none",
+        /** The signal: one per screen at most (the hero call to action). Coral, glowing. */
+        signal: "bg-[var(--signal)] text-[var(--signal-foreground)] hover:bg-[var(--signal-hover)] active:scale-[0.98] font-semibold shadow-[0_12px_26px_-12px_rgb(255_92_124/0.8)]",
         secondary:
-          "bg-surface text-text shadow-[inset_0_0_0_1px_var(--border-strong)] hover:bg-surface-subtle hover:shadow-[inset_0_0_0_1px_var(--text)] active:bg-surface-sunken",
+          "bg-surface-subtle text-text shadow-[inset_0_0_0_1px_var(--border-strong)] hover:bg-surface hover:shadow-[inset_0_0_0_1px_var(--accent-text)] active:bg-surface-sunken",
         ghost: "text-secondary hover:bg-surface-subtle hover:text-text active:bg-surface-sunken",
         destructive: "bg-critical text-white hover:opacity-90 active:opacity-80 dark:text-[#1c0a0a]",
         link: "h-auto px-0 text-accent-text underline-offset-4 hover:underline",
       },
       size: {
-        sm: "h-8 px-3 text-sm [&_svg]:size-4",
-        md: "h-10 px-4 text-sm [&_svg]:size-4",
-        lg: "h-12 px-5 text-[15px] [&_svg]:size-5",
+        sm: "h-9 px-3.5 text-sm [&_svg]:size-4",
+        md: "h-11 px-5 text-sm [&_svg]:size-4",
+        lg: "h-12 px-6 text-[15px] [&_svg]:size-5",
         icon: "size-10 [&_svg]:size-5",
         "icon-sm": "size-8 [&_svg]:size-4",
       },

@@ -77,6 +77,8 @@ const PAIRS: [string, string, number][] = [
   ["signal", "background", AA_LARGE],
   ["signal", "surface", AA_LARGE],
   ["hero-secondary", "hero-from", AA],
+  // Stat tiles: white numbers on blue and teal.
+  ["accent-foreground", "blue-deep", AA],
 ];
 
 describe("design token contrast (WCAG AA)", () => {
@@ -94,6 +96,7 @@ describe("design token contrast (WCAG AA)", () => {
   }
 
   it("uses one hue for the level ramp (no red/green)", () => {
+    // Night: the ramp is violet.
     for (const theme of ["light", "dark"] as const) {
       const hues = [1, 2, 3, 4, 5].flatMap((l) => {
         const hex = t[theme][`level-${l}`]!;
@@ -105,10 +108,10 @@ describe("design token contrast (WCAG AA)", () => {
         const h = max === r ? ((g - b) / d) % 6 : max === g ? (b - r) / d + 2 : (r - g) / d + 4;
         return [(h * 60 + 360) % 360];
       });
-      // Warm stone only: one family, never red or green.
+      // Violet only: one family, never red or green.
       for (const h of hues) {
-        expect(h).toBeGreaterThan(20);
-        expect(h).toBeLessThan(55);
+        expect(h).toBeGreaterThan(230);
+        expect(h).toBeLessThan(270);
       }
     }
   });
