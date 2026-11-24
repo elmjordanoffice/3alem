@@ -169,7 +169,7 @@ function Verdict({ content }: { content: ReportContent }) {
               <p className="text-sm text-hero-secondary">{t("gapsInterview")}</p>
               <ul className="mt-2.5 flex flex-wrap gap-2">
                 {content.fit.gaps.slice(0, 4).map((g) => (
-                  <li key={g.key} className="rounded-[6px] px-2.5 py-1 text-sm shadow-[inset_0_0_0_1px_rgb(242_240_235/0.25)]">{g.name}</li>
+                  <li key={g.key} className="rounded-lg px-2.5 py-1 text-sm shadow-[inset_0_0_0_1px_rgb(255_255_255/0.25)]">{g.name}</li>
                 ))}
               </ul>
             </div>

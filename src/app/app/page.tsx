@@ -375,7 +375,7 @@ function GrowCard({ t, hasProfile, large = false }: { t: T; hasProfile: boolean;
         large && "p-7",
       )}
     >
-      <span className="inline-flex size-9 items-center justify-center rounded-[10px] bg-accent-subtle text-accent-text">
+      <span className="inline-flex size-9 items-center justify-center rounded-xl bg-accent-subtle text-accent-text">
         <Sprout className="size-[18px]" strokeWidth={1.75} aria-hidden />
       </span>
       <span>

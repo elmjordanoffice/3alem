@@ -78,7 +78,7 @@ export function WeekRing({ done, target, size = 128, from = 0, label, tone = "pa
   return (
     <div className="relative shrink-0" style={{ width: size, height: size }}>
       <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} role="img" aria-label={label}>
-        <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={ink ? "rgb(242 240 235 / 0.16)" : "var(--level-empty)"} strokeWidth={stroke} />
+        <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={ink ? "rgb(255 255 255 / 0.18)" : "var(--level-empty)"} strokeWidth={stroke} />
         <circle
           className="ring-arc"
           cx={size / 2}
@@ -257,9 +257,9 @@ export function PracticeCelebration({ c }: { c: CelebrationView }) {
           {c.repStreak && c.firstToday ? <p className="text-sm font-semibold text-hero-foreground">{t("celebrate.repStreak", { n: c.repStreak })}</p> : null}
           {c.improved ? (
             <p className="flex flex-wrap items-center gap-2 text-sm text-hero-secondary">
-              <span className="rounded-full px-2.5 py-0.5 shadow-[inset_0_0_0_1px_rgb(242_240_235/0.3)]">{tl(String(c.improved.from))}</span>
+              <span className="rounded-full px-2.5 py-0.5 shadow-[inset_0_0_0_1px_rgb(255_255_255/0.3)]">{tl(String(c.improved.from))}</span>
               <ArrowRight className="size-4 flip-rtl" aria-hidden />
-              <span className="joy-pop rounded-full bg-saffron px-2.5 py-0.5 font-semibold text-[#141414]" style={{ "--i": 3 } as React.CSSProperties}>{tl(String(c.improved.to))}</span>
+              <span className="joy-pop rounded-full bg-signal px-2.5 py-0.5 font-semibold text-signal-foreground" style={{ "--i": 3 } as React.CSSProperties}>{tl(String(c.improved.to))}</span>
             </p>
           ) : null}
           <p className="text-sm text-hero-secondary">{goalJustMet ? t("celebrate.goalBody") : weekText(c.week)}</p>
@@ -269,7 +269,7 @@ export function PracticeCelebration({ c }: { c: CelebrationView }) {
                 const Icon = MILESTONE_ICON[k];
                 return (
                   <li key={k} style={{ "--i": i + 2 } as React.CSSProperties} className="joy-pop hero-tile flex items-center gap-2 rounded-full py-1.5 ps-1.5 pe-3 text-sm font-medium">
-                    <span className="grid size-7 place-items-center rounded-full bg-hero-foreground text-[#141414]"><Icon className="size-3.5" aria-hidden /></span>
+                    <span className="grid size-7 place-items-center rounded-full bg-white text-accent"><Icon className="size-3.5" aria-hidden /></span>
                     {t(`milestones.${k}.title`)}
                   </li>
                 );

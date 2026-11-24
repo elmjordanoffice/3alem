@@ -67,7 +67,7 @@ function FacePile({ people }: { people: { name: string; role: string }[] }) {
   return (
     <span className="flex -space-x-2 rtl:space-x-reverse" aria-hidden>
       {people.map((p) => (
-        <span key={p.name} className="grid size-8 place-items-center rounded-full bg-hero-foreground text-[11px] font-semibold text-[#141414] ring-2 ring-[var(--hero-from)]">
+        <span key={p.name} className="grid size-8 place-items-center rounded-full bg-white text-[11px] font-semibold text-accent ring-2 ring-[var(--hero-from)]">
           {initials(p.name)}
         </span>
       ))}

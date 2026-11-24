@@ -187,7 +187,7 @@ function CoachingPanel({ coaching, previous }: { coaching: Coaching; previous?: 
           </h3>
           <ul className="flex flex-col gap-2">
             {coaching.tips.map((x) => (
-              <li key={x} className="rounded-[10px] bg-accent-subtle px-3 py-2.5 text-sm text-text" dir="auto">{x}</li>
+              <li key={x} className="rounded-xl bg-accent-subtle px-3 py-2.5 text-sm text-text" dir="auto">{x}</li>
             ))}
           </ul>
         </div>

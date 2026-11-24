@@ -51,7 +51,7 @@ function ImportancePicker({ value, onChange, label, disabled }: { value: Importa
           aria-checked={value === i}
           disabled={disabled}
           onClick={() => onChange(i)}
-          className={cn("h-8 rounded-[6px] px-2.5 text-xs font-medium transition-colors disabled:opacity-60", value === i ? "bg-surface text-text shadow-[0_1px_2px_rgb(0_0_0/0.06)]" : "text-secondary hover:text-text")}
+          className={cn("h-8 rounded-lg px-2.5 text-xs font-medium transition-colors disabled:opacity-60", value === i ? "bg-surface text-text shadow-[0_1px_2px_rgb(0_0_0/0.06)]" : "text-secondary hover:text-text")}
         >
           {t(`importance.${i}`)}
         </button>

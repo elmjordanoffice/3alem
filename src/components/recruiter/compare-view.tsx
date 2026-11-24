@@ -119,13 +119,13 @@ function DiffTile({ d, name, mustHave, ahead, level }: { d: Difference; name: st
       <div className="flex flex-wrap items-baseline justify-between gap-2">
         <h3 className="font-semibold text-hero-foreground">
           {name}
-          {d.mustHave ? <span className="ms-2 rounded-full bg-saffron px-2 py-0.5 text-[11px] font-semibold text-[#141414]">{mustHave}</span> : null}
+          {d.mustHave ? <span className="ms-2 rounded-full bg-signal px-2 py-0.5 text-[11px] font-semibold text-signal-foreground">{mustHave}</span> : null}
         </h3>
         <span className="text-xs text-hero-secondary">{ahead}</span>
       </div>
       <div className="grid gap-2 sm:grid-cols-2">
         {[d.leader, d.trailer].map((s, i) => (
-          <figure key={s.sessionId} className="flex flex-col gap-1.5 rounded-[10px] bg-white/5 p-3">
+          <figure key={s.sessionId} className="flex flex-col gap-1.5 rounded-xl bg-white/5 p-3">
             <figcaption className="flex items-center justify-between gap-2 text-xs">
               <span className={cn("font-semibold", i === 0 ? "text-hero-foreground" : "text-hero-secondary")}>{s.name}</span>
               <span className="tabular text-hero-secondary">{level(s.estimate)}</span>

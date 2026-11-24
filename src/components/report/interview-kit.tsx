@@ -197,7 +197,7 @@ function FocusCard({
       ) : null}
 
       {f.anchors.length ? (
-        <details className="group mt-4 rounded-[10px] bg-surface-subtle p-3 text-sm shadow-[inset_0_0_0_1px_var(--border)]">
+        <details className="group mt-4 rounded-xl bg-surface-subtle p-3 text-sm shadow-[inset_0_0_0_1px_var(--border)]">
           <summary className="cursor-pointer font-medium marker:text-mark-muted">{t("levels")}</summary>
           <dl className="mt-2 flex flex-col gap-2">
             {f.anchors.map((a) => (
@@ -250,7 +250,7 @@ function FocusCard({
       </div>
 
       {revealed ? (
-        <div className="mt-4 rounded-[10px] bg-surface-subtle p-3 shadow-[inset_0_0_0_1px_var(--border)]">
+        <div className="mt-4 rounded-xl bg-surface-subtle p-3 shadow-[inset_0_0_0_1px_var(--border)]">
           <div className="flex flex-wrap items-baseline justify-between gap-2 text-sm">
             <span className="font-medium">{t("assessmentSaid")}</span>
             <LevelLabel estimate={f.assessment.estimate} confidence={f.assessment.confidence} range={f.assessment.range} />
@@ -282,7 +282,7 @@ function FocusCard({
 function SignalList({ title, items, tone }: { title: string; items: string[]; tone: "good" | "watch" }) {
   if (!items.length) return null;
   return (
-    <div className={cn("rounded-[10px] p-3", tone === "good" ? "bg-success-subtle" : "bg-warning-subtle")}>
+    <div className={cn("rounded-xl p-3", tone === "good" ? "bg-success-subtle" : "bg-warning-subtle")}>
       <h3 className={cn("text-xs font-semibold uppercase tracking-wide", tone === "good" ? "text-success" : "text-warning")}>{title}</h3>
       <ul className="mt-1.5 flex flex-col gap-1 text-sm">
         {items.map((x) => (
@@ -306,7 +306,7 @@ function Debrief({ kit, disagreements, others }: { kit: InterviewKit; disagreeme
       <p className="mt-1 text-sm text-hero-secondary">{others ? t("debriefBody", { n: kit.scorecards.length }) : t("debriefSolo")}</p>
       <dl className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-4">
         {RECS.map((r) => (
-          <div key={r} className="hero-tile rounded-[10px] p-3">
+          <div key={r} className="hero-tile rounded-xl p-3">
             <dt className="text-xs text-hero-secondary">{t(`rec.${r}`)}</dt>
             <dd className="tabular mt-1 text-xl font-semibold">{kit.scorecards.filter((s) => s.recommendation === r).length}</dd>
           </div>
@@ -322,7 +322,7 @@ function Debrief({ kit, disagreements, others }: { kit: InterviewKit; disagreeme
       {kit.scorecards.length > 1 ? (
         <ul className="mt-4 flex flex-col gap-2">
           {kit.scorecards.map((s) => (
-            <li key={s.interviewerName + s.submittedAt} className="hero-tile rounded-[10px] p-3 text-sm">
+            <li key={s.interviewerName + s.submittedAt} className="hero-tile rounded-xl p-3 text-sm">
               <span className="font-medium">{s.mine ? t("you") : s.interviewerName}</span> · {t(`rec.${s.recommendation}`)}
               <p className="mt-1 text-hero-secondary" dir="auto">{s.summary}</p>
             </li>

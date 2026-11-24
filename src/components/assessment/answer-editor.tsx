@@ -153,7 +153,7 @@ export function AnswerEditor({
             aria-pressed={Boolean(active)}
             aria-label={t(key)}
             className={cn(
-              "inline-flex size-8 items-center justify-center rounded-[6px] text-secondary transition-colors hover:bg-surface-subtle hover:text-text focus-visible:outline-2 focus-visible:outline-focus disabled:opacity-50",
+              "inline-flex size-8 items-center justify-center rounded-lg text-secondary transition-colors hover:bg-surface-subtle hover:text-text focus-visible:outline-2 focus-visible:outline-focus disabled:opacity-50",
               active && "bg-accent-subtle text-accent-text hover:bg-accent-subtle",
             )}
           >

@@ -100,7 +100,7 @@ export function Landing({ v, onStart }: { v: View<"landing">; onStart: (o: { loc
             <span className="text-sm font-medium text-text">{t("language")}</span>
             <div className="grid grid-cols-2 gap-1 rounded-control bg-surface-sunken p-0.5">
               {(["en", "ar"] as const).map((l) => (
-                <button key={l} type="button" lang={l} aria-pressed={locale === l} onClick={() => chooseLanguage(l)} className={cn("h-9 rounded-[6px] text-sm font-medium", locale === l ? "bg-surface text-text shadow-[0_1px_2px_rgb(0_0_0/0.06)]" : "text-secondary hover:text-text")}>
+                <button key={l} type="button" lang={l} aria-pressed={locale === l} onClick={() => chooseLanguage(l)} className={cn("h-9 rounded-lg text-sm font-medium", locale === l ? "bg-surface text-text shadow-[0_1px_2px_rgb(0_0_0/0.06)]" : "text-secondary hover:text-text")}>
                   {l === "en" ? "English" : "العربية"}
                 </button>
               ))}
@@ -316,7 +316,7 @@ export function Transition({ v, onContinue, onPause }: { v: View<"transition">; 
           </div>
           {/* The chapter just finished, stamped, then the next one. */}
           {v.chapterIndex > 0 ? (
-            <span className="joy-stamp mt-6 inline-block rounded-[8px] border-2 border-saffron px-2.5 py-1 font-display text-xs font-extrabold uppercase tracking-[0.08em] text-saffron [font-stretch:112%]" style={{ animationDelay: "380ms" }}>
+            <span className="joy-stamp mt-6 inline-block rounded-lg border-2 border-saffron px-2.5 py-1 font-display text-xs font-extrabold uppercase tracking-[0.08em] text-saffron [font-stretch:112%]" style={{ animationDelay: "380ms" }}>
               {td("chapterDone", { n: v.chapterIndex })}
             </span>
           ) : null}

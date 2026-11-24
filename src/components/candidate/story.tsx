@@ -53,7 +53,7 @@ export function ColleagueNote({ note, tone = "paper", className }: { note: Story
   const ink = tone === "ink";
   return (
     <div className={cn("note-in flex items-start gap-2.5", className)} role="note">
-      <span className={cn("grid size-8 shrink-0 place-items-center rounded-full text-[11px] font-semibold", ink ? "bg-hero-foreground text-[#141414]" : "bg-accent text-accent-foreground")} aria-hidden>
+      <span className={cn("grid size-8 shrink-0 place-items-center rounded-full text-[11px] font-semibold", ink ? "bg-white text-accent" : "bg-accent text-accent-foreground")} aria-hidden>
         {initials(note.from.name)}
       </span>
       <div className="min-w-0 flex-1">
@@ -64,7 +64,7 @@ export function ColleagueNote({ note, tone = "paper", className }: { note: Story
         <p
           className={cn(
             "relative mt-1.5 rounded-[14px] rounded-ss-[4px] px-3.5 py-2.5 text-[14px] leading-relaxed",
-            ink ? "bg-hero-foreground/[0.08] text-hero-foreground shadow-[inset_0_0_0_1px_rgb(242_240_235/0.14)]" : "bg-surface-subtle text-text shadow-[inset_0_0_0_1px_var(--border)]",
+            ink ? "bg-hero-foreground/[0.08] text-hero-foreground shadow-[inset_0_0_0_1px_rgb(255_255_255/0.14)]" : "bg-surface-subtle text-text shadow-[inset_0_0_0_1px_var(--border)]",
           )}
           dir="auto"
         >

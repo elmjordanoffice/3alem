@@ -65,7 +65,7 @@ export function InboxTask({ itemId, content, onChange, onSaveState, disabled, ti
                     type="button"
                     onClick={() => setDraft((d) => ({ ...d, open: id }))}
                     aria-current={active ? "true" : undefined}
-                    className="flex min-w-0 flex-1 items-start gap-2.5 rounded-[6px] p-1 text-start focus-visible:outline-2 focus-visible:outline-focus"
+                    className="flex min-w-0 flex-1 items-start gap-2.5 rounded-lg p-1 text-start focus-visible:outline-2 focus-visible:outline-focus"
                   >
                     <span className="mt-0.5 w-4 shrink-0 text-xs text-tertiary tabular">{n.number(idx + 1)}</span>
                     <span className="min-w-0 flex-1">
@@ -80,10 +80,10 @@ export function InboxTask({ itemId, content, onChange, onSaveState, disabled, ti
                     </span>
                   </button>
                   <span className="flex flex-col">
-                    <button type="button" disabled={disabled || idx === 0} onClick={() => move(id, -1)} aria-label={t("moveUp", { subject: m.subject })} className="inline-flex size-7 items-center justify-center rounded-[6px] text-tertiary hover:bg-surface-subtle disabled:opacity-30">
+                    <button type="button" disabled={disabled || idx === 0} onClick={() => move(id, -1)} aria-label={t("moveUp", { subject: m.subject })} className="inline-flex size-7 items-center justify-center rounded-lg text-tertiary hover:bg-surface-subtle disabled:opacity-30">
                       <ChevronUp className="size-4" aria-hidden />
                     </button>
-                    <button type="button" disabled={disabled || idx === draft.order.length - 1} onClick={() => move(id, 1)} aria-label={t("moveDown", { subject: m.subject })} className="inline-flex size-7 items-center justify-center rounded-[6px] text-tertiary hover:bg-surface-subtle disabled:opacity-30">
+                    <button type="button" disabled={disabled || idx === draft.order.length - 1} onClick={() => move(id, 1)} aria-label={t("moveDown", { subject: m.subject })} className="inline-flex size-7 items-center justify-center rounded-lg text-tertiary hover:bg-surface-subtle disabled:opacity-30">
                       <ChevronDown className="size-4" aria-hidden />
                     </button>
                   </span>

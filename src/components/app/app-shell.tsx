@@ -284,7 +284,7 @@ function SidebarContent({ user, organizations, activeOrganizationId, nav }: Pick
 
       <div className="flex items-center gap-1 p-3 lg:hidden">
         <DropdownMenu>
-          <DropdownMenuTrigger className="flex min-w-0 flex-1 items-center gap-2.5 rounded-[10px] p-1.5 text-start transition-colors hover:bg-sidebar-raised focus-visible:outline-2 focus-visible:outline-focus">
+          <DropdownMenuTrigger className="flex min-w-0 flex-1 items-center gap-2.5 rounded-xl p-1.5 text-start transition-colors hover:bg-sidebar-raised focus-visible:outline-2 focus-visible:outline-focus">
             <Avatar name={user.name} />
             <span className="min-w-0 flex-1">
               <span className="block truncate text-sm font-medium text-sidebar-foreground">{user.name}</span>

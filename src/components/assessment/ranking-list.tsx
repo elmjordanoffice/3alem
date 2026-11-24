@@ -147,7 +147,7 @@ function SortableRow({
         {...listeners}
         disabled={disabled}
         aria-label={t("handle", { item: item.label })}
-        className="inline-flex h-9 w-7 shrink-0 cursor-grab touch-none items-center justify-center rounded-[6px] text-mark-muted hover:bg-surface-subtle hover:text-secondary focus-visible:outline-2 focus-visible:outline-focus active:cursor-grabbing"
+        className="inline-flex h-9 w-7 shrink-0 cursor-grab touch-none items-center justify-center rounded-lg text-mark-muted hover:bg-surface-subtle hover:text-secondary focus-visible:outline-2 focus-visible:outline-focus active:cursor-grabbing"
       >
         <GripVertical className="size-4" aria-hidden />
       </button>
@@ -164,7 +164,7 @@ function SortableRow({
           onClick={() => onMove(index, index - 1)}
           disabled={disabled || index === 0}
           aria-label={t("moveUp", { item: item.label })}
-          className="inline-flex size-8 items-center justify-center rounded-[6px] text-tertiary hover:bg-surface-subtle hover:text-text focus-visible:outline-2 focus-visible:outline-focus disabled:opacity-30"
+          className="inline-flex size-8 items-center justify-center rounded-lg text-tertiary hover:bg-surface-subtle hover:text-text focus-visible:outline-2 focus-visible:outline-focus disabled:opacity-30"
         >
           <ChevronUp className="size-4" aria-hidden />
         </button>
@@ -173,7 +173,7 @@ function SortableRow({
           onClick={() => onMove(index, index + 1)}
           disabled={disabled || index === total - 1}
           aria-label={t("moveDown", { item: item.label })}
-          className="inline-flex size-8 items-center justify-center rounded-[6px] text-tertiary hover:bg-surface-subtle hover:text-text focus-visible:outline-2 focus-visible:outline-focus disabled:opacity-30"
+          className="inline-flex size-8 items-center justify-center rounded-lg text-tertiary hover:bg-surface-subtle hover:text-text focus-visible:outline-2 focus-visible:outline-focus disabled:opacity-30"
         >
           <ChevronDown className="size-4" aria-hidden />
         </button>

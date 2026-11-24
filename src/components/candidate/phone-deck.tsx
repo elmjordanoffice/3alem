@@ -245,7 +245,7 @@ function DeckBar({ branding, chapters, chapter, deadline, onExpire, online, cloc
     <header className="z-50 border-b border-border/70 bg-background/85 px-4 pb-2.5 pt-[max(10px,env(safe-area-inset-top))] backdrop-blur-xl">
       <div className="flex items-center justify-between gap-3">
         <span className="flex min-w-0 items-center gap-2">
-          <span className="grid size-6 shrink-0 place-items-center rounded-[6px] bg-accent font-display text-[11px] font-bold text-accent-foreground [font-stretch:125%]" aria-hidden>
+          <span className="grid size-6 shrink-0 place-items-center rounded-lg bg-accent font-display text-[11px] font-bold text-accent-foreground [font-stretch:125%]" aria-hidden>
             {branding.orgName.trim().charAt(0).toUpperCase()}
           </span>
           <span className="truncate text-[13px] font-semibold">{branding.orgName}</span>

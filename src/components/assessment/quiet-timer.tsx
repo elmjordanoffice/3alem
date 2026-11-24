@@ -66,7 +66,7 @@ export function QuietTimer({
         type="button"
         onClick={() => setHidden((h) => !h)}
         aria-label={hidden ? t("show") : t("hide")}
-        className="inline-flex size-7 items-center justify-center rounded-[6px] text-tertiary hover:bg-surface-subtle hover:text-text focus-visible:outline-2 focus-visible:outline-focus"
+        className="inline-flex size-7 items-center justify-center rounded-lg text-tertiary hover:bg-surface-subtle hover:text-text focus-visible:outline-2 focus-visible:outline-focus"
       >
         {hidden ? <Eye className="size-4" aria-hidden /> : <EyeOff className="size-4" aria-hidden />}
       </button>

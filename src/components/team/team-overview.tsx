@@ -232,7 +232,7 @@ function TeamBrief({ a, hire }: { a: TeamAnalytics; hire: NextHire | null }) {
       <ol className="mt-5 grid gap-2 sm:grid-cols-2">
         {(steps.length ? steps : [t("none")]).slice(0, 4).map((s, i) => (
           <li key={s} className="hero-tile flex gap-3 rounded-[12px] p-4 text-sm">
-            <span className="tabular grid size-6 shrink-0 place-items-center rounded-full bg-saffron text-xs font-semibold text-[#15163a]" aria-hidden>{n.number(i + 1)}</span>
+            <span className="tabular grid size-6 shrink-0 place-items-center rounded-full bg-signal text-xs font-semibold text-signal-foreground" aria-hidden>{n.number(i + 1)}</span>
             <span dir="auto">{s}</span>
           </li>
         ))}

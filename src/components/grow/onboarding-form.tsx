@@ -128,11 +128,11 @@ export function GrowOnboardingForm({ initial, domains }: { initial: (Omit<Values
                 <p className="mt-0.5 text-sm text-secondary">“{d.statement}”</p>
                 <div role="radiogroup" aria-label={t("selfAria", { domain: d.name })} className="mt-2.5 flex flex-wrap gap-1.5">
                   {OFTEN.map(([k, val]) => (
-                    <button key={k} type="button" role="radio" aria-checked={cur === val} onClick={() => set(cur === val ? null : val)} className={cn("h-9 rounded-[10px] px-3 text-[13px] font-medium shadow-[inset_0_0_0_1px_var(--border)]", cur === val ? "bg-accent text-accent-foreground shadow-none" : "text-secondary hover:bg-surface-subtle")}>
+                    <button key={k} type="button" role="radio" aria-checked={cur === val} onClick={() => set(cur === val ? null : val)} className={cn("h-9 rounded-xl px-3 text-[13px] font-medium shadow-[inset_0_0_0_1px_var(--border)]", cur === val ? "bg-accent text-accent-foreground shadow-none" : "text-secondary hover:bg-surface-subtle")}>
                       {t(`often.${k}`)}
                     </button>
                   ))}
-                  <button type="button" role="radio" aria-checked={cur == null} onClick={() => set(null)} className={cn("h-9 rounded-[10px] px-3 text-[13px] font-medium", cur == null ? "bg-surface-sunken text-text" : "text-tertiary hover:bg-surface-subtle")}>
+                  <button type="button" role="radio" aria-checked={cur == null} onClick={() => set(null)} className={cn("h-9 rounded-xl px-3 text-[13px] font-medium", cur == null ? "bg-surface-sunken text-text" : "text-tertiary hover:bg-surface-subtle")}>
                     {t("often.unsure")}
                   </button>
                 </div>
