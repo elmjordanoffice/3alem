@@ -6,7 +6,7 @@ The live, bilingual brand book is at **/brand** in the app (`src/app/brand/`). I
 
 **Every answer narrows the range.** An assessment starts out knowing almost nothing: the person could be anywhere on the scale. Each answer is evidence, and each piece of evidence rules something out, until what is left is an estimate we can stand behind, with the person's own words underneath it.
 
-Range draws exactly that: wide bands of uncertainty below, narrower above, and one vermilion point at the top, the estimate. Centred, the bands stack into an A, for Aalim. Arabic name of the brand: **النطاق**.
+Range draws exactly that: wide bands of uncertainty below, narrower above, and one coral point at the top, the estimate. Centred, the bands stack into an A, for Aalim. Arabic name of the brand: **النطاق**.
 
 Three words: **exact** (measured, aligned; every line means something), **warm** (soft light, rounded shapes, a friendly voice) and **honest about certainty** (ranges, not verdicts).
 
@@ -30,15 +30,15 @@ Four rows on a 64-unit square:
 | Ends | Fully round (r 5.5) |
 | Legs of the A | The tangent through the band ends meets just above the dot |
 
-The bands take the opposite of the ground (ink on bone, bone on ink). The dot is vermilion, always, except in one-colour reproduction, where it joins the bands. The geometry lives in one place, `scripts/brand-assets.mts` (`MARK`), which also writes `src/components/brand/wordmark-paths.ts` for the in-app `<Logo>`.
+The bands take the opposite of the ground (indigo on light, white on dark). The dot is coral, always, except in one-colour reproduction, where it joins the bands. The geometry lives in one place, `scripts/brand-assets.mts` (`MARK`), which also writes `src/components/brand/wordmark-paths.ts` for the in-app `<Logo>`.
 
 ## Wordmark and lockups
 
 - **AALIM** in Archivo Expanded ExtraBold, tracked open a little. **عالم** in Beiruti Black, never tracked; its alif rises 18% above the Latin capitals so both read at the same size. Baselines align, separated by a hairline at 22% ink. Both are outlined with HarfBuzz from the static fonts in `brand/fonts/`, so the Arabic joins exactly as a browser would shape it and no font is needed to open a file.
-- **Lockups:** horizontal bilingual (primary), English, Arabic, one colour, reversed on ink, and the app tile (the mark at 70% on an ink square, 22.5% corner radius). A vermilion tile (ink bands, bone dot) is for marketing only.
+- **Lockups:** horizontal bilingual (primary), English, Arabic, one colour, reversed on indigo, and the app tile (the mark at 70% in white on the blue gradient square, 22.5% corner radius). A coral tile (indigo bands, white dot) is for marketing only.
 - **Clear space:** x on every side, where x is the cap height of AALIM; around the mark alone, half its width.
 - **Minimum sizes:** mark 16 px, app tile 20 px, horizontal lockup 120 px wide, English lockup 80 px wide. In print: lockup 30 mm, mark 5 mm.
-- **Don't:** recolour the bands or the dot, stretch, rotate, add shadows, glows or gradients, put it on vermilion or a busy picture, retype the wordmark, rearrange the parts, or redraw the bands.
+- **Don't:** recolour the bands or the dot, stretch, rotate, add effects to the mark itself (the app tile's gradient and a soft glow behind it are the only exceptions), put it on coral or a busy picture, retype the wordmark, rearrange the parts, or redraw the bands.
 
 ## Colour: Night
 
@@ -103,6 +103,7 @@ Tone shifts by audience: calm and reassuring with **candidates** ("Take the time
 `npm run brand:assets` regenerates everything: `scripts/brand-assets.mts` writes the outlined SVGs and the in-app paths, then `scripts/brand-render.spec.ts` (Playwright, fonts embedded as data URIs) renders the PNGs.
 
 - `public/brand/`: `logo*.svg` (horizontal, English, Arabic, reversed, one colour), `mark*.svg`, `symbol.svg` and `symbol-signal.svg` (app tiles), `wordmark*.svg`; PNGs `logo.png` and `logo-reverse.png` (transparent, clear space built in), `symbol-{1024,512,192}.png`, `symbol-maskable-512.png`, `logo-email.png`.
-- Social images: `og-en.png` and `og-ar.png` (1200 × 630): bone ground, the promise as a huge Archivo (or Beiruti) headline ending in the vermilion dot, the mark, and a vermilion strip with the line "Every score comes with the person's own words." Set as the site's Open Graph image in `src/app/layout.tsx`.
-- App icons: `src/app/icon.svg` (browser tab), `src/app/apple-icon.png` (full-bleed ink), and the PWA manifest (`src/app/manifest.ts`, including a maskable icon).
-- Email: one layout (`src/lib/mail/templates.ts`) for invitations, renewed links, team invitations, password resets and shared reports, in the recipient's language and direction, with a plain-text twin. Bone around a white card, `logo-email.png` at 140 px, a vermilion tick, ink text and one vermilion button with ink text.
+- Colours (Night): marks and logos are indigo `#1B1840` on light grounds and white on dark ones; the dot is coral `#E8436B` (3:1 or more on white and on the indigo canvas). The app tile is the mark in white on the blue gradient (`#4C86FF` → `#2350E0`), as in the app's `LogoTile`.
+- Social images: `og-en.png` and `og-ar.png` (1200 × 630): the indigo canvas lit violet and blue, the white logo, the promise as a huge Plus Jakarta Sans (or Readex Pro) headline ending in the coral dot, the glowing mark, and a violet strip with the line "Every score comes with the person's own words." Set as the site's Open Graph image in `src/app/layout.tsx`.
+- App icons: `src/app/icon.svg` (browser tab), `src/app/apple-icon.png` (full-bleed blue), the PWA manifest (`src/app/manifest.ts`, including a maskable icon), and the phone app's icon, adaptive icon and splash in `mobile/assets/`.
+- Email: one layout (`src/lib/mail/templates.ts`) for invitations, renewed links, team invitations, password resets, shared reports and reminders, in the recipient's language and direction, with a plain-text twin. A lavender ground around a rounded white card, `logo-email.png` at 140 px, a violet tick, indigo text and one violet pill button with white text.

@@ -1,7 +1,7 @@
 import type * as React from "react";
 import { getLocale, getTranslations } from "next-intl/server";
 import { Check, CornerDownLeft, MessageSquareText, Share2 } from "lucide-react";
-import { LogoMark } from "@/components/brand/logo";
+import { LogoTile } from "@/components/brand/logo";
 import { FitPill, type FitLevel } from "@/components/report/fit";
 import { RangeScale } from "@/components/report/range-scale";
 import { levelBand } from "@/lib/levels";
@@ -20,9 +20,9 @@ async function quotes() {
   return (await getLocale()) === "ar" ? (["«", "»"] as const) : (["“", "”"] as const);
 }
 
-/** A white card on the plate: flat, a hairline, the product's radius. */
+/** A card in its well: rounded and lifted by light, no lines. */
 function Card({ className, children }: { className?: string; children: React.ReactNode }) {
-  return <div className={cn("rounded-card bg-surface text-text shadow-card", className)}>{children}</div>;
+  return <div className={cn("rounded-[18px] bg-surface text-text shadow-card", className)}>{children}</div>;
 }
 
 /* ── Step 1: a scene from the week ─────────────────────────────────────── */
@@ -30,12 +30,12 @@ export async function SceneCard() {
   const t = await getTranslations("landing.how.scene");
   return (
     <Card className="w-full overflow-hidden">
-      <div className="flex items-center justify-between gap-3 border-b border-border px-4 py-3 text-xs rtl:text-[13px]">
+      <div className="flex items-center justify-between gap-3 bg-surface-subtle px-4 py-3 text-xs rtl:text-[13px]">
         <span className="min-w-0 truncate font-medium text-secondary">{t("chapter")}</span>
         <span className="flex shrink-0 items-center gap-2 whitespace-nowrap text-tertiary">
-          <span className="hidden gap-0.5 sm:flex" dir="ltr">
+          <span className="hidden gap-0.5 sm:flex lg:hidden 2xl:flex" dir="ltr">
             {Array.from({ length: 9 }, (_, i) => (
-              <span key={i} className={cn("h-1 w-2.5 rounded-full", i < 4 ? "bg-text" : "bg-surface-sunken")} />
+              <span key={i} className={cn("h-1 w-2.5 rounded-full", i < 4 ? "bg-accent shadow-[0_0_6px_rgb(108_92_231/0.8)]" : "bg-surface-sunken")} />
             ))}
           </span>
           {t("progress")}
@@ -43,7 +43,7 @@ export async function SceneCard() {
       </div>
       <div className="p-4 sm:p-5">
         <div className="flex items-start gap-3">
-          <Initials name={t("from")} className="size-9 bg-text text-[#f2f0eb]" />
+          <Initials name={t("from")} className="size-9 bg-accent text-accent-foreground" />
           <div className="min-w-0 flex-1">
             <p className="flex items-baseline justify-between gap-2 text-sm">
               <span className="font-semibold">{t("from")}</span>
@@ -58,18 +58,18 @@ export async function SceneCard() {
           <span className="size-1.5 rounded-full bg-[var(--signal)]" aria-hidden />
           {t("adaptive")}
         </p>
-        <div className="mt-4 rounded-[12px] shadow-[inset_0_0_0_1px_var(--border-strong)]">
+        <div className="mt-4 rounded-[14px] bg-surface-subtle shadow-[0_0_0_3px_var(--accent-subtle),inset_0_0_0_1px_var(--accent)]">
           <p className="px-3.5 pt-3 text-xs font-medium text-tertiary rtl:text-[13px]">{t("replyLabel")}</p>
           <p className="px-3.5 pb-3 pt-1 text-sm leading-relaxed rtl:text-[15px] rtl:leading-[1.8]">
             {t("reply")}
-            <span className="ms-0.5 inline-block h-[1.1em] w-px translate-y-[0.2em] bg-text" aria-hidden />
+            <span className="ms-0.5 inline-block h-[1.1em] w-0.5 translate-y-[0.2em] rounded-full bg-accent" aria-hidden />
           </p>
-          <div className="flex items-center justify-between border-t border-border px-3.5 py-2 text-xs text-tertiary">
+          <div className="flex items-center justify-between px-3.5 pb-2.5 pt-1 text-xs text-tertiary">
             <span className="inline-flex items-center gap-1.5">
               <Check className="size-3.5" strokeWidth={2} aria-hidden />
               {t("saved")}
             </span>
-            <span className="inline-grid size-6 place-items-center rounded-md bg-text text-[#f2f0eb]">
+            <span className="inline-grid size-7 place-items-center rounded-full bg-accent text-accent-foreground shadow-[0_6px_14px_-6px_rgb(108_92_231/0.9)]">
               <CornerDownLeft className="flip-rtl size-3.5" strokeWidth={2} aria-hidden />
             </span>
           </div>
@@ -112,10 +112,10 @@ export async function NarrowingCard() {
                   </span>
                   <span className="absolute inset-x-0 top-0 block">
                     <span className="r-track block">
-                      <Band low={s.low} high={s.high} i={i} className="text-[var(--signal)]" />
-                      <span className="absolute -top-1.5 h-[calc(var(--bh)+12px)] w-0.5 -translate-x-1/2 rounded-full bg-text" style={{ left: `${pct(4)}%` }} />
+                      <Band low={s.low} high={s.high} i={i} className="r-glow text-[var(--signal)]" />
+                      <span className="absolute -top-1.5 h-[calc(var(--bh)+12px)] w-0.5 -translate-x-1/2 rounded-full bg-accent" style={{ left: `${pct(4)}%` }} />
                       <span className="r-at" style={{ "--x": pct(s.est), "--i": i } as React.CSSProperties}>
-                        <span className="absolute -left-[7px] -top-[2px] size-3.5 rounded-full bg-text ring-[3px] ring-surface" />
+                        <span className="absolute -left-[7px] -top-[2px] size-3.5 rounded-full bg-text ring-[3px] ring-surface shadow-[0_1px_4px_rgb(6_4_30/0.4)]" />
                       </span>
                     </span>
                   </span>
@@ -133,7 +133,7 @@ export async function NarrowingCard() {
             {t("level")} <bdi dir="ltr" className="font-normal text-secondary tabular">3.6–4.2</bdi>
           </span>
           <span className="flex items-center gap-1.5 text-xs text-tertiary rtl:text-[13px]">
-            <span className="inline-block h-3 w-0.5 rounded-full bg-text" aria-hidden />
+            <span className="inline-block h-3 w-0.5 rounded-full bg-accent" aria-hidden />
             {t("expected")} <bdi dir="ltr" className="tabular">4.0</bdi>
           </span>
         </div>
@@ -170,7 +170,7 @@ export async function EvidenceFragment() {
           </div>
         </div>
       </div>
-      <div className="border-t border-border bg-surface-subtle p-4 sm:p-5">
+      <div className="bg-surface-subtle p-4 sm:p-5">
         <p className="flex items-center gap-2 text-xs font-medium text-secondary rtl:text-[13px]">
           <MessageSquareText className="size-3.5" strokeWidth={1.75} aria-hidden />
           {t("askLabel")}
@@ -188,8 +188,8 @@ function Marker({ letter, ink = false, className }: { letter: string; ink?: bool
     <span
       aria-hidden
       className={cn(
-        "absolute z-10 grid size-6 place-items-center rounded-full font-display text-[10px] font-extrabold leading-none [font-stretch:125%] rtl:text-[13px] rtl:font-bold",
-        ink ? "bg-[#f2f0eb] text-text" : "bg-text text-[#f2f0eb]",
+        "absolute z-10 grid size-6 place-items-center rounded-full font-display text-[11px] font-extrabold leading-none rtl:text-[13px] rtl:font-bold",
+        ink ? "bg-white text-[#4030b8] shadow-[0_6px_14px_-6px_rgb(6_4_30/0.6)]" : "bg-accent text-accent-foreground shadow-[0_6px_14px_-6px_rgb(108_92_231/0.9)]",
         className,
       )}
     >
@@ -212,10 +212,10 @@ export async function ReportFragment() {
   const [qo, qc] = await quotes();
 
   return (
-    <figure aria-label={t("label")} className="overflow-hidden rounded-[18px] bg-surface text-text shadow-[0_0_0_1px_rgb(20_20_20/0.12)]">
+    <figure aria-label={t("label")} className="overflow-hidden rounded-card bg-surface text-text shadow-window">
       {/* Window bar */}
-      <div className="flex h-12 items-center gap-3 border-b border-border bg-surface-subtle px-4 sm:px-5">
-        <LogoMark className="size-5" />
+      <div className="flex h-14 items-center gap-3 bg-surface-subtle px-4 sm:px-5">
+        <LogoTile className="size-7" />
         <p className="flex min-w-0 items-center gap-1.5 truncate text-xs text-tertiary rtl:text-[13px]">
           <span className="truncate">{t("crumb")}</span>
           <span aria-hidden>/</span>
@@ -225,41 +225,41 @@ export async function ReportFragment() {
           <Share2 className="size-3.5" aria-hidden />
           {t("share")}
         </span>
-        <span className="hidden rounded-md bg-surface px-2 py-0.5 text-[11px] font-semibold text-secondary shadow-card sm:inline-flex">PDF</span>
+        <span className="hidden rounded-full bg-surface px-2.5 py-0.5 text-[11px] font-semibold text-secondary shadow-card sm:inline-flex">PDF</span>
       </div>
 
       <div className="p-4 sm:p-6 lg:p-7">
         <div className="flex items-center gap-3">
           <Initials name={t("candidate")} className="size-10 text-xs" />
           <div className="min-w-0">
-            <p className="font-display text-lg font-bold leading-tight [font-stretch:112%]">{t("candidate")}</p>
+            <p className="font-display text-lg font-bold leading-tight tracking-[-0.01em]">{t("candidate")}</p>
             <p className="truncate text-sm text-secondary">{t("role")}</p>
           </div>
         </div>
 
         {/* The verdict: the page's one filled object */}
-        <div className="relative mt-5 rounded-[16px] bg-ink p-5 text-ink-foreground sm:p-7">
+        <div className="hero-card r-on-hero relative mt-6 overflow-visible! rounded-[22px] p-5 sm:p-7">
           <Marker letter={m[0]!} ink className="-top-3 start-5 sm:start-7" />
           <div className="grid gap-8 md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] md:gap-10">
             <div className="flex flex-col">
-              <p className="text-xs text-ink-secondary rtl:text-sm">{t("roleFit")}</p>
+              <p className="text-xs text-hero-secondary rtl:text-sm">{t("roleFit")}</p>
               <p className="display-x mt-2 text-[2.5rem] leading-none sm:text-[3.25rem] rtl:text-[2.75rem] rtl:leading-[1.25] sm:rtl:text-[3.5rem]">{tf("GOOD")}</p>
               <p className="mt-3 flex items-center gap-2 text-sm">
                 <span className="flex gap-0.5" aria-hidden>
                   {[0, 1, 2].map((i) => (
-                    <span key={i} className="h-1.5 w-4 rounded-full bg-[var(--signal)]" />
+                    <span key={i} className="h-1.5 w-4 rounded-full bg-saffron-light shadow-[0_0_10px_rgb(255_92_124/0.7)]" />
                   ))}
                 </span>
                 {t("confidence")}
               </p>
-              <p className="mt-5 text-[15px] leading-relaxed text-ink-foreground/90 rtl:text-base rtl:leading-[1.8]">{t("summary")}</p>
+              <p className="mt-5 text-[15px] leading-relaxed text-hero-foreground rtl:text-base rtl:leading-[1.8]">{t("summary")}</p>
             </div>
             <div className="relative">
               <Marker letter={m[1]!} ink className="-top-7 start-0 md:-top-10" />
               <div className="flex items-baseline justify-between gap-3">
-                <p className="text-xs text-ink-secondary rtl:text-sm">{t("mustHaves")}</p>
-                <p className="flex items-center gap-1.5 text-xs text-ink-secondary rtl:text-sm">
-                  <span className="inline-block h-3 w-0.5 rounded-full bg-ink-foreground/70" aria-hidden />
+                <p className="text-xs text-hero-secondary rtl:text-sm">{t("mustHaves")}</p>
+                <p className="flex items-center gap-1.5 text-xs text-hero-secondary rtl:text-sm">
+                  <span className="inline-block h-3 w-0.5 rounded-full bg-white/80" aria-hidden />
                   {t("expected")}
                 </p>
               </div>
@@ -268,7 +268,7 @@ export async function ReportFragment() {
                   <li key={s.key}>
                     <div className="flex items-baseline justify-between gap-3 text-sm">
                       <span className="min-w-0 font-medium">{t(`skills.${s.key}`)}</span>
-                      <span className="shrink-0 text-xs text-ink-secondary rtl:text-[13px]">
+                      <span className="shrink-0 text-xs text-hero-secondary rtl:text-[13px]">
                         {tl(String(levelBand(s.est)))} <bdi dir="ltr" className="tabular">{range(s.low, s.high)}</bdi>
                       </span>
                     </div>
@@ -284,7 +284,7 @@ export async function ReportFragment() {
 
         {/* Under every score: her words, then what to ask */}
         <div className="mt-4 grid gap-4 md:grid-cols-2">
-          <div className="relative rounded-[14px] p-4 shadow-[inset_0_0_0_1px_var(--border)] sm:p-5">
+          <div className="relative rounded-[18px] bg-surface-subtle p-4 sm:p-5">
             <Marker letter={m[2]!} className="-top-3 start-4 sm:start-5" />
             <div className="flex items-baseline justify-between gap-3 text-xs rtl:text-[13px]">
               <span className="font-medium text-secondary">{t("wordsLabel")}</span>
@@ -297,7 +297,7 @@ export async function ReportFragment() {
             </blockquote>
             <p className="mt-3 text-xs text-tertiary rtl:text-[13px]">{t("skills.stakeholders")}</p>
           </div>
-          <div className="relative flex flex-col rounded-[14px] p-4 shadow-[inset_0_0_0_1px_var(--border)] sm:p-5">
+          <div className="relative flex flex-col rounded-[18px] bg-surface-subtle p-4 sm:p-5">
             <Marker letter={m[3]!} className="-top-3 start-4 sm:start-5" />
             <p className="text-xs font-medium text-secondary rtl:text-[13px]">{t("askLabel")}</p>
             <ol className="mb-5 mt-3 flex flex-col gap-3 text-sm leading-snug rtl:text-[15px] rtl:leading-[1.7]">
@@ -308,7 +308,7 @@ export async function ReportFragment() {
                 </li>
               ))}
             </ol>
-            <p className="mt-auto flex items-center gap-2 border-t border-border pt-3 text-xs text-tertiary rtl:text-[13px]">
+            <p className="mt-auto flex items-center gap-2 pt-1 text-xs text-tertiary rtl:text-[13px]">
               <span className="flex h-3 items-end gap-px" aria-hidden>
                 {[2, 3, 1, 3, 2, 3, 1, 2, 3].map((h, i) => (
                   <span key={i} className={cn("w-[3px] rounded-[1px]", i === 3 ? "bg-[var(--signal)]" : "bg-level-3")} style={{ height: `${h * 4}px` }} />
@@ -334,16 +334,16 @@ export async function HireFragment() {
   ];
   return (
     <Card className="w-full overflow-hidden">
-      <div className="grid grid-cols-[minmax(0,1fr)_4.75rem_auto] sm:grid-cols-[minmax(0,1fr)_7rem_auto] items-center gap-3 border-b border-border px-4 py-3 text-[11px] text-tertiary rtl:text-xs">
+      <div className="grid grid-cols-[minmax(0,1fr)_4.75rem_auto] items-center sm:grid-cols-[minmax(0,1fr)_7rem_auto] lg:grid-cols-[minmax(0,1fr)_4.5rem_auto] xl:grid-cols-[minmax(0,1fr)_5.5rem_auto] gap-3 bg-surface-subtle px-4 py-3 text-[11px] text-tertiary rtl:text-xs">
         <span className="font-medium text-secondary">{t("role")}</span>
         <span>{t("col1")}</span>
         <span aria-hidden />
       </div>
       <ul className="divide-y divide-border">
         {rows.map((c) => (
-          <li key={c.name} className="grid grid-cols-[minmax(0,1fr)_4.75rem_auto] sm:grid-cols-[minmax(0,1fr)_7rem_auto] items-center gap-3 px-4 py-3">
+          <li key={c.name} className="grid grid-cols-[minmax(0,1fr)_4.75rem_auto] items-center sm:grid-cols-[minmax(0,1fr)_7rem_auto] lg:grid-cols-[minmax(0,1fr)_4.5rem_auto] xl:grid-cols-[minmax(0,1fr)_5.5rem_auto] gap-3 px-4 py-3">
             <span className="flex min-w-0 items-center gap-2.5">
-              <Initials name={c.name} className="hidden size-7 text-[10px] min-[400px]:inline-grid" />
+              <Initials name={c.name} className="hidden size-7 text-[10px] min-[400px]:inline-grid lg:hidden 2xl:inline-grid" />
               <span className="truncate text-sm">{c.name}</span>
             </span>
             <span dir="ltr">
@@ -365,14 +365,16 @@ export async function GrowFragment() {
     <div className="flex w-full flex-col gap-3 text-sm">
       <Card className="p-4">
         <p className="flex items-center gap-2 text-xs font-medium text-secondary rtl:text-[13px]">
-          <Check className="size-3.5" strokeWidth={2} aria-hidden />
+          <span className="grid size-5 place-items-center rounded-full bg-success-subtle text-success" aria-hidden>
+            <Check className="size-3" strokeWidth={2.5} />
+          </span>
           {t("wellLabel")}
         </p>
         <p className="mt-1.5 leading-relaxed rtl:text-[15px] rtl:leading-[1.8]">{t("well")}</p>
       </Card>
-      <div className="ms-6 rounded-card p-4 text-ink-foreground shadow-[inset_0_0_0_1px_rgb(242_240_235/0.22)]">
-        <p className="flex items-center gap-2 text-xs font-medium text-ink-secondary rtl:text-[13px]">
-          <span className="size-1.5 rounded-full bg-[var(--signal)]" aria-hidden />
+      <div className="ms-6 rounded-[18px] bg-accent-subtle p-4 text-text shadow-card">
+        <p className="flex items-center gap-2 text-xs font-medium text-accent-text rtl:text-[13px]">
+          <span className="size-1.5 rounded-full bg-[var(--signal)] shadow-[0_0_6px_var(--signal)]" aria-hidden />
           {t("expertLabel")}
         </p>
         <p className="mt-1.5 leading-relaxed rtl:text-[15px] rtl:leading-[1.8]">{t("expert")}</p>
@@ -397,14 +399,14 @@ export async function TeamFragment() {
     <figure className="w-full">
       <Card className="p-3">
         <div className="grid grid-cols-5 gap-1.5" role="img" aria-label={t("heatLabel")}>
-          {HEAT.flatMap((row, r) => row.map((v, c) => <span key={`${r}-${c}`} className={cn("aspect-[2.2] rounded-[5px]", LEVEL_BG[v])} />))}
+          {HEAT.flatMap((row, r) => row.map((v, c) => <span key={`${r}-${c}`} className={cn("aspect-[2.2] rounded-[6px]", LEVEL_BG[v], v === 5 && "shadow-[0_0_12px_-2px_var(--level-3)]")} />))}
         </div>
       </Card>
-      <figcaption className="mt-3 flex items-center justify-between gap-3 text-xs text-ink-secondary rtl:text-[13px]">
+      <figcaption className="mt-3 flex items-center justify-between gap-3 px-1 text-xs text-secondary rtl:text-[13px]">
         <span>{t("heatCaption")}</span>
         <span className="flex gap-0.5" aria-hidden>
           {[1, 2, 3, 4, 5].map((l) => (
-            <span key={l} className={cn("size-2.5 rounded-[3px]", LEVEL_BG[l], l === 5 && "ring-1 ring-ink-foreground/30")} />
+            <span key={l} className={cn("size-2.5 rounded-[3px]", LEVEL_BG[l])} />
           ))}
         </span>
       </figcaption>
@@ -427,8 +429,8 @@ export async function FairnessChart() {
         {rows.map(([k, v]) => (
           <div key={k} className="grid grid-cols-[4.5rem_minmax(0,1fr)_2.75rem] items-center gap-3">
             <span className="text-xs text-tertiary rtl:text-[13px]">{t(k)}</span>
-            <span className="h-2 rounded-full bg-level-empty">
-              <span className="block h-full rounded-full bg-text" style={{ width: `${v * 100}%` }} />
+            <span className="h-2.5 rounded-full bg-level-empty">
+              <span className="block h-full rounded-full bg-gradient-to-r from-[var(--chart-1)] to-[var(--blue)] shadow-[0_0_12px_-2px_var(--blue)] rtl:bg-gradient-to-l" style={{ width: `${v * 100}%` }} />
             </span>
             <bdi dir="ltr" className="text-end text-xs text-tertiary tabular">{Math.round(v * 100)}%</bdi>
           </div>

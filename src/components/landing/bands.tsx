@@ -24,14 +24,14 @@ export function Band({ low, high, i = 0, className }: { low: number; high: numbe
   );
 }
 
-/** Initials in a stone circle, set in the display face (characters never get photos). */
+/** Initials in a soft violet circle, set in the display face (characters never get photos). */
 export function Initials({ name, className }: { name: string; className?: string }) {
   const parts = name.trim().split(/\s+/);
   const a = Array.from(parts[0] ?? "")[0] ?? "";
   const b = parts.length > 1 ? (Array.from(parts[parts.length - 1] ?? "")[0] ?? "") : "";
   const joiner = /[؀-ۿ]/.test(a + b) ? "‌" : "";
   return (
-    <span aria-hidden className={cn("inline-grid size-8 shrink-0 place-items-center rounded-full bg-[#ebe8e1] font-display text-[11px] font-bold uppercase text-text [font-stretch:112%]", className)}>
+    <span aria-hidden className={cn("inline-grid size-8 shrink-0 place-items-center rounded-full bg-accent-subtle font-display text-[11px] font-bold uppercase text-accent-text", className)}>
       {a + joiner + b}
     </span>
   );

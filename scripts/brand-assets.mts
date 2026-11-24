@@ -22,9 +22,13 @@ const ROOT = path.resolve(import.meta.dirname, "..");
 const OUT = path.join(ROOT, "public/brand");
 mkdirSync(OUT, { recursive: true });
 
-export const INK = "#141414";
-export const BONE = "#f2f0eb";
-export const SIGNAL = "#f04a23";
+// Night (D-061): indigo marks on light grounds, white on dark, a coral dot that
+// keeps 3:1 against both white and the indigo canvas.
+export const INK = "#1b1840";
+export const BONE = "#ffffff";
+export const SIGNAL = "#e8436b";
+/** The app tile's ground: the in-app LogoTile's blue gradient. */
+export const TILE = ["#4c86ff", "#2350e0"] as const;
 
 const r = (n: number) => Math.round(n * 100) / 100;
 
@@ -106,8 +110,11 @@ const markInner = (fg: string, dot: string) =>
   `<circle cx="${MARK.dot.cx}" cy="${MARK.dot.cy}" r="${MARK.dot.r}" fill="${dot}"/>`;
 const markSvg = (fg: string, dot = SIGNAL) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">${markInner(fg, dot)}</svg>`;
 /** App icon: the mark on a tile. The tile radius follows the iOS/Android squircle proportion (22.5%). */
-const symbolSvg = (bg: string, fg: string, dot: string, size = 64) =>
-  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="${size}" height="${size}"><rect width="64" height="64" rx="14.4" fill="${bg}"/><g transform="translate(9.6 9.6) scale(0.7)">${markInner(fg, dot)}</g></svg>`;
+const symbolSvg = (bg: string | readonly [string, string], fg: string, dot: string, size = 64) => {
+  const fill = typeof bg === "string" ? bg : "url(#tile)";
+  const defs = typeof bg === "string" ? "" : `<defs><linearGradient id="tile" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${bg[0]}"/><stop offset="1" stop-color="${bg[1]}"/></linearGradient></defs>`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="${size}" height="${size}">${defs}<rect width="64" height="64" rx="14.4" fill="${fill}"/><g transform="translate(9.6 9.6) scale(0.7)">${markInner(fg, dot)}</g></svg>`;
+};
 
 /** Horizontal lockup: mark, AALIM, a hairline, عالم. All heights in Latin cap-height units. */
 function lockup({ fg, dot = SIGNAL, arabicOnly = false, latinOnly = false }: { fg: string; dot?: string; arabicOnly?: boolean; latinOnly?: boolean }) {
@@ -144,7 +151,7 @@ function lockup({ fg, dot = SIGNAL, arabicOnly = false, latinOnly = false }: { f
 const files: Record<string, string> = {
   "mark.svg": markSvg(INK),
   "mark-reverse.svg": markSvg(BONE),
-  "symbol.svg": symbolSvg(INK, BONE, SIGNAL),
+  "symbol.svg": symbolSvg(TILE, BONE, SIGNAL),
   "symbol-signal.svg": symbolSvg(SIGNAL, INK, BONE),
   "logo.svg": lockup({ fg: INK }),
   "logo-reverse.svg": lockup({ fg: BONE }),
@@ -158,7 +165,7 @@ const files: Record<string, string> = {
 };
 for (const [name, svg] of Object.entries(files)) writeFileSync(path.join(OUT, name), svg + "\n");
 // The browser tab icon: the app tile.
-writeFileSync(path.join(ROOT, "src/app/icon.svg"), symbolSvg(INK, BONE, SIGNAL) + "\n");
+writeFileSync(path.join(ROOT, "src/app/icon.svg"), symbolSvg(TILE, BONE, SIGNAL) + "\n");
 
 // Path data for the in-app <Logo>, so the product and the files never drift.
 writeFileSync(

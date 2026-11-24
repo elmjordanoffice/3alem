@@ -71,6 +71,7 @@
         "start": "Start",
         "scene": "Scene {n}",
         "estimate": "Estimate",
+        "quotes": "Quotes in her own words",
         "low": "Emerging",
         "high": "Expert"
       }
@@ -2661,10 +2662,10 @@
   },
   "brandbook": {
     "title": "Brand book",
-    "metaDescription": "Range, the Aalim brand: the idea, the mark, lockups, colour, type, the narrowing motif, voice and files, in English and Arabic.",
+    "metaDescription": "Night, the Aalim brand: the idea, the mark, lockups, colour in both themes, type, shape and light, the narrowing, the interface, voice and files, in English and Arabic.",
     "topbar": {
       "label": "Brand book",
-      "version": "v1.0",
+      "version": "v2.0",
       "home": "Aalim home"
     },
     "navLabel": "Brand book sections",
@@ -2676,6 +2677,7 @@
       "misuse": "Misuse",
       "colour": "Colour",
       "type": "Typography",
+      "shape": "Shape and light",
       "motif": "The narrowing",
       "ui": "Interface",
       "voice": "Voice",
@@ -2683,12 +2685,12 @@
     },
     "cover": {
       "eyebrow": "Aalim brand book",
-      "statement": "Every answer narrows what we know about a person. The mark is that process: wide bands of uncertainty tightening, step by step, into one point. It also reads as an A. Ink, bone and a single vermilion signal.",
+      "statement": "Every answer narrows what we know about a person. The mark draws that: wide bands of uncertainty tightening, step by step, into one point. Night sets it on a deep indigo canvas, with violet for action, glowing blue and teal for data, and a single coral signal for the estimate.",
       "contents": "Contents",
       "poster": "Every answer narrows the range",
       "meta": {
         "version": "Version",
-        "versionValue": "1.0",
+        "versionValue": "2.0",
         "updated": "Updated",
         "updatedValue": "November 2026",
         "scope": "Covers",
@@ -2699,7 +2701,7 @@
       "title": "The idea",
       "lede": "Every answer narrows the range.",
       "body1": "An assessment starts out knowing almost nothing: the person could be anywhere on the scale. Each answer is evidence, and each piece of evidence rules something out. The band of plausible levels tightens until what is left is an estimate we can stand behind, with the person’s own words underneath it.",
-      "body2": "Range draws exactly that. Wide bands below, narrower above, and one vermilion point at the top: the estimate. Centre the bands and they stack into an A, for Aalim.",
+      "body2": "The mark draws exactly that. Wide bands below, narrower above, and one coral point at the top: the estimate. Centre the bands and they stack into an A, for Aalim.",
       "figure": {
         "after": "After {count, plural, one {# answer} other {# answers}}",
         "estimate": "Estimate",
@@ -2724,7 +2726,7 @@
         },
         "warm": {
           "title": "Warm",
-          "body": "Bone, not white; stone, not grey. A product about people should feel made by people."
+          "body": "Soft light and round corners on a calm indigo night. A product about people should feel made by people."
         },
         "honest": {
           "title": "Honest about certainty",
@@ -2753,18 +2755,18 @@
         "bands": "Bands",
         "bandsValue": "58 · 42 · 26, centred",
         "dot": "Dot",
-        "dotValue": "⌀ 11, vermilion",
+        "dotValue": "⌀ 11, coral",
         "ends": "Ends",
         "endsValue": "Fully round, r 5.5",
         "legs": "Legs",
         "legsValue": "Tangent to every band end"
       },
       "colourTitle": "Colour",
-      "colourBody": "The bands take the opposite of the ground: ink on bone, bone on ink. The dot is vermilion, always, except where only one colour can be printed.",
-      "onBone": "On bone",
-      "onInk": "On ink",
+      "colourBody": "The bands take the opposite of the ground: white on night and on the blue disc, deep indigo on lavender and white. The dot is coral, always, except where only one colour can be printed.",
+      "onNight": "On night",
+      "onLavender": "On lavender",
       "oneColour": "One colour",
-      "onSignal": "On vermilion, app tile only"
+      "onTile": "On the blue disc, the app tile"
     },
     "lockups": {
       "title": "Lockups",
@@ -2788,15 +2790,15 @@
         },
         "reverse": {
           "name": "Reversed",
-          "body": "On ink. Bands and letters in bone; the dot stays vermilion."
+          "body": "On night. Bands and letters in white; the dot stays coral."
         },
         "tile": {
           "name": "App tile",
-          "body": "The mark at 70% on an ink square with a 22.5% corner. The vermilion tile is for marketing only."
+          "body": "The mark in white on a glowing blue disc, the dot in coral. It stands in for the logo where space is tight: the app, the browser tab, a profile picture."
         }
       },
       "wordmarkTitle": "The wordmark",
-      "wordmarkBody": "AALIM in Archivo Expanded ExtraBold, tracked open a little. عالم in Beiruti Black, never tracked, its alif rising 18% above the Latin capitals so both read at the same size. Baselines align, and a hairline at 22% ink separates them. Every file is outlined, so no font is needed to open it.",
+      "wordmarkBody": "AALIM is drawn from Archivo Expanded ExtraBold, tracked open a little; عالم from Beiruti Black, never tracked, its alif rising 18% above the Latin capitals so both read at the same size. Baselines align, and a hairline at 22% separates them. The wordmark is a drawing: the text around it is set in Plus Jakarta Sans and Readex Pro.",
       "guides": {
         "cap": "Cap height",
         "baseline": "Baseline",
@@ -2828,8 +2830,8 @@
         "recolour": "Recolour the bands or the dot",
         "stretch": "Stretch or squash it",
         "rotate": "Rotate it",
-        "effects": "Add shadows, glows or gradients",
-        "ground": "Put it on vermilion or a busy picture",
+        "effects": "Add shadows, glows or gradients to the logo itself",
+        "ground": "Put it on coral or a busy picture",
         "retype": "Retype the wordmark in another font",
         "rearrange": "Rearrange the parts",
         "redraw": "Redraw the bands or change their steps"
@@ -2837,38 +2839,63 @@
     },
     "colour": {
       "title": "Colour",
-      "lede": "Ink, bone and a single vermilion signal. The neutrals are warm stone so the vermilion belongs. Everything is flat: no gradients, no glows.",
-      "shareTitle": "Share of a typical screen",
+      "lede": "A deep indigo night by default, and the same system on lavender and white in the light theme. Violet acts and highlights, blue and teal carry data, and coral is the signal. Cards are lifted by light, not lines.",
       "swatches": {
-        "ink": {
-          "name": "Ink",
-          "role": "Text, the logo, primary actions and the one hero panel on each screen."
+        "night": {
+          "name": "Night",
+          "role": "The canvas of the dark theme. Cards rise from it in a raised indigo, and the deepest wells sink below it."
         },
-        "bone": {
-          "name": "Bone",
-          "role": "The canvas. White cards sit on it, edged with a hairline."
+        "violet": {
+          "name": "Violet",
+          "role": "Primary actions, the current selection and the raised highlight card. A step deeper in the light theme."
         },
-        "signal": {
-          "name": "Vermilion",
-          "role": "The signal: the estimate, range bands, focus and at most one call to action per screen. Ink text on it, never bone."
+        "coral": {
+          "name": "Coral",
+          "role": "The signal: the estimate dot, the evidence band and the one call to action that matters. Deeper in the light theme."
         },
-        "evidence": {
-          "name": "Evidence",
-          "role": "The highlighter behind a person’s own words. Never decoration."
+        "blue": {
+          "name": "Blue",
+          "role": "Data: stat tiles, chart lines and the app tile."
         },
-        "white": {
-          "name": "White",
-          "role": "Cards and panels on bone."
+        "teal": {
+          "name": "Teal",
+          "role": "Data, beside blue. Text on it is deep indigo, never white."
+        },
+        "lavender": {
+          "name": "Lavender",
+          "role": "The canvas of the light theme. White cards sit on it, lifted by a soft violet shadow."
         }
       },
-      "stoneTitle": "Stone",
-      "stoneBody": "Warm neutrals for secondary text, hairlines and borders.",
-      "stone": {
-        "s700": "Secondary text",
-        "s600": "Tertiary text",
-        "s500": "Icons, large text",
-        "s300": "Strong hairlines",
-        "s200": "Hairlines"
+      "dark": "Dark",
+      "light": "Light",
+      "default": "Default",
+      "themesTitle": "Two themes, one system",
+      "themesBody": "Every colour here is a design token, read straight from the product’s token file. Components use nothing else, so every screen works in both themes. Dark is the default.",
+      "tokens": {
+        "background": "Canvas",
+        "surface": "Card",
+        "surfaceSunken": "Well",
+        "text": "Text",
+        "textSecondary": "Secondary text",
+        "textTertiary": "Tertiary text",
+        "accent": "Violet",
+        "accentText": "Violet text",
+        "signal": "Coral",
+        "blue": "Blue",
+        "teal": "Teal",
+        "highlight": "Evidence"
+      },
+      "levelsTitle": "Skill levels",
+      "levelsBody": "One violet hue, light to deep, for levels 1 to 5. Never red and green, so no level reads as a failure.",
+      "chartsTitle": "Chart series",
+      "chartsBody": "Up to four series, always in this order: violet, blue, teal, coral.",
+      "shareTitle": "Share of a typical screen",
+      "share": {
+        "night": "Night",
+        "cards": "Raised cards",
+        "violet": "Violet",
+        "data": "Blue and teal",
+        "coral": "Coral"
       },
       "pairsTitle": "Contrast",
       "pairsBody": "WCAG ratios for every pairing of the core colours. AA needs 4.5:1 for text, and 3:1 for large text (24 px, or 19 px bold) and graphics. Every pairing used in the product is tested in code.",
@@ -2880,33 +2907,46 @@
       },
       "fg": "Text",
       "bg": "Ground",
-      "ruleTitle": "The vermilion rule",
-      "ruleBody": "Vermilion is a ground or a graphic. Text on it is ink. On bone it is never small text: at {ratio}:1 it passes only for large display and shapes."
+      "names": {
+        "white": "White",
+        "indigo": "Indigo",
+        "lilac": "Lilac",
+        "violetText": "Soft violet",
+        "coral": "Coral",
+        "violet": "Violet",
+        "violetDeep": "Deep violet",
+        "slate": "Slate",
+        "night": "Night",
+        "raised": "Raised indigo",
+        "lavender": "Lavender"
+      },
+      "ruleTitle": "The coral rule",
+      "ruleBody": "Coral marks what matters, so keep it rare: the estimate, the evidence band and one button. On night it reads at {ratio}:1; on lavender use the deeper coral. Text on a coral button is deep indigo in the dark theme and white in the light."
     },
     "type": {
       "title": "Typography",
-      "lede": "Archivo, wide and heavy, for what we declare. Beiruti for Arabic display. IBM Plex for everything people read and use.",
-      "archivo": {
-        "name": "Archivo",
-        "role": "Latin display",
-        "spec": "ExtraBold · width 125% · capitals",
+      "lede": "Plus Jakarta Sans for Latin and Readex Pro for Arabic, drawn to sit together. Heavy and tight for what we declare, regular and open for what people read, and never capitals for display.",
+      "jakarta": {
+        "name": "Plus Jakarta Sans",
+        "role": "Latin, display and reading",
+        "spec": "ExtraBold · Bold · Medium · Regular",
         "sample": "Every answer narrows the range"
       },
-      "beiruti": {
-        "name": "Beiruti",
-        "role": "Arabic display",
-        "spec": "Black · ExtraBold",
+      "readex": {
+        "name": "Readex Pro",
+        "role": "Arabic, display and reading",
+        "spec": "Bold · SemiBold · Medium · Regular",
         "sample": "كل إجابة تضيّق النطاق"
       },
-      "plex": {
-        "name": "IBM Plex Sans",
-        "role": "Reading and interface, in both scripts",
+      "pair": {
+        "name": "Together",
+        "role": "One voice in two scripts",
         "spec": "Regular · Medium · SemiBold",
         "sampleEn": "Strongest in diagnosing problems. Ask about stakeholder management in the interview: the evidence there is thin.",
         "sampleAr": "أقوى ما يكون في تشخيص المشكلات. اسأل عن إدارة الأطراف المعنية في المقابلة، فالأدلة على ذلك قليلة."
       },
-      "widthTitle": "Width is the voice",
-      "widthBody": "Archivo runs from condensed to expanded. Range uses the widest setting for display, so even short words carry weight.",
+      "weightTitle": "Weight is the voice",
+      "weightBody": "Display is ExtraBold and tracked tight, card titles Bold, the interface Medium and reading Regular. Weight carries emphasis, never capitals.",
       "scaleTitle": "Scale",
       "roles": {
         "display": "Display",
@@ -2928,25 +2968,48 @@
       },
       "arabicTitle": "Rules for Arabic",
       "arabicRules": [
-        "Arabic display is Beiruti, never Archivo. Arabic has no capitals and is never letter-spaced: tracking breaks the joins.",
+        "Arabic is set in Readex Pro, never in Plus Jakarta. Arabic has no capitals and is never letter-spaced: tracking breaks the joins.",
         "Give it room: line height 1.65 for reading and about 1.3 for display, so dots and marks never touch.",
-        "Set Arabic display a step larger than the Latin beside it. In the logo, عالم rises 18% above the capitals.",
-        "Use the fonts’ own weights. Never stretch, slant or fake bold Arabic.",
+        "Set Arabic a step larger than the Latin beside it: Readex Pro reads small. In the logo, عالم rises 18% above the capitals.",
+        "Use the font’s own weights, up to Bold. Never stretch, slant or fake bold Arabic.",
         "Mirror the layout, not the content: direction, alignment and range bands flip; logos, numbers, links and code don’t.",
         "Latin digits by default; Arabic-Indic digits are a personal setting. Use Arabic punctuation: ، ؛ ؟"
       ],
       "latinTitle": "Rules for Latin",
       "latinRules": [
-        "Capitals for display and labels only. Titles and sentences are in sentence case.",
-        "Archivo never sets running text. Reading is Plex, at 16 px or more.",
-        "Labels are tracked open by 14%. Display is set tight and never tracked."
+        "Sentence case everywhere, display included. Capitals belong to the wordmark.",
+        "Display is ExtraBold and tracked tight; reading is Regular at 16 px or more and never tracked.",
+        "Small labels are SemiBold in sentence case. Numbers use tabular figures."
       ]
+    },
+    "shape": {
+      "title": "Shape and light",
+      "lede": "Soft, round and lifted by light. Nothing sits on a hairline.",
+      "radiiTitle": "Radii",
+      "radiiBody": "Three radii do the work: 12 px for controls, 24 px for cards, and pills fully round. Pieces inside a card step down to 18 px so the corners stay concentric.",
+      "radii": {
+        "control": "Controls",
+        "card": "Cards",
+        "inner": "Inside a card",
+        "pill": "Pills and round buttons"
+      },
+      "round": "Round",
+      "lightTitle": "Elevation",
+      "lightBody": "Cards rise on a soft shadow, with a faint light along the top edge in the dark theme. The raised card glows violet; menus and windows float highest.",
+      "elevations": {
+        "card": "Card",
+        "hover": "Card, on hover",
+        "raised": "Raised card",
+        "window": "Window and menu"
+      },
+      "glowTitle": "Glow",
+      "glowBody": "Glow belongs to data and to the one highlight: violet and blue light pooled behind a hero, a soft glow under a chart line, a halo on the estimate. Never on body text, never on the logo."
     },
     "motif": {
       "title": "The narrowing",
       "lede": "The mark’s idea, at work in the product.",
       "bandsTitle": "Range bands",
-      "bandsBody": "Every estimate is a band on the 1–5 scale: wide while the evidence is thin, narrow once it settles. The dot is the estimate and the tick is the level the role expects. Bands are vermilion, horizontal and always data.",
+      "bandsBody": "Every estimate is a band on the 1–5 scale: wide while the evidence is thin, narrow once it settles. The dot is the estimate and the tick is the level the role expects. Bands are coral, horizontal and always data.",
       "states": {
         "early": "After 3 answers",
         "mid": "After 8 answers",
@@ -2957,8 +3020,19 @@
         "dot": "Estimate",
         "tick": "Expected for the role"
       },
-      "heroTitle": "The hero panel",
-      "heroBody": "Each screen has one filled panel, in ink, holding its one verdict. The mark’s bands sit faintly in its corner, and the dot keeps its vermilion.",
+      "chartTitle": "Over a whole assessment",
+      "chartBody": "Across the week the band becomes an area: violet while it is wide, warming to coral as it narrows, with the estimate as a bright line and a glowing dot where it lands. Time runs with the reading direction.",
+      "evidenceTitle": "The evidence highlight",
+      "evidenceBody": "The person’s own words, marked like a reviewer’s highlighter. Only verbatim quotes get it.",
+      "evidenceSample": "Before I reply to the client, I’d check",
+      "evidenceMark": "whether the delay affects the other two orders on the same route.",
+      "rule": "Bands run horizontally, wider means less certain, and the dot is the conclusion. Outside the logo, bands only ever show data."
+    },
+    "ui": {
+      "title": "Interface",
+      "lede": "The brand in the product, built from the same components.",
+      "heroTitle": "The raised card",
+      "heroBody": "A screen has at most one raised card: violet, lit from above and glowing softly. It holds the verdict or the brief, whatever should be read first. On it, text is white and tiles are frosted glass.",
       "hero": {
         "eyebrow": "Role fit",
         "verdict": "Good fit",
@@ -2978,20 +3052,28 @@
           ]
         ]
       },
-      "cornerLabel": "Corner mark: bands at 9%, dot in vermilion",
-      "openerTitle": "The section opener",
-      "openerBody": "A hairline with a short vermilion tick at its start opens a section. In Arabic the tick sits on the right.",
-      "evidenceTitle": "The evidence highlight",
-      "evidenceBody": "The person’s own words, marked like a reviewer’s highlighter. Only verbatim quotes get it.",
-      "evidenceSample": "Before I reply to the client, I’d check",
-      "evidenceMark": "whether the delay affects the other two orders on the same route.",
-      "rule": "Bands run horizontally, wider means less certain, and the dot is the conclusion. Outside the logo and the hero corner, bands only ever show data."
-    },
-    "ui": {
-      "title": "Interface",
-      "lede": "The brand in the product, built from the same components.",
+      "tilesTitle": "Stat tiles",
+      "tilesBody": "Gradient tiles for headline numbers, with a soft wave of light across the top. Text on every tile is white; each tile colour is chosen so white passes AA at its lightest point.",
+      "tiles": {
+        "blue": {
+          "value": "17",
+          "label": "Reports to read"
+        },
+        "violet": {
+          "value": "3.8",
+          "label": "Team average"
+        },
+        "teal": {
+          "label": "Interviews this week",
+          "value": "4"
+        },
+        "coral": {
+          "label": "Waiting for review",
+          "value": "2"
+        }
+      },
       "buttonsTitle": "Buttons",
-      "buttonsBody": "Ink is the action colour. The vermilion signal button is the screen’s one call to action, if it has one.",
+      "buttonsBody": "Violet is the action colour, lit from above with a soft glow. The coral signal button is the screen’s one call to action, if it has one. Secondary actions sit on a surface.",
       "variants": {
         "primary": "Primary",
         "signal": "Signal",
@@ -3006,6 +3088,17 @@
         "ghost": "Cancel",
         "link": "See the evidence"
       },
+      "pillsTitle": "Pills and round controls",
+      "pillsBody": "Tabs, filters and section labels are pills; icon buttons are round.",
+      "pills": {
+        "overview": "Overview",
+        "skills": "Skills",
+        "evidence": "Evidence",
+        "section": "The report",
+        "search": "Search",
+        "theme": "Theme",
+        "more": "More"
+      },
       "badgesTitle": "Badges",
       "badges": {
         "neutral": "Draft",
@@ -3014,6 +3107,12 @@
         "warning": "Needs review",
         "critical": "Expired",
         "info": "Shared"
+      },
+      "chartsTitle": "Charts",
+      "chartsBody": "Area charts with a glowing gradient fill, lines with a soft glow, a dashed grid and no axis lines. Series follow the chart order.",
+      "chart": {
+        "title": "Levels over time",
+        "week": "Week {n}"
       },
       "reportTitle": "A report, in miniature",
       "candidate": "Operations Team Lead · Grace Mensah",
@@ -3119,7 +3218,7 @@
         "mark": "Mark",
         "markReverse": "Mark, reversed",
         "symbol": "App tile",
-        "symbolSignal": "App tile, vermilion",
+        "symbolSignal": "App tile, signal colour",
         "wordmark": "Wordmark",
         "wordmarkAr": "Arabic wordmark",
         "logoPng": "Horizontal",
@@ -3132,7 +3231,7 @@
       "download": "Download {name}"
     },
     "footer": {
-      "line": "Range is the Aalim brand. Version 1.0, November 2026.",
+      "line": "Night is the Aalim brand. Version 2.0, November 2026.",
       "back": "Back to Aalim"
     }
   },
