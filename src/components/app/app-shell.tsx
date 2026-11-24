@@ -90,6 +90,7 @@ const ICONS: Record<ShellNavItem["icon"], LucideIcon> = {
 export function AppShell({ user, organizations, activeOrganizationId, nav, commandPages, canCreateAssessment, children }: ShellProps) {
   const t = useTranslations("shell");
   const pathname = usePathname();
+  const router = useRouter();
   // The menu is open for the route it was opened on, so navigating closes it.
   const [openAt, setOpenAt] = React.useState<string | null>(null);
   const open = openAt === pathname;
@@ -163,9 +164,37 @@ export function AppShell({ user, organizations, activeOrganizationId, nav, comma
           <div className="ms-auto flex items-center gap-3">
             <LanguageToggle className="h-11 rounded-full px-4" />
             <ThemeMenu className="size-11 rounded-full shadow-[inset_0_0_0_1px_var(--border-strong)]" />
-            <Link href="/app/settings" aria-label={t("nav.settings")} className="rounded-full focus-visible:outline-2 focus-visible:outline-focus">
-              <Avatar name={user.name} className="size-11 text-sm" />
-            </Link>
+            <DropdownMenu>
+              <DropdownMenuTrigger className="flex items-center gap-2.5 rounded-full p-1 pe-1 transition-colors hover:bg-surface focus-visible:outline-2 focus-visible:outline-focus xl:pe-4">
+                <Avatar name={user.name} className="size-11 text-sm" />
+                <span className="hidden min-w-0 max-w-40 text-start xl:block">
+                  <span className="block truncate text-sm font-semibold text-text">{user.name}</span>
+                  <span className="block truncate text-xs text-tertiary">{user.email}</span>
+                </span>
+                <span className="sr-only xl:hidden">{user.name}</span>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-60">
+                <div className="px-2.5 py-2">
+                  <p className="truncate text-sm font-semibold text-text">{user.name}</p>
+                  <p className="truncate text-xs text-tertiary">{user.email}</p>
+                </div>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onSelect={() => router.push("/app/settings")}>
+                  <Settings aria-hidden />
+                  {t("nav.settings")}
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onSelect={async () => {
+                    await authClient.signOut();
+                    router.replace("/sign-in");
+                    router.refresh();
+                  }}
+                >
+                  <LogOut className="flip-rtl" aria-hidden />
+                  {t("signOut")}
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </header>
         <main id="main" className="flex-1">
@@ -314,7 +343,7 @@ function SidebarContent({ user, organizations, activeOrganizationId, nav }: Pick
         <LanguageToggle />
         <ThemeMenu />
       </div>
-      {/* Desktop: the account lives in the top bar; the rail ends with sign out. */}
+      {/* Desktop: the account menu lives in the top bar; the rail also ends with sign out. */}
       <div className="hidden p-3 lg:block">
         <button
           type="button"
