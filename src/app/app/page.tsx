@@ -218,7 +218,7 @@ function CaughtUp({ t }: { t: T }) {
     <section aria-labelledby="caught-h" className="flex items-center gap-5 rounded-card bg-surface p-5 shadow-card">
       <span className="flex w-14 shrink-0 flex-col-reverse items-center gap-1.5" aria-hidden>
         {[100, 70, 40].map((w, i) => (
-          <span key={i} className="narrow-band block h-2.5 rounded-full bg-text" style={{ width: `${w}%`, animationDelay: `${80 + i * 110}ms` }} />
+          <span key={i} className="narrow-band block h-2.5 rounded-full bg-accent" style={{ width: `${w}%`, animationDelay: `${80 + i * 110}ms` }} />
         ))}
         <span className="narrow-dot block size-2.5 rounded-full bg-saffron" style={{ animationDelay: "420ms" }} />
       </span>

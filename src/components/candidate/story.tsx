@@ -53,7 +53,7 @@ export function ColleagueNote({ note, tone = "paper", className }: { note: Story
   const ink = tone === "ink";
   return (
     <div className={cn("note-in flex items-start gap-2.5", className)} role="note">
-      <span className={cn("grid size-8 shrink-0 place-items-center rounded-full text-[11px] font-semibold", ink ? "bg-hero-foreground text-[#141414]" : "bg-text text-background")} aria-hidden>
+      <span className={cn("grid size-8 shrink-0 place-items-center rounded-full text-[11px] font-semibold", ink ? "bg-hero-foreground text-[#141414]" : "bg-accent text-accent-foreground")} aria-hidden>
         {initials(note.from.name)}
       </span>
       <div className="min-w-0 flex-1">
@@ -90,7 +90,7 @@ export function StoryLoading() {
     <div className="flex flex-col items-center gap-6 py-28 text-center" role="status" aria-live="polite">
       <span className="loading-narrow flex w-20 flex-col-reverse items-center gap-1.5" aria-hidden>
         {[100, 72, 44].map((w, k) => (
-          <span key={k} className="block h-3 rounded-full bg-text" style={{ width: `${w}%`, "--i": k } as React.CSSProperties} />
+          <span key={k} className="block h-3 rounded-full bg-accent" style={{ width: `${w}%`, "--i": k } as React.CSSProperties} />
         ))}
         <span className="block size-3 rounded-full bg-saffron" style={{ "--i": 3 } as React.CSSProperties} />
       </span>

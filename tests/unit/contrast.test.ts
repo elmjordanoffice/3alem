@@ -79,6 +79,14 @@ const PAIRS: [string, string, number][] = [
   ["hero-secondary", "hero-from", AA],
   // Stat tiles: white numbers on blue and teal.
   ["accent-foreground", "blue-deep", AA],
+  // White labels on every stat tile, at its lightest stop.
+  ["accent-foreground", "tile-blue", AA],
+  ["accent-foreground", "tile-teal", AA],
+  ["accent-foreground", "tile-violet", AA],
+  ["accent-foreground", "tile-coral", AA],
+  // Teal as text (skill names, legends) on cards.
+  ["teal-text", "surface", AA],
+  ["teal-text", "surface-subtle", AA],
 ];
 
 describe("design token contrast (WCAG AA)", () => {

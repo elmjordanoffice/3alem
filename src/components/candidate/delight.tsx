@@ -20,7 +20,7 @@ export function SentToast({ onDone }: { onDone: () => void }) {
   return (
     // Phones: just under the deck's bar. Larger screens: low and centred, clear of the header.
     <div className="pointer-events-none fixed inset-x-0 top-[max(64px,calc(env(safe-area-inset-top)+56px))] z-[60] flex justify-center md:top-auto md:bottom-10">
-      <div role="status" className="sent-toast flex items-center gap-2 rounded-full bg-text py-2 ps-2.5 pe-4 text-sm font-semibold text-background shadow-raised" onAnimationEnd={onDone}>
+      <div role="status" className="sent-toast flex items-center gap-2 rounded-full bg-accent py-2 ps-2.5 pe-4 text-sm font-semibold text-accent-foreground shadow-raised" onAnimationEnd={onDone}>
         <span className="relative grid size-6 place-items-center rounded-full bg-background/10">
           <svg viewBox="0 0 24 24" className="size-4" aria-hidden>
             <path d="M5 12.5l4.2 4.2L19 7" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" className="joy-draw" style={{ "--len": 22 } as React.CSSProperties} />
@@ -63,7 +63,7 @@ export function FinishMark() {
   return (
     <div className="relative flex w-24 flex-col-reverse items-center gap-2" aria-hidden>
       {[100, 72, 44].map((w, i) => (
-        <span key={i} className="narrow-band block h-4 rounded-full bg-text" style={{ width: `${w}%`, animationDelay: `${100 + i * 120}ms` }} />
+        <span key={i} className="narrow-band block h-4 rounded-full bg-accent" style={{ width: `${w}%`, animationDelay: `${100 + i * 120}ms` }} />
       ))}
       <span className="relative block size-4">
         <span className="narrow-dot absolute inset-0 rounded-full bg-saffron" style={{ animationDelay: "520ms" }} />

@@ -42,17 +42,17 @@ export default async function AssessmentsPage() {
           ) : null
         }
       />
-      <dl className="mb-10 grid grid-cols-2 gap-px overflow-hidden rounded-card border border-border bg-border sm:grid-cols-5">
+      <dl className="mb-10 grid grid-cols-2 gap-4 sm:grid-cols-5">
         {([
           ["open", totals.open],
           ["invited", totals.invited],
           ["inProgress", totals.inProgress],
           ["completed", totals.completed],
           ["review", totals.review],
-        ] as const).map(([k, v]) => (
-          <div key={k} className="flex flex-col gap-1 bg-surface p-4">
-            <dt className="text-xs text-secondary">{t(`stats.${k}`)}</dt>
-            <dd className="font-display text-2xl font-semibold text-text tabular">
+        ] as const).map(([k, v], i) => (
+          <div key={k} className={i === 4 ? "tile-violet flex flex-col gap-1 p-4" : i === 3 ? "tile-teal flex flex-col gap-1 p-4" : "flex flex-col gap-1 rounded-[20px] bg-surface p-4 shadow-card"}>
+            <dt className={i >= 3 ? "text-xs font-medium text-white/85" : "text-xs text-secondary"}>{t(`stats.${k}`)}</dt>
+            <dd className={i >= 3 ? "text-[1.75rem] font-extrabold tracking-[-0.02em] text-white tabular" : "text-[1.75rem] font-extrabold tracking-[-0.02em] text-text tabular"}>
               <FormattedNumber value={v} />
             </dd>
           </div>

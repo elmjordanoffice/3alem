@@ -195,7 +195,7 @@ export function PhoneDeck({
       {/* The rail: where you are in this scene. */}
       <ol className="pointer-events-none fixed end-[3px] top-1/2 z-50 flex -translate-y-1/2 flex-col gap-1.5" aria-hidden>
         {Array.from({ length: slides }, (_, i) => (
-          <li key={i} className={cn("w-1 rounded-full transition-all duration-300 ease-[var(--ease-out)]", i === current ? "h-5 bg-text" : "h-1 bg-text/25", i === taskIndex && i !== current && "bg-saffron")} />
+          <li key={i} className={cn("w-1 rounded-full transition-all duration-300 ease-[var(--ease-out)]", i === current ? "h-5 bg-accent" : "h-1 bg-accent/25", i === taskIndex && i !== current && "bg-saffron")} />
         ))}
       </ol>
     </div>
@@ -245,7 +245,7 @@ function DeckBar({ branding, chapters, chapter, deadline, onExpire, online, cloc
     <header className="z-50 border-b border-border/70 bg-background/85 px-4 pb-2.5 pt-[max(10px,env(safe-area-inset-top))] backdrop-blur-xl">
       <div className="flex items-center justify-between gap-3">
         <span className="flex min-w-0 items-center gap-2">
-          <span className="grid size-6 shrink-0 place-items-center rounded-[6px] bg-text font-display text-[11px] font-bold text-background [font-stretch:125%]" aria-hidden>
+          <span className="grid size-6 shrink-0 place-items-center rounded-[6px] bg-accent font-display text-[11px] font-bold text-accent-foreground [font-stretch:125%]" aria-hidden>
             {branding.orgName.trim().charAt(0).toUpperCase()}
           </span>
           <span className="truncate text-[13px] font-semibold">{branding.orgName}</span>
@@ -258,7 +258,7 @@ function DeckBar({ branding, chapters, chapter, deadline, onExpire, online, cloc
       </div>
       <ol className="mt-2 flex gap-1" aria-hidden>
         {chapters.map((c, i) => (
-          <li key={c} className={cn("h-[3px] flex-1 rounded-full", i < chapter ? "bg-text" : i === chapter ? "bg-saffron" : "bg-text/15")} />
+          <li key={c} className={cn("h-[3px] flex-1 rounded-full", i < chapter ? "bg-accent" : i === chapter ? "bg-saffron" : "bg-accent/15")} />
         ))}
       </ol>
     </header>

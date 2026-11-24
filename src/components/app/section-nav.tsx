@@ -22,9 +22,9 @@ export function SectionNav({ title, icon: Icon, tabs, hideOn = [] }: { title: st
     .filter((t) => (t.exact ? pathname === t.href : pathname === t.href || pathname.startsWith(`${t.href}/`)))
     .sort((a, b) => b.href.length - a.href.length)[0]?.href;
   return (
-    <div className="sticky top-14 z-20 bg-background/80 px-4 py-2 backdrop-blur-xl sm:px-8 lg:top-0">
-      <div className="mx-auto flex max-w-5xl items-center gap-4 overflow-x-auto [scrollbar-width:none]">
-        <span className="flex shrink-0 items-center gap-2.5 py-2 text-sm font-bold text-text">
+    <div className="pointer-events-none sticky top-14 z-20 px-4 py-2 sm:px-8 lg:top-0">
+      <div className="pointer-events-auto mx-auto flex max-w-5xl items-center gap-2 overflow-x-auto [scrollbar-width:none]">
+        <span className="flex shrink-0 items-center gap-2.5 rounded-full bg-surface/90 py-1 pe-4 ps-1 text-sm font-bold text-text shadow-card backdrop-blur-xl">
           {Icon ? (
             <span className="grid size-8 place-items-center rounded-full bg-accent text-accent-foreground shadow-[0_6px_16px_-6px_var(--accent)]">
               <Icon className="size-4" strokeWidth={2} aria-hidden />
@@ -32,7 +32,7 @@ export function SectionNav({ title, icon: Icon, tabs, hideOn = [] }: { title: st
           ) : null}
           {title}
         </span>
-        <nav aria-label={title} className="flex shrink-0 items-center gap-1 rounded-full bg-surface p-1 shadow-card">
+        <nav aria-label={title} className="flex shrink-0 items-center gap-1 rounded-full bg-surface/90 p-1 shadow-card backdrop-blur-xl">
           {tabs.map((t) => {
             const active = t.href === current;
             return (

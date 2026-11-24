@@ -222,12 +222,12 @@ export function HireReport({ content, audience, actions, review, firstDays = fal
         <header className="flex flex-col gap-6">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div className="flex min-w-0 items-center gap-4">
-              {/* The person, first: an initials tile in the evidence gold. */}
-              <span className="relative inline-flex size-16 shrink-0 items-center justify-center rounded-[12px] bg-text font-display text-xl font-bold text-background [font-stretch:125%] print:shadow-none" aria-hidden>
+              {/* The person, first: a glowing violet initials disc. */}
+              <span className="relative inline-flex size-16 shrink-0 items-center justify-center rounded-full bg-[linear-gradient(140deg,#8b7cff,#5847d6)] text-xl font-extrabold text-white shadow-[0_14px_30px_-12px_#6c5ce7] print:shadow-none" aria-hidden>
                 {initials(content.candidate.name)}
               </span>
               <div className="flex min-w-0 flex-col gap-1">
-                <h1 className="text-[2rem] font-semibold leading-[1.1] text-text sm:text-[2.5rem]">{content.candidate.name}</h1>
+                <h1 className="text-[2rem] font-extrabold leading-[1.1] tracking-[-0.025em] text-text sm:text-[2.5rem]">{content.candidate.name}</h1>
                 <p className="text-sm text-secondary">
                   {forCandidate ? t("yourReportFor", { role: content.role.title }) : t("candidateReportFor", { role: content.role.title })} ·{" "}
                   {t("generated", { date: new Date(content.generatedAt).toLocaleDateString(locale === "ar" ? "ar" : "en-GB", { year: "numeric", month: "long", day: "numeric" }) })}

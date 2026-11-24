@@ -62,6 +62,7 @@
   --color-blue-deep: var(--blue-deep);
   --color-teal: var(--teal);
   --color-teal-deep: var(--teal-deep);
+  --color-teal-text: var(--teal-text);
   --color-night-raised: var(--night-raised);
   --color-glow-indigo: var(--glow-indigo);
   --color-glow-lavender: var(--glow-lavender);
@@ -210,9 +211,10 @@
     font-weight: 800;
   }
   /* Verbatim evidence: the candidate's words, marked like a reviewer's highlighter. */
+  /* The candidate's own words: a soft violet highlighter across the lower half of the line. */
   .evidence-mark {
-    background: linear-gradient(to bottom, transparent 8%, var(--highlight) 8%, var(--highlight) 92%, transparent 92%);
-    color: var(--highlight-foreground);
+    background: linear-gradient(to bottom, transparent 52%, color-mix(in oklab, var(--chart-1) 34%, transparent) 52%, color-mix(in oklab, var(--chart-1) 34%, transparent) 92%, transparent 92%);
+    color: inherit;
     box-decoration-break: clone;
     -webkit-box-decoration-break: clone;
     padding-inline: 0.15em;
@@ -341,10 +343,10 @@
   color: #ffffff;
   border-radius: 20px;
 }
-.tile-blue { background: linear-gradient(180deg, var(--blue), var(--blue-deep)); box-shadow: 0 18px 36px -20px rgb(47 107 255 / 0.7); }
-.tile-teal { background: linear-gradient(180deg, var(--teal), var(--teal-deep)); box-shadow: 0 18px 36px -20px rgb(18 165 151 / 0.7); }
-.tile-violet { background: linear-gradient(180deg, #7b6cf0, #5040ce); box-shadow: 0 18px 36px -20px rgb(108 92 231 / 0.7); }
-.tile-coral { background: linear-gradient(180deg, #ff6d8a, #e03a62); box-shadow: 0 18px 36px -20px rgb(255 92 124 / 0.6); }
+.tile-blue { background: linear-gradient(180deg, var(--tile-blue), var(--tile-blue-deep)); box-shadow: 0 18px 36px -18px rgb(59 120 255 / 0.75); }
+.tile-teal { background: linear-gradient(180deg, var(--tile-teal), var(--tile-teal-deep)); box-shadow: 0 18px 36px -18px rgb(37 198 182 / 0.6); }
+.tile-violet { background: linear-gradient(180deg, var(--tile-violet), var(--tile-violet-deep)); box-shadow: 0 18px 36px -18px rgb(108 92 231 / 0.75); }
+.tile-coral { background: linear-gradient(180deg, var(--tile-coral), var(--tile-coral-deep)); box-shadow: 0 18px 36px -18px rgb(255 92 124 / 0.6); }
 .tile-blue::before, .tile-teal::before, .tile-violet::before, .tile-coral::before {
   content: "";
   position: absolute;
@@ -352,7 +354,7 @@
   inset: -40% -15% auto -15%;
   height: 75%;
   border-radius: 50%;
-  background: rgb(255 255 255 / 0.16);
+  background: rgb(255 255 255 / 0.06);
 }
 /* The evidenced range: the signal, solid. */
 .band-gold { background: var(--saffron); }

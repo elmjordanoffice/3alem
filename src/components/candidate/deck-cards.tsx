@@ -140,7 +140,7 @@ export function MaterialCard({ material, index, total, org }: { material: Materi
     <div className="flex flex-col">
       <div className="flex items-center justify-between gap-3">
         <span className="flex items-center gap-2">
-          <span className="grid size-8 place-items-center rounded-full bg-text text-background">
+          <span className="grid size-8 place-items-center rounded-full bg-accent text-accent-foreground">
             <Icon className="size-4" strokeWidth={1.9} aria-hidden />
           </span>
           <span className="eyebrow text-text">{td(material.kind)}</span>

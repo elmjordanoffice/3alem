@@ -244,7 +244,7 @@ function WhyThisOne({ why }: { why: NonNullable<PracticeItem["why"]> }) {
       <ul className="flex flex-wrap gap-x-5 gap-y-1.5 text-sm text-text">
         {lines.map((l, i) => (
           <li key={l} className="flex items-center gap-2" dir="auto">
-            <span className={cn("size-1.5 shrink-0 rounded-full", i === 0 ? "bg-saffron" : "bg-text/30")} aria-hidden />
+            <span className={cn("size-1.5 shrink-0 rounded-full", i === 0 ? "bg-saffron" : "bg-accent/30")} aria-hidden />
             {l}
           </li>
         ))}

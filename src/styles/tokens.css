@@ -51,6 +51,16 @@
   --blue-deep: #2350e0;
   --teal: #12a597;
   --teal-deep: #0b8579;
+  --teal-text: #0a7a6f;
+  /* Stat tiles: white text on each, AA at the lightest (top) stop. */
+  --tile-blue: #2a5fe6;
+  --tile-blue-deep: #1d43c4;
+  --tile-teal: #0a786e;
+  --tile-teal-deep: #065850;
+  --tile-violet: #6a5ae6;
+  --tile-violet-deep: #4a3bc4;
+  --tile-coral: #cf3159;
+  --tile-coral-deep: #a3203f;
 
   /* Semantic */
   --success: #14784f;
@@ -162,6 +172,16 @@
   --blue-deep: #2456f0;
   --teal: #25c6b6;
   --teal-deep: #119c90;
+  --teal-text: #5fe0d2;
+  /* Stat tiles: white text on each, AA at the lightest (top) stop. */
+  --tile-blue: #2a5fe6;
+  --tile-blue-deep: #1d43c4;
+  --tile-teal: #0a786e;
+  --tile-teal-deep: #065850;
+  --tile-violet: #6a5ae6;
+  --tile-violet-deep: #4a3bc4;
+  --tile-coral: #cf3159;
+  --tile-coral-deep: #a3203f;
 
   --success: #4ade9b;
   --success-subtle: #173a35;

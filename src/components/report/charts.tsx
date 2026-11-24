@@ -93,29 +93,31 @@ export function SkillRadar({
         </ResponsiveContainer>
       </div>
       {/* Text alternative for screen readers. */}
-      <table className="sr-only">
-        <caption>{label}</caption>
-        <thead>
-          <tr>
-            <th scope="col" />
-            {series.map((s) => (
-              <th key={s.key} scope="col">
-                {s.label}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((d) => (
-            <tr key={d.key}>
-              <th scope="row">{d.label}</th>
+      <div className="sr-only">
+        <table>
+          <caption>{label}</caption>
+          <thead>
+            <tr>
+              <th scope="col" />
               {series.map((s) => (
-                <td key={s.key}>{n.level(d.values[s.key] ?? 0)}</td>
+                <th key={s.key} scope="col">
+                  {s.label}
+                </th>
               ))}
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {data.map((d) => (
+              <tr key={d.key}>
+                <th scope="row">{d.label}</th>
+                {series.map((s) => (
+                  <td key={s.key}>{n.level(d.values[s.key] ?? 0)}</td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </figure>
   );
 }

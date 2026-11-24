@@ -124,7 +124,7 @@ function DayDots({ days }: { days: boolean[] }) {
     <ol className="flex gap-1.5" aria-hidden>
       {days.map((d, i) => (
         <li key={i} className="flex flex-col items-center gap-1">
-          <span className={cn("size-3 rounded-full", d ? "bg-text" : i === today ? "ring-[1.5px] ring-text ring-inset" : "bg-level-empty")} />
+          <span className={cn("size-3 rounded-full", d ? "bg-accent" : i === today ? "ring-[1.5px] ring-accent ring-inset" : "bg-level-empty")} />
           <span className="text-[10px] text-tertiary">{fmt.format(new Date(start.getTime() + i * 86_400_000))}</span>
         </li>
       ))}
@@ -137,7 +137,7 @@ function StreakBands({ weeks }: { weeks: number }) {
   return (
     <span className="flex flex-col items-center gap-[3px]" aria-hidden>
       {[0.45, 0.7, 1].map((w, i) => (
-        <span key={i} className={cn("h-[5px] rounded-full", 2 - i < weeks ? "bg-text" : "bg-level-empty")} style={{ width: `${w * 22}px` }} />
+        <span key={i} className={cn("h-[5px] rounded-full", 2 - i < weeks ? "bg-accent" : "bg-level-empty")} style={{ width: `${w * 22}px` }} />
       ))}
     </span>
   );
@@ -204,7 +204,7 @@ export function MilestoneShelf({ m }: { m: MomentumView }) {
               style={{ "--i": i } as React.CSSProperties}
               className={cn(
                 "joy-rise relative flex flex-col gap-2 rounded-card p-4",
-                done ? "bg-text text-background" : next ? "border border-dashed border-text bg-surface" : "border border-border bg-surface/60 text-tertiary",
+                done ? "bg-accent text-accent-foreground" : next ? "border border-dashed border-accent bg-surface" : "border border-border bg-surface/60 text-tertiary",
               )}
             >
               <span className={cn("grid size-10 place-items-center rounded-full", done ? "bg-background/10" : "bg-surface-sunken")}>
@@ -304,7 +304,7 @@ export function ChallengeCard({ c }: { c: { key: string; target: number; done: n
         <div className="relative shrink-0">
           <ol className="flex gap-1.5" aria-label={t("progress", { done: c.done, target: c.target })}>
             {Array.from({ length: c.target }, (_, i) => (
-              <li key={i} style={{ "--i": i } as React.CSSProperties} className={cn("size-3.5 rounded-full", i < c.done ? "joy-pop bg-text" : "ring-[1.5px] ring-inset ring-border-strong")} />
+              <li key={i} style={{ "--i": i } as React.CSSProperties} className={cn("size-3.5 rounded-full", i < c.done ? "joy-pop bg-accent" : "ring-[1.5px] ring-inset ring-border-strong")} />
             ))}
           </ol>
           {c.complete ? <Burst count={8} distance={26} delay={300} /> : null}
@@ -346,7 +346,7 @@ export function RepCard({ habit, skillKey, skillName, reminderHour = null }: { h
   return (
     <section aria-labelledby="rep-h" className="flex flex-col gap-4 rounded-card bg-surface p-5 shadow-card sm:flex-row sm:items-center sm:justify-between">
       <div className="flex items-center gap-4">
-        <span className="relative grid size-14 shrink-0 place-items-center rounded-full bg-text text-background">
+        <span className="relative grid size-14 shrink-0 place-items-center rounded-full bg-accent text-accent-foreground">
           <span className="font-display text-xl font-extrabold tabular [font-stretch:112%]">{habit.streak}</span>
           {habit.doneToday ? <span className="absolute -end-0.5 -top-0.5 size-3 rounded-full bg-saffron ring-2 ring-surface" aria-hidden /> : null}
         </span>
@@ -358,7 +358,7 @@ export function RepCard({ habit, skillKey, skillName, reminderHour = null }: { h
                 <span
                   className={cn(
                     "grid size-5 place-items-center rounded-full",
-                    d.state === "done" ? "bg-text text-background" : d.state === "rest" ? "bg-surface-sunken text-secondary" : d.state === "today" ? "ring-[1.5px] ring-inset ring-saffron" : d.state === "missed" ? "bg-level-empty" : "ring-1 ring-inset ring-border",
+                    d.state === "done" ? "bg-accent text-accent-foreground" : d.state === "rest" ? "bg-surface-sunken text-secondary" : d.state === "today" ? "ring-[1.5px] ring-inset ring-saffron" : d.state === "missed" ? "bg-level-empty" : "ring-1 ring-inset ring-border",
                   )}
                 >
                   {d.state === "done" ? <Check className="size-3" strokeWidth={3} aria-hidden /> : d.state === "rest" ? <Moon className="size-3" aria-hidden /> : null}
@@ -386,7 +386,7 @@ export function RepCard({ habit, skillKey, skillName, reminderHour = null }: { h
 const LOCAL_HOURS = [7, 8, 9, 12, 17, 18, 20, 21];
 
 /** The opt-in reminder, in the person's own time; stored as an hour in UTC. */
-function ReminderPicker({ hourUtc }: { hourUtc: number | null }) {
+export function ReminderPicker({ hourUtc }: { hourUtc: number | null }) {
   const t = useTranslations("grow.rep.reminder");
   const n = useNumbers();
   const [value, setValue] = React.useState<number | null>(hourUtc);
