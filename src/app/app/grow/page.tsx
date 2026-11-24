@@ -84,10 +84,15 @@ export default async function GrowHome() {
   const buckets = daily14
     ? Array.from({ length: 14 }, (_, i) => ({ start: todayStart - (13 - i) * DAY, end: todayStart - (12 - i) * DAY }))
     : Array.from({ length: 8 }, (_, i) => ({ start: thisWeek - (7 - i) * 7 * DAY, end: thisWeek - (6 - i) * 7 * DAY }));
+  // The line starts where the baseline put the roadmap skills, then rises with the best level reached in practice.
+  const planLevels = plan.map((p) => skills.get(p.skillKey)?.estimate).filter((v): v is number => typeof v === "number");
+  const baseline = latest?.report && planLevels.length ? { at: latest.report.createdAt.getTime(), level: Math.round((planLevels.reduce((a, b) => a + b, 0) / planLevels.length) * 10) / 10 } : null;
   let runningBest: number | null = null;
   const before = events.filter((e) => e.completedAt.getTime() < buckets[0]!.start).flatMap((e) => e.levels);
   if (before.length) runningBest = Math.max(...before);
+  if (baseline && baseline.at < buckets[0]!.start) runningBest = Math.max(runningBest ?? 0, baseline.level);
   const weeks: GrowthWeek[] = buckets.map((b) => {
+    if (baseline && baseline.at >= b.start && baseline.at < b.end) runningBest = Math.max(runningBest ?? 0, baseline.level);
     const inside = events.filter((e) => e.completedAt.getTime() >= b.start && e.completedAt.getTime() < b.end);
     const levels = inside.flatMap((e) => e.levels);
     if (levels.length) runningBest = Math.max(runningBest ?? 0, ...levels);

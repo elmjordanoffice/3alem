@@ -2211,8 +2211,8 @@
       "practise": "Practise {skill}",
       "growth": "Your growth",
       "legendSessions": "Sessions",
-      "legendBest": "Best level",
-      "growthLabel": "Sessions and best level so far, by week, last eight weeks",
+      "legendBest": "Your level",
+      "growthLabel": "Sessions per week and your level (the baseline, then the best reached in practice), last eight weeks",
       "sessionsN": "{n, plural, one {1 session} other {# sessions}}",
       "weekCol": "Date",
       "streakCollection": "Streak & collection",
@@ -2221,7 +2221,7 @@
       "roadmap": "Roadmap",
       "profile": "Your profile",
       "more": "More",
-      "growthLabelDays": "Sessions and best level so far, by day, last two weeks",
+      "growthLabelDays": "Sessions per day and your level (the baseline, then the best reached in practice), last two weeks",
       "noneYet": "Not yet"
     }
   },
