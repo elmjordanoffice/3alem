@@ -188,3 +188,11 @@ All motion is CSS or Reanimated, uses springs and short eases, and goes still un
 - **What we left out on purpose:** penalties, countdowns, fake scarcity, leaderboards and guilt. *(Grow)*
 
 **D-060: Real email through any provider's SMTP.** `sendMail` sends through `SMTP_URL` (from `MAIL_FROM`) when set, using nodemailer, which covers Resend, Postmark, SES, Mailgun and Google Workspace. Without it, development keeps writing to `.mail/`. The launch steps are in [deploy.md](deploy.md). *(Ops)*
+
+**D-061: Night, a new look from the owner's reference.** The owner shared a reference dashboard (deep indigo, soft rounded cards, a raised glowing violet card, blue and teal gradient tiles, glowing area charts, a floating icon rail) and asked to "redo the whole app design to be this level", without the 3D characters.
+- **Tokens:** `src/styles/tokens.css` now defines Night: dark indigo by default and a lavender light theme, violet accent, coral signal, blue and teal for data, a violet level ramp. All pairings stay AA-tested, including white labels on every stat tile.
+- **Type and shape:** Plus Jakarta Sans and Readex Pro; 24 px cards, 12 px controls, pill tabs and badges.
+- **Shell:** a floating rounded rail with round icon chips, a desktop top bar (search pill, language, theme, avatar), and section tabs as pills.
+- **Screens:** Grow's overview follows the reference layout (a This-week ring, today's practice as raised tiles, a growth chart by day early on and by week later, streak and collection tiles). Home gains a two-week activity chart. Reports, lists, the candidate deck, auth, the landing page, the brand book and the phone app use the same system.
+- **Kept:** the Range mark and its idea, the fairness rules for candidates (no scores or game mechanics in Hire) and the healthy-habit rules in Grow. *(Design)*
+

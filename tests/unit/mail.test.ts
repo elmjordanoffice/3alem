@@ -28,13 +28,14 @@ describe("branded email (Range)", () => {
     expect(html).toMatch(/dir="ltr"[^>]*>https:\/\/aalim\.test/);
   });
 
-  it("uses the Range palette: bone ground, ink text, a vermilion button with ink text", () => {
+  it("uses the Night palette: lavender ground, indigo text, a violet button with white text", () => {
     const { html } = brandedEmail("reset", "en", VARS, { url: "https://aalim.test/r" });
-    expect(html).toContain("background:#f2f0eb");
-    expect(html).toMatch(/bgcolor="#f04a23"[^>]*>\s*<a [^>]*color:#141414/);
+    expect(html).toContain("background:#efedfb");
+    expect(html).toMatch(/bgcolor="#5847d6"[^>]*>\s*<a [^>]*color:#ffffff/);
     // Old brand colours are gone.
-    for (const old of ["#17184a", "#3b3fd8", "#f2b532", "Alexandria"]) expect(html).not.toContain(old);
-    expect(contrastRatio("#141414", "#f04a23")).toBeGreaterThanOrEqual(4.5);
-    expect(contrastRatio("#67635b", "#ffffff")).toBeGreaterThanOrEqual(4.5);
+    for (const old of ["#17184a", "#3b3fd8", "#f2b532", "Alexandria", "#f2f0eb", "#f04a23"]) expect(html).not.toContain(old);
+    expect(contrastRatio("#ffffff", "#5847d6")).toBeGreaterThanOrEqual(4.5);
+    expect(contrastRatio("#5f5a8c", "#ffffff")).toBeGreaterThanOrEqual(4.5);
+    expect(contrastRatio("#5f5a8c", "#efedfb")).toBeGreaterThanOrEqual(4.5);
   });
 });

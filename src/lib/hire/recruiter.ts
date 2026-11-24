@@ -163,6 +163,8 @@ export interface HomeOverview {
   inProgress: { sessionId: string; name: string; role: string; startedAt: string; minutes: number; budget: number }[];
   roles: Awaited<ReturnType<typeof listAssessments>>;
   totals: { open: number; invited: number; inProgress: number; completed: number };
+  /** The last 14 days, oldest first: assessments finished and decisions recorded each day (UTC). */
+  activity: { day: string; finished: number; decided: number }[];
 }
 
 /**
@@ -193,7 +195,18 @@ export async function homeOverview(viewer: Viewer & { activeOrganization: { id: 
       take: 6,
       select: { id: true, elapsedSeconds: true, startedAt: true, createdAt: true, invitation: { select: { name: true, email: true } }, template: { select: { title: true, durationMinutes: true } } },
     });
+    const DAY = 86_400_000;
+    const today = Date.UTC(new Date().getUTCFullYear(), new Date().getUTCMonth(), new Date().getUTCDate());
+    const since = new Date(today - 13 * DAY);
+    // One query at a time per connection (D-046).
+    const finished = await tx.assessmentSession.findMany({ where: { mode: "HIRE", completedAt: { gte: since } }, select: { completedAt: true } });
+    const decided = await tx.hiringDecision.findMany({ where: { createdAt: { gte: since } }, select: { createdAt: true } });
+    const dayOf = (d: Date) => Math.floor((Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()) - since.getTime()) / DAY);
+    const activity = Array.from({ length: 14 }, (_, i) => ({ day: new Date(since.getTime() + i * DAY).toISOString().slice(0, 10), finished: 0, decided: 0 }));
+    for (const f of finished) if (f.completedAt) activity[dayOf(f.completedAt)]!.finished++;
+    for (const d of decided) activity[dayOf(d.createdAt)]!.decided++;
     return {
+      activity,
       review: review.slice(0, 7),
       unviewed: review.filter((r) => !r.viewed).length,
       awaitingDecision: review.filter((r) => !r.decision).length,

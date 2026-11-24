@@ -535,6 +535,17 @@
     "caughtUp": {
       "title": "All caught up",
       "body": "Every report is read and every decision recorded. Nothing is waiting on you."
+    },
+    "activity": {
+      "title": "The last two weeks",
+      "finished": "Finished",
+      "decided": "Decided",
+      "label": "Assessments finished and decisions recorded per day, last two weeks",
+      "finishedN": "{n} finished",
+      "decidedN": "{n} decided",
+      "finishedWeek": "Finished this week",
+      "decidedWeek": "Decisions this week",
+      "day": "Day"
     }
   },
   "framework": {

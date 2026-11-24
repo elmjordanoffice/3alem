@@ -33,7 +33,7 @@ test("an individual onboards, takes a baseline, practises and talks to the coach
   // Their own view of one area; the rest left as "I'm not sure".
   await page.getByRole("radiogroup", { name: /Decision-making and judgment/ }).getByRole("radio", { name: "Often" }).click();
   await page.getByRole("button", { name: "Save and continue" }).click();
-  await expect(page.getByRole("heading", { name: /Your development, Layla/ })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /Hi, Layla/ })).toBeVisible();
   await expect(page.getByText(/Everything here is private to you/)).toBeVisible();
 
   await page.getByRole("button", { name: "Start the baseline" }).click();
@@ -86,7 +86,7 @@ test("an individual onboards, takes a baseline, practises and talks to the coach
 
   // The daily rep: today's is done, and the scenarios practised are on the shelf.
   await page.goto("/app/grow");
-  await expect(page.getByRole("region", { name: /day streak/ })).toContainText("Today's rep done");
+  await expect(page.getByRole("region", { name: "Streak & collection" })).toContainText("Today's rep done");
   await page.goto("/app/grow/progress");
   await expect(page.getByRole("region", { name: "Your collection" })).toContainText(/\d+ of \d+ scenes/);
 

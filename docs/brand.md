@@ -1,4 +1,4 @@
-# Aalim brand: Range
+# Aalim brand: Range, in Night
 
 The live, bilingual brand book is at **/brand** in the app (`src/app/brand/`). It is built from the product's own components, tokens and logo geometry, so it can't drift. This file is the written summary.
 
@@ -8,7 +8,9 @@ The live, bilingual brand book is at **/brand** in the app (`src/app/brand/`). I
 
 Range draws exactly that: wide bands of uncertainty below, narrower above, and one vermilion point at the top, the estimate. Centred, the bands stack into an A, for Aalim. Arabic name of the brand: **النطاق**.
 
-Three words: **exact** (measured, aligned; every line means something), **warm** (bone, not white; stone, not grey) and **honest about certainty** (ranges, not verdicts).
+Three words: **exact** (measured, aligned; every line means something), **warm** (soft light, rounded shapes, a friendly voice) and **honest about certainty** (ranges, not verdicts).
+
+The mark and the idea are unchanged. Since D-061 the product wears them in **Night**: a deep indigo canvas lit by violet, blue and teal, from the owner's reference.
 
 ## Name
 
@@ -38,31 +40,36 @@ The bands take the opposite of the ground (ink on bone, bone on ink). The dot is
 - **Minimum sizes:** mark 16 px, app tile 20 px, horizontal lockup 120 px wide, English lockup 80 px wide. In print: lockup 30 mm, mark 5 mm.
 - **Don't:** recolour the bands or the dot, stretch, rotate, add shadows, glows or gradients, put it on vermilion or a busy picture, retype the wordmark, rearrange the parts, or redraw the bands.
 
-## Colour
+## Colour: Night
 
-| Name | Hex | Role |
-|---|---|---|
-| Ink | `#141414` | Text, the logo, primary actions, the one hero panel per screen |
-| Bone | `#F2F0EB` | The canvas; white cards sit on it with a hairline |
-| Vermilion (signal) | `#F04A23` | The estimate, range bands, focus, at most one call to action per screen |
-| Evidence | `#FFD6C9` | The highlighter behind a person's own words; never decoration |
-| White | `#FFFFFF` | Cards and panels on bone |
-| Stone | `#4F4B45` · `#67635B` · `#8A857C` · `#CDC8BD` · `#E2DED5` | Secondary text, tertiary text, icons and large text, strong hairlines, hairlines |
+Dark indigo is the default theme; the light theme is the same system on lavender and white. Every value is a token in `src/styles/tokens.css` (both themes) and every text pairing is checked for WCAG AA in `tests/unit/contrast.test.ts`.
 
-Rough share of a screen: bone 62%, white 18%, ink 13%, stone 5%, vermilion 2%. Everything is flat: no gradients, no glows, no blur.
+| Name | Dark | Light | Role |
+|---|---|---|---|
+| Canvas | `#1B1840` | `#EFEDFB` | The page, lit by two soft radial washes (violet top left, blue bottom right) |
+| Surface | `#26224F` | `#FFFFFF` | Cards, lifted by shadow and light, not hairlines |
+| Text | `#FFFFFF` · `#BDB8E3` · `#A09BCB` | `#1B1840` · `#4A4575` · `#5F5A8C` | Primary, secondary, tertiary |
+| Violet (accent) | `#6C5CE7` (text `#B3A8FF`) | `#5847D6` (text `#4636C2`) | Actions, the current selection, the raised highlight card |
+| Coral (signal) | `#FF5C7C` | `#D6345D` | The estimate dot, range bands, the one call to action that matters most |
+| Blue | `#3B78FF` | `#2F6BFF` | Data: stat tiles, chart lines |
+| Teal | `#25C6B6` (text `#5FE0D2`) | `#12A597` (text `#0A7A6F`) | Data: stat tiles, chart lines, progress |
+| Levels | `#36306E` → `#D9D3FF` | `#E6E3F8` → `#2B2273` | One violet ramp for skill levels; never red and green |
 
-**The vermilion rule:** text on vermilion is ink (5.0:1), never bone. Vermilion on bone is 3.2:1, so it is never small text: only large display and shapes. Key ratios: ink on bone 16.1:1, stone `#4F4B45` on bone 7.6:1, `#67635B` on bone 5.2:1, `#8A857C` on bone 3.2:1 (large text and icons only). The brand book computes its contrast matrix with `src/lib/contrast.ts`; every token pairing used in the product is tested in `tests/unit/contrast.test.ts`. Tokens (with dark-mode counterparts) are in `src/styles/tokens.css`; some names are historical (`--saffron` is the signal colour).
+**Light and depth.** Cards are rounded (24 px) and float on soft shadows. One raised violet card per screen (`.hero-card`, a violet gradient with a glow) holds what to look at first. Stat tiles (`.tile-blue`, `.tile-teal`, `.tile-violet`, `.tile-coral`) are bold gradients with a faint wave of light; their colours are tokens (`--tile-*`) chosen so white labels pass AA at the lightest stop. Charts are glowing gradient areas and lines in violet, blue, teal and coral.
+
+**The coral rule:** coral marks the estimate and, at most, one call to action per screen. It is never decoration.
 
 ## Type
 
-- **Archivo**, at width 125% and ExtraBold, in capitals, for display (`.display-x`) and labels (`.eyebrow`, tracked +14%). Page and section titles use Archivo at 112%, 700, in sentence case. Archivo never sets running text.
-- **Beiruti** for Arabic display (Black and ExtraBold).
-- **IBM Plex Sans** and **IBM Plex Sans Arabic** for everything people read and use: 400 reading, 500 labels, 600 titles; 16 px and up for reading.
-- Scale: display 72, page title 40, section title 32, card title 20, body 16, small 14, label 11 (14 in Arabic).
+- **Plus Jakarta Sans** for Latin and **Readex Pro** for Arabic, everywhere (variable fonts, loaded with `@fontsource-variable`).
+- Titles are bold to extra-bold (700–800) in sentence case with slightly tight tracking (−0.02 em); no all-capitals display type. Labels are 500–600.
+- Reading text is 400, 15–16 px and up.
+- Scale: page title 36–44, section title 20, card title 17, body 15–16, small 13–14, label 11–12 (14 in Arabic).
+- The logo's wordmark keeps its own outlined letterforms (Archivo Expanded and Beiruti); they are drawings, not live type.
 
 Rules for Arabic:
 
-1. Arabic display is Beiruti, never Archivo. No capitals, and never letter-spaced: tracking breaks the joins.
+1. Arabic is never letter-spaced: tracking breaks the joins. Negative title tracking applies to Latin only.
 2. Give it room: line height 1.65 for reading and about 1.3 for display.
 3. Set Arabic display a step larger than the Latin beside it (in the logo, عالم rises 18% above the capitals).
 4. Use the fonts' own weights; never stretch, slant or fake bold Arabic.
@@ -71,11 +78,11 @@ Rules for Arabic:
 
 ## The narrowing motif
 
-- **Range bands** (`src/components/report/range-scale.tsx`): every estimate is a vermilion band on the 1–5 scale, wide while the evidence is thin and narrow once it settles; the dot is the estimate and the tick is the level the role expects. The brand's one moving idea: a band narrows once, on arrival.
-- **The hero panel** (`.hero-card`): one filled ink panel per screen, holding its one verdict, with the mark's bands at 9% bone in its corner and the dot in vermilion.
-- **The section opener** (`.rule-signal`): a hairline with a short vermilion tick at its start (on the right in Arabic).
-- **The evidence highlight** (`.evidence-mark`): verbatim quotes only.
-- Bands run horizontally, wider means less certain, and the dot is the conclusion. Outside the logo and the hero corner, bands only ever show data.
+- **Range bands** (`src/components/report/range-scale.tsx`): every estimate is a coral band on the 1–5 scale, wide while the evidence is thin and narrow once it settles; the dot is the estimate and the tick is the level the role expects.
+- **The highlight card** (`.hero-card`): one raised violet card per screen, holding its verdict or its one next step.
+- **The evidence highlight** (`.evidence-mark`): a soft violet highlighter under a person's own words, used for verbatim quotes only. Evidence cards carry a violet-to-teal edge.
+- **Glow, used for meaning:** the weekly ring, chart lines and stat tiles glow; text and reading surfaces do not.
+- No characters, mascots or illustrations of people: the product shows real work and real evidence.
 
 ## Voice
 
