@@ -6,11 +6,18 @@ import * as SystemUI from "expo-system-ui";
 import { useFonts } from "expo-font";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { IBMPlexSans_400Regular, IBMPlexSans_500Medium, IBMPlexSans_600SemiBold, IBMPlexSans_700Bold } from "@expo-google-fonts/ibm-plex-sans";
-import { IBMPlexSansArabic_400Regular, IBMPlexSansArabic_500Medium, IBMPlexSansArabic_600SemiBold, IBMPlexSansArabic_700Bold } from "@expo-google-fonts/ibm-plex-sans-arabic";
-import { Beiruti_700Bold, Beiruti_900Black } from "@expo-google-fonts/beiruti";
+// Night's faces, one file per weight (the package index would bundle every weight and italic).
+import { PlusJakartaSans_400Regular } from "@expo-google-fonts/plus-jakarta-sans/400Regular";
+import { PlusJakartaSans_500Medium } from "@expo-google-fonts/plus-jakarta-sans/500Medium";
+import { PlusJakartaSans_600SemiBold } from "@expo-google-fonts/plus-jakarta-sans/600SemiBold";
+import { PlusJakartaSans_700Bold } from "@expo-google-fonts/plus-jakarta-sans/700Bold";
+import { PlusJakartaSans_800ExtraBold } from "@expo-google-fonts/plus-jakarta-sans/800ExtraBold";
+import { ReadexPro_400Regular } from "@expo-google-fonts/readex-pro/400Regular";
+import { ReadexPro_500Medium } from "@expo-google-fonts/readex-pro/500Medium";
+import { ReadexPro_600SemiBold } from "@expo-google-fonts/readex-pro/600SemiBold";
+import { ReadexPro_700Bold } from "@expo-google-fonts/readex-pro/700Bold";
 import { LocaleProvider, useLocale } from "../i18n";
-import { ThemeProvider, useTheme } from "../theme";
+import { loadScheme, ThemeProvider, useTheme } from "../theme";
 import { SessionProvider } from "../state/session";
 
 void SplashScreen.preventAutoHideAsync().catch(() => undefined);
@@ -27,9 +34,10 @@ function Shell() {
     void SystemUI.setBackgroundColorAsync(c.canvas).catch(() => undefined);
     if (Platform.OS === "web" && typeof document !== "undefined") {
       document.body.style.backgroundColor = c.canvas;
+      document.documentElement.style.colorScheme = c.scheme;
       document.querySelector('meta[name="theme-color"]')?.setAttribute("content", c.canvas);
     }
-  }, [c.canvas]);
+  }, [c.canvas, c.scheme]);
   return (
     <View {...webDir} style={{ flex: 1, backgroundColor: c.canvas }}>
       <Stack screenOptions={{ headerShown: false, animation: "fade", contentStyle: { backgroundColor: c.canvas } }} />
@@ -39,25 +47,28 @@ function Shell() {
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
-    IBMPlexSans_400Regular,
-    IBMPlexSans_500Medium,
-    IBMPlexSans_600SemiBold,
-    IBMPlexSans_700Bold,
-    IBMPlexSansArabic_400Regular,
-    IBMPlexSansArabic_500Medium,
-    IBMPlexSansArabic_600SemiBold,
-    IBMPlexSansArabic_700Bold,
-    Beiruti_700Bold,
-    Beiruti_900Black,
-    // Archivo at 125% width, weight 800 (brand/fonts): the wide display face.
-    "ArchivoExpanded-800": require("../../assets/fonts/archivo-expanded-800.ttf"),
+    PlusJakartaSans_400Regular,
+    PlusJakartaSans_500Medium,
+    PlusJakartaSans_600SemiBold,
+    PlusJakartaSans_700Bold,
+    PlusJakartaSans_800ExtraBold,
+    ReadexPro_400Regular,
+    ReadexPro_500Medium,
+    ReadexPro_600SemiBold,
+    ReadexPro_700Bold,
   });
+  // The saved theme choice, read before the first frame so a light pick never flashes dark.
+  const [schemeReady, setSchemeReady] = React.useState(false);
+  React.useEffect(() => {
+    void loadScheme().finally(() => setSchemeReady(true));
+  }, []);
+  const ready = (loaded || Boolean(error)) && schemeReady;
 
   React.useEffect(() => {
-    if (loaded || error) void SplashScreen.hideAsync().catch(() => undefined);
-  }, [loaded, error]);
+    if (ready) void SplashScreen.hideAsync().catch(() => undefined);
+  }, [ready]);
 
-  if (!loaded && !error) return null;
+  if (!ready) return null;
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>

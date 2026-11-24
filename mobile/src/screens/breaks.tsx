@@ -4,11 +4,12 @@ import Animated, { Extrapolation, interpolate, useAnimatedStyle, useSharedValue,
 import { Clock, Link2Off, PauseCircle, WifiOff, type LucideIcon } from "lucide-react-native";
 import type { Branding, View as V } from "../api/types";
 import { useLocale, useT } from "../i18n";
-import { palette, spring, useTheme } from "../theme";
+import { palette, radius, spring, useTheme } from "../theme";
 import { haptic } from "../lib/haptics";
 import { Button } from "../ui/button";
 import { Narrowing } from "../ui/brand";
 import { ARRIVE, Entrance, FADE, OUT, Swap, useEntrance, useOnce } from "../ui/motion";
+import { Card, HeroCard, IconCircle } from "../ui/primitives";
 import { T } from "../ui/text";
 import { OrgHeader, Screen } from "./scaffold";
 
@@ -26,10 +27,11 @@ export function dayOf(title: string | undefined, rtl: boolean): string | null {
 const BEAT = { stamp: ARRIVE, rail: ARRIVE + 200, title: ARRIVE + 280, decisions: ARRIVE + 560, stagger: 110 };
 
 /**
- * A chapter break as a story beat: a "Day 1 done" stamp lands (with a light
- * haptic), the chapter rail fills to the new position, the next chapter's
- * title rises in and your decisions so far are dealt in one by one from the
- * reading side. Pause and Continue stay where they always are.
+ * A chapter break as a story beat, on the violet highlight card: a "Day 1
+ * done" stamp lands (with a light haptic), the chapter rail fills to the new
+ * position, the next chapter's title rises in; then, on a card below, your
+ * decisions so far are dealt in one by one from the reading side. Pause and
+ * Continue stay where they always are.
  */
 export function Transition({ v, onContinue, onPause }: { v: V<"transition">; onContinue: () => Promise<void>; onPause: () => Promise<void> }) {
   const t = useT("candidate.transition");
@@ -51,49 +53,50 @@ export function Transition({ v, onContinue, onPause }: { v: V<"transition">; onC
   };
   return (
     <Screen
-      ink
       testID="screen-transition"
-      header={<OrgHeader branding={v.branding} onInk />}
+      header={<OrgHeader branding={v.branding} />}
       bar={
         <>
           <Button testID="chapter-continue" variant="primary" label={t("start", { n: v.chapterIndex + 1 })} loading={pending === "go"} disabled={pending === "pause"} onPress={run("go", onContinue)} full />
-          <Button testID="chapter-pause" variant="onInk" icon={PauseCircle} label={t("pause")} loading={pending === "pause"} disabled={pending === "go"} onPress={run("pause", onPause)} full />
+          <Button testID="chapter-pause" variant="secondary" icon={PauseCircle} label={t("pause")} loading={pending === "pause"} disabled={pending === "go"} onPress={run("pause", onPause)} full />
         </>
       }
       contentStyle={{ justifyContent: "flex-start" }}
     >
-      <View style={{ gap: 18, marginTop: 16 }}>
-        {stamp ? <Stamp label={stamp} delay={BEAT.stamp} /> : null}
-        <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
-          <Entrance delay={BEAT.rail} style={{ flexShrink: 1 }}>
-            <T variant="subhead" tone="inkSecondary">
-              {t("eyebrow")}
+      <HeroCard style={{ marginTop: 8 }}>
+        <View style={{ gap: 18 }}>
+          {stamp ? <Stamp label={stamp} delay={BEAT.stamp} /> : null}
+          <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
+            <Entrance delay={BEAT.rail} style={{ flexShrink: 1 }}>
+              <T variant="subhead" tone="heroSecondary">
+                {t("eyebrow")}
+              </T>
+            </Entrance>
+            <ChapterFill count={v.world.chapters.length} current={v.chapterIndex} delay={BEAT.rail} />
+          </View>
+          <Entrance delay={BEAT.title} y={22} style={{ gap: 12 }}>
+            <T variant="display" tone="heroText" accessibilityRole="header">
+              {ch?.title}
+            </T>
+            <T variant="body" tone="heroSecondary">
+              {ch?.summary}
             </T>
           </Entrance>
-          <ChapterFill count={v.world.chapters.length} current={v.chapterIndex} delay={BEAT.rail} />
         </View>
-        <Entrance delay={BEAT.title} y={22} style={{ gap: 14 }}>
-          <T variant="display" tone="inkForeground" accessibilityRole="header">
-            {ch?.title}
-          </T>
-          <T variant="body" tone="inkSecondary">
-            {ch?.summary}
-          </T>
-        </Entrance>
-      </View>
+      </HeroCard>
       {v.recap.length ? (
-        <Entrance delay={BEAT.decisions - 80} style={{ gap: 12, paddingTop: 22, borderTopWidth: 1, borderColor: "rgba(242,240,235,0.14)" }}>
-          <T variant="headline" tone="inkForeground">
-            {t("soFar")}
-          </T>
-          {v.recap.map((r, i) => (
-            <Decision key={r} text={r} delay={BEAT.decisions + i * BEAT.stagger} />
-          ))}
-          <Entrance delay={decisionsEnd + 60}>
-            <T variant="footnote" tone="inkSecondary" style={{ opacity: 0.8 }}>
-              {t("carryForward")}
-            </T>
-          </Entrance>
+        <Entrance delay={BEAT.decisions - 80}>
+          <Card style={{ gap: 12 }}>
+            <T variant="headline">{t("soFar")}</T>
+            {v.recap.map((r, i) => (
+              <Decision key={r} text={r} delay={BEAT.decisions + i * BEAT.stagger} />
+            ))}
+            <Entrance delay={decisionsEnd + 60}>
+              <T variant="footnote" tone="tertiary">
+                {t("carryForward")}
+              </T>
+            </Entrance>
+          </Card>
         </Entrance>
       ) : null}
     </Screen>
@@ -103,8 +106,8 @@ export function Transition({ v, onContinue, onPause }: { v: V<"transition">; onC
 /**
  * The stamp: it comes down from a little above the page, a touch larger and
  * more turned, and lands at a slight tilt toward the reading start (mirrored
- * in Arabic), with a light haptic on contact. Bone ink on the ink screen; its
- * dot is the one vermilion mark.
+ * in Arabic), with a light haptic on contact. White on the violet card; its
+ * dot is the coral mark.
  */
 function Stamp({ label, delay }: { label: string; delay: number }) {
   const { reduceMotion } = useTheme();
@@ -127,9 +130,9 @@ function Stamp({ label, delay }: { label: string; delay: number }) {
         },
   );
   return (
-    <Animated.View accessibilityRole="text" style={[{ alignSelf: "flex-start", flexDirection: "row", alignItems: "center", gap: 10, paddingStart: 12, paddingEnd: 14, paddingVertical: rtl ? 4 : 8, borderRadius: 10, borderWidth: 1.5, borderColor: "rgba(242,240,235,0.88)" }, style]}>
-      <View style={{ width: 9, height: 9, borderRadius: 5, backgroundColor: palette.signal }} />
-      <T variant="displaySm" tone="inkForeground">
+    <Animated.View accessibilityRole="text" style={[{ alignSelf: "flex-start", flexDirection: "row", alignItems: "center", gap: 10, paddingStart: 14, paddingEnd: 16, paddingVertical: rtl ? 4 : 8, borderRadius: radius.pill, borderWidth: 1.5, borderColor: "rgba(255,255,255,0.85)", backgroundColor: "rgba(255,255,255,0.1)" }, style]}>
+      <View style={{ width: 9, height: 9, borderRadius: 5, backgroundColor: palette.coral }} />
+      <T variant="displaySm" tone="heroText">
         {label}
       </T>
     </Animated.View>
@@ -137,9 +140,9 @@ function Stamp({ label, delay }: { label: string; delay: number }) {
 }
 
 const SEG = 22;
-const FAINT = "rgba(242,240,235,0.16)";
+const FAINT = "rgba(255,255,255,0.2)";
 
-/** The chapter rail on a break: the chapter just finished fills from the reading start; then the next one lights. */
+/** The chapter rail on a break, on the violet card: the chapter just finished fills coral from the reading start; then the next one lights white. */
 function ChapterFill({ count, current, delay }: { count: number; current: number; delay: number }) {
   const { reduceMotion } = useTheme();
   const fill = useSharedValue(0);
@@ -161,14 +164,14 @@ function ChapterFill({ count, current, delay }: { count: number; current: number
     <View style={{ flexDirection: "row", gap: 4 }} accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
       {Array.from({ length: count }, (_, i) =>
         i < current - 1 ? (
-          <View key={i} style={[seg, { backgroundColor: palette.signal }]} />
+          <View key={i} style={[seg, { backgroundColor: palette.coral }]} />
         ) : i === current - 1 ? (
-          <View key={i} style={[seg, { backgroundColor: palette.bone }]}>
-            <Animated.View style={[{ position: "absolute", top: 0, bottom: 0, start: 0, backgroundColor: palette.signal }, fillStyle]} />
+          <View key={i} style={[seg, { backgroundColor: palette.white }]}>
+            <Animated.View style={[{ position: "absolute", top: 0, bottom: 0, start: 0, backgroundColor: palette.coral }, fillStyle]} />
           </View>
         ) : i === current ? (
           <View key={i} style={[seg, { backgroundColor: FAINT }]}>
-            <Animated.View style={[StyleSheet.absoluteFill, { backgroundColor: palette.bone }, nextStyle]} />
+            <Animated.View style={[StyleSheet.absoluteFill, { backgroundColor: palette.white }, nextStyle]} />
           </View>
         ) : (
           <View key={i} style={[seg, { backgroundColor: FAINT }]} />
@@ -181,13 +184,14 @@ function ChapterFill({ count, current, delay }: { count: number; current: number
 /** One of "your decisions so far": its dot sets down, then the line slides in from the reading start. */
 function Decision({ text, delay }: { text: string; delay: number }) {
   const { rtl } = useLocale();
+  const { c } = useTheme();
   const dot = useEntrance({ delay, scale: 0.2, config: spring.pop });
   const line = useEntrance({ delay: delay + 50, x: rtl ? 14 : -14 });
   return (
     <View style={{ flexDirection: "row", gap: 12 }}>
-      <Animated.View style={[{ width: 7, height: 7, borderRadius: 4, backgroundColor: palette.signal, marginTop: rtl ? 11 : 9 }, dot]} />
+      <Animated.View style={[{ width: 8, height: 8, borderRadius: 4, backgroundColor: c.accentText, marginTop: rtl ? 11 : 8 }, dot]} />
       <Animated.View style={[{ flex: 1 }, line]}>
-        <T variant="callout" tone="inkSecondary">
+        <T variant="callout" tone="secondary">
           {text}
         </T>
       </Animated.View>
@@ -197,7 +201,6 @@ function Decision({ text, delay }: { text: string; delay: number }) {
 
 export function Paused({ v, onResume }: { v: V<"paused">; onResume: () => Promise<void> }) {
   const t = useT("candidate.paused");
-  const { c } = useTheme();
   const [pending, setPending] = React.useState(false);
   return (
     <Screen
@@ -223,9 +226,7 @@ export function Paused({ v, onResume }: { v: V<"paused">; onResume: () => Promis
       }
     >
       <View style={{ flexGrow: 1, justifyContent: "center", gap: 18 }}>
-        <View style={{ width: 64, height: 64, borderRadius: 32, backgroundColor: c.surface, borderWidth: 1, borderColor: c.hairline, alignItems: "center", justifyContent: "center" }}>
-          <PauseCircle size={30} color={c.text} strokeWidth={1.5} />
-        </View>
+        <IconCircle icon={PauseCircle} size={68} />
         <T variant="display" accessibilityRole="header">
           {t("title")}
         </T>
@@ -241,7 +242,6 @@ export function Paused({ v, onResume }: { v: V<"paused">; onResume: () => Promis
 export function StateScreen({ branding, kind, onBack, onRetry, message }: { branding?: Branding; kind: "invalid" | "expired" | "revoked" | "offline"; onBack: () => void; onRetry?: () => void; message?: string }) {
   const t = useT("candidate");
   const tm = useT("mobile");
-  const { c } = useTheme();
   const Icon: LucideIcon = kind === "expired" ? Clock : kind === "offline" ? WifiOff : Link2Off;
   const org = branding?.orgName ?? "";
   const title = kind === "offline" ? tm("errors.connectTitle") : t(`${kind}.title`);
@@ -258,9 +258,7 @@ export function StateScreen({ branding, kind, onBack, onRetry, message }: { bran
       }
     >
       <View style={{ flexGrow: 1, justifyContent: "center", gap: 16 }}>
-        <View style={{ width: 56, height: 56, borderRadius: 28, backgroundColor: c.surfaceSunken, alignItems: "center", justifyContent: "center" }}>
-          <Icon size={24} color={c.secondary} strokeWidth={1.6} />
-        </View>
+        <IconCircle icon={Icon} size={60} tone={kind === "offline" ? "accent" : "sunken"} />
         <T variant="title" accessibilityRole="header">
           {title}
         </T>
@@ -311,15 +309,13 @@ function useLoadingLine() {
  */
 export function Preparing({ branding }: { branding?: Branding }) {
   const t = useT("candidate.loading");
-  const { rtl } = useLocale();
   const line = useLoadingLine();
   return (
     <Screen testID="screen-preparing" header={<OrgHeader branding={branding} />} scroll={false}>
       <View accessibilityRole="progressbar" accessibilityLabel={t("title")} style={{ flexGrow: 1, alignItems: "center", justifyContent: "center", gap: 32, paddingBottom: 60 }}>
         <Narrowing width={132} rows={3} loop />
         <View style={{ alignSelf: "stretch", gap: 10 }}>
-          {/* Beiruti's narrow word space all but vanishes in "نجهّز أسبوعك" (ز then أ); Plex Arabic keeps the words apart. */}
-          <T variant={rtl ? "title2" : "displaySm"} align="center" accessibilityRole="header">
+          <T variant="displaySm" align="center" accessibilityRole="header">
             {t("title")}
           </T>
           <Swap

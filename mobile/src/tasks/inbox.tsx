@@ -50,7 +50,7 @@ export function useInboxTask(ctx: TaskContext): TaskResult {
           <T variant="footnote" tone="secondary" accessibilityLiveRegion="polite">
             {progress}
           </T>
-          <View accessibilityLabel={t("listLabel")} style={{ borderRadius: radius.card, backgroundColor: c.surface, borderWidth: hairline, borderColor: c.hairline, overflow: "hidden" }}>
+          <View accessibilityLabel={t("listLabel")} style={{ borderRadius: 20, backgroundColor: c.surfaceSubtle, overflow: "hidden" }}>
             {inbox.messages.map((m, i) => (
               <Press key={m.id} depth={0.99} onPress={() => ctx.goToKey(`msg-${m.id}`)} accessibilityLabel={`${m.from.name}. ${m.subject}${draft.triage[m.id] ? `. ${t(`triage.${draft.triage[m.id]}`)}` : ""}`} style={{ flexDirection: "row", alignItems: "center", gap: 12, paddingVertical: 12, paddingHorizontal: 14, borderTopWidth: i ? hairline : 0, borderColor: c.hairline }}>
                 <Avatar name={m.from.name} size={34} />
@@ -68,8 +68,8 @@ export function useInboxTask(ctx: TaskContext): TaskResult {
                   </T>
                 </View>
                 {draft.triage[m.id] ? (
-                  <View style={{ paddingHorizontal: 8, paddingVertical: 3, borderRadius: radius.pill, backgroundColor: c.surfaceSunken }}>
-                    <T variant="caption" tone="secondary">
+                  <View style={{ paddingHorizontal: 10, paddingVertical: 4, borderRadius: radius.pill, backgroundColor: c.accentSubtle }}>
+                    <T variant="caption" tone="accentText">
                       {t(`triage.${draft.triage[m.id]}`)}
                     </T>
                   </View>
@@ -87,7 +87,7 @@ export function useInboxTask(ctx: TaskContext): TaskResult {
       node: (
         <View style={{ gap: 18 }}>
           <TaskHeader label={tm("messageOf", { n: i + 1, total: inbox.messages.length })} tone="follow" meta={progress.split("·")[0]?.trim()} />
-          <View style={{ borderRadius: radius.card, backgroundColor: c.surface, borderWidth: hairline, borderColor: c.hairline }}>
+          <View style={{ borderRadius: 20, backgroundColor: c.surfaceSubtle }}>
             <View style={{ padding: 16, gap: 12, borderBottomWidth: hairline, borderColor: c.hairline }}>
               <T variant="headline">{m.subject}</T>
               <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
@@ -167,7 +167,7 @@ export function useInboxTask(ctx: TaskContext): TaskResult {
             node: (
               <View style={{ gap: 16 }}>
                 <TaskHeader label={tm("repliesTitle", { n: i + 1, total: replyIds.length })} meta={replyIds.length < inbox.replyCount ? t("progress", { triaged, total: inbox.messages.length, replies: replyIds.length, needed: inbox.replyCount }).split("·")[1]?.trim() : undefined} />
-                <View style={{ padding: 14, borderRadius: radius.control, backgroundColor: c.surfaceSubtle, borderWidth: hairline, borderColor: c.hairline, gap: 2 }}>
+                <View style={{ padding: 14, borderRadius: radius.field, backgroundColor: c.surfaceSubtle, gap: 2 }}>
                   <T variant="caption" tone="tertiary">
                     {m.from.name}
                     {m.from.role ? ` · ${m.from.role}` : ""}

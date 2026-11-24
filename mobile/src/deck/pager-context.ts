@@ -34,8 +34,8 @@ export function usePagerContext() {
 // screen's sides, and the next card peeks in at the bottom. Same numbers on
 // native and web (and in the web app's phone deck).
 
-/** Corner radius of a card. */
-export const CARD_RADIUS = 22;
+/** Corner radius of a card (Night's card radius). */
+export const CARD_RADIUS = 24;
 /** Space between a card and the screen's sides. */
 export const CARD_INSET = 12;
 /** Cards never grow wider than this (tablets); they sit centred. */

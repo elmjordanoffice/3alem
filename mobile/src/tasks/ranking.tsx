@@ -9,7 +9,6 @@ import { radius, spring, useTheme } from "../theme";
 import { haptic } from "../lib/haptics";
 import { draftKey, useDraft } from "../state/drafts";
 import { Press } from "../ui/press";
-import { hairline } from "../ui/primitives";
 import { T } from "../ui/text";
 import { Editor, SummaryLine, TaskHeader } from "./parts";
 import { RankList } from "./rank-list";
@@ -86,7 +85,7 @@ export function useAllocationTask(ctx: TaskContext): TaskResult {
       node: (
         <View style={{ gap: 18 }}>
           <TaskHeader label={t("item.yourTask")} prompt={content.task.prompt} showKind />
-          <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingVertical: 12, paddingHorizontal: 14, borderRadius: radius.control, backgroundColor: c.surfaceSunken }}>
+          <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingVertical: 12, paddingHorizontal: 16, borderRadius: radius.pill, backgroundColor: c.surfaceSunken }}>
             <T variant="subhead" tone="secondary">
               {ta("total", { total: alloc.total })}
             </T>
@@ -180,7 +179,7 @@ function AllocationRow({ label, detail, value, total, max, step, disabled, onCha
   };
 
   return (
-    <View style={{ gap: 10, padding: 14, borderRadius: radius.card, backgroundColor: c.surface, borderWidth: hairline, borderColor: c.hairline }}>
+    <View style={{ gap: 10, padding: 14, borderRadius: 20, backgroundColor: c.surfaceSubtle }}>
       <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
         <View style={{ flex: 1, gap: 2 }}>
           <T variant="subhead" style={{ color: c.text }}>
@@ -223,8 +222,8 @@ function AllocationRow({ label, detail, value, total, max, step, disabled, onCha
         >
           <GestureDetector gesture={tap}>
             <View style={{ height: 28, justifyContent: "center" }}>
-              <View style={{ height: 6, borderRadius: 3, backgroundColor: c.surfaceSunken, overflow: "hidden", flexDirection: "row" }}>
-                <Animated.View style={[{ height: 6, borderRadius: 3, backgroundColor: c.text }, fill]} />
+              <View style={{ height: 8, borderRadius: 4, backgroundColor: c.surfaceSunken, overflow: "hidden", flexDirection: "row" }}>
+                <Animated.View style={[{ height: 8, borderRadius: 4, backgroundColor: c.accent }, fill]} />
               </View>
             </View>
           </GestureDetector>

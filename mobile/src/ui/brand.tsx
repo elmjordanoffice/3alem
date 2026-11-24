@@ -1,15 +1,16 @@
 import * as React from "react";
-import { View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import Svg, { Circle, Rect } from "react-native-svg";
+import { LinearGradient } from "expo-linear-gradient";
 import Animated, { Easing, interpolate, useAnimatedStyle, useSharedValue, withDelay, withRepeat, withTiming, Extrapolation, type SharedValue } from "react-native-reanimated";
-import { palette, useTheme } from "../theme";
+import { lift, palette, useTheme } from "../theme";
 import { Burst, useOnce } from "./motion";
 
 /** Geometry from src/components/brand/wordmark-paths.ts (MARK). */
 const MARK = { bars: [{ x: 3, y: 48.25, w: 58 }, { x: 11, y: 33.75, w: 42 }, { x: 19, y: 19.25, w: 26 }], h: 11, dot: { cx: 32, cy: 10.25, r: 5.5 } };
 
-/** The mark: three rounded bands narrowing upward into the vermilion dot. */
-export function Mark({ size = 28, color, dot = palette.signal }: { size?: number; color?: string; dot?: string }) {
+/** The mark: three rounded bands narrowing upward into the coral dot. */
+export function Mark({ size = 28, color, dot = palette.coral }: { size?: number; color?: string; dot?: string }) {
   const { c } = useTheme();
   const fill = color ?? c.text;
   return (
@@ -22,11 +23,18 @@ export function Mark({ size = 28, color, dot = palette.signal }: { size?: number
   );
 }
 
-/** The app symbol: the bone mark on an ink tile. */
+/** The app symbol (Night): the white mark on a glowing blue disc, the dot in coral. */
 export function Symbol({ size = 40 }: { size?: number }) {
+  const { c } = useTheme();
   return (
-    <View style={{ width: size, height: size, borderRadius: size * 0.225, backgroundColor: palette.ink, alignItems: "center", justifyContent: "center" }}>
-      <Mark size={size * 0.7} color={palette.bone} />
+    <View style={[{ width: size, height: size, borderRadius: size / 2, backgroundColor: palette.logoTo, alignItems: "center", justifyContent: "center" }, lift("glow", c, palette.logoFrom)]}>
+      <View pointerEvents="none" style={[StyleSheet.absoluteFill, { borderRadius: size / 2, overflow: "hidden" }]}>
+        <LinearGradient colors={[palette.logoFrom, palette.logoTo]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={StyleSheet.absoluteFill} />
+      </View>
+      {/* In a View: on the web a bare <svg> would paint under the absolutely placed gradient. */}
+      <View>
+        <Mark size={size * 0.62} color={palette.white} />
+      </View>
     </View>
   );
 }
@@ -47,19 +55,21 @@ function Band({ t, i, rows, width, height, color }: { t: SharedValue<number>; i:
 
 /**
  * The Narrowing: wide bands of uncertainty tightening, row by row, into one
- * vermilion point. The loading state while a scene is prepared (looping) and
+ * coral point. The loading state while a scene is prepared (looping) and
  * the signature on the complete screen (once). Still under reduced motion.
+ * Lavender-violet bands on the canvas; white ones on the highlight card.
  *
  * Played once with `burst`, the dot pops as it lands: a ring and a few
- * vermilion particles, about a second (none under reduced motion). `onLand`
+ * coral particles, about a second (none under reduced motion). `onLand`
  * fires at that moment (at once when still).
  */
-export function Narrowing({ width = 120, rows = 3, loop = true, color, onInk, burst, onLand }: { width?: number; rows?: number; loop?: boolean; color?: string; onInk?: boolean; burst?: boolean; onLand?: () => void }) {
+export function Narrowing({ width = 120, rows = 3, loop = true, color, onHero, burst, onLand }: { width?: number; rows?: number; loop?: boolean; color?: string; onHero?: boolean; burst?: boolean; onLand?: () => void }) {
   const { c, reduceMotion } = useTheme();
   const t = useSharedValue(reduceMotion ? 1 : 0);
   const height = Math.max(8, Math.round((width * 11) / 58));
   const gap = Math.round(height * 0.32);
-  const band = color ?? (onInk ? "rgba(242,240,235,0.9)" : c.text);
+  const band = color ?? (onHero ? "rgba(255,255,255,0.92)" : c.accentText);
+  const dot = onHero ? palette.coral : c.signal;
 
   React.useEffect(() => {
     if (reduceMotion) {
@@ -95,8 +105,8 @@ export function Narrowing({ width = 120, rows = 3, loop = true, color, onInk, bu
   return (
     <View style={{ width, alignItems: "center", gap }} accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
       <View style={{ width: height, height }}>
-        {burst && !reduceMotion ? <Burst t={pop} size={height} color={c.signal} /> : null}
-        <Animated.View style={[{ width: height, height, borderRadius: height / 2, backgroundColor: c.signal }, dotStyle]} />
+        {burst && !reduceMotion ? <Burst t={pop} size={height} color={dot} /> : null}
+        <Animated.View style={[{ width: height, height, borderRadius: height / 2, backgroundColor: dot }, dotStyle]} />
       </View>
       {Array.from({ length: rows }, (_, k) => rows - 1 - k).map((i) => (
         <Band key={i} t={t} i={i} rows={rows} width={width} height={height} color={band} />

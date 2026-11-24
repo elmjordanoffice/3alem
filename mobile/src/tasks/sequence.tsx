@@ -1,9 +1,9 @@
 import * as React from "react";
 import { View } from "react-native";
 import { useT } from "../i18n";
-import { radius, useTheme } from "../theme";
+import { useTheme } from "../theme";
 import { draftKey, useDraft } from "../state/drafts";
-import { hairline, TextArea } from "../ui/primitives";
+import { TextArea } from "../ui/primitives";
 import { T } from "../ui/text";
 import { usePasteReporter } from "../state/integrity";
 import { OptionCard, SummaryLine, TaskHeader } from "./parts";
@@ -95,11 +95,11 @@ export function useChainTask(ctx: TaskContext): TaskResult {
           <TaskHeader label={ti("yourTask")} prompt={i === 0 ? content.task.prompt : undefined} meta={t("roundOf", { n: i + 1, total: rounds.length })} showKind={i === 0} />
           <View style={{ flexDirection: "row", gap: 4 }} accessibilityLabel={t("rounds")}>
             {rounds.map((r, k) => (
-              <View key={r.id} style={{ flex: 1, height: 3, borderRadius: 2, backgroundColor: k < i ? c.text : k === i ? c.signal : c.hairlineStrong }} />
+              <View key={r.id} style={{ flex: 1, height: 4, borderRadius: 2, backgroundColor: k < i ? c.accent : k === i ? c.signal : c.hairlineStrong }} />
             ))}
           </View>
           {consequence ? (
-            <View style={{ padding: 16, borderRadius: radius.card, backgroundColor: c.surfaceSubtle, borderWidth: hairline, borderColor: c.hairline, gap: 6 }}>
+            <View style={{ padding: 18, borderRadius: 20, backgroundColor: c.surfaceSubtle, gap: 6 }}>
               <T variant="footnote" tone="tertiary">
                 {t("whatHappened")}
               </T>

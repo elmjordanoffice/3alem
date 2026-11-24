@@ -5,9 +5,9 @@ import { StatusBar } from "expo-status-bar";
 import { Clock, Coffee, PauseCircle, Route, Wifi } from "lucide-react-native";
 import type { View as V } from "../api/types";
 import { useLocale, useT } from "../i18n";
-import { palette, radius, useTheme } from "../theme";
+import { fonts, radius, useTheme } from "../theme";
 import { Button } from "../ui/button";
-import { hairline, SignalRule } from "../ui/primitives";
+import { Card, hairline, HeroCard, IconCircle, NumberBadge, SignalRule } from "../ui/primitives";
 import { T } from "../ui/text";
 import { Avatar } from "../ui/avatar";
 import { Narrowing } from "../ui/brand";
@@ -25,7 +25,7 @@ const BEFORE = [
   { icon: Wifi, k: "offline" },
 ] as const;
 
-/** Before you begin (a numbered checklist), then the world: the company, your role, the people, your week. */
+/** Before you begin (a checklist card), then the world: the company, your role, the people, your week. */
 export function Briefing({ v, onBegin }: { v: V<"briefing">; onBegin: () => Promise<void> }) {
   const [step, setStep] = React.useState<"before" | "story">("before");
   return step === "before" ? <Before v={v} onReady={() => setStep("story")} /> : <World v={v} onBegin={onBegin} />;
@@ -33,71 +33,70 @@ export function Briefing({ v, onBegin }: { v: V<"briefing">; onBegin: () => Prom
 
 function Before({ v, onReady }: { v: V<"briefing">; onReady: () => void }) {
   const t = useT("candidate.briefing");
-  const { c } = useTheme();
   return (
     <Screen testID="screen-before" header={<OrgHeader branding={v.branding} />} bar={<Button testID="ready" variant="primary" label={t("ready")} onPress={onReady} full />}>
-      <View style={{ gap: 18, marginTop: 8 }}>
+      <View style={{ gap: 16, marginTop: 8 }}>
         <SignalRule />
         <T variant="display" accessibilityRole="header">
           {t("beforeTitle")}
         </T>
       </View>
-      <View>
-        {BEFORE.map(({ icon: Icon, k }, i) => (
-          <View key={k} style={{ flexDirection: "row", gap: 16, paddingVertical: 18, borderTopWidth: hairline, borderBottomWidth: i === BEFORE.length - 1 ? hairline : 0, borderColor: c.hairline }}>
-            <T variant="index" latin style={{ width: 44 }}>
-              {String(i + 1).padStart(2, "0")}
-            </T>
-            <View style={{ flex: 1, gap: 4 }}>
+      <Card style={{ gap: 20 }}>
+        {BEFORE.map(({ icon, k }) => (
+          <View key={k} style={{ flexDirection: "row", gap: 14 }}>
+            <IconCircle icon={icon} size={42} />
+            <View style={{ flex: 1, gap: 3, paddingTop: 1 }}>
               <T variant="headline">{t(`before.${k}.title`, { minutes: v.minutes })}</T>
               <T variant="subhead" tone="secondary">
                 {t(`before.${k}.body`, { minutes: v.minutes })}
               </T>
             </View>
-            <Icon size={19} color={c.tertiary} strokeWidth={1.75} style={{ marginTop: 2 }} />
           </View>
         ))}
-      </View>
+      </Card>
     </Screen>
   );
 }
 
-/** The world intro, paged like the scenes that follow. */
+/** The world intro, paged like the scenes that follow; the company opens on the violet highlight card. */
 function World({ v, onBegin }: { v: V<"briefing">; onBegin: () => Promise<void> }) {
   const t = useT("candidate.briefing");
   const tm = useT("mobile.briefing");
-  const { dir } = useLocale();
+  const { dir, rtl } = useLocale();
   const { c, dark } = useTheme();
   const insets = useSafeAreaInsets();
   const pager = React.useRef<PagerHandle>(null);
   const [index, setIndex] = React.useState(0);
   const [pending, setPending] = React.useState(false);
   const w = v.world;
-  const pad = { paddingTop: insets.top + 64, paddingHorizontal: 22, paddingBottom: insets.bottom + 120, width: "100%" as const, maxWidth: 640, alignSelf: "center" as const };
+  const pad = { paddingTop: insets.top + 64, paddingHorizontal: 20, paddingBottom: insets.bottom + 120, width: "100%" as const, maxWidth: 640, alignSelf: "center" as const };
 
-  const pages: { key: string; ink?: boolean; node: React.ReactNode; footer?: React.ReactNode }[] = [
+  const pages: { key: string; node: React.ReactNode; footer?: React.ReactNode }[] = [
     {
       key: "company",
-      ink: true,
       node: (
-        <View style={{ flexGrow: 1, justifyContent: "center", gap: 22 }}>
-          <View style={{ alignItems: "flex-start" }}>
-            <Narrowing width={92} rows={3} loop={false} onInk />
-          </View>
-          <T variant="subhead" tone="inkSecondary">
-            {t("eyebrow")}
-          </T>
-          <T variant="display" tone="inkForeground" accessibilityRole="header">
-            {t("title", { company: w.companyName })}
-          </T>
-          <T variant="body" tone="inkSecondary">
-            {w.premise}
-          </T>
-          <View style={{ flexDirection: "row", alignSelf: "flex-start", paddingHorizontal: 12, paddingVertical: 6, borderRadius: radius.pill, borderWidth: hairline, borderColor: "rgba(242,240,235,0.25)" }}>
-            <T variant="caption" tone="inkSecondary">
-              {w.industry}
-            </T>
-          </View>
+        <View style={{ flexGrow: 1, justifyContent: "center" }}>
+          <HeroCard>
+            <View style={{ gap: 18 }}>
+              <View style={{ alignItems: "flex-start" }}>
+                <Narrowing width={84} rows={3} loop={false} onHero />
+              </View>
+              <T variant="label" tone="heroSecondary">
+                {t("eyebrow")}
+              </T>
+              <T variant="display" tone="heroText" accessibilityRole="header">
+                {t("title", { company: w.companyName })}
+              </T>
+              <T variant="body" tone="heroSecondary">
+                {w.premise}
+              </T>
+              <View style={{ flexDirection: "row", alignSelf: "flex-start", paddingHorizontal: 12, paddingVertical: 6, borderRadius: radius.pill, backgroundColor: "rgba(255,255,255,0.14)" }}>
+                <T variant="caption" tone="heroText">
+                  {w.industry}
+                </T>
+              </View>
+            </View>
+          </HeroCard>
         </View>
       ),
     },
@@ -105,18 +104,18 @@ function World({ v, onBegin }: { v: V<"briefing">; onBegin: () => Promise<void> 
       key: "role",
       node: (
         <View style={{ flexGrow: 1, justifyContent: "center", gap: 18 }}>
-          <T variant="label" tone="secondary">
+          <T variant="label" tone="accentText">
             {t("yourRole")}
           </T>
           <T variant="title" accessibilityRole="header">
             {w.yourRole}
           </T>
-          <View style={{ padding: 18, borderRadius: radius.card, backgroundColor: c.surface, borderWidth: hairline, borderColor: c.hairline, gap: 6 }}>
+          <Card style={{ gap: 6 }}>
             <T variant="footnote" tone="tertiary">
               {tm("roleTeam")}
             </T>
             <T variant="body">{w.team}</T>
-          </View>
+          </Card>
         </View>
       ),
     },
@@ -127,10 +126,10 @@ function World({ v, onBegin }: { v: V<"briefing">; onBegin: () => Promise<void> 
           <T variant="title2" accessibilityRole="header">
             {t("people")}
           </T>
-          <View style={{ borderRadius: radius.card, backgroundColor: c.surface, borderWidth: hairline, borderColor: c.hairline }}>
+          <Card padded={false} style={{ paddingVertical: 6 }}>
             {w.cast.map((p, i) => (
-              <View key={p.name} style={{ flexDirection: "row", alignItems: "center", gap: 14, paddingVertical: 12, paddingHorizontal: 16, borderTopWidth: i ? hairline : 0, borderColor: c.hairline }}>
-                <Avatar name={p.name} size={40} />
+              <View key={p.name} style={{ flexDirection: "row", alignItems: "center", gap: 14, paddingVertical: 12, marginHorizontal: 18, borderTopWidth: i ? hairline : 0, borderColor: c.hairline }}>
+                <Avatar name={p.name} size={42} />
                 <View style={{ flex: 1 }}>
                   <T variant="headline">{p.name}</T>
                   <T variant="footnote" tone="secondary">
@@ -139,7 +138,7 @@ function World({ v, onBegin }: { v: V<"briefing">; onBegin: () => Promise<void> 
                 </View>
               </View>
             ))}
-          </View>
+          </Card>
         </View>
       ),
     },
@@ -150,19 +149,15 @@ function World({ v, onBegin }: { v: V<"briefing">; onBegin: () => Promise<void> 
           <T variant="title2" accessibilityRole="header">
             {t("week")}
           </T>
-          <View>
+          <Card>
             {w.chapters.map((ch, i) => (
               <View key={ch.title} style={{ flexDirection: "row", gap: 14 }}>
                 <View style={{ alignItems: "center", width: 32 }}>
-                  <View style={{ width: 32, height: 32, borderRadius: 16, alignItems: "center", justifyContent: "center", backgroundColor: i === 0 ? c.signal : c.surface, borderWidth: i === 0 ? 0 : hairline, borderColor: c.hairlineStrong }}>
-                    <T variant="footnote" latin align="center" style={{ color: i === 0 ? palette.ink : c.secondary, fontFamily: "IBMPlexSans_600SemiBold" }}>
-                      {i + 1}
-                    </T>
-                  </View>
-                  {i < w.chapters.length - 1 ? <View style={{ width: hairline, flex: 1, minHeight: 18, backgroundColor: c.hairlineStrong }} /> : null}
+                  <NumberBadge n={i + 1} size={32} strong={i === 0} />
+                  {i < w.chapters.length - 1 ? <View style={{ width: 2, flex: 1, minHeight: 18, borderRadius: 1, marginVertical: 4, backgroundColor: c.hairlineStrong }} /> : null}
                 </View>
-                <View style={{ flex: 1, paddingBottom: 18, gap: 2 }}>
-                  <T variant="headline" tone={i === 0 ? "text" : "secondary"}>
+                <View style={{ flex: 1, paddingBottom: i < w.chapters.length - 1 ? 18 : 0, gap: 2, paddingTop: rtl ? 0 : 5 }}>
+                  <T variant="headline" tone={i === 0 ? "text" : "secondary"} style={i === 0 ? null : { fontFamily: rtl ? fonts.arabic[500] : fonts.sans[600] }}>
                     {ch.title}
                   </T>
                   <T variant="footnote" tone="tertiary">
@@ -171,14 +166,14 @@ function World({ v, onBegin }: { v: V<"briefing">; onBegin: () => Promise<void> 
                 </View>
               </View>
             ))}
-          </View>
+          </Card>
           <T variant="subhead" tone="secondary">
             {t("howItWorks")}
           </T>
         </View>
       ),
       footer: (
-        <View style={{ position: "absolute", left: 22, right: 22, bottom: insets.bottom + 16, maxWidth: 600, alignSelf: "center" }}>
+        <View style={{ position: "absolute", left: 20, right: 20, bottom: insets.bottom + 16, maxWidth: 600, alignSelf: "center" }}>
           <Button
             testID="begin"
             variant="primary"
@@ -199,22 +194,21 @@ function World({ v, onBegin }: { v: V<"briefing">; onBegin: () => Promise<void> 
     },
   ];
 
-  const ink = pages[index]?.ink;
   return (
     <View style={{ flex: 1, direction: dir, backgroundColor: c.canvas }} testID="screen-world">
-      <StatusBar style={ink || dark ? "light" : "dark"} />
+      <StatusBar style={dark ? "light" : "dark"} />
       <Pager ref={pager} onIndexChange={setIndex}>
         {pages.map((p, i) => (
-          <View key={p.key} style={{ flex: 1, backgroundColor: p.ink ? palette.ink : c.canvas }}>
+          <View key={p.key} style={{ flex: 1, backgroundColor: c.canvas }}>
             <Slide inactive={i !== index} contentStyle={[pad, { paddingBottom: insets.bottom + (p.footer ? 110 : 8) }]} footer={p.footer}>
               <View style={{ flexGrow: 1 }}>{p.node}</View>
-              {!p.footer ? <NextHint first={i === 0} onInk={p.ink} label={tm("swipe")} onPress={() => pager.current?.goTo(i + 1)} /> : null}
+              {!p.footer ? <NextHint first={i === 0} label={tm("swipe")} onPress={() => pager.current?.goTo(i + 1)} /> : null}
             </Slide>
           </View>
         ))}
       </Pager>
-      <View pointerEvents="none" style={{ position: "absolute", top: insets.top + 14, left: 22, right: 22 }}>
-        <OrgHeader branding={v.branding} onInk={ink} />
+      <View pointerEvents="none" style={{ position: "absolute", top: insets.top + 14, left: 20, right: 20 }}>
+        <OrgHeader branding={v.branding} />
       </View>
     </View>
   );

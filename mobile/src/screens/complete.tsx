@@ -3,12 +3,12 @@ import { View } from "react-native";
 import Animated, { FadeIn } from "react-native-reanimated";
 import type { FairnessAnswers, Recap, View as V } from "../api/types";
 import { useLocale, useT } from "../i18n";
-import { radius, useTheme } from "../theme";
+import { fonts, lift, radius, tiles, useTheme, type TileTone } from "../theme";
 import { haptic } from "../lib/haptics";
 import { Button } from "../ui/button";
 import { Narrowing } from "../ui/brand";
 import { Entrance, useCountUp } from "../ui/motion";
-import { Card, Chip, hairline, TextArea } from "../ui/primitives";
+import { Card, Chip, HeroCard, NumberBadge, TextArea, Tile } from "../ui/primitives";
 import { Press } from "../ui/press";
 import { T } from "../ui/text";
 import { OrgHeader, Screen } from "./scaffold";
@@ -24,7 +24,7 @@ const FAIRNESS: Record<keyof FairnessAnswers, string[]> = {
 // haptic), the title rises, the recap counts up, the habits fade in.
 const FINISH = { title: 900, count: 1000, habits: 1500, habitStagger: 160 };
 
-/** Done: the signature narrows into its dot; then optional feedback and the voluntary fairness questions. */
+/** Done: on the violet highlight card the signature narrows into its dot; then the recap, what happens next, optional feedback and the voluntary fairness questions. */
 export function Complete({ v, onFeedback, onFairness }: { v: V<"complete">; onFeedback: (f: { rating: number; comment: string }) => Promise<void>; onFairness: (a: FairnessAnswers) => Promise<void> }) {
   const t = useT("candidate.complete");
   const tm = useT("mobile.complete");
@@ -37,37 +37,37 @@ export function Complete({ v, onFeedback, onFairness }: { v: V<"complete">; onFe
 
   return (
     <Screen testID="screen-complete" header={<OrgHeader branding={v.branding} />}>
-      <View style={{ gap: 22, marginTop: 12 }}>
-        <View style={{ alignItems: "flex-start" }}>
-          <Narrowing width={150} rows={5} loop={false} burst onLand={haptic.success} />
+      <HeroCard style={{ marginTop: 8 }}>
+        <View style={{ gap: 20 }}>
+          <View style={{ alignItems: "flex-start" }}>
+            <Narrowing width={132} rows={5} loop={false} burst onLand={haptic.success} onHero />
+          </View>
+          <Entrance delay={FINISH.title} y={22} style={{ gap: 12 }}>
+            <T variant="display" tone="heroText" accessibilityRole="header">
+              {t("title")}
+            </T>
+            <T variant="body" tone="heroSecondary">
+              {t("body", { org, role: v.roleTitle })}
+            </T>
+          </Entrance>
         </View>
-        <Entrance delay={FINISH.title} y={22} style={{ gap: 12 }}>
-          <T variant="display" accessibilityRole="header">
-            {t("title")}
-          </T>
-          <T variant="body" tone="secondary">
-            {t("body", { org, role: v.roleTitle })}
-          </T>
-        </Entrance>
-      </View>
+      </HeroCard>
 
       {v.recap ? <RecapCard recap={v.recap} org={org} /> : null}
 
-      <View style={{ gap: 10 }}>
+      <Card style={{ gap: 16 }}>
         <T variant="headline">{t("nextTitle")}</T>
         {[t("next1", { org }), t("next2"), t("next3", { org })].map((line, i) => (
-          <View key={i} style={{ flexDirection: "row", gap: 14, paddingVertical: 10, borderTopWidth: hairline, borderColor: c.hairline }}>
-            <T variant="index" latin style={{ width: 34, fontSize: 14, lineHeight: 22, color: c.tertiary }}>
-              {String(i + 1).padStart(2, "0")}
-            </T>
-            <T variant="subhead" tone="secondary" style={{ flex: 1 }}>
+          <View key={i} style={{ flexDirection: "row", gap: 14 }}>
+            <NumberBadge n={i + 1} size={28} />
+            <T variant="subhead" tone="secondary" style={{ flex: 1, paddingTop: 3 }}>
               {line}
             </T>
           </View>
         ))}
-      </View>
+      </Card>
 
-      <Card style={{ gap: 14 }}>
+      <Card style={{ gap: 16 }}>
         {sent ? (
           <Animated.View entering={FadeIn}>
             <T variant="callout" tone="secondary" accessibilityLiveRegion="polite">
@@ -85,25 +85,28 @@ export function Complete({ v, onFeedback, onFairness }: { v: V<"complete">; onFe
             {/* A 1–5 scale reads left to right in both languages. */}
             <View style={{ direction: "ltr", gap: 6 }}>
               <View accessibilityRole="radiogroup" accessibilityLabel={t("feedbackTitle")} style={{ flexDirection: "row", gap: 8 }}>
-                {[1, 2, 3, 4, 5].map((r) => (
-                  <Press
-                    key={r}
-                    testID={`rating-${r}`}
-                    depth={0.94}
-                    accessibilityRole="radio"
-                    accessibilityState={{ checked: rating === r, selected: rating === r }}
-                    accessibilityLabel={tm("rating", { n: r })}
-                    onPress={() => {
-                      haptic.select();
-                      setRating(r);
-                    }}
-                    style={{ flex: 1, height: 52, borderRadius: radius.control, alignItems: "center", justifyContent: "center", backgroundColor: rating === r ? c.action : c.surface, borderWidth: hairline, borderColor: rating === r ? c.action : c.hairlineStrong }}
-                  >
-                    <T variant="headline" latin align="center" style={{ color: rating === r ? c.actionText : c.text }}>
-                      {r}
-                    </T>
-                  </Press>
-                ))}
+                {[1, 2, 3, 4, 5].map((r) => {
+                  const on = rating === r;
+                  return (
+                    <Press
+                      key={r}
+                      testID={`rating-${r}`}
+                      depth={0.94}
+                      accessibilityRole="radio"
+                      accessibilityState={{ checked: on, selected: on }}
+                      accessibilityLabel={tm("rating", { n: r })}
+                      onPress={() => {
+                        haptic.select();
+                        setRating(r);
+                      }}
+                      style={[{ flex: 1, height: 52, borderRadius: radius.control, alignItems: "center", justifyContent: "center", backgroundColor: on ? c.accent : c.surfaceSunken }, on ? lift("glow", c) : null]}
+                    >
+                      <T variant="headline" latin align="center" style={{ color: on ? c.actionText : c.text }}>
+                        {r}
+                      </T>
+                    </Press>
+                  );
+                })}
               </View>
               <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
                 <T variant="caption" tone="tertiary">
@@ -145,7 +148,10 @@ export function Complete({ v, onFeedback, onFairness }: { v: V<"complete">; onFe
 
 const KNOWN_HABITS = new Set<string>(["reasons", "ownership", "checking", "tradeoffs", "perspective", "specifics", "contingency", "options", "calibration", "learning", "people"]);
 
-/** What they got through and the habits their own words showed: closure, not a verdict. */
+/** One tile per count, in the chart order: violet, blue, teal, coral. */
+const TILE_TONES: TileTone[] = ["violet", "blue", "teal", "coral"];
+
+/** What they got through and the habits their own words showed: closure, not a verdict. Counts of what they did, never a score. */
 function RecapCard({ recap, org }: { recap: Recap; org: string }) {
   const t = useT("candidate.complete.recap");
   const { c } = useTheme();
@@ -159,26 +165,31 @@ function RecapCard({ recap, org }: { recap: Recap; org: string }) {
   // Only habits this build has words for (a newer server may name more).
   const habits = recap.habits.filter((h) => KNOWN_HABITS.has(h)).slice(0, 3);
   return (
-    <Card padded={false} style={{ overflow: "hidden" }}>
-      <T variant="label" tone="tertiary" style={{ paddingHorizontal: 18, paddingTop: 18 }} accessibilityRole="header">
+    <Card style={{ gap: 18 }}>
+      <T variant="label" tone="tertiary" accessibilityRole="header">
         {t("title")}
       </T>
-      <View style={{ flexDirection: "row", flexWrap: "wrap", marginTop: 14, borderTopWidth: hairline, borderColor: c.hairline }}>
-        {stats.map((s, i) => (
-          <View key={s.k} accessible accessibilityLabel={`${n(s.v)} ${t(s.k, { n: s.v })}`} style={{ width: "50%", paddingHorizontal: 18, paddingVertical: 14, gap: 2, borderColor: c.hairline, borderBottomWidth: i < 2 ? hairline : 0, borderEndWidth: i % 2 === 0 ? hairline : 0 }}>
-            <CountUp value={s.v} delay={FINISH.count} />
-            <T variant="footnote" tone="secondary">
-              {t(s.k, { n: s.v })}
-            </T>
-          </View>
-        ))}
+      <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 12 }}>
+        {stats.map((s, i) => {
+          const tone = TILE_TONES[i % TILE_TONES.length]!;
+          return (
+            <View key={s.k} accessible accessibilityLabel={`${n(s.v)} ${t(s.k, { n: s.v })}`} style={{ flexBasis: "45%", flexGrow: 1 }}>
+              <Tile tone={tone} style={{ paddingHorizontal: 16, paddingVertical: 16, gap: 4, minHeight: 96, justifyContent: "flex-end" }}>
+                <CountUp value={s.v} delay={FINISH.count} color={tiles[tone].text} />
+                <T variant="footnote" style={{ color: tiles[tone].text }}>
+                  {t(s.k, { n: s.v })}
+                </T>
+              </Tile>
+            </View>
+          );
+        })}
       </View>
       {habits.length ? (
-        <View style={{ paddingHorizontal: 18, paddingVertical: 18, gap: 12, borderTopWidth: hairline, borderColor: c.hairline }}>
+        <View style={{ gap: 12 }}>
           <T variant="headline">{t("habitsTitle")}</T>
           {habits.map((h, i) => (
             <Entrance key={h} delay={FINISH.habits + i * FINISH.habitStagger} y={8} style={{ flexDirection: "row", gap: 12 }}>
-              <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: c.signal, marginTop: 9 }} />
+              <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: c.accentText, marginTop: 7 }} />
               <View style={{ flex: 1, gap: 2 }}>
                 <T variant="subhead" style={{ color: c.text }}>
                   {t(`habits.${h}.title`)}
@@ -191,11 +202,9 @@ function RecapCard({ recap, org }: { recap: Recap; org: string }) {
           ))}
         </View>
       ) : null}
-      <View style={{ paddingHorizontal: 18, paddingVertical: 12, borderTopWidth: hairline, borderColor: c.hairline }}>
-        <T variant="caption" tone="tertiary">
-          {t("note", { org })}
-        </T>
-      </View>
+      <T variant="caption" tone="tertiary">
+        {t("note", { org })}
+      </T>
     </Card>
   );
 }
@@ -205,10 +214,10 @@ function RecapCard({ recap, org }: { recap: Recap; org: string }) {
  * number, invisible, holds the width, so nothing beside it moves while it
  * counts. Screen readers get the final value from the cell's label.
  */
-function CountUp({ value, delay }: { value: number; delay: number }) {
+function CountUp({ value, delay, color }: { value: number; delay: number; color: string }) {
   const { n } = useLocale();
   const shown = useCountUp(value, { delay, duration: 900 });
-  const style = { fontSize: 28, lineHeight: 32, fontVariant: ["tabular-nums" as const] };
+  const style = { fontSize: 30, lineHeight: 34, fontFamily: fonts.sans[800], letterSpacing: -0.6, color, fontVariant: ["tabular-nums" as const] };
   return (
     <View>
       <T variant="index" latin style={[style, { opacity: 0 }]} accessibilityElementsHidden importantForAccessibility="no">
@@ -243,9 +252,7 @@ function Fairness({ onSubmit }: { onSubmit: (a: FairnessAnswers) => Promise<void
       </View>
       {(Object.keys(FAIRNESS) as (keyof FairnessAnswers)[]).map((field) => (
         <View key={field} style={{ gap: 10 }}>
-          <T variant="subhead">
-            {t(`fields.${field}`)}
-          </T>
+          <T variant="subhead">{t(`fields.${field}`)}</T>
           <View accessibilityRole="radiogroup" accessibilityLabel={t(`fields.${field}`)} style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
             {FAIRNESS[field].map((o) => (
               <Chip key={o} label={t(`values.${field}.${o}`)} selected={answers[field] === o} onPress={() => setAnswers((a) => ({ ...a, [field]: a[field] === o ? undefined : o }))} />

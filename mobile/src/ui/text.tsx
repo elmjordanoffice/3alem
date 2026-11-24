@@ -20,7 +20,21 @@ export type Variant =
   | "label"
   | "index";
 
-export type Tone = "text" | "secondary" | "tertiary" | "muted" | "action" | "actionText" | "signal" | "signalInk" | "signalText" | "critical" | "warning" | "inkForeground" | "inkSecondary";
+export type Tone =
+  | "text"
+  | "secondary"
+  | "tertiary"
+  | "muted"
+  | "action"
+  | "actionText"
+  | "accentText"
+  | "signal"
+  | "signalInk"
+  | "signalText"
+  | "critical"
+  | "warning"
+  | "heroText"
+  | "heroSecondary";
 
 interface Spec {
   family: string;
@@ -33,45 +47,46 @@ interface Spec {
 }
 
 /**
- * The type scale. Latin: IBM Plex Sans for reading, wide Archivo capitals for
- * display moments. Arabic: IBM Plex Sans Arabic one step larger with line
- * height of at least 1.7, Beiruti for display, and never any letter-spacing.
+ * The type scale. Latin: Plus Jakarta Sans, headings heavy (700–800) and
+ * tight, with a slight negative letter-spacing; small uppercase eyebrows are
+ * the only spaced-out type. Arabic: Readex Pro, line height of at least 1.6,
+ * headings at its heaviest (700), and never any letter-spacing.
  */
 const LATIN: Record<Variant, Spec> = {
-  display: { family: fonts.wide, size: 30, line: 33, tracking: -0.3, upper: true, maxScale: 1.25 },
-  displayMd: { family: fonts.wide, size: 25, line: 29, tracking: -0.2, upper: true, maxScale: 1.25 },
-  displaySm: { family: fonts.wide, size: 20, line: 24, tracking: -0.1, upper: true, maxScale: 1.3 },
-  title: { family: fonts.sans[600], size: 28, line: 34, tracking: -0.45, maxScale: 1.5 },
-  title2: { family: fonts.sans[600], size: 21, line: 27, tracking: -0.2, maxScale: 1.6 },
-  prompt: { family: fonts.sans[600], size: 22, line: 29, tracking: -0.3, maxScale: 1.6 },
-  headline: { family: fonts.sans[600], size: 17, line: 23, tracking: -0.1, maxScale: 1.8 },
+  display: { family: fonts.sans[800], size: 32, line: 36, tracking: -0.9, maxScale: 1.25 },
+  displayMd: { family: fonts.sans[800], size: 27, line: 31, tracking: -0.7, maxScale: 1.25 },
+  displaySm: { family: fonts.sans[800], size: 21, line: 26, tracking: -0.4, maxScale: 1.3 },
+  title: { family: fonts.sans[800], size: 28, line: 33, tracking: -0.7, maxScale: 1.5 },
+  title2: { family: fonts.sans[700], size: 21, line: 27, tracking: -0.35, maxScale: 1.6 },
+  prompt: { family: fonts.sans[700], size: 21, line: 28, tracking: -0.35, maxScale: 1.6 },
+  headline: { family: fonts.sans[700], size: 17, line: 23, tracking: -0.2, maxScale: 1.8 },
   body: { family: fonts.sans[400], size: 17, line: 26, maxScale: 2 },
-  bodyStrong: { family: fonts.sans[500], size: 17, line: 25, maxScale: 2 },
+  bodyStrong: { family: fonts.sans[600], size: 17, line: 25, tracking: -0.1, maxScale: 2 },
   callout: { family: fonts.sans[400], size: 16, line: 24, maxScale: 2 },
-  subhead: { family: fonts.sans[400], size: 15, line: 21, maxScale: 2 },
-  footnote: { family: fonts.sans[400], size: 13, line: 18, maxScale: 1.8 },
-  caption: { family: fonts.sans[500], size: 12, line: 16, maxScale: 1.6 },
-  label: { family: fonts.wide, size: 10.5, line: 14, tracking: 1.3, upper: true, maxScale: 1.4 },
-  index: { family: fonts.wide, size: 22, line: 26, tracking: 0.4, maxScale: 1.3 },
+  subhead: { family: fonts.sans[500], size: 15, line: 21, maxScale: 2 },
+  footnote: { family: fonts.sans[500], size: 13, line: 18, maxScale: 1.8 },
+  caption: { family: fonts.sans[600], size: 12, line: 16, maxScale: 1.6 },
+  label: { family: fonts.sans[700], size: 11.5, line: 15, tracking: 0.8, upper: true, maxScale: 1.4 },
+  index: { family: fonts.sans[800], size: 22, line: 26, tracking: -0.4, maxScale: 1.3 },
 };
 
 const ARABIC: Record<Variant, Spec> = {
-  display: { family: fonts.arabicDisplay[900], size: 38, line: 52, maxScale: 1.25 },
-  displayMd: { family: fonts.arabicDisplay[900], size: 34, line: 46, maxScale: 1.25 },
-  displaySm: { family: fonts.arabicDisplay[700], size: 26, line: 38, maxScale: 1.3 },
-  title: { family: fonts.arabicDisplay[700], size: 32, line: 46, maxScale: 1.5 },
-  title2: { family: fonts.arabic[600], size: 21, line: 36, maxScale: 1.6 },
-  prompt: { family: fonts.arabic[600], size: 22, line: 38, maxScale: 1.6 },
-  headline: { family: fonts.arabic[600], size: 17, line: 29, maxScale: 1.8 },
-  body: { family: fonts.arabic[400], size: 18, line: 31, maxScale: 2 },
-  bodyStrong: { family: fonts.arabic[500], size: 18, line: 31, maxScale: 2 },
-  callout: { family: fonts.arabic[400], size: 17, line: 29, maxScale: 2 },
-  subhead: { family: fonts.arabic[400], size: 16, line: 27, maxScale: 2 },
-  footnote: { family: fonts.arabic[400], size: 14, line: 24, maxScale: 1.8 },
-  caption: { family: fonts.arabic[500], size: 13, line: 22, maxScale: 1.6 },
+  display: { family: fonts.arabic[700], size: 31, line: 48, maxScale: 1.25 },
+  displayMd: { family: fonts.arabic[700], size: 27, line: 42, maxScale: 1.25 },
+  displaySm: { family: fonts.arabic[700], size: 22, line: 35, maxScale: 1.3 },
+  title: { family: fonts.arabic[700], size: 27, line: 42, maxScale: 1.5 },
+  title2: { family: fonts.arabic[600], size: 20, line: 33, maxScale: 1.6 },
+  prompt: { family: fonts.arabic[600], size: 20, line: 34, maxScale: 1.6 },
+  headline: { family: fonts.arabic[600], size: 16.5, line: 28, maxScale: 1.8 },
+  body: { family: fonts.arabic[400], size: 17, line: 30, maxScale: 2 },
+  bodyStrong: { family: fonts.arabic[500], size: 17, line: 30, maxScale: 2 },
+  callout: { family: fonts.arabic[400], size: 16, line: 28, maxScale: 2 },
+  subhead: { family: fonts.arabic[400], size: 15, line: 26, maxScale: 2 },
+  footnote: { family: fonts.arabic[400], size: 13.5, line: 23, maxScale: 1.8 },
+  caption: { family: fonts.arabic[500], size: 12.5, line: 21, maxScale: 1.6 },
   label: { family: fonts.arabic[600], size: 13, line: 21, maxScale: 1.4 },
-  // Numbers stay Latin and wide in both languages.
-  index: { family: fonts.wide, size: 22, line: 28, tracking: 0.4, maxScale: 1.3 },
+  // Numbers stay Latin in both languages.
+  index: { family: fonts.sans[800], size: 22, line: 28, tracking: -0.4, maxScale: 1.3 },
 };
 
 export function useTypeSpec(variant: Variant) {
@@ -84,14 +99,7 @@ export function useTypeSpec(variant: Variant) {
 
 export function useTone(tone: Tone): string {
   const { c } = useTheme();
-  switch (tone) {
-    case "inkForeground":
-      return "#F2F0EB";
-    case "inkSecondary":
-      return "#B9B4AA";
-    default:
-      return c[tone];
-  }
+  return c[tone];
 }
 
 export interface TProps extends TextProps {

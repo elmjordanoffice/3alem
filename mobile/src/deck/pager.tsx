@@ -1,9 +1,9 @@
 import * as React from "react";
-import { StyleSheet, View, type LayoutChangeEvent, type ViewStyle } from "react-native";
+import { Platform, StyleSheet, View, type LayoutChangeEvent, type ViewStyle } from "react-native";
 import { GestureDetector, usePanGesture } from "react-native-gesture-handler";
 import Animated, { cancelAnimation, Easing, Extrapolation, interpolate, useAnimatedStyle, useSharedValue, withDelay, withSequence, withSpring, withTiming, type SharedValue } from "react-native-reanimated";
 import { scheduleOnRN } from "react-native-worklets";
-import { spring, useTheme } from "../theme";
+import { lift as shadow, spring, useTheme } from "../theme";
 import { haptic } from "../lib/haptics";
 import { CARD_RADIUS, CardGeometryContext, cardLayout, PagerContext, SlideIndexContext, type CardGeometry, type PagerContextValue, type PagerHandle, type PagerProps } from "./pager-context";
 
@@ -339,10 +339,14 @@ function DeckCard({
     if (d > 0 && i > 0) return { opacity: 0.1 * Math.min(d, 1) };
     return { opacity: 0 };
   });
+  // Night lifts the card with a soft shadow (iOS); the shadow sits on the unclipped outer view, the content is
+  // clipped to the corners inside it. Android skips it: elevation would fight the stack's own depth.
   return (
-    <Animated.View style={[frame, { borderRadius: CARD_RADIUS, overflow: "hidden" }, card]}>
-      {children}
-      <Animated.View pointerEvents="none" style={[StyleSheet.absoluteFill, { backgroundColor: c.canvas }, dim]} />
+    <Animated.View style={[frame, { borderRadius: CARD_RADIUS, backgroundColor: c.surface }, Platform.OS === "ios" ? shadow("card", c) : null, card]}>
+      <View style={[StyleSheet.absoluteFill, { borderRadius: CARD_RADIUS, overflow: "hidden" }]}>
+        {children}
+        <Animated.View pointerEvents="none" style={[StyleSheet.absoluteFill, { backgroundColor: c.canvas }, dim]} />
+      </View>
     </Animated.View>
   );
 }

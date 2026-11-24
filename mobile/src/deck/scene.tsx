@@ -4,7 +4,7 @@ import Animated, { Extrapolation, FadeIn, FadeOut, interpolate, useAnimatedStyle
 import { Lock, RotateCw, WifiOff } from "lucide-react-native";
 import type { ItemView, ResponseContent, Stage, SubmitPayload } from "../api/types";
 import { useLocale, useT } from "../i18n";
-import { radius, spring, useTheme } from "../theme";
+import { alpha, lift, radius, spring, useTheme } from "../theme";
 import { haptic } from "../lib/haptics";
 import { newClientId } from "../lib/ids";
 import { kv } from "../lib/storage";
@@ -13,7 +13,7 @@ import type { SaveState } from "../state/drafts";
 import { IntegrityContext, useIntegrity } from "../state/integrity";
 import { Button } from "../ui/button";
 import { DrawnCheck, FADE } from "../ui/motion";
-import { hairline, Notice } from "../ui/primitives";
+import { Notice } from "../ui/primitives";
 import { T } from "../ui/text";
 import { useChoiceTask } from "../tasks/choice";
 import { TaskKindContext } from "../tasks/parts";
@@ -55,8 +55,8 @@ export interface SceneActions {
 }
 
 /**
- * One scene as a stack of cards you swipe up through: the situation (an ink
- * card with the scene's art), each material on paper, then the task. Follow-ups
+ * One scene as a stack of cards you swipe up through: the situation (the violet
+ * highlight card with the scene's art), each material on paper, then the task. Follow-ups
  * arrive as new cards below and the deck springs to them; the answered task
  * folds into a sealed "Answer sent" card. Within the scene you can swipe back
  * down to reread; earlier scenes are gone.
@@ -139,7 +139,7 @@ export function SceneScreen({ view, actions, online }: { view: ItemView; actions
   const kinds = content.materials.map((m) => m.kind).join(",");
   const at = (specs: SlideSpec[], s: Stage) => specs.map((spec) => ({ ...spec, at: s }));
   const all: (SlideSpec & { at: Stage })[] = [
-    { key: "cover", tone: "ink", at: "MAIN", node: <Cover title={content.title} scenario={content.scenario} kinds={kinds} chapter={chapter} cast={view.world.cast} moment={moment} note={note} /> },
+    { key: "cover", tone: "hero", at: "MAIN", node: <Cover title={content.title} scenario={content.scenario} kinds={kinds} chapter={chapter} cast={view.world.cast} moment={moment} note={note} /> },
     ...content.materials.map((m, i) => ({ key: `material-${m.id}`, at: "MAIN" as const, node: <MaterialCard material={m} n={i + 1} total={content.materials.length} company={view.world.companyName} /> })),
   ];
   if (stage === "MAIN") all.push(...at(main.slides, "MAIN"));
@@ -233,13 +233,13 @@ export function SceneScreen({ view, actions, online }: { view: ItemView; actions
             {slides.map((s, i) => {
               const last = i === slides.length - 1;
               const withSubmit = last && lastIsTask;
-              const ink = s.tone === "ink";
+              const hero = s.tone === "hero";
               const footer = withSubmit ? <SubmitBar ready={Boolean(value)} label={stage === "MAIN" && content.probe ? t("item.continue") : t("item.submit")} loading={submitting} done={sent} onPress={doSubmit} failure={failure} online={online} /> : null;
-              const contentStyle: StyleProp<ViewStyle> = ink ? { paddingBottom: 12 } : { paddingTop: CARD_PAD, paddingHorizontal: CARD_PAD, paddingBottom: withSubmit ? 156 : 12 };
+              const contentStyle: StyleProp<ViewStyle> = hero ? { paddingBottom: 12 } : { paddingTop: CARD_PAD, paddingHorizontal: CARD_PAD, paddingBottom: withSubmit ? 156 : 12 };
               return (
                 <DeckSlide key={s.key} i={i} pages={pages} tone={s.tone ?? "paper"} footer={footer} testID={`slide-${s.key}`} contentStyle={contentStyle}>
                   <View style={{ flexGrow: 1 }}>{s.node}</View>
-                  {!last ? <NextHint first={i === 0} onInk={ink} label={tm("next")} onPress={() => goTo(i + 1)} /> : null}
+                  {!last ? <NextHint first={i === 0} onHero={hero} label={tm("next")} onPress={() => goTo(i + 1)} /> : null}
                 </DeckSlide>
               );
             })}
@@ -256,7 +256,7 @@ export function SceneScreen({ view, actions, online }: { view: ItemView; actions
           />
           {toast ? (
             <Animated.View entering={FadeIn.duration(160)} exiting={FadeOut.duration(200)} pointerEvents="none" style={{ position: "absolute", top: insets.top + 8, left: 20, right: 20, alignItems: "center", zIndex: 20 }}>
-              <View accessibilityLiveRegion="polite" style={{ flexDirection: "row", alignItems: "center", gap: 8, paddingHorizontal: 14, paddingVertical: 10, borderRadius: radius.pill, backgroundColor: c.text, maxWidth: 420 }}>
+              <View accessibilityLiveRegion="polite" style={[{ flexDirection: "row", alignItems: "center", gap: 8, paddingHorizontal: 16, paddingVertical: 11, borderRadius: radius.pill, backgroundColor: c.text, maxWidth: 420 }, lift("float", c)]}>
                 <Lock size={14} color={c.canvas} />
                 <T variant="footnote" style={{ color: c.canvas, flexShrink: 1 }}>
                   {toast}
@@ -307,7 +307,7 @@ function Sealed({ summary, compact, fresh }: { summary: React.ReactNode; compact
           {tm("sentBody")}
         </T>
       </View>
-      <View style={{ padding: 16, gap: 10, borderRadius: radius.card, backgroundColor: c.surfaceSubtle, borderWidth: hairline, borderColor: c.hairline }}>
+      <View style={{ padding: 18, gap: 10, borderRadius: 20, backgroundColor: c.surfaceSubtle }}>
         <T variant="label" tone="tertiary">
           {tm("yourAnswer")}
         </T>
@@ -321,8 +321,8 @@ const SEAL = 52;
 const SEAL_DOT = 14;
 
 /**
- * The seal: an ink disc settles, its check draws itself, and a small vermilion
- * dot drops into the corner (the trailing one, so it mirrors in Arabic). About
+ * The seal: a glowing violet disc settles, its check draws itself, and a small
+ * coral dot drops into the corner (the trailing one, so it mirrors in Arabic). About
  * 530 ms, all on the UI thread; it never holds the deck, which springs on to a
  * follow-up at 520 ms as before. The success haptic fires when the server
  * accepts the answer, the same instant. Under reduced motion: a fade.
@@ -349,8 +349,8 @@ function Seal({ play }: { play: boolean }) {
   );
   return (
     <View style={{ width: SEAL, height: SEAL }}>
-      <Animated.View style={[{ width: SEAL, height: SEAL, borderRadius: SEAL / 2, backgroundColor: c.text, alignItems: "center", justifyContent: "center" }, discStyle]}>
-        <DrawnCheck size={32} color={c.canvas} strokeWidth={2.4} delay={90} duration={300} still={!play} />
+      <Animated.View style={[{ width: SEAL, height: SEAL, borderRadius: SEAL / 2, backgroundColor: c.accent, alignItems: "center", justifyContent: "center" }, lift("glow", c), discStyle]}>
+        <DrawnCheck size={32} color={c.actionText} strokeWidth={2.4} delay={90} duration={300} still={!play} />
       </Animated.View>
       <Animated.View style={[{ position: "absolute", top: -2, end: -2, width: SEAL_DOT, height: SEAL_DOT, borderRadius: SEAL_DOT / 2, backgroundColor: c.signal, borderWidth: 2.5, borderColor: c.surface }, dotStyle]} />
     </View>
@@ -360,13 +360,14 @@ function Seal({ play }: { play: boolean }) {
 function SubmitBar({ ready, label, loading, done, onPress, failure, online }: { ready: boolean; label: string; loading: boolean; done: boolean; onPress: () => void; failure: null | "offline" | "failed"; online: boolean }) {
   const t = useT("candidate.item");
   const tm = useT("mobile.deck");
+  const { c } = useTheme();
   const { bottom } = useDeckInsets();
   // Inside a card the bar sits on the card's bottom edge, which is the peek and the gap above the screen's.
   const card = useCardGeometry();
-  const lift = useKeyboardLift(card ? card.bottomGap : bottom);
+  const keyboardLift = useKeyboardLift(card ? card.bottomGap : bottom);
   return (
-    <Animated.View style={[{ position: "absolute", left: 0, right: 0, bottom: 0 }, lift]}>
-      <Glass edge="top" style={{ paddingTop: 12, paddingBottom: card ? 14 : bottom + 8, paddingHorizontal: card ? CARD_PAD : 20 }}>
+    <Animated.View style={[{ position: "absolute", left: 0, right: 0, bottom: 0 }, keyboardLift]}>
+      <Glass edge="top" fill={card ? alpha(c.surface, 0.86) : undefined} style={{ paddingTop: 12, paddingBottom: card ? 14 : bottom + 8, paddingHorizontal: card ? CARD_PAD : 20 }}>
         <View style={{ gap: 10, width: "100%", maxWidth: 600, alignSelf: "center" }}>
           {failure ? (
             <Notice tone={failure === "offline" || !online ? "warning" : "critical"} icon={failure === "offline" ? WifiOff : undefined} action={<Button size="sm" variant="secondary" icon={RotateCw} label={t("retry")} onPress={onPress} />}>

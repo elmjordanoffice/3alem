@@ -6,7 +6,7 @@ import { useLocale, useT } from "../i18n";
 import { radius, useTheme } from "../theme";
 import { haptic } from "../lib/haptics";
 import { Button } from "../ui/button";
-import { Card, CheckRow, hairline, Notice, Segmented } from "../ui/primitives";
+import { Card, CheckRow, hairline, HeroCard, IconCircle, Notice, NumberBadge, Segmented } from "../ui/primitives";
 import { Press } from "../ui/press";
 import { T } from "../ui/text";
 import { AiSheet } from "./ai-sheet";
@@ -62,25 +62,25 @@ export function Landing({ v, onStart }: { v: V<"landing">; onStart: (o: StartInp
         </>
       }
     >
-      <View style={{ gap: 14 }}>
-        <T variant="subhead" tone="secondary">
-          {t("eyebrow", { org })}
-        </T>
-        <T variant="title" accessibilityRole="header" style={{ fontSize: locale === "ar" ? 32 : 30, lineHeight: locale === "ar" ? 46 : 36 }}>
-          {title}
-        </T>
-        <T variant="body" tone="secondary">
-          {t("intro", { minutes: v.minutes })}
-        </T>
-      </View>
+      <HeroCard style={{ marginTop: 4 }}>
+        <View style={{ gap: 12 }}>
+          <T variant="subhead" tone="heroSecondary">
+            {t("eyebrow", { org })}
+          </T>
+          <T variant="title" tone="heroText" accessibilityRole="header" style={{ fontSize: locale === "ar" ? 29 : 30, lineHeight: locale === "ar" ? 44 : 35 }}>
+            {title}
+          </T>
+          <T variant="body" tone="heroSecondary">
+            {t("intro", { minutes: v.minutes })}
+          </T>
+        </View>
+      </HeroCard>
 
-      <View>
+      <Card style={{ gap: 18 }}>
         {(["story", "adapts", "noTricks", "pause", "people"] as const).map((k, i) => (
-          <View key={k} style={{ flexDirection: "row", gap: 16, paddingVertical: 16, borderTopWidth: hairline, borderColor: c.hairline }}>
-            <T variant="index" latin style={{ width: 40, fontSize: 15, lineHeight: 22, color: c.tertiary }}>
-              {String(i + 1).padStart(2, "0")}
-            </T>
-            <View style={{ flex: 1, gap: 3 }}>
+          <View key={k} style={{ flexDirection: "row", gap: 14 }}>
+            <NumberBadge n={i + 1} />
+            <View style={{ flex: 1, gap: 3, paddingTop: locale === "ar" ? 0 : 4 }}>
               <T variant="headline">{t(`expect.${k}.title`)}</T>
               <T variant="subhead" tone="secondary">
                 {t(`expect.${k}.body`)}
@@ -88,24 +88,26 @@ export function Landing({ v, onStart }: { v: V<"landing">; onStart: (o: StartInp
             </View>
           </View>
         ))}
-      </View>
+      </Card>
 
       <Card tone="subtle" style={{ gap: 12 }}>
-        <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-          <ShieldCheck size={18} color={c.text} strokeWidth={1.8} />
-          <T variant="headline">{t("data.title")}</T>
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+          <IconCircle icon={ShieldCheck} size={36} />
+          <T variant="headline" style={{ flex: 1 }}>
+            {t("data.title")}
+          </T>
         </View>
         {(["who", "how", "ai", "keep", "rights"] as const).map((k) => (
           <View key={k} style={{ flexDirection: "row", gap: 10 }}>
-            <View style={{ width: 4, height: 4, borderRadius: 2, backgroundColor: c.tertiary, marginTop: locale === "ar" ? 13 : 10 }} />
+            <View style={{ width: 5, height: 5, borderRadius: 3, backgroundColor: c.accentText, marginTop: locale === "ar" ? 12 : 9 }} />
             <T variant="subhead" tone="secondary" style={{ flex: 1 }}>
               {t(`data.${k}`, { org })}
             </T>
           </View>
         ))}
         <Press testID="ai-link" onPress={() => setAiOpen(true)} depth={0.98} accessibilityRole="button" style={{ flexDirection: "row", alignItems: "center", gap: 8, minHeight: 44 }}>
-          <Sparkles size={17} color={c.text} strokeWidth={1.8} />
-          <T variant="subhead" style={{ color: c.text, textDecorationLine: "underline" }}>
+          <Sparkles size={17} color={c.accentText} strokeWidth={2} />
+          <T variant="subhead" tone="accentText" style={{ textDecorationLine: "underline" }}>
             {t("aiLink")}
           </T>
         </Press>
@@ -148,8 +150,8 @@ export function Landing({ v, onStart }: { v: V<"landing">; onStart: (o: StartInp
 
       <View style={{ gap: 12 }}>
         {humanReview ? (
-          <View accessibilityLiveRegion="polite" style={{ flexDirection: "row", gap: 10, padding: 14, borderRadius: radius.control, backgroundColor: c.surfaceSunken }}>
-            <UserCheck size={18} color={c.text} />
+          <View accessibilityLiveRegion="polite" style={{ flexDirection: "row", gap: 10, padding: 14, borderRadius: radius.field, backgroundColor: c.accentSubtle }}>
+            <UserCheck size={18} color={c.accentText} />
             <T variant="subhead" style={{ flex: 1 }}>
               {t("humanReviewOn")}
             </T>

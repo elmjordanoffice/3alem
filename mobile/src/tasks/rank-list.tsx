@@ -5,10 +5,9 @@ import Animated, { useAnimatedReaction, useAnimatedStyle, useSharedValue, withSp
 import { scheduleOnRN } from "react-native-worklets";
 import { ChevronDown, ChevronUp, GripVertical } from "lucide-react-native";
 import { useT } from "../i18n";
-import { radius, spring, useTheme } from "../theme";
+import { fonts, radius, spring, useTheme } from "../theme";
 import { haptic } from "../lib/haptics";
 import { Press } from "../ui/press";
-import { hairline } from "../ui/primitives";
 import { T } from "../ui/text";
 
 export interface RankEntry {
@@ -170,19 +169,20 @@ function Row({
     top: top.value,
     zIndex: lifted.value > 0.01 ? 10 : 1,
     transform: [{ scale: 1 + lifted.value * 0.03 }],
-    borderColor: lifted.value > 0.5 ? c.text : c.hairline,
+    borderColor: lifted.value > 0.5 ? c.accent : c.hairline,
+    backgroundColor: lifted.value > 0.5 ? c.surface : c.surfaceSubtle,
   }));
 
   return (
-    <Animated.View style={[{ position: "absolute", left: 0, right: 0, height: rowH, borderRadius: radius.control + 2, backgroundColor: c.surface, borderWidth: hairline }, style]}>
+    <Animated.View style={[{ position: "absolute", left: 0, right: 0, height: rowH, borderRadius: radius.field, borderWidth: 2 }, style]}>
       <View style={{ flex: 1, flexDirection: "row", alignItems: "center", paddingStart: 4, paddingEnd: 6, gap: 6 }}>
         <GestureDetector gesture={pan}>
           <View accessible accessibilityLabel={`${pos + 1}. ${entry.label}${entry.detail ? `. ${entry.detail}` : ""}`} accessibilityHint={t("handle", { item: entry.label })} style={{ flex: 1, flexDirection: "row", alignItems: "center", gap: 6, height: rowH }}>
             <View style={{ width: 30, height: rowH, alignItems: "center", justifyContent: "center" }}>
               <GripVertical size={18} color={c.muted} />
             </View>
-            <View style={{ width: 26, height: 26, borderRadius: 13, backgroundColor: c.surfaceSunken, alignItems: "center", justifyContent: "center" }}>
-              <T variant="caption" latin tone="secondary" align="center">
+            <View style={{ width: 28, height: 28, borderRadius: 14, backgroundColor: c.accentSubtle, alignItems: "center", justifyContent: "center" }}>
+              <T variant="caption" latin tone="accentText" align="center" style={{ fontFamily: fonts.sans[700] }}>
                 {pos + 1}
               </T>
             </View>

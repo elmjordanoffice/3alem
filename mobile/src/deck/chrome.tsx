@@ -4,8 +4,8 @@ import { BlurView } from "expo-blur";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withDelay, withRepeat, withSequence, withSpring, withTiming } from "react-native-reanimated";
 import { ChevronUp, Clock, Eye, EyeOff } from "lucide-react-native";
-import { formatDuration, useT } from "../i18n";
-import { radius, spring, useTheme } from "../theme";
+import { formatDuration, useLocale, useT } from "../i18n";
+import { fonts, radius, spring, useTheme } from "../theme";
 import { FADE, OUT } from "../ui/motion";
 import { Press } from "../ui/press";
 import { hairline } from "../ui/primitives";
@@ -20,14 +20,14 @@ export function useDeckInsets() {
   return { top: insets.top + TOPBAR_H + 8, bottom: Math.max(insets.bottom, 12), safeTop: insets.top, safeBottom: insets.bottom };
 }
 
-/** Frosted glass over the content (expo-blur), with a hairline edge. */
-export function Glass({ children, style, edge = "bottom" }: { children?: React.ReactNode; style?: object; edge?: "top" | "bottom" | "none" }) {
+/** Frosted glass over the content (expo-blur), tinted with the canvas (or `fill`, inside a card), with a faint edge. */
+export function Glass({ children, style, edge = "bottom", fill }: { children?: React.ReactNode; style?: object; edge?: "top" | "bottom" | "none"; fill?: string }) {
   const { c, dark } = useTheme();
   return (
     <View style={[{ overflow: "hidden" }, style]}>
       <BlurView intensity={Platform.OS === "ios" ? 60 : 40} tint={dark ? "systemChromeMaterialDark" : "systemChromeMaterialLight"} experimentalBlurMethod="dimezisBlurView" style={StyleSheet.absoluteFill} />
-      <View style={[StyleSheet.absoluteFill, { backgroundColor: c.barFill }]} />
-      {edge !== "none" ? <View style={{ position: "absolute", left: 0, right: 0, [edge]: 0, height: hairline, backgroundColor: c.hairline }} /> : null}
+      <View style={[StyleSheet.absoluteFill, { backgroundColor: fill ?? c.barFill }]} />
+      {edge !== "none" ? <View style={{ position: "absolute", left: 0, right: 0, [edge]: 0, height: hairline, backgroundColor: c.hairline, opacity: 0.7 }} /> : null}
       {children}
     </View>
   );
@@ -35,9 +35,9 @@ export function Glass({ children, style, edge = "bottom" }: { children?: React.R
 
 /**
  * Progress by chapter, never by question count (the assessment adapts, so a
- * count would be wrong and would create pressure). The current chapter's
- * segment carries the vermilion accent; with `sweep` (its last answer is in)
- * it fills, from the reading start, with the done colour.
+ * count would be wrong and would create pressure). Chapters behind you are
+ * violet; the current one carries the coral signal; with `sweep` (its last
+ * answer is in) it fills, from the reading start, with violet.
  */
 export function ChapterRail({ chapters, current, sweep }: { chapters: string[]; current: number; sweep?: boolean }) {
   const { c } = useTheme();
@@ -48,7 +48,7 @@ export function ChapterRail({ chapters, current, sweep }: { chapters: string[]; 
         i === current ? (
           <CurrentChapter key={name + i} sweep={Boolean(sweep)} />
         ) : (
-          <View key={name + i} style={{ flex: 1, height: 3, borderRadius: 2, backgroundColor: i < current ? c.text : c.hairlineStrong, opacity: i > current ? 0.6 : 1 }} />
+          <View key={name + i} style={{ flex: 1, height: 4, borderRadius: 2, backgroundColor: i < current ? c.accent : c.hairlineStrong, opacity: i > current ? 0.7 : 1 }} />
         ),
       )}
     </View>
@@ -65,8 +65,8 @@ function CurrentChapter({ sweep }: { sweep: boolean }) {
   // `start: 0` is the reading start, so the fill runs right to left in Arabic.
   const fill = useAnimatedStyle(() => (reduceMotion ? { width: "100%", opacity: f.value } : { width: `${f.value * 100}%`, opacity: f.value > 0 ? 1 : 0 }));
   return (
-    <View style={{ flex: 1, height: 3, borderRadius: 2, backgroundColor: c.signal, overflow: "hidden" }}>
-      <Animated.View style={[{ position: "absolute", top: 0, bottom: 0, start: 0, borderRadius: 2, backgroundColor: c.text }, fill]} />
+    <View style={{ flex: 1, height: 4, borderRadius: 2, backgroundColor: c.signal, overflow: "hidden" }}>
+      <Animated.View style={[{ position: "absolute", top: 0, bottom: 0, start: 0, borderRadius: 2, backgroundColor: c.accent }, fill]} />
     </View>
   );
 }
@@ -77,7 +77,7 @@ function SaveDot({ state }: { state: SaveState }) {
   const color = state === "error" ? c.critical : state === "offline" ? c.warning : c.tertiary;
   return (
     <View accessible accessibilityLabel={t(state)} style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
-      <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: state === "saved" ? c.hairlineStrong : color }} />
+      <View style={{ width: 7, height: 7, borderRadius: 4, backgroundColor: state === "saved" ? c.success : color }} />
       {state !== "saved" ? (
         <T variant="caption" style={{ color }} numberOfLines={1}>
           {t(state)}
@@ -88,8 +88,8 @@ function SaveDot({ state }: { state: SaveState }) {
 }
 
 /**
- * A quiet timer, only on timed tasks. It never flashes or turns red, it can be
- * hidden, and screen readers hear it only at 5 and 1 minutes left.
+ * A quiet timer, only on timed tasks: a pill. It never flashes or turns red,
+ * it can be hidden, and screen readers hear it only at 5 and 1 minutes left.
  */
 export function QuietTimer({ deadline, onExpire }: { deadline: number; onExpire?: () => void }) {
   const { c } = useTheme();
@@ -116,7 +116,7 @@ export function QuietTimer({ deadline, onExpire }: { deadline: number; onExpire?
   }, [remaining, onExpire, t]);
   const low = remaining <= 120;
   return (
-    <Press depth={0.95} onPress={() => setHidden((h) => !h)} accessibilityLabel={hidden ? t("show") : `${t("remaining", { time: formatDuration(remaining) })}. ${t("hide")}`} style={{ flexDirection: "row", alignItems: "center", gap: 6, height: 32, paddingHorizontal: 10, borderRadius: radius.pill, backgroundColor: c.surfaceSunken }}>
+    <Press depth={0.95} onPress={() => setHidden((h) => !h)} accessibilityLabel={hidden ? t("show") : `${t("remaining", { time: formatDuration(remaining) })}. ${t("hide")}`} style={{ flexDirection: "row", alignItems: "center", gap: 6, height: 32, paddingHorizontal: 12, borderRadius: radius.pill, backgroundColor: c.surfaceSunken }}>
       <Clock size={14} color={c.tertiary} strokeWidth={2} />
       <T variant="footnote" tone="secondary" latin style={{ fontVariant: ["tabular-nums"] }}>
         {hidden ? t("hidden") : low ? t("lowLeft", { time: formatDuration(remaining) }) : formatDuration(remaining)}
@@ -129,19 +129,20 @@ export function QuietTimer({ deadline, onExpire }: { deadline: number; onExpire?
 /** The floating bar over the deck: who it's for, which chapter and the moment in the week, save state, the timer. */
 export function TopBar({ orgName, chapters, chapterIndex, save, timer, chapterDone, clock }: { orgName: string; chapters: string[]; chapterIndex: number; save: SaveState; timer?: React.ReactNode; chapterDone?: boolean; clock?: React.ReactNode }) {
   const { c } = useTheme();
+  const { rtl } = useLocale();
   const { safeTop } = useDeckInsets();
   const t = useT("components.chapters");
   return (
     <Glass style={{ position: "absolute", top: 0, left: 0, right: 0, paddingTop: safeTop, zIndex: 10 }}>
       <View style={{ height: TOPBAR_H, paddingHorizontal: 18, justifyContent: "center", gap: 9 }}>
         <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
-          <View style={{ width: 24, height: 24, borderRadius: 7, backgroundColor: c.text, alignItems: "center", justifyContent: "center" }}>
-            <T variant="label" latin style={{ color: c.canvas, fontSize: 10, letterSpacing: 0 }} align="center">
+          <View style={{ width: 24, height: 24, borderRadius: 12, backgroundColor: c.accent, alignItems: "center", justifyContent: "center" }}>
+            <T variant="caption" latin style={{ color: c.actionText, fontFamily: fonts.sans[800], fontSize: 11, lineHeight: 14, letterSpacing: 0 }} align="center">
               {orgName.trim().charAt(0).toUpperCase()}
             </T>
           </View>
           <T variant="footnote" numberOfLines={1} style={{ flex: 1 }}>
-            <T variant="footnote">
+            <T variant="footnote" style={{ fontFamily: rtl ? fonts.arabic[600] : fonts.sans[700] }}>
               {t("chapterOf", { current: chapterIndex + 1, total: chapters.length })}
             </T>
             <T variant="footnote" tone="tertiary">
@@ -161,7 +162,7 @@ export function TopBar({ orgName, chapters, chapterIndex, save, timer, chapterDo
 
 /**
  * Where you are inside the scene: one dot per page down the trailing edge,
- * the current one stretched and vermilion. Each change of `pulse` sends an
+ * the current one stretched and violet. Each change of `pulse` sends an
  * "arrived" ripple down the pages read so far into the current one.
  */
 export function SlideRail({ count, index, pulse = 0 }: { count: number; index: number; pulse?: number }) {
@@ -169,10 +170,10 @@ export function SlideRail({ count, index, pulse = 0 }: { count: number; index: n
   const { top, bottom } = useDeckInsets();
   if (count < 2) return null;
   return (
-    <View pointerEvents="none" accessibilityElementsHidden importantForAccessibility="no-hide-descendants" style={{ position: "absolute", end: 6, top, bottom: bottom + 80, justifyContent: "center", zIndex: 5 }}>
+    <View pointerEvents="none" accessibilityElementsHidden importantForAccessibility="no-hide-descendants" style={{ position: "absolute", end: 4, top, bottom: bottom + 80, justifyContent: "center", zIndex: 5 }}>
       <View style={{ gap: 5, alignItems: "center" }}>
         {Array.from({ length: count }, (_, i) => (
-          <RailDot key={i} active={i === index} color={i === index ? c.signal : c.hairlineStrong} halo={c.signal} pulse={pulse} order={i <= index ? i : -1} />
+          <RailDot key={i} active={i === index} color={i === index ? c.accentText : c.hairlineStrong} halo={c.accent} pulse={pulse} order={i <= index ? i : -1} />
         ))}
       </View>
     </View>
@@ -209,8 +210,8 @@ function RailDot({ active, color, halo, pulse, order }: { active: boolean; color
   );
 }
 
-/** The quiet affordance at the bottom of a page: a chevron that drifts, and a tap target for those who don't swipe. */
-export function NextHint({ onPress, label, first, onInk }: { onPress: () => void; label: string; first?: boolean; onInk?: boolean }) {
+/** The quiet affordance at the bottom of a page: a round button whose chevron drifts, for those who don't swipe. */
+export function NextHint({ onPress, label, first, onHero }: { onPress: () => void; label: string; first?: boolean; onHero?: boolean }) {
   const { c, reduceMotion } = useTheme();
   const t = useT("mobile.deck");
   const y = useSharedValue(0);
@@ -223,14 +224,14 @@ export function NextHint({ onPress, label, first, onInk }: { onPress: () => void
     // Inline at the end of the page: on a long page it waits below the content
     // instead of floating over it; on a short one it sits at the bottom.
     <View pointerEvents="box-none" style={{ alignItems: "center", paddingTop: 16 }}>
-      <Press onPress={onPress} accessibilityLabel={label} accessibilityHint={t("swipeHint")} depth={0.92} style={{ alignItems: "center", gap: 2, minWidth: 88, minHeight: 44, justifyContent: "center", paddingHorizontal: 12 }}>
+      <Press onPress={onPress} accessibilityLabel={label} accessibilityHint={t("swipeHint")} depth={0.92} style={{ alignItems: "center", gap: 4, minWidth: 88, minHeight: 44, justifyContent: "center", paddingHorizontal: 12 }}>
         {first ? (
-          <T variant="caption" tone={onInk ? "inkSecondary" : "tertiary"} align="center">
+          <T variant="caption" tone={onHero ? "heroSecondary" : "tertiary"} align="center">
             {t("swipeUp")}
           </T>
         ) : null}
-        <Animated.View style={[{ width: 34, height: 34, borderRadius: 17, alignItems: "center", justifyContent: "center", backgroundColor: onInk ? "rgba(242,240,235,0.1)" : c.surface, borderWidth: hairline, borderColor: onInk ? "rgba(242,240,235,0.25)" : c.hairline }, drift]}>
-          <ChevronUp size={18} color={onInk ? "#F2F0EB" : c.secondary} strokeWidth={2.2} />
+        <Animated.View style={[{ width: 38, height: 38, borderRadius: 19, alignItems: "center", justifyContent: "center", backgroundColor: onHero ? "rgba(255,255,255,0.14)" : c.accentSubtle }, drift]}>
+          <ChevronUp size={19} color={onHero ? c.heroText : c.accentText} strokeWidth={2.4} />
         </Animated.View>
       </Press>
     </View>

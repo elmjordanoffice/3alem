@@ -3,7 +3,9 @@
 The candidate app: a week at a fictional company, one scene at a time, as a
 vertical stack of cards you swipe up through. Expo SDK 58, React
 Native 0.88 (New Architecture), expo-router, Reanimated 4 and Gesture Handler 3.
-English and Arabic (full RTL), light and dark.
+English and Arabic (full RTL). The look is Night, as on the web: dark indigo by
+default, with a lavender-and-white light theme the candidate can switch to on
+the welcome screen (the choice is kept on the device).
 
 It talks only to the candidate API in the web app (`/api/m/:token`, see
 `src/app/api/m/[token]/route.ts` and `src/lib/hire/candidate-actions.ts`). The
@@ -78,7 +80,8 @@ src/
                        complete (+ recap, feedback, fairness), state screens, AI sheet
   ui/                  type scale, buttons, press feedback, sheet, brand mark, primitives,
                        motion (drawn check, entrances, burst, count-up)
-  theme/               Range tokens (light/dark), fonts, reduced motion, larger text
+  theme/               Night tokens (dark default, light), shadows (lift), fonts
+                       (Plus Jakarta Sans, Readex Pro), reduced motion, larger text
   i18n/                translator over ../messages/*.json + mobile-only copy
 ```
 
@@ -90,16 +93,17 @@ chain round, design section or inbox message, then the inbox's priority order
 and replies). Each task is a hook (`src/tasks/*`) that returns its pages, its
 answer (or `null` until complete) and a digest for later.
 
-- **Cards.** Each page is a rounded card (radius 22) inset 12pt from the sides,
-  under the floating bar; the next card peeks 20pt at the bottom. The situation
-  is an ink card: the scene's art (`sceneArt(title)` from the web app's
+- **Cards.** Each page is a rounded card (radius 24) inset 12pt from the sides,
+  under the floating bar, lifted by a soft shadow rather than a hairline; the
+  next card peeks 20pt at the bottom. The situation is the violet highlight
+  card (a gradient, expo-linear-gradient): the scene's art (`sceneArt(title)` from the web app's
   `src/lib/brand/scene-art.ts`, imported directly so both draw the same picture;
   Metro watches that folder), then the chapter, the title, the situation, the
   materials and the people it names. Materials are paper cards that look like
   the real thing (a mail app, letterhead, a spreadsheet with a sticky first
-  column, a framed chart). Task cards open with a header band and a chip saying
-  how to answer. Ink stays ink in dark mode (with a hairline); paper takes the
-  dark surface.
+  column, a framed chart). Task cards open with a header band and a violet pill
+  saying how to answer. The highlight card is violet in both themes; paper takes
+  the theme's surface.
 - **Depth.** Every card is placed from the pager's one shared position on the
   UI thread: the card leaving upward sinks to 0.94, dims toward the canvas and
   drifts up 28pt under the next card, which grows from 0.95 to full size with
@@ -143,8 +147,8 @@ server before any of them plays. All run on the UI thread (Reanimated), on
 springs from `theme/tokens.ts`; under reduced motion each becomes a short fade
 where nothing moves and nothing bursts.
 
-- **Sent.** A freshly sealed "Answer sent" page settles its ink disc, draws its
-  check and drops a vermilion dot into the trailing corner (~530 ms, never
+- **Sent.** A freshly sealed "Answer sent" page settles its violet disc, draws its
+  check and drops a coral dot into the trailing corner (~530 ms, never
   holding the deck's spring to the follow-up). When the answer leads out of the
   scene, the submit button draws the check instead as the scene slides away.
   The success haptic fires when the server accepts.
@@ -183,7 +187,7 @@ emoji or colour, and there is no copy that evaluates.
 - **The note.** Sent only as a new scene opens (after a previous one); it stays
   on the cover through the scene's follow-ups. Between the art and the title:
   a "New message" eyebrow, initials, name · time, role, then the text in a
-  bubble (bone at 8% on ink, a hairline, a tail on the start side). Its space
+  bubble (white at 12% on the violet card, a fine edge, a tail on the start side). Its space
   is kept from the start; about half a second after the cover settles
   (`NOTE_DELAY`) it slides in from the reading start with a light haptic.
   Under reduced motion it fades in. The art is a little shorter on a cover

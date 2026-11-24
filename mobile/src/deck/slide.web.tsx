@@ -1,5 +1,6 @@
 import * as React from "react";
 import { ScrollView, View } from "react-native";
+import { HeroFill } from "../ui/primitives";
 import type { SlideProps } from "./slide";
 import { CardEdge, useCardSurface } from "./card-surface";
 import { SlideScrollContext } from "./pager-context";
@@ -12,11 +13,12 @@ export function Slide({ children, footer, contentStyle, inactive, tone, testID }
   return (
     <SlideScrollContext.Provider value={scroller}>
     <View style={{ flex: 1, backgroundColor: surface?.bg }} accessibilityElementsHidden={inactive} importantForAccessibility={inactive ? "no-hide-descendants" : "auto"} testID={testID}>
+      {surface?.hero ? <HeroFill /> : null}
       <ScrollView ref={ref} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled" contentContainerStyle={[{ flexGrow: 1 }, contentStyle]} style={{ flex: 1 }}>
         {children}
       </ScrollView>
       {footer}
-      {surface ? <CardEdge color={surface.edge} /> : null}
+      {surface ? <CardEdge color={surface.edge} ring={surface.ring} /> : null}
     </View>
     </SlideScrollContext.Provider>
   );

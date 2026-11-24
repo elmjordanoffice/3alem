@@ -4,10 +4,10 @@ import Animated, { useAnimatedStyle, withSpring, withTiming } from "react-native
 import { ChartPie, Check, CircleDot, Inbox, LayoutTemplate, ListOrdered, MessagesSquare, PenLine, Scale, Signpost, type LucideIcon } from "lucide-react-native";
 import { CARD_PAD } from "../deck/pager-context";
 import { useLocale, useT } from "../i18n";
-import { radius, spring, useTheme } from "../theme";
+import { fonts, radius, spring, useTheme } from "../theme";
 import { haptic } from "../lib/haptics";
 import { Press } from "../ui/press";
-import { hairline, TextArea, wordCount } from "../ui/primitives";
+import { TextArea, wordCount } from "../ui/primitives";
 import { T, useTypeSpec } from "../ui/text";
 import { usePasteReporter } from "../state/integrity";
 
@@ -27,10 +27,10 @@ const ANSWER_ICONS: Record<string, LucideIcon> = {
 };
 
 /**
- * The top of a task card: a header band across the card (the vermilion dot,
- * the label, and on the task's first page a chip saying how you answer), then
- * the instruction, large. The band bleeds to the card's edges, so it must be
- * the first thing on the page.
+ * The top of a task card: a soft header band across the card (the coral dot,
+ * the label, and on the task's first page a violet pill saying how you
+ * answer), then the instruction, large. The band bleeds to the card's edges,
+ * so it must be the first thing on the page.
  */
 export function TaskHeader({ label, prompt, meta, context, tone = "task", showKind }: { label: string; prompt?: string; meta?: string; context?: string; tone?: "task" | "follow" | "change"; showKind?: boolean }) {
   const { c } = useTheme();
@@ -40,16 +40,16 @@ export function TaskHeader({ label, prompt, meta, context, tone = "task", showKi
   const chip = showKind && kind && Icon ? { Icon, text: ta(kind) } : null;
   return (
     <View style={{ gap: 14 }}>
-      <View style={{ marginHorizontal: -CARD_PAD, marginTop: -CARD_PAD, paddingHorizontal: CARD_PAD, paddingVertical: 10, minHeight: 54, flexDirection: "row", alignItems: "center", gap: 10, backgroundColor: c.surfaceSubtle, borderBottomWidth: hairline, borderColor: c.hairline }}>
-        <View style={{ width: 9, height: 9, borderRadius: 5, backgroundColor: tone === "change" ? c.warning : c.signal }} />
+      <View style={{ marginHorizontal: -CARD_PAD, marginTop: -CARD_PAD, paddingHorizontal: CARD_PAD, paddingVertical: 10, minHeight: 56, flexDirection: "row", alignItems: "center", gap: 10, backgroundColor: c.surfaceSubtle }}>
+        <View style={{ width: 9, height: 9, borderRadius: 5, backgroundColor: tone === "change" ? c.warning : tone === "follow" ? c.accent : c.signal }} />
         <T variant="label" tone="secondary" accessibilityRole="header" numberOfLines={1} style={{ flexShrink: 1 }}>
           {label}
         </T>
         <View style={{ flex: 1 }} />
         {chip ? (
-          <View accessible accessibilityLabel={chip.text} style={{ flexDirection: "row", alignItems: "center", gap: 6, height: 30, paddingHorizontal: 11, borderRadius: radius.pill, backgroundColor: c.surface, borderWidth: hairline, borderColor: c.hairlineStrong, flexShrink: 1 }}>
-            <chip.Icon size={14} color={c.secondary} strokeWidth={2} />
-            <T variant="caption" tone="secondary" numberOfLines={1} style={{ flexShrink: 1 }}>
+          <View accessible accessibilityLabel={chip.text} style={{ flexDirection: "row", alignItems: "center", gap: 6, height: 32, paddingHorizontal: 12, borderRadius: radius.pill, backgroundColor: c.accentSubtle, flexShrink: 1 }}>
+            <chip.Icon size={14} color={c.accentText} strokeWidth={2.2} />
+            <T variant="caption" tone="accentText" numberOfLines={1} style={{ flexShrink: 1 }}>
               {chip.text}
             </T>
           </View>
@@ -65,7 +65,7 @@ export function TaskHeader({ label, prompt, meta, context, tone = "task", showKi
         </T>
       ) : null}
       {context ? (
-        <View style={{ paddingHorizontal: 12, paddingVertical: 8, borderRadius: radius.control, backgroundColor: c.surfaceSunken }}>
+        <View style={{ paddingHorizontal: 14, paddingVertical: 10, borderRadius: radius.control, backgroundColor: c.surfaceSunken }}>
           <T variant="footnote" tone="secondary" numberOfLines={2}>
             {context}
           </T>
@@ -89,10 +89,11 @@ function Prompt({ text }: { text: string }) {
   );
 }
 
-/** A big, calm option card. The selected one is outlined in ink with a filled letter. */
+/** A big, calm option card. The selected one is ringed in violet on a violet wash, its letter a filled violet disc. */
 export function OptionCard({ letter, label, detail, selected, onPress, disabled, testID }: { letter?: string; label: string; detail?: string; selected: boolean; onPress: () => void; disabled?: boolean; testID?: string }) {
   const { c } = useTheme();
-  const ring = useAnimatedStyle(() => ({ borderColor: withTiming(selected ? c.text : c.hairline, { duration: 140 }), borderWidth: selected ? hairline * 2.4 : hairline }));
+  // The border is always 2pt (only its colour changes), so nothing inside shifts when it is chosen.
+  const ring = useAnimatedStyle(() => ({ borderColor: withTiming(selected ? c.accent : c.hairline, { duration: 140 }), backgroundColor: withTiming(selected ? c.accentSubtle : c.surfaceSubtle, { duration: 140 }) }));
   const badge = useAnimatedStyle(() => ({ transform: [{ scale: withSpring(selected ? 1.06 : 1, spring.pop) }] }));
   return (
     <Press
@@ -107,10 +108,10 @@ export function OptionCard({ letter, label, detail, selected, onPress, disabled,
         onPress();
       }}
     >
-      <Animated.View style={[{ flexDirection: "row", gap: 14, padding: 16, borderRadius: radius.card, backgroundColor: c.surface, opacity: disabled && !selected ? 0.6 : 1 }, ring]}>
+      <Animated.View style={[{ flexDirection: "row", gap: 14, padding: 16, borderRadius: 20, borderWidth: 2, opacity: disabled && !selected ? 0.6 : 1 }, ring]}>
         {letter ? (
-          <Animated.View style={[{ width: 30, height: 30, borderRadius: 15, alignItems: "center", justifyContent: "center", backgroundColor: selected ? c.text : "transparent", borderWidth: selected ? 0 : hairline * 1.4, borderColor: c.hairlineStrong, marginTop: 1 }, badge]}>
-            {selected ? <Check size={16} color={c.canvas} strokeWidth={3} /> : <T variant="footnote" latin tone="secondary" align="center" style={{ fontFamily: "IBMPlexSans_600SemiBold" }}>{letter}</T>}
+          <Animated.View style={[{ width: 30, height: 30, borderRadius: 15, alignItems: "center", justifyContent: "center", backgroundColor: selected ? c.accent : c.hairline, marginTop: 1 }, badge]}>
+            {selected ? <Check size={16} color={c.actionText} strokeWidth={3} /> : <T variant="footnote" latin tone="secondary" align="center" style={{ fontFamily: fonts.sans[700] }}>{letter}</T>}
           </Animated.View>
         ) : null}
         <View style={{ flex: 1, gap: 4 }}>

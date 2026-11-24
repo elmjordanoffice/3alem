@@ -7,7 +7,7 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
-    "backgroundColor": "#F2F0EB",
+    "backgroundColor": "#1B1840",
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.aalim.candidate",
@@ -21,7 +21,7 @@
       "package": "com.aalim.candidate",
       "softwareKeyboardLayoutMode": "resize",
       "adaptiveIcon": {
-        "backgroundColor": "#141414",
+        "backgroundColor": "#1B1840",
         "foregroundImage": "./assets/android-icon-foreground.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
@@ -32,8 +32,8 @@
       "output": "single",
       "bundler": "metro",
       "name": "Aalim",
-      "themeColor": "#F2F0EB",
-      "backgroundColor": "#F2F0EB"
+      "themeColor": "#1B1840",
+      "backgroundColor": "#1B1840"
     },
     "plugins": [
       "expo-router",
@@ -45,8 +45,8 @@
           "image": "./assets/splash-icon.png",
           "imageWidth": 120,
           "resizeMode": "contain",
-          "backgroundColor": "#141414",
-          "dark": { "image": "./assets/splash-icon.png", "backgroundColor": "#141414" }
+          "backgroundColor": "#1B1840",
+          "dark": { "image": "./assets/splash-icon.png", "backgroundColor": "#1B1840" }
         }
       ],
       [

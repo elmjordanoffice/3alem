@@ -47,8 +47,8 @@ function Eyebrow({ kind, counter }: { kind: keyof typeof MATERIAL_ICONS; counter
   const Icon = MATERIAL_ICONS[kind];
   return (
     <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
-      <View style={{ width: 28, height: 28, borderRadius: 9, backgroundColor: c.surfaceSunken, alignItems: "center", justifyContent: "center" }}>
-        <Icon size={15} color={c.secondary} strokeWidth={1.9} />
+      <View style={{ width: 32, height: 32, borderRadius: 16, backgroundColor: c.accentSubtle, alignItems: "center", justifyContent: "center" }}>
+        <Icon size={16} color={c.accentText} strokeWidth={2} />
       </View>
       <T variant="label" tone="secondary" style={{ flexShrink: 1 }}>
         {tm(kind)}
@@ -92,7 +92,7 @@ function EmailCard({ email, counter }: { email: EmailMaterial; counter?: string 
           ) : null}
         </View>
       </View>
-      <View style={{ gap: 4, paddingVertical: 10, borderTopWidth: hairline, borderBottomWidth: hairline, borderColor: c.hairline }}>
+      <View style={{ gap: 4, paddingVertical: 12, paddingHorizontal: 14, borderRadius: radius.field, backgroundColor: c.surfaceSubtle }}>
         <AddressLine label={t("to")} value={names(email.to)} />
         {email.cc?.length ? <AddressLine label={t("cc")} value={names(email.cc)} /> : null}
       </View>
@@ -115,11 +115,11 @@ function AddressLine({ label, value }: { label: string; value: string }) {
   );
 }
 
-/** A quoted aside (a forwarded line, a signature note): grey, set in from the reading start. */
+/** A quoted aside (a forwarded line, a signature note): quiet, set in from the reading start behind a violet bar. */
 function Quote({ text }: { text: string }) {
   const { c } = useTheme();
   return (
-    <View style={{ borderStartWidth: 3, borderColor: c.hairlineStrong, backgroundColor: c.surfaceSubtle, borderTopEndRadius: radius.control, borderBottomEndRadius: radius.control, paddingVertical: 12, paddingHorizontal: 14 }}>
+    <View style={{ borderStartWidth: 3, borderColor: c.accent, backgroundColor: c.surfaceSubtle, borderRadius: 14, paddingVertical: 12, paddingHorizontal: 14 }}>
       <T variant="footnote" tone="secondary">
         {text}
       </T>
@@ -127,7 +127,7 @@ function Quote({ text }: { text: string }) {
   );
 }
 
-/** Letterhead: the company, a thin vermilion rule, MEMO in the wide face, then who and when, then the memo. */
+/** Letterhead: the company, a short violet rule, "Memo" heavy and tight, then who and when, then the memo. */
 function MemoCard({ memo, counter, company }: { memo: MemoMaterial; counter?: string; company: string }) {
   const { c } = useTheme();
   const t = useT("components.documents");
@@ -145,7 +145,10 @@ function MemoCard({ memo, counter, company }: { memo: MemoMaterial; counter?: st
           </T>
         ) : null}
       </View>
-      <View style={{ height: 1.5, borderRadius: 1, backgroundColor: c.signal, marginTop: 10 }} />
+      <View style={{ flexDirection: "row", gap: 4, marginTop: 12 }}>
+        <View style={{ width: 36, height: 4, borderRadius: 2, backgroundColor: c.accent }} />
+        <View style={{ width: 12, height: 4, borderRadius: 2, backgroundColor: c.blue }} />
+      </View>
       <T variant="display" accessibilityRole="header" style={{ marginTop: 20 }}>
         {t("memo")}
       </T>
@@ -335,7 +338,7 @@ function ChartCard({ chart, counter }: { chart: ChartMaterial; counter?: string 
         <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 14 }}>
           {chart.series.map((s, i) => (
             <View key={s.key} style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
-              <View style={{ width: 10, height: 10, borderRadius: 3, backgroundColor: c.chart[i] }} />
+              <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: c.chart[i] }} />
               <T variant="caption" tone="secondary">
                 {s.label}
               </T>
@@ -389,11 +392,21 @@ function Chart({ chart }: { chart: ChartMaterial }) {
   const labelFont = rtl ? fonts.arabic[400] : fonts.sans[400];
   const every = Math.ceil(data.length / 7);
   const summary = chart.series.map((s) => `${s.label}: ${data.map((d) => `${d[chart.xKey]} ${d[s.key] ?? ""}`).join(", ")}`).join(". ");
+  // Night's glowing data: bars fade from their colour into the card; lines sit on a soft wash of theirs.
+  const gid = `chart${React.useId().replace(/[^a-zA-Z0-9]/g, "")}`;
 
   return (
     <View style={{ gap: 6 }}>
       <View accessible accessibilityRole="image" accessibilityLabel={`${chart.title}. ${summary}${chart.unit ? ` ${chart.unit}` : ""}`}>
         <Svg width={W} height={H}>
+          <Defs>
+            {chart.series.map((s, si) => (
+              <LinearGradient key={s.key} id={`${gid}-${si}`} x1="0" y1="0" x2="0" y2="1">
+                <Stop offset="0" stopColor={c.chart[si]} stopOpacity={chart.chartType === "bar" ? 1 : 0.28} />
+                <Stop offset="1" stopColor={c.chart[si]} stopOpacity={chart.chartType === "bar" ? 0.5 : 0} />
+              </LinearGradient>
+            ))}
+          </Defs>
           {ticks.map((v, k) => (
             <G key={v}>
               {k > 0 ? <Line x1={x0} x2={x0 + plotW} y1={yOf(v)} y2={yOf(v)} stroke={c.chartGrid} strokeWidth={1} strokeDasharray="2 4" /> : null}
@@ -411,19 +424,23 @@ function Chart({ chart }: { chart: ChartMaterial }) {
                   const v = Number(d[s.key] ?? 0);
                   const y = yOf(v);
                   const h = Math.max(0, padT + plotH - y);
-                  const r = Math.min(4, barW / 2, h);
-                  const x = gx + si * barW + 1;
-                  const w = barW - 2;
+                  const r = Math.min(6, barW / 2, h);
+                  const x = gx + si * barW + 1.5;
+                  const w = barW - 3;
                   // Rounded top corners only.
                   const path = `M${x},${y + h} L${x},${y + r} Q${x},${y} ${x + r},${y} L${x + w - r},${y} Q${x + w},${y} ${x + w},${y + r} L${x + w},${y + h} Z`;
-                  return <Path key={`${di}-${s.key}`} d={path} fill={c.chart[si]} />;
+                  return <Path key={`${di}-${s.key}`} d={path} fill={`url(#${gid}-${si})`} />;
                 });
               })
             : chart.series.map((s, si) => {
                 const pts = data.map((d, di) => [x0 + di * band + band / 2, yOf(Number(d[s.key] ?? 0))] as const);
+                const line = pts.map((p, i) => `${i ? "L" : "M"}${p[0]},${p[1]}`).join(" ");
+                const first = pts[0];
+                const lastPt = pts[pts.length - 1];
                 return (
                   <G key={s.key}>
-                    <Path d={pts.map((p, i) => `${i ? "L" : "M"}${p[0]},${p[1]}`).join(" ")} stroke={c.chart[si]} strokeWidth={2.2} fill="none" strokeLinejoin="round" strokeLinecap="round" />
+                    {first && lastPt && chart.series.length === 1 ? <Path d={`${line} L${lastPt[0]},${padT + plotH} L${first[0]},${padT + plotH} Z`} fill={`url(#${gid}-${si})`} /> : null}
+                    <Path d={line} stroke={c.chart[si]} strokeWidth={2.6} fill="none" strokeLinejoin="round" strokeLinecap="round" />
                     {pts.map((p, i) => (
                       <Circle key={i} cx={p[0]} cy={p[1]} r={3.2} fill={c.surface} stroke={c.chart[si]} strokeWidth={2} />
                     ))}

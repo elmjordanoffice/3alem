@@ -1,17 +1,44 @@
 /**
- * Range, the Aalim brand, in React Native. The same values as the web app's
- * src/styles/tokens.css: bone canvas, white surfaces with hairlines, ink for
- * actions, one vermilion signal (the estimate dot, the progress accent, and the
- * single primary call to action on a screen). No shadows, no gradients.
+ * Night, the Aalim look, in React Native. The same values as the web app's
+ * src/styles/tokens.css: a deep indigo canvas (dark is the default), violet
+ * for actions and selection, glowing blue and teal for data, and one coral
+ * signal (the estimate dot, the current chapter, the mark's dot). Cards are
+ * soft and rounded and lifted with light rather than hairlines; the raised
+ * violet "hero" card, a gradient lit from above, marks what to look at first.
+ * The light theme is the same system on lavender and white.
+ *
+ * Every text/background pair used on screen meets WCAG AA (4.5:1 for body
+ * text). `muted` is for non-text marks only (grips, dividers, disabled icons).
  */
 export const palette = {
-  ink: "#141414",
-  inkRaised: "#232220",
-  inkForeground: "#F2F0EB",
-  inkSecondary: "#B9B4AA",
-  bone: "#F2F0EB",
-  signal: "#F04A23",
+  /** The ground of the logo and the deepest indigo. */
+  night: "#1B1840",
+  white: "#FFFFFF",
+  /** The bright coral of the mark's dot, on violet and indigo grounds in both themes. */
+  coral: "#FF5C7C",
+  /** The raised highlight card: violet, lit from above. White text on every stop is AA. */
+  heroFrom: "#5847D6",
+  heroVia: "#5040CE",
+  heroTo: "#4836C4",
+  heroText: "#FFFFFF",
+  heroSecondary: "#E3DFFF",
+  /** The logo tile: a glowing blue disc. */
+  logoFrom: "#4C86FF",
+  logoTo: "#2350E0",
 } as const;
+
+/**
+ * Stat tiles: bold gradient blocks (top to bottom) with a soft wave of light
+ * across the top. Each text colour is AA (4.5:1) on both stops, even under the
+ * wave: white on violet and blue, indigo on the bright teal and coral.
+ */
+export const tiles = {
+  violet: { from: "#6C5CE7", to: "#5040CE", text: "#FFFFFF", glow: "#6C5CE7" },
+  blue: { from: "#2A62F0", to: "#2350E0", text: "#FFFFFF", glow: "#2F6BFF" },
+  teal: { from: "#25C6B6", to: "#12A597", text: "#1B1840", glow: "#12A597" },
+  coral: { from: "#FF6D8A", to: "#FF5C7C", text: "#1B1840", glow: "#FF5C7C" },
+} as const;
+export type TileTone = keyof typeof tiles;
 
 export interface Colors {
   scheme: "light" | "dark";
@@ -19,91 +46,159 @@ export interface Colors {
   surface: string;
   surfaceSubtle: string;
   surfaceSunken: string;
+  /** Text fields: a soft well, a step below the surface. */
+  field: string;
+  /** Dividers inside a card and quiet control edges. Cards themselves have no line. */
   hairline: string;
   hairlineStrong: string;
   text: string;
   secondary: string;
   tertiary: string;
+  /** Non-text marks only. */
   muted: string;
-  /** The usual action colour: ink in light mode, bone in dark mode. */
+  /** The usual action colour: violet in both themes, white text on it. */
   action: string;
   actionText: string;
-  /** The one vermilion signal. Text on it is always ink. */
+  /** Violet: primary actions and the current selection. */
+  accent: string;
+  accentPressed: string;
+  /** Violet as text and icons on the canvas and on surfaces. */
+  accentText: string;
+  /** A quiet violet wash (selected rows, number badges). */
+  accentSubtle: string;
+  focus: string;
+  /** The coral signal: the estimate dot, the current chapter. */
   signal: string;
   signalText: string;
   signalSubtle: string;
+  /** The signal as text on surfaces. */
   signalInk: string;
+  /** Data: glowing blue and teal. */
+  blue: string;
+  blueDeep: string;
+  teal: string;
+  tealDeep: string;
+  /** The raised highlight card's gradient and its text. */
+  heroFrom: string;
+  heroVia: string;
+  heroTo: string;
+  heroText: string;
+  heroSecondary: string;
+  success: string;
+  successSubtle: string;
   warning: string;
   warningSubtle: string;
   critical: string;
   criticalSubtle: string;
-  success: string;
+  info: string;
+  infoSubtle: string;
   chart: [string, string, string, string];
   chartGrid: string;
   /** Translucent fill behind blurred bars. */
   barFill: string;
   scrim: string;
+  /** The colour of a card's soft shadow. */
+  shadow: string;
 }
+
+const hero = {
+  heroFrom: palette.heroFrom,
+  heroVia: palette.heroVia,
+  heroTo: palette.heroTo,
+  heroText: palette.heroText,
+  heroSecondary: palette.heroSecondary,
+} as const;
 
 export const light: Colors = {
   scheme: "light",
-  canvas: "#F2F0EB",
+  canvas: "#EFEDFB",
   surface: "#FFFFFF",
-  surfaceSubtle: "#F8F7F4",
-  surfaceSunken: "#EBE8E1",
-  hairline: "#E2DED5",
-  hairlineStrong: "#CDC8BD",
-  text: "#141414",
-  secondary: "#4F4B45",
-  tertiary: "#67635B",
-  muted: "#ACA79C",
-  action: "#141414",
+  surfaceSubtle: "#F7F6FE",
+  surfaceSunken: "#E6E3F8",
+  field: "#EEEBFA",
+  hairline: "#E1DDF5",
+  hairlineStrong: "#C3BCEC",
+  text: "#1B1840",
+  secondary: "#4A4575",
+  tertiary: "#5F5A8C",
+  muted: "#A9A3D4",
+  action: "#5847D6",
   actionText: "#FFFFFF",
-  signal: "#F04A23",
-  signalText: "#141414",
-  signalSubtle: "#FFE8E0",
-  signalInk: "#B2300C",
-  warning: "#9A5600",
+  accent: "#5847D6",
+  accentPressed: "#4030B8",
+  accentText: "#4636C2",
+  accentSubtle: "#EBE8FF",
+  focus: "#6C5CE7",
+  signal: "#D6345D",
+  signalText: "#FFFFFF",
+  signalSubtle: "#FDE8EE",
+  signalInk: "#B8284F",
+  blue: "#2F6BFF",
+  blueDeep: "#2350E0",
+  teal: "#12A597",
+  tealDeep: "#0B8579",
+  ...hero,
+  success: "#14784F",
+  successSubtle: "#E3F6EE",
+  warning: "#8A5600",
   warningSubtle: "#FDF1DF",
-  critical: "#B42318",
-  criticalSubtle: "#FDECEB",
-  success: "#1A7A47",
-  chart: ["#141414", "#F04A23", "#0E7C66", "#6B5B95"],
-  chartGrid: "#E2DED5",
-  barFill: "rgba(242,240,235,0.72)",
-  scrim: "rgba(20,20,20,0.32)",
+  critical: "#B4233C",
+  criticalSubtle: "#FDE8EC",
+  info: "#2A5BD7",
+  infoSubtle: "#E8EFFF",
+  chart: ["#5847D6", "#2F6BFF", "#12A597", "#D6345D"],
+  chartGrid: "#E6E3F8",
+  barFill: "rgba(239,237,251,0.78)",
+  scrim: "rgba(20,18,53,0.55)",
+  shadow: "#2B1F7A",
 };
 
 export const dark: Colors = {
   scheme: "dark",
-  canvas: "#0F0F0E",
-  surface: "#191817",
-  surfaceSubtle: "#1E1D1B",
-  surfaceSunken: "#0B0B0A",
-  hairline: "#2D2B28",
-  hairlineStrong: "#423F3A",
-  text: "#F2F0EB",
-  secondary: "#C4BFB5",
-  tertiary: "#A29D93",
-  muted: "#6E6A63",
-  action: "#F2F0EB",
-  actionText: "#141414",
-  signal: "#FF5A33",
-  signalText: "#141414",
-  signalSubtle: "#3B1A10",
-  signalInk: "#FF9472",
-  warning: "#F5B84A",
-  warningSubtle: "#2B2010",
-  critical: "#FF8578",
-  criticalSubtle: "#2D1513",
-  success: "#5FD08F",
-  chart: ["#F2F0EB", "#FF6A45", "#3FC1A3", "#B3A3E0"],
-  chartGrid: "#2D2B28",
-  barFill: "rgba(15,15,14,0.7)",
-  scrim: "rgba(0,0,0,0.5)",
+  canvas: "#1B1840",
+  surface: "#26224F",
+  surfaceSubtle: "#2C2858",
+  surfaceSunken: "#141233",
+  field: "#19173B",
+  hairline: "#332E66",
+  hairlineStrong: "#4A4485",
+  text: "#FFFFFF",
+  secondary: "#BDB8E3",
+  tertiary: "#A09BCB",
+  muted: "#5A548F",
+  action: "#6C5CE7",
+  actionText: "#FFFFFF",
+  accent: "#6C5CE7",
+  accentPressed: "#5847D6",
+  accentText: "#B3A8FF",
+  accentSubtle: "#342E72",
+  focus: "#A99DFF",
+  signal: "#FF5C7C",
+  signalText: "#1B1840",
+  signalSubtle: "#3E1F40",
+  signalInk: "#FF8AA0",
+  blue: "#3B78FF",
+  blueDeep: "#2456F0",
+  teal: "#25C6B6",
+  tealDeep: "#119C90",
+  ...hero,
+  success: "#4ADE9B",
+  successSubtle: "#173A35",
+  warning: "#FFC562",
+  warningSubtle: "#3A3020",
+  critical: "#FF8A96",
+  criticalSubtle: "#3E1F36",
+  info: "#82ADFF",
+  infoSubtle: "#1E2A5E",
+  chart: ["#8B7CFF", "#4C86FF", "#25C6B6", "#FF5C7C"],
+  chartGrid: "#2F2A5E",
+  barFill: "rgba(27,24,64,0.78)",
+  scrim: "rgba(10,8,30,0.7)",
+  shadow: "#06041E",
 };
 
-export const radius = { control: 12, card: 18, sheet: 28, pill: 999 } as const;
+/** Controls 12, text fields 16, cards 24, the sheet 32, pills fully round. */
+export const radius = { control: 12, field: 16, card: 24, sheet: 32, pill: 999 } as const;
 
 /** 4pt grid. */
 export const space = { xs: 4, sm: 8, md: 12, lg: 16, xl: 20, xxl: 24, xxxl: 32, huge: 48 } as const;
@@ -121,6 +216,6 @@ export const spring = {
   rise: { mass: 1, stiffness: 260, damping: 30 },
   /** A stamp meeting paper: stiff and quick, a hair of give on contact. */
   land: { mass: 1, stiffness: 600, damping: 38 },
-  /** A small mark dropping into its place (the vermilion dot). */
+  /** A small mark dropping into its place (the coral dot). */
   settle: { mass: 1, stiffness: 480, damping: 30 },
 } as const;

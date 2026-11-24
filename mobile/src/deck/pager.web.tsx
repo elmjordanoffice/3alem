@@ -1,6 +1,6 @@
 import * as React from "react";
 import { View, type LayoutChangeEvent } from "react-native";
-import { useTheme } from "../theme";
+import { lift, useTheme } from "../theme";
 import { CARD_PEEK, CARD_RADIUS, CardGeometryContext, cardLayout, SlideIndexContext, type CardGeometry, type PagerHandle, type PagerProps } from "./pager-context";
 
 /**
@@ -226,7 +226,8 @@ export const Pager = React.forwardRef<PagerHandle, PagerProps>(function Pager({ 
 
   let body: React.ReactNode = null;
   if (layout && cards) {
-    const vars = { "--deck-top": `${cards.top}px`, "--deck-hold": `${layout.cardH - 28}px`, "--deck-canvas": c.canvas } as React.CSSProperties;
+    // Night: each card lifted off the canvas by the web app's own card shadow.
+    const vars = { "--deck-top": `${cards.top}px`, "--deck-hold": `${layout.cardH - 28}px`, "--deck-canvas": c.canvas, boxShadow: String(lift("card", c).boxShadow ?? ""), backgroundColor: c.surface } as React.CSSProperties;
     body = (
       <div ref={el} data-pager="true" style={{ ...scroller, scrollPaddingTop: cards.top }}>
         <div ref={inner} style={{ paddingTop: cards.top, paddingBottom: CARD_PEEK }}>

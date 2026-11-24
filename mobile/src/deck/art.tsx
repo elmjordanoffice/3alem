@@ -16,8 +16,8 @@ const STAGGER = 80;
 /**
  * A scene's cover art: the brand's own shapes, composed from the scene's
  * title by the shared generator (a faint field of thin bands; a stack of
- * rounded bands narrowing upward into the vermilion dot, leaning by `tilt`).
- * Bone on ink, in both themes.
+ * rounded bands narrowing upward into the coral dot, leaning by `tilt`).
+ * White light on the violet highlight card, in both themes, as on the web.
  *
  * It draws itself in once: each band of the stack narrows from the full width
  * to its own, bottom first, then the dot drops into place, on springs. Still
@@ -28,7 +28,7 @@ const STAGGER = 80;
  * wider one crops the sides.
  */
 export const SceneArt = React.memo(function SceneArt({ seed, width, height, play = true }: { seed: string; width: number; height: number; play?: boolean }) {
-  const { c, reduceMotion } = useTheme();
+  const { reduceMotion } = useTheme();
   const art = React.useMemo(() => sceneArt(seed), [seed]);
   const animate = play && !reduceMotion;
   const aspect = width / Math.max(1, height);
@@ -63,13 +63,14 @@ export const SceneArt = React.memo(function SceneArt({ seed, width, height, play
     <View style={{ width, height, overflow: "hidden" }} accessibilityElementsHidden importantForAccessibility="no-hide-descendants" pointerEvents="none">
       <Svg width={width} height={height} viewBox={`0 ${-extra} ${art.width} ${vbH}`} preserveAspectRatio={slice ? "xMidYMax slice" : "xMidYMid meet"}>
         {field.map((b, i) => (
-          <Rect key={i} x={b.x} y={b.y} width={b.w} height={b.h} rx={b.h / 2} fill={palette.bone} fillOpacity={b.strength} />
+          // The lowest rows fade out, so the field melts into the card instead of stopping at a line.
+          <Rect key={i} x={b.x} y={b.y} width={b.w} height={b.h} rx={b.h / 2} fill={palette.heroText} fillOpacity={b.strength * Math.min(1, Math.max(0.25, (art.height - 14 - (b.y + b.h)) / 50))} />
         ))}
         <G transform={art.tilt ? `rotate(${art.tilt} ${cx} ${cy})` : undefined}>
           {art.stack.map((b, i) => (
             <StackBand key={i} band={b} full={art.width} delay={ARRIVE + i * STAGGER} animate={animate} />
           ))}
-          <Dot cx={art.dot.cx} cy={art.dot.cy} r={art.dot.r} color={c.signal} delay={dotDelay} animate={animate} />
+          <Dot cx={art.dot.cx} cy={art.dot.cy} r={art.dot.r} color={palette.coral} delay={dotDelay} animate={animate} />
         </G>
       </Svg>
     </View>
@@ -83,10 +84,11 @@ function StackBand({ band, full, delay, animate }: { band: ArtBand; full: number
     if (animate) p.value = withDelay(delay, withSpring(1, spring.rise));
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
   const props = useAnimatedProps(() => ({ x: band.x * p.value, width: full + (band.w - full) * p.value }));
-  return <AnimatedRect y={band.y} height={band.h} rx={band.h / 2} fill={palette.bone} fillOpacity={band.strength} animatedProps={props} />;
+  // White light, solid enough to read as the mark, soft enough to sit in the violet (the web's 0.22 + 0.5 × strength).
+  return <AnimatedRect y={band.y} height={band.h} rx={band.h / 2} fill={palette.heroText} fillOpacity={0.22 + band.strength * 0.5} animatedProps={props} />;
 }
 
-/** The vermilion dot, dropping into place once the stack has narrowed. */
+/** The coral dot, dropping into place once the stack has narrowed. */
 function Dot({ cx, cy, r, color, delay, animate }: { cx: number; cy: number; r: number; color: string; delay: number; animate: boolean }) {
   const p = useSharedValue(animate ? 0 : 1);
   React.useEffect(() => {

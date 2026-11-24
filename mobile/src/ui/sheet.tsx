@@ -7,9 +7,8 @@ import { scheduleOnRN } from "react-native-worklets";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { X } from "lucide-react-native";
 import { useLocale, useT } from "../i18n";
-import { radius, spring, useTheme } from "../theme";
+import { lift, radius, spring, useTheme } from "../theme";
 import { Press } from "./press";
-import { hairline } from "./primitives";
 import { T } from "./text";
 
 interface SheetProps {
@@ -94,10 +93,9 @@ function SheetBody({ title, subtitle, children, footer, onClose, progress, drag,
             backgroundColor: c.surface,
             borderTopLeftRadius: radius.sheet,
             borderTopRightRadius: radius.sheet,
-            borderWidth: hairline,
-            borderColor: c.hairline,
             paddingBottom: Math.max(insets.bottom, 16),
           },
+          lift("float", c),
           panel,
         ]}
       >
@@ -115,8 +113,8 @@ function SheetBody({ title, subtitle, children, footer, onClose, progress, drag,
                   </T>
                 ) : null}
               </View>
-              <Press onPress={onClose} accessibilityLabel={t("close")} style={{ width: 36, height: 36, borderRadius: 18, backgroundColor: c.surfaceSunken, alignItems: "center", justifyContent: "center" }} hitSlop={6}>
-                <X size={18} color={c.secondary} strokeWidth={2.2} />
+              <Press onPress={onClose} accessibilityLabel={t("close")} depth={0.92} style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: c.surfaceSunken, alignItems: "center", justifyContent: "center" }} hitSlop={4}>
+                <X size={18} color={c.text} strokeWidth={2.2} />
               </Press>
             </View>
           </View>

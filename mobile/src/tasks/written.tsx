@@ -1,9 +1,8 @@
 import * as React from "react";
 import { View } from "react-native";
 import { useT } from "../i18n";
-import { useTheme, radius } from "../theme";
+import { useTheme } from "../theme";
 import { draftKey, readDraft, useDraft } from "../state/drafts";
-import { hairline } from "../ui/primitives";
 import { T } from "../ui/text";
 import { Editor, SummaryLine, TaskHeader } from "./parts";
 import { MIN_WRITTEN, type TaskContext, type TaskResult } from "./types";
@@ -78,7 +77,7 @@ export function useFollowUp(ctx: TaskContext, stage: "PROBE" | "TWIST"): TaskRes
         <View style={{ gap: 18 }}>
           <TaskHeader label={stage === "PROBE" ? t("item.followUp") : t("item.changed")} tone={stage === "PROBE" ? "follow" : "change"} />
           {stage === "TWIST" && follow.change ? (
-            <View style={{ padding: 16, borderRadius: radius.card, backgroundColor: c.warningSubtle, borderWidth: hairline, borderColor: c.hairline }}>
+            <View style={{ padding: 18, borderRadius: 20, backgroundColor: c.warningSubtle }}>
               <T variant="body">{follow.change}</T>
             </View>
           ) : null}

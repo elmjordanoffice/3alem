@@ -3,13 +3,13 @@ import { ActivityIndicator, TextInput, View } from "react-native";
 import Animated, { FadeInDown } from "react-native-reanimated";
 import { ArrowUp } from "lucide-react-native";
 import { useLocale, useT } from "../i18n";
-import { radius, useTheme } from "../theme";
+import { lift, radius, useTheme } from "../theme";
 import { haptic } from "../lib/haptics";
 import { newClientId } from "../lib/ids";
 import { SlideScrollContext } from "../deck/pager-context";
 import { usePasteReporter } from "../state/integrity";
 import { Button } from "../ui/button";
-import { hairline, noOutline, Notice } from "../ui/primitives";
+import { hairline, noOutline, Notice, useFieldStyle } from "../ui/primitives";
 import { Press } from "../ui/press";
 import { T, useTypeSpec } from "../ui/text";
 import { Avatar } from "../ui/avatar";
@@ -80,7 +80,7 @@ function Chat({
   onSend: (t: string) => void;
   onEnd: () => void;
 }) {
-  const { c } = useTheme();
+  const { c, dark } = useTheme();
   const { rtl } = useLocale();
   const t = useT("components.roleplay");
   const ti = useT("candidate");
@@ -88,6 +88,9 @@ function Chat({
   const paste = usePasteReporter();
   const scroll = React.useContext(SlideScrollContext);
   const [draft, setDraft] = React.useState("");
+  const [focused, setFocused] = React.useState(false);
+  const field = useFieldStyle(focused);
+  const ready = Boolean(draft.trim()) && !pending;
   const last = React.useRef(0);
   const turns = messages.filter((m) => m.from === "candidate").length;
 
@@ -108,14 +111,14 @@ function Chat({
   return (
     <View style={{ gap: 16, flexGrow: 1 }}>
       <TaskHeader label={ti("item.yourTask")} prompt={prompt} showKind />
-      <View style={{ flexDirection: "row", gap: 12, padding: 14, borderRadius: radius.card, backgroundColor: c.surface, borderWidth: hairline, borderColor: c.hairline }}>
+      <View style={{ flexDirection: "row", gap: 12, padding: 16, borderRadius: 20, backgroundColor: c.surfaceSubtle }}>
         <Avatar name={stakeholder.name} size={44} />
         <View style={{ flex: 1, gap: 3 }}>
           <View style={{ flexDirection: "row", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
             <T variant="headline">{stakeholder.name}</T>
             {/* Always say who is speaking: a character played by AI, never a person. */}
-            <View style={{ paddingHorizontal: 8, paddingVertical: 2, borderRadius: radius.pill, borderWidth: hairline, borderColor: c.hairlineStrong }}>
-              <T variant="caption" tone="secondary">
+            <View style={{ paddingHorizontal: 10, paddingVertical: 3, borderRadius: radius.pill, backgroundColor: c.accentSubtle }}>
+              <T variant="caption" tone="accentText">
                 {t("playedByAi")}
               </T>
             </View>
@@ -134,7 +137,7 @@ function Chat({
           const mine = m.from === "candidate";
           return (
             <Animated.View key={m.id} entering={FadeInDown.springify().damping(18)} style={{ alignSelf: mine ? "flex-end" : "flex-start", maxWidth: "86%" }}>
-              <View accessible accessibilityLabel={`${mine ? t("you") : stakeholder.name}: ${m.text}`} style={{ paddingHorizontal: 14, paddingVertical: 10, borderRadius: 20, borderBottomEndRadius: mine ? 6 : 20, borderBottomStartRadius: mine ? 20 : 6, backgroundColor: mine ? c.action : c.surface, borderWidth: mine ? 0 : hairline, borderColor: c.hairline }}>
+              <View accessible accessibilityLabel={`${mine ? t("you") : stakeholder.name}: ${m.text}`} style={{ paddingHorizontal: 15, paddingVertical: 11, borderRadius: 22, borderBottomEndRadius: mine ? 6 : 22, borderBottomStartRadius: mine ? 22 : 6, backgroundColor: mine ? c.action : c.surfaceSunken }}>
                 <T variant="callout" style={{ color: mine ? c.actionText : c.text }}>
                   {m.text}
                 </T>
@@ -184,13 +187,17 @@ function Chat({
               }}
               editable={!locked && !pending}
               placeholder={t("placeholder", { name: stakeholder.name })}
-              placeholderTextColor={c.muted}
+              placeholderTextColor={c.tertiary}
               accessibilityLabel={t("reply", { name: stakeholder.name })}
-              selectionColor={c.signal}
-              style={{ flex: 1, minHeight: 48, maxHeight: 160, paddingHorizontal: 16, paddingTop: 12, paddingBottom: 12, borderRadius: 24, borderWidth: hairline, borderColor: c.hairlineStrong, backgroundColor: c.surface, color: c.text, fontFamily: spec.family, fontSize: spec.size, lineHeight: spec.line, textAlign: "start", writingDirection: rtl ? "rtl" : "ltr", ...noOutline }}
+              selectionColor={c.accent}
+              cursorColor={c.accentText}
+              keyboardAppearance={dark ? "dark" : "light"}
+              onFocus={() => setFocused(true)}
+              onBlur={() => setFocused(false)}
+              style={{ flex: 1, minHeight: 48, maxHeight: 160, paddingHorizontal: 18 - (field.borderWidth - hairline), paddingTop: 12, paddingBottom: 12, borderRadius: 24, ...field, color: c.text, fontFamily: spec.family, fontSize: spec.size, lineHeight: spec.line, textAlign: "start", writingDirection: rtl ? "rtl" : "ltr", ...noOutline }}
             />
-            <Press testID="roleplay-send" onPress={send} disabled={!draft.trim() || pending || locked} accessibilityLabel={t("send")} style={{ width: 48, height: 48, borderRadius: 24, alignItems: "center", justifyContent: "center", backgroundColor: draft.trim() && !pending ? c.action : c.surfaceSunken }}>
-              <ArrowUp size={22} color={draft.trim() && !pending ? c.actionText : c.tertiary} strokeWidth={2.4} />
+            <Press testID="roleplay-send" onPress={send} disabled={!draft.trim() || pending || locked} accessibilityLabel={t("send")} style={[{ width: 48, height: 48, borderRadius: 24, alignItems: "center", justifyContent: "center", backgroundColor: ready ? c.accent : c.surfaceSunken }, ready ? lift("glow", c) : null]}>
+              <ArrowUp size={22} color={ready ? c.actionText : c.tertiary} strokeWidth={2.4} />
             </Press>
           </View>
         ) : null}

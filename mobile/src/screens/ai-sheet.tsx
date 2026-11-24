@@ -21,7 +21,7 @@ export function AiSheet({ visible, onClose, org, humanReview, onHumanReviewChang
         <T variant="headline">{t("doesTitle")}</T>
         {(["world", "roleplay", "scoring", "report"] as const).map((k) => (
           <View key={k} style={{ flexDirection: "row", gap: 12 }}>
-            <Check size={18} color={c.text} strokeWidth={2.4} style={{ marginTop: 3 }} />
+            <Check size={18} color={c.accentText} strokeWidth={2.4} style={{ marginTop: 3 }} />
             <T variant="callout" tone="secondary" style={{ flex: 1 }}>
               {t(`does.${k}`)}
             </T>

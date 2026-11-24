@@ -136,15 +136,14 @@ export function BarClock({ day, minutes }: StoryClock) {
 
 // ── The colleague's note on the cover ────────────────────────────────────────
 
-/** A colour of bone laid over ink at `a`, as a solid colour, so the bubble and its tail can overlap without a seam. */
-function onInk(a: number) {
-  const ink = [0x14, 0x14, 0x14];
-  const bone = [0xf2, 0xf0, 0xeb];
-  return `#${ink.map((v, i) => Math.round(v + (bone[i]! - v) * a).toString(16).padStart(2, "0")).join("")}`;
+/** White laid over the violet card at `a`, as a solid colour, so the bubble and its tail can overlap without a seam. */
+function onHero(a: number) {
+  const violet = [0x58, 0x47, 0xd6];
+  return `#${violet.map((v) => Math.round(v + (255 - v) * a).toString(16).padStart(2, "0")).join("")}`;
 }
-const BUBBLE = onInk(0.08);
-const BUBBLE_EDGE = onInk(0.2);
-const SOFT = palette.inkSecondary;
+const BUBBLE = onHero(0.12);
+const BUBBLE_EDGE = onHero(0.26);
+const SOFT = palette.heroSecondary;
 const AVATAR = 32;
 const TAIL_W = 7;
 const TAIL_H = 10;
@@ -173,7 +172,7 @@ function Tail({ rtl }: { rtl: boolean }) {
 /**
  * A short note from a colleague about the last scene, between the cover's art
  * and its title: who it's from (initials, name, role) and when, under a "New
- * message" eyebrow, then the text in a chat bubble on the ink card. About half
+ * message" eyebrow, then the text in a chat bubble on the violet card. About half
  * a second after the cover settles it slides in from the reading start (from
  * the right in Arabic) with a light haptic, as if it had just arrived; under
  * reduced motion it fades in. Its space is kept from the start, so nothing on
@@ -205,15 +204,15 @@ export function ColleagueNote({ note, travel }: { note: StoryNote; travel: numbe
       style={[{ paddingHorizontal: CARD_PAD, paddingTop: 18, gap: 10 }, style]}
     >
       <View style={{ flexDirection: "row", alignItems: "center", gap: 7 }}>
-        <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: palette.bone }} />
+        <View style={{ width: 7, height: 7, borderRadius: 4, backgroundColor: palette.coral }} />
         <T variant="label" style={{ color: SOFT }}>
           {t("candidate.story.message")}
         </T>
       </View>
       <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
-        <Avatar name={note.from.name} size={AVATAR} colors={{ bg: palette.bone, fg: palette.ink }} />
+        <Avatar name={note.from.name} size={AVATAR} colors={{ bg: palette.white, fg: palette.night }} />
         <View style={{ flex: 1 }}>
-          <T variant="footnote" numberOfLines={1} style={{ color: palette.inkForeground, fontFamily: rtl ? fonts.arabic[600] : fonts.sans[600] }}>
+          <T variant="footnote" numberOfLines={1} style={{ color: palette.heroText, fontFamily: rtl ? fonts.arabic[600] : fonts.sans[700] }}>
             {from}
           </T>
           <T variant="caption" numberOfLines={1} style={{ color: SOFT }}>
@@ -222,8 +221,8 @@ export function ColleagueNote({ note, travel }: { note: StoryNote; travel: numbe
         </View>
       </View>
       <View style={{ marginStart: AVATAR + 10 - TAIL_W }}>
-        <View style={{ marginStart: TAIL_W, paddingHorizontal: 14, paddingVertical: 10, backgroundColor: BUBBLE, borderWidth: hairline, borderColor: BUBBLE_EDGE, borderRadius: 16, borderTopStartRadius: 0 }}>
-          <T variant="callout" style={{ color: "rgba(242,240,235,0.9)" }}>
+        <View style={{ marginStart: TAIL_W, paddingHorizontal: 14, paddingVertical: 10, backgroundColor: BUBBLE, borderWidth: hairline, borderColor: BUBBLE_EDGE, borderRadius: 18, borderTopStartRadius: 0 }}>
+          <T variant="callout" style={{ color: palette.heroText }}>
             {note.text}
           </T>
         </View>

@@ -3,15 +3,15 @@ import { Platform, TextInput, View } from "react-native";
 import * as Clipboard from "expo-clipboard";
 import { router } from "expo-router";
 import Animated, { FadeInDown } from "react-native-reanimated";
-import { ClipboardPaste, KeyRound, Server } from "lucide-react-native";
+import { ClipboardPaste, KeyRound, Moon, Server, Sun } from "lucide-react-native";
 import { parseInvitation } from "../api/client";
 import { useLocale, useT } from "../i18n";
-import { radius, useTheme } from "../theme";
+import { fonts, radius, useTheme } from "../theme";
 import { haptic } from "../lib/haptics";
 import { useSession } from "../state/session";
-import { Button } from "../ui/button";
+import { Button, RoundButton } from "../ui/button";
 import { Narrowing } from "../ui/brand";
-import { Card, hairline, noOutline, Notice, Segmented } from "../ui/primitives";
+import { Card, HeroCard, IconCircle, noOutline, Notice, Segmented, useFieldStyle } from "../ui/primitives";
 import { Press } from "../ui/press";
 import { Sheet } from "../ui/sheet";
 import { T, useTypeSpec } from "../ui/text";
@@ -20,16 +20,20 @@ import { OrgHeader, Screen } from "./scaffold";
 /** The way in: paste an invitation link or code, or continue the one on this device. */
 export function Welcome() {
   const t = useT("mobile.welcome");
+  const tp = useT("preferences");
   const { locale, setLocale } = useLocale();
-  const { c } = useTheme();
+  const { c, dark, setScheme } = useTheme();
   const { token, setToken, clearToken, apiBase, setApiBase } = useSession();
   const spec = useTypeSpec("body");
   const [input, setInput] = React.useState("");
   const [invalid, setInvalid] = React.useState(false);
   const [focused, setFocused] = React.useState(false);
+  const [serverFocused, setServerFocused] = React.useState(false);
   const [serverOpen, setServerOpen] = React.useState(false);
   const [server, setServer] = React.useState(apiBase);
   const [saved, setSaved] = React.useState(false);
+  const field = useFieldStyle(focused, invalid);
+  const serverField = useFieldStyle(serverFocused);
 
   const open = async (raw = input) => {
     const tok = parseInvitation(raw);
@@ -60,18 +64,30 @@ export function Welcome() {
     <Screen
       testID="screen-welcome"
       header={
-        <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
+        <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 10 }}>
           <OrgHeader />
-          <View style={{ width: 132 }}>
-            <Segmented
-              label="Language"
-              value={locale}
-              onChange={(l) => setLocale(l)}
-              options={[
-                { value: "en", label: "EN", lang: "en" },
-                { value: "ar", label: "عربي", lang: "ar" },
-              ]}
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+            <RoundButton
+              testID="theme-toggle"
+              icon={dark ? Moon : Sun}
+              size={42}
+              accessibilityLabel={`${tp("theme")}: ${dark ? tp("themeDark") : tp("themeLight")}`}
+              onPress={() => {
+                haptic.select();
+                setScheme(dark ? "light" : "dark");
+              }}
             />
+            <View style={{ width: 124 }}>
+              <Segmented
+                label="Language"
+                value={locale}
+                onChange={(l) => setLocale(l)}
+                options={[
+                  { value: "en", label: "EN", lang: "en" },
+                  { value: "ar", label: "عربي", lang: "ar" },
+                ]}
+              />
+            </View>
           </View>
         </View>
       }
@@ -91,28 +107,28 @@ export function Welcome() {
         )
       }
     >
-      <View style={{ gap: 20, marginTop: 10 }}>
-        <View style={{ alignItems: "flex-start" }}>
-          <Narrowing width={84} rows={3} loop={false} />
+      <HeroCard style={{ marginTop: 6 }}>
+        <View style={{ gap: 18 }}>
+          <View style={{ alignItems: "flex-start" }}>
+            <Narrowing width={72} rows={3} loop={false} onHero />
+          </View>
+          <Animated.View entering={FadeInDown.delay(500).springify().damping(20)} style={{ gap: 12 }}>
+            <T variant="label" tone="heroSecondary">
+              {t("eyebrow")}
+            </T>
+            <T variant="display" tone="heroText" accessibilityRole="header">
+              {t("title")}
+            </T>
+            <T variant="body" tone="heroSecondary">
+              {token ? t("resumeBody") : t("body")}
+            </T>
+          </Animated.View>
         </View>
-        <Animated.View entering={FadeInDown.delay(500).springify().damping(20)} style={{ gap: 14 }}>
-          <T variant="label" tone="secondary">
-            {t("eyebrow")}
-          </T>
-          <T variant="display" accessibilityRole="header">
-            {t("title")}
-          </T>
-          <T variant="body" tone="secondary">
-            {token ? t("resumeBody") : t("body")}
-          </T>
-        </Animated.View>
-      </View>
+      </HeroCard>
 
       {token ? (
         <Card style={{ flexDirection: "row", alignItems: "center", gap: 14 }}>
-          <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: c.surfaceSunken, alignItems: "center", justifyContent: "center" }}>
-            <KeyRound size={18} color={c.text} strokeWidth={1.8} />
-          </View>
+          <IconCircle icon={KeyRound} size={44} />
           <View style={{ flex: 1, gap: 2 }}>
             <T variant="headline">{t("resumeTitle")}</T>
             <T variant="footnote" tone="tertiary" latin numberOfLines={1}>
@@ -123,7 +139,7 @@ export function Welcome() {
       ) : (
         <View style={{ gap: 10 }}>
           <T variant="headline">{t("inputLabel")}</T>
-          <View style={{ flexDirection: "row", alignItems: "center", gap: 8, paddingStart: 16, paddingEnd: 6, minHeight: 56, borderRadius: radius.card, backgroundColor: c.surface, borderWidth: focused ? hairline * 1.25 : hairline, borderColor: invalid ? c.critical : focused ? c.text : c.hairlineStrong }}>
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 8, paddingStart: 16 - (field.borderWidth - 1), paddingEnd: 7 - (field.borderWidth - 1), minHeight: 60, borderRadius: radius.field, ...field }}>
             <TextInput
               testID="invite-input"
               value={input}
@@ -135,18 +151,20 @@ export function Welcome() {
               onBlur={() => setFocused(false)}
               onSubmitEditing={() => void open()}
               placeholder={t("placeholder")}
-              placeholderTextColor={c.muted}
+              placeholderTextColor={c.tertiary}
               autoCapitalize="none"
               autoCorrect={false}
               keyboardType={Platform.OS === "ios" ? "url" : "default"}
+              keyboardAppearance={dark ? "dark" : "light"}
               returnKeyType="go"
               accessibilityLabel={t("inputLabel")}
-              selectionColor={c.signal}
+              selectionColor={c.accent}
+              cursorColor={c.accentText}
               style={{ flex: 1, minWidth: 0, minHeight: 54, fontFamily: spec.family, fontSize: 16, color: c.text, textAlign: "start", ...noOutline }}
             />
-            <Press onPress={paste} accessibilityLabel={t("paste")} depth={0.95} style={{ flexDirection: "row", alignItems: "center", gap: 6, height: 44, paddingHorizontal: 12, borderRadius: radius.control, backgroundColor: c.surfaceSunken }}>
-              <ClipboardPaste size={16} color={c.text} />
-              <T variant="subhead" style={{ color: c.text }}>
+            <Press onPress={paste} accessibilityLabel={t("paste")} depth={0.95} style={{ flexDirection: "row", alignItems: "center", gap: 6, height: 44, paddingHorizontal: 14, borderRadius: radius.pill, backgroundColor: c.accentSubtle }}>
+              <ClipboardPaste size={16} color={c.accentText} strokeWidth={2.2} />
+              <T variant="subhead" tone="accentText" style={{ fontFamily: locale === "ar" ? fonts.arabic[600] : fonts.sans[700] }}>
                 {t("paste")}
               </T>
             </Press>
@@ -155,7 +173,7 @@ export function Welcome() {
         </View>
       )}
 
-      <Press onPress={() => setServerOpen(true)} depth={0.98} accessibilityLabel={`${t("server")}: ${apiBase}`} style={{ flexDirection: "row", alignItems: "center", gap: 8, alignSelf: "flex-start", minHeight: 44 }}>
+      <Press onPress={() => setServerOpen(true)} depth={0.97} accessibilityLabel={`${t("server")}: ${apiBase}`} style={{ flexDirection: "row", alignItems: "center", gap: 8, alignSelf: "flex-start", minHeight: 36, paddingHorizontal: 12, borderRadius: radius.pill, backgroundColor: c.surfaceSunken }}>
         <Server size={14} color={c.tertiary} />
         <T variant="caption" tone="tertiary" latin>
           {apiBase.replace(/^https?:\/\//, "")}
@@ -169,11 +187,15 @@ export function Welcome() {
             setServer(s);
             setSaved(false);
           }}
+          onFocus={() => setServerFocused(true)}
+          onBlur={() => setServerFocused(false)}
           autoCapitalize="none"
           autoCorrect={false}
           keyboardType={Platform.OS === "ios" ? "url" : "default"}
+          keyboardAppearance={dark ? "dark" : "light"}
           accessibilityLabel={t("server")}
-          style={{ minHeight: 52, paddingHorizontal: 14, borderRadius: radius.control, borderWidth: hairline, borderColor: c.hairlineStrong, backgroundColor: c.surface, color: c.text, fontFamily: "IBMPlexSans_400Regular", fontSize: 16, textAlign: "left", direction: "ltr", ...noOutline }}
+          selectionColor={c.accent}
+          style={{ minHeight: 54, paddingHorizontal: 16 - (serverField.borderWidth - 1), borderRadius: radius.field, ...serverField, color: c.text, fontFamily: fonts.sans[400], fontSize: 16, textAlign: "left", direction: "ltr", ...noOutline }}
         />
         <Button
           variant="action"

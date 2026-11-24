@@ -2,6 +2,7 @@ import * as React from "react";
 import { View, type StyleProp, type ViewStyle } from "react-native";
 import { GestureDetector, useNativeGesture } from "react-native-gesture-handler";
 import Animated, { scrollTo, useAnimatedRef, useAnimatedScrollHandler } from "react-native-reanimated";
+import { HeroFill } from "../ui/primitives";
 import { CardEdge, useCardSurface, type CardTone } from "./card-surface";
 import { SlideIndexContext, SlideScrollContext, usePagerContext } from "./pager-context";
 
@@ -12,7 +13,7 @@ export interface SlideProps {
   contentStyle?: StyleProp<ViewStyle>;
   /** Hidden from screen readers while another page is showing. */
   inactive?: boolean;
-  /** In a card deck: the card's material. Paper takes the surface colour, ink stays ink in both themes. */
+  /** In a card deck: the card's material. Paper takes the surface colour; hero is the violet highlight card in both themes. */
   tone?: CardTone;
   testID?: string;
 }
@@ -72,6 +73,7 @@ export function Slide({ children, footer, contentStyle, inactive, tone, testID }
   return (
     <SlideScrollContext.Provider value={scroller}>
     <View style={{ flex: 1, backgroundColor: surface?.bg }} accessibilityElementsHidden={inactive} importantForAccessibility={inactive ? "no-hide-descendants" : "auto"} testID={testID}>
+      {surface?.hero ? <HeroFill /> : null}
       <GestureDetector gesture={native}>
         <Animated.ScrollView
           ref={ref}
@@ -97,7 +99,7 @@ export function Slide({ children, footer, contentStyle, inactive, tone, testID }
         </Animated.ScrollView>
       </GestureDetector>
       {footer}
-      {surface ? <CardEdge color={surface.edge} /> : null}
+      {surface ? <CardEdge color={surface.edge} ring={surface.ring} /> : null}
     </View>
     </SlideScrollContext.Provider>
   );
