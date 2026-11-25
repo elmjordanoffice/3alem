@@ -44,7 +44,7 @@ export const DOMAIN_ICON: Record<string, LucideIcon> = {
 const ORBS = [
   "bg-[radial-gradient(circle_at_32%_28%,#7ff0e3,#25c6b6_45%,#0f8f84)] shadow-[0_18px_34px_-12px_#25c6b6]",
   "bg-[radial-gradient(circle_at_32%_28%,#ffb3c2,#ff5c7c_45%,#c22a51)] shadow-[0_18px_34px_-12px_#ff5c7c]",
-  "bg-[radial-gradient(circle_at_32%_28%,#a9c6ff,#4c86ff_45%,#2350e0)] shadow-[0_18px_34px_-12px_#4c86ff]",
+  "bg-[radial-gradient(circle_at_32%_28%,#9fb4f5,#3a62dc_45%,#1a3291)] shadow-[0_18px_34px_-12px_#3a62dc]",
   "bg-[radial-gradient(circle_at_32%_28%,#d8d1ff,#8b7cff_45%,#5847d6)] shadow-[0_18px_34px_-12px_#8b7cff]",
 ];
 
@@ -320,7 +320,7 @@ export function GrowthChart({ weeks, daily = false }: { weeks: GrowthWeek[]; dai
                 tick={{ fill: "var(--text-tertiary)", fontSize: 11 }}
                 axisLine={false}
                 tickLine={false}
-                width={dir === "rtl" ? 92 : 80}
+                width={dir === "rtl" ? 108 : 80}
                 orientation={dir === "rtl" ? "right" : "left"}
               />
               <YAxis yAxisId="sessions" domain={[0, maxSessions]} hide />

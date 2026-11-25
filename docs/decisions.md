@@ -196,3 +196,5 @@ All motion is CSS or Reanimated, uses springs and short eases, and goes still un
 - **Screens:** Grow's overview follows the reference layout (a This-week ring, today's practice as raised tiles, a growth chart by day early on and by week later, streak and collection tiles). Home gains a two-week activity chart. Reports, lists, the candidate deck, auth, the landing page, the brand book and the phone app use the same system.
 - **Kept:** the Range mark and its idea, the fairness rules for candidates (no scores or game mechanics in Hire) and the healthy-habit rules in Grow. *(Design)*
 
+**D-062: A deeper blue.** The owner liked Night but found the blue too bright. Stat tiles now run `#2547C2` → `#172C80`, the logo disc and app icons `#3156D4` → `#1A3291`, and the blue data colour is `#3A63D8` (dark) / `#2851D6` (light), with chart lines at `#5A7FE6` on dark so they stay visible. The phone app uses the same values. *(Design)*
+

@@ -28,7 +28,7 @@ export const INK = "#1b1840";
 export const BONE = "#ffffff";
 export const SIGNAL = "#e8436b";
 /** The app tile's ground: the in-app LogoTile's blue gradient. */
-export const TILE = ["#4c86ff", "#2350e0"] as const;
+export const TILE = ["#3156d4", "#1a3291"] as const;
 
 const r = (n: number) => Math.round(n * 100) / 100;
 

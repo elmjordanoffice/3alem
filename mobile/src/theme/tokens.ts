@@ -23,8 +23,8 @@ export const palette = {
   heroText: "#FFFFFF",
   heroSecondary: "#E3DFFF",
   /** The logo tile: a glowing blue disc. */
-  logoFrom: "#4C86FF",
-  logoTo: "#2350E0",
+  logoFrom: "#3156D4",
+  logoTo: "#1A3291",
 } as const;
 
 /**
@@ -34,7 +34,7 @@ export const palette = {
  */
 export const tiles = {
   violet: { from: "#6C5CE7", to: "#5040CE", text: "#FFFFFF", glow: "#6C5CE7" },
-  blue: { from: "#2A62F0", to: "#2350E0", text: "#FFFFFF", glow: "#2F6BFF" },
+  blue: { from: "#2547C2", to: "#172C80", text: "#FFFFFF", glow: "#2547C2" },
   teal: { from: "#25C6B6", to: "#12A597", text: "#1B1840", glow: "#12A597" },
   coral: { from: "#FF6D8A", to: "#FF5C7C", text: "#1B1840", glow: "#FF5C7C" },
 } as const;
@@ -133,8 +133,8 @@ export const light: Colors = {
   signalText: "#FFFFFF",
   signalSubtle: "#FDE8EE",
   signalInk: "#B8284F",
-  blue: "#2F6BFF",
-  blueDeep: "#2350E0",
+  blue: "#2851D6",
+  blueDeep: "#1B3AA8",
   teal: "#12A597",
   tealDeep: "#0B8579",
   ...hero,
@@ -146,7 +146,7 @@ export const light: Colors = {
   criticalSubtle: "#FDE8EC",
   info: "#2A5BD7",
   infoSubtle: "#E8EFFF",
-  chart: ["#5847D6", "#2F6BFF", "#12A597", "#D6345D"],
+  chart: ["#5847D6", "#2851D6", "#12A597", "#D6345D"],
   chartGrid: "#E6E3F8",
   barFill: "rgba(239,237,251,0.78)",
   scrim: "rgba(20,18,53,0.55)",
@@ -177,8 +177,8 @@ export const dark: Colors = {
   signalText: "#1B1840",
   signalSubtle: "#3E1F40",
   signalInk: "#FF8AA0",
-  blue: "#3B78FF",
-  blueDeep: "#2456F0",
+  blue: "#3A63D8",
+  blueDeep: "#2347C4",
   teal: "#25C6B6",
   tealDeep: "#119C90",
   ...hero,
@@ -190,7 +190,7 @@ export const dark: Colors = {
   criticalSubtle: "#3E1F36",
   info: "#82ADFF",
   infoSubtle: "#1E2A5E",
-  chart: ["#8B7CFF", "#4C86FF", "#25C6B6", "#FF5C7C"],
+  chart: ["#8B7CFF", "#5A7FE6", "#25C6B6", "#FF5C7C"],
   chartGrid: "#2F2A5E",
   barFill: "rgba(27,24,64,0.78)",
   scrim: "rgba(10,8,30,0.7)",
