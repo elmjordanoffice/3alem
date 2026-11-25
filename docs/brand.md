@@ -51,7 +51,7 @@ Dark indigo is the default theme; the light theme is the same system on lavender
 | Text | `#FFFFFF` · `#BDB8E3` · `#A09BCB` | `#1B1840` · `#4A4575` · `#5F5A8C` | Primary, secondary, tertiary |
 | Violet (accent) | `#6C5CE7` (text `#B3A8FF`) | `#5847D6` (text `#4636C2`) | Actions, the current selection, the raised highlight card |
 | Coral (signal) | `#FF5C7C` | `#D6345D` | The estimate dot, range bands, the one call to action that matters most |
-| Blue | `#3A63D8` (tiles `#2547C2` → `#172C80`) | `#2851D6` | Data: stat tiles, chart lines; a deep blue that sits with the indigo |
+| Blue | `#3558C4` (tiles `#21409E` → `#12245E`) | `#22449F` | Data: stat tiles, chart lines; a navy blue that sits with the indigo |
 | Teal | `#25C6B6` (text `#5FE0D2`) | `#12A597` (text `#0A7A6F`) | Data: stat tiles, chart lines, progress |
 | Levels | `#36306E` → `#D9D3FF` | `#E6E3F8` → `#2B2273` | One violet ramp for skill levels; never red and green |
 
@@ -103,7 +103,7 @@ Tone shifts by audience: calm and reassuring with **candidates** ("Take the time
 `npm run brand:assets` regenerates everything: `scripts/brand-assets.mts` writes the outlined SVGs and the in-app paths, then `scripts/brand-render.spec.ts` (Playwright, fonts embedded as data URIs) renders the PNGs.
 
 - `public/brand/`: `logo*.svg` (horizontal, English, Arabic, reversed, one colour), `mark*.svg`, `symbol.svg` and `symbol-signal.svg` (app tiles), `wordmark*.svg`; PNGs `logo.png` and `logo-reverse.png` (transparent, clear space built in), `symbol-{1024,512,192}.png`, `symbol-maskable-512.png`, `logo-email.png`.
-- Colours (Night): marks and logos are indigo `#1B1840` on light grounds and white on dark ones; the dot is coral `#E8436B` (3:1 or more on white and on the indigo canvas). The app tile is the mark in white on the deep blue gradient (`#3156D4` → `#1A3291`), as in the app's `LogoTile`.
+- Colours (Night): marks and logos are indigo `#1B1840` on light grounds and white on dark ones; the dot is coral `#E8436B` (3:1 or more on white and on the indigo canvas). The app tile is the mark in white on the navy gradient (`#2A4BB0` → `#142966`), as in the app's `LogoTile`.
 - Social images: `og-en.png` and `og-ar.png` (1200 × 630): the indigo canvas lit violet and blue, the white logo, the promise as a huge Plus Jakarta Sans (or Readex Pro) headline ending in the coral dot, the glowing mark, and a violet strip with the line "Every score comes with the person's own words." Set as the site's Open Graph image in `src/app/layout.tsx`.
 - App icons: `src/app/icon.svg` (browser tab), `src/app/apple-icon.png` (full-bleed blue), the PWA manifest (`src/app/manifest.ts`, including a maskable icon), and the phone app's icon, adaptive icon and splash in `mobile/assets/`.
 - Email: one layout (`src/lib/mail/templates.ts`) for invitations, renewed links, team invitations, password resets, shared reports and reminders, in the recipient's language and direction, with a plain-text twin. A lavender ground around a rounded white card, `logo-email.png` at 140 px, a violet tick, indigo text and one violet pill button with white text.

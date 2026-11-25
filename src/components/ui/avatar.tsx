@@ -3,7 +3,7 @@ import { cn, initials } from "@/lib/utils";
 // Night: violet, blue, teal and coral discs, each a soft gradient with white initials.
 const TONES = [
   "bg-[linear-gradient(140deg,#7d6cf0,#5847d6)] text-white",
-  "bg-[linear-gradient(140deg,#3a62dc,#1d3a9e)] text-white",
+  "bg-[linear-gradient(140deg,#2f4fb8,#162d73)] text-white",
   "bg-[linear-gradient(140deg,#25b3a5,#13877c)] text-white",
   "bg-[linear-gradient(140deg,#ff6f8c,#d6345d)] text-white",
   "bg-[linear-gradient(140deg,#9b8cff,#6c5ce7)] text-white",

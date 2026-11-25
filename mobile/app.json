@@ -21,7 +21,7 @@
       "package": "com.aalim.candidate",
       "softwareKeyboardLayoutMode": "resize",
       "adaptiveIcon": {
-        "backgroundColor": "#1A3291",
+        "backgroundColor": "#142966",
         "foregroundImage": "./assets/android-icon-foreground.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
       },
