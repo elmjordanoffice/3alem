@@ -59,13 +59,13 @@ export function CountUp({ value, duration = 900, delay = 0 }: { value: number; d
   );
 }
 
-/** The finish: the ʿayn draws itself, and its pupil lands with a small burst. */
+/** The finish: the rings draw in, and the coral point lands with a small burst. */
 export function FinishMark() {
   return (
     <div className="relative size-24" aria-hidden>
       <LogoMark animated className="size-24 text-accent" />
-      {/* The burst sits on the pupil (AYN.pupil, as a share of the 64-unit box). */}
-      <span className="absolute block size-0" style={{ left: `${(31.8 / 64) * 100}%`, top: `${(17.4 / 64) * 100}%` }}>
+      {/* The burst sits on the point, at the centre of the mark. */}
+      <span className="absolute left-1/2 top-1/2 block size-0">
         <Burst count={12} distance={30} delay={1300} />
       </span>
     </div>

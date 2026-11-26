@@ -1,5 +1,5 @@
 /**
- * Generates the Aalim brand assets ("ʿAyn", D-063) from the brand fonts, so
+ * Generates the Aalim brand assets ("Focus", D-064) from the brand fonts, so
  * every file is outlined (no font needed to open it) and identical to the
  * in-app logo.
  *
@@ -92,56 +92,61 @@ const latin = normalise(outline("plus-jakarta-sans-800.ttf", "aalim", -42));
 const arabic = normalise(outline("readex-pro-700.ttf", "عالم"));
 
 /**
- * The mark: ʿayn (ع), the first letter of عالم (world), علم (knowledge),
- * عمل (work) and عين (eye). One rounded stroke: a small head open to the
- * right over a larger bowl, joined by a short neck. The head's counter is
- * the letter's "eye" in calligraphy; the coral pupil sits in it, looking
- * toward what comes next. 64-unit box, optically centred.
+ * The mark ("Focus"): two open rings closing in on one coral point. Each
+ * answer brings the picture of what someone can do into focus; the point is
+ * the estimate. Both rings open towards the lower left, the outer one lighter
+ * and wider, the inner one stronger. 64-unit box, centred on (32, 32).
  */
 const deg = (a: number) => (a * Math.PI) / 180;
 const at = (cx: number, cy: number, rr: number, a: number) => [r(cx + rr * Math.cos(deg(a))), r(cy + rr * Math.sin(deg(a)))] as const;
-export const AYN = (() => {
-  const head = { cx: 30.6, cy: 17, r: 10, from: -28, to: -262 };
-  const bowl = { cx: 32.6, cy: 41, r: 16, from: 236, to: 22 };
-  const stroke = 8.5;
-  const [sx, sy] = at(head.cx, head.cy, head.r, head.from);
-  const [hx, hy] = at(head.cx, head.cy, head.r, head.to);
-  const [bx, by] = at(bowl.cx, bowl.cy, bowl.r, bowl.from);
-  const [ex, ey] = at(bowl.cx, bowl.cy, bowl.r, bowl.to);
-  // Head: counter-clockwise from the upper-right tip, over the top, down to its foot (large arc).
-  // Neck: a short stroke to the bowl. Bowl: counter-clockwise round the left and bottom to the tail.
-  const d = `M${sx} ${sy}A${head.r} ${head.r} 0 1 0 ${hx} ${hy}L${bx} ${by}A${bowl.r} ${bowl.r} 0 1 0 ${ex} ${ey}`;
-  // Length of the stroke (arcs and neck), for drawing it on: SVG pathLength isn't available everywhere.
-  const length = r(head.r * deg(Math.abs(head.to - head.from)) + Math.hypot(bx - hx, by - hy) + bowl.r * deg(Math.abs(bowl.from - bowl.to)));
-  return { d, stroke, length, head, bowl, pupil: { cx: r(head.cx + 1.2), cy: r(head.cy + 0.4), r: 3.6 } };
+export const MARK = (() => {
+  const c = 32;
+  // Angles in degrees, SVG-style (0 is right, 90 is down); each ring runs clockwise from `from` to `to`.
+  const ring = (g: { r: number; w: number; from: number; to: number; opacity: number }) => {
+    const [x0, y0] = at(c, c, g.r, g.from);
+    const [x1, y1] = at(c, c, g.r, g.to);
+    // Length, for drawing it on (SVG pathLength isn't available everywhere).
+    return { ...g, d: `M${x0} ${y0}A${g.r} ${g.r} 0 1 1 ${x1} ${y1}`, length: r(g.r * deg(g.to - g.from)) };
+  };
+  return {
+    cx: c,
+    cy: c,
+    outer: ring({ r: 24, w: 6, from: 200, to: 480, opacity: 0.55 }),
+    inner: ring({ r: 15.5, w: 6.5, from: 230, to: 490, opacity: 0.85 }),
+    dot: { r: 6.5 },
+    /** Where the ink sits in the box (for lockups and tight crops). */
+    ink: { x0: 6.4, y0: 5, x1: 59, y1: 59 },
+  };
 })();
-const markInner = (fg: string, dot: string) =>
-  `<path d="${AYN.d}" fill="none" stroke="${fg}" stroke-width="${AYN.stroke}" stroke-linecap="round" stroke-linejoin="round"/>` +
-  `<circle cx="${AYN.pupil.cx}" cy="${AYN.pupil.cy}" r="${AYN.pupil.r}" fill="${dot}"/>`;
-const markSvg = (fg: string, dot = SIGNAL) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">${markInner(fg, dot)}</svg>`;
+/** The rings in `fg` (lighter outside, stronger inside), the point in `dot`; `solid` for one-colour use. */
+const markInner = (fg: string, dot: string, solid = false) =>
+  [MARK.outer, MARK.inner].map((g) => `<path d="${g.d}" fill="none" stroke="${fg}" stroke-width="${g.w}" stroke-linecap="round"${solid ? "" : ` stroke-opacity="${g.opacity}"`}/>`).join("") +
+  `<circle cx="${MARK.cx}" cy="${MARK.cy}" r="${MARK.dot.r}" fill="${dot}"/>`;
+const markSvg = (fg: string, dot = SIGNAL, solid = false) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">${markInner(fg, dot, solid)}</svg>`;
 /** App icon: the mark on a tile. The tile radius follows the iOS/Android squircle proportion (22.5%). */
-const symbolSvg = (bg: string | readonly [string, string], fg: string, dot: string, size = 64) => {
+const symbolSvg = (bg: string | readonly [string, string], fg: string, dot: string, size = 64, solid = false) => {
   const fill = typeof bg === "string" ? bg : "url(#tile)";
   const defs = typeof bg === "string" ? "" : `<defs><linearGradient id="tile" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${bg[0]}"/><stop offset="1" stop-color="${bg[1]}"/></linearGradient></defs>`;
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="${size}" height="${size}">${defs}<rect width="64" height="64" rx="14.4" fill="${fill}"/><g transform="translate(11.2 11.2) scale(0.65)">${markInner(fg, dot)}</g></svg>`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="${size}" height="${size}">${defs}<rect width="64" height="64" rx="14.4" fill="${fill}"/><g transform="translate(8.32 8.32) scale(0.74)">${markInner(fg, dot, solid)}</g></svg>`;
 };
 
 /** Lockup geometry, shared with the in-app <Logo>: all in units of the Latin height (the l's ascender). */
 // arabicGap: wider than gap, because Arabic's first letter (ع) sits flush with the end of its box.
-export const LOCKUP = { mark: 1.38, gap: 0.28, arabicGap: 0.6, rule: 0.34, arabic: 1.06 };
+export const LOCKUP = { mark: 1.34, gap: 0.3, arabicGap: 0.42, rule: 0.34, arabic: 1.06 };
 
-/** Horizontal lockup: the ʿayn, aalim, a hairline, عالم. */
-function lockup({ fg, dot = SIGNAL, arabicOnly = false, latinOnly = false }: { fg: string; dot?: string; arabicOnly?: boolean; latinOnly?: boolean }) {
+/** Horizontal lockup: the rings, aalim, a hairline, عالم. */
+function lockup({ fg, dot = SIGNAL, arabicOnly = false, latinOnly = false, solid = false }: { fg: string; dot?: string; arabicOnly?: boolean; latinOnly?: boolean; solid?: boolean }) {
   const H = latin.height; // ascender height of "aalim" (no descenders)
   const mark = H * LOCKUP.mark;
   const gap = H * LOCKUP.gap;
   const parts: string[] = [];
   let x = 0;
-  // The mark's centre sits on the centre of the Latin height. Its ink spans about x 14–54 of its 64-unit box.
+  // The mark's centre sits on the centre of the Latin height; it's placed by its ink, not its box.
   const markTop = (H - mark) / 2;
+  const u = mark / 64;
   const placeMark = () => {
-    parts.push(`<g transform="translate(${r(x - mark * 0.2)} ${r(markTop)}) scale(${r(mark / 64)})">${markInner(fg, dot)}</g>`);
-    x += mark * 0.66;
+    parts.push(`<g transform="translate(${r(x - MARK.ink.x0 * u)} ${r(markTop)}) scale(${r(u)})">${markInner(fg, dot, solid)}</g>`);
+    x += (MARK.ink.x1 - MARK.ink.x0) * u;
   };
   // Arabic alone reads right to left, so the mark leads on the right.
   if (!arabicOnly) {
@@ -155,7 +160,7 @@ function lockup({ fg, dot = SIGNAL, arabicOnly = false, latinOnly = false }: { f
     parts.push(`<rect x="${r(x)}" y="${r(H * 0.12)}" width="${r(H * 0.07)}" height="${r(H * 0.88)}" rx="${r(H * 0.035)}" fill="${fg}" opacity="0.24"/>`);
     x += H * 0.07 + H * LOCKUP.rule;
   }
-  let bottom = Math.max(H, markTop + mark);
+  let bottom = Math.max(H, markTop + MARK.ink.y1 * u);
   if (!latinOnly) {
     // Arabic: the alif rises a touch above the Latin ascenders (optical match), baselines aligned.
     const scale = (H * LOCKUP.arabic) / arabic.baseline;
@@ -168,11 +173,10 @@ function lockup({ fg, dot = SIGNAL, arabicOnly = false, latinOnly = false }: { f
       placeMark();
     }
   }
-  const top = Math.min(markTop, latinOnly ? 0 : H - H * LOCKUP.arabic);
+  const top = Math.min(markTop + MARK.ink.y0 * u, latinOnly ? 0 : H - H * LOCKUP.arabic);
   const pad = H * 0.06;
-  // The mark's ink starts about 12 units into its box and ends about 56 in.
-  const left = arabicOnly ? -pad : -mark * 0.2 + (mark / 64) * 12 - pad;
-  const right = arabicOnly ? x - mark * 0.66 - mark * 0.2 + (mark / 64) * 56 + pad : x + pad;
+  const left = -pad;
+  const right = x + pad;
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${r(left)} ${r(top - pad)} ${r(right - left)} ${r(bottom - top + pad * 2)}">${parts.join("")}</svg>`;
 }
 
@@ -180,14 +184,14 @@ const files: Record<string, string> = {
   "mark.svg": markSvg(INK),
   "mark-reverse.svg": markSvg(BONE),
   "symbol.svg": symbolSvg(TILE, BONE, SIGNAL),
-  "symbol-signal.svg": symbolSvg(SIGNAL, INK, BONE),
+  "symbol-signal.svg": symbolSvg(SIGNAL, INK, BONE, 64, true),
   "logo.svg": lockup({ fg: INK }),
   "logo-reverse.svg": lockup({ fg: BONE }),
   "logo-en.svg": lockup({ fg: INK, latinOnly: true }),
   "logo-ar.svg": lockup({ fg: INK, arabicOnly: true }),
   "logo-en-reverse.svg": lockup({ fg: BONE, latinOnly: true }),
   "logo-ar-reverse.svg": lockup({ fg: BONE, arabicOnly: true }),
-  "logo-mono.svg": lockup({ fg: INK, dot: INK }),
+  "logo-mono.svg": lockup({ fg: INK, dot: INK, solid: true }),
   "wordmark.svg": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${latin.width} ${latin.height}"><path d="${latin.d}" fill="${INK}"/></svg>`,
   "wordmark-ar.svg": `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${arabic.width} ${arabic.height}"><path d="${arabic.d}" fill="${INK}"/></svg>`,
 };
@@ -201,15 +205,15 @@ writeFileSync(
   `// Generated by scripts/brand-assets.mts. Do not edit by hand.\n` +
     `export const LATIN = { width: ${latin.width}, height: ${latin.height}, baseline: ${latin.baseline}, d: "${latin.d}" };\n` +
     `export const ARABIC = { width: ${arabic.width}, height: ${arabic.height}, baseline: ${arabic.baseline}, d: "${arabic.d}" };\n` +
-    `// The mark's geometry lives in src/lib/brand/ayn.ts, where the phone app can import it too.\n` +
-    `export { AYN } from "@/lib/brand/ayn";\n` +
+    `// The mark's geometry lives in src/lib/brand/mark.ts, where the phone app can import it too.\n` +
+    `export { MARK } from "@/lib/brand/mark";\n` +
     `export const LOCKUP = ${JSON.stringify(LOCKUP)};\n`,
 );
 // The mark alone, in the folder Metro watches (mobile/metro.config.js), so web and phone share one geometry.
 writeFileSync(
-  path.join(ROOT, "src/lib/brand/ayn.ts"),
+  path.join(ROOT, "src/lib/brand/mark.ts"),
   `// Generated by scripts/brand-assets.mts. Do not edit by hand.\n` +
-    `/** The ʿAyn (D-063): the mark's path, stroke, construction circles and pupil, in a 64-unit box. */\n` +
-    `export const AYN = ${JSON.stringify(AYN)};\n`,
+    `/** Focus (D-064): two open rings closing in on the coral point, in a 64-unit box centred on (32, 32). */\n` +
+    `export const MARK = ${JSON.stringify(MARK)};\n`,
 );
-console.log(`brand: ${Object.keys(files).length} SVGs, icon.svg, wordmark-paths.ts and ayn.ts written`);
+console.log(`brand: ${Object.keys(files).length} SVGs, icon.svg, wordmark-paths.ts and mark.ts written`);

@@ -26,7 +26,7 @@ export default async function AuthLayout({ children }: { children: React.ReactNo
       {/* Brand panel: the idea, at billboard scale. */}
       <aside className="hero-card hidden lg:m-3 lg:flex lg:flex-col lg:justify-between lg:gap-10 lg:rounded-[20px] lg:p-12 xl:p-14" aria-label={t("label")}>
         <p className="display-x max-w-lg text-[2.6rem] xl:text-[3.1rem]">{t("title")}</p>
-        {/* The ʿayn at billboard scale: it draws itself, then keeps an eye out. */}
+        {/* The mark at billboard scale: the rings close in on the point, then keep finding focus. */}
         <div className="relative mx-auto grid place-items-center">
           <span className="absolute size-56 rounded-full bg-[radial-gradient(circle,rgb(255_255_255/0.18),transparent_68%)] blur-xl" aria-hidden />
           <LogoMark animated className="relative size-52 text-white [filter:drop-shadow(0_24px_40px_rgb(20_18_60/0.45))]" />

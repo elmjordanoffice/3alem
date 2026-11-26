@@ -215,7 +215,7 @@ function SectionTitle({ id, title, count, href, linkLabel }: { id: string; title
 }
 
 /** The pipeline as a to-do list: the most urgent first, each one a link to where it's done. */
-/** Inbox zero for hiring: the ʿayn draws itself and takes a look round. */
+/** Inbox zero for hiring: the rings close in and the point lands. */
 function CaughtUp({ t }: { t: T }) {
   return (
     <section aria-labelledby="caught-h" className="flex items-center gap-5 rounded-card bg-surface p-5 shadow-card">

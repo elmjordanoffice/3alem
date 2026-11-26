@@ -1,25 +1,32 @@
 import { cn } from "@/lib/utils";
-import { ARABIC, AYN, LATIN, LOCKUP } from "./wordmark-paths";
+import { ARABIC, LATIN, LOCKUP, MARK } from "./wordmark-paths";
 
 /**
- * The Aalim mark ("ʿAyn", D-063): the letter ع, first letter of عالم (world),
- * علم (knowledge), عمل (work) and عين (eye), drawn as one rounded stroke. The
- * coral pupil sits in the letter's head, which calligraphers call its eye.
- * See /brand and scripts/brand-assets.mts (the geometry lives there).
+ * The Aalim mark ("Focus", D-064): two open rings closing in on one coral
+ * point. Each answer brings the picture of what someone can do into focus;
+ * the point is the estimate. See /brand and scripts/brand-assets.mts (the
+ * geometry lives there).
  *
- * `animated`: the stroke draws itself once, then the pupil glances and blinks
- * now and then (still under prefers-reduced-motion).
+ * `animated`: the rings draw in, outside first, the point lands, then every
+ * few seconds the rings turn a little, like a lens finding focus (still under
+ * prefers-reduced-motion).
  */
 export function LogoMark({ className, mono = false, tight = false, animated = false }: { className?: string; mono?: boolean; tight?: boolean; animated?: boolean }) {
+  const { ink } = MARK;
   return (
-    <svg viewBox={tight ? "12 0 44 64" : "0 0 64 64"} className={cn("size-7 shrink-0 overflow-visible", animated && "ayn-live", className)} aria-hidden>
-      <path d={AYN.d} fill="none" stroke="currentColor" strokeWidth={AYN.stroke} strokeLinecap="round" strokeLinejoin="round" pathLength={100} className="ayn-stroke" />
-      <circle cx={AYN.pupil.cx} cy={AYN.pupil.cy} r={AYN.pupil.r} fill={mono ? "currentColor" : "var(--saffron)"} className="ayn-pupil" />
+    <svg
+      viewBox={tight ? `${ink.x0} ${ink.y0} ${ink.x1 - ink.x0} ${ink.y1 - ink.y0}` : "0 0 64 64"}
+      className={cn("size-7 shrink-0 overflow-visible", animated && "mark-live", className)}
+      aria-hidden
+    >
+      <path d={MARK.outer.d} fill="none" stroke="currentColor" strokeWidth={MARK.outer.w} strokeOpacity={mono ? 1 : MARK.outer.opacity} strokeLinecap="round" pathLength={100} className="mark-outer" />
+      <path d={MARK.inner.d} fill="none" stroke="currentColor" strokeWidth={MARK.inner.w} strokeOpacity={mono ? 1 : MARK.inner.opacity} strokeLinecap="round" pathLength={100} className="mark-inner" />
+      <circle cx={MARK.cx} cy={MARK.cy} r={MARK.dot.r} fill={mono ? "currentColor" : "var(--saffron)"} className="mark-dot" />
     </svg>
   );
 }
 
-/** The app tile: the white ʿayn on violet turning to navy, the pupil in coral. */
+/** The app tile: the white rings on violet turning to navy, the point in coral. */
 export function LogoTile({ className, animated = false }: { className?: string; animated?: boolean }) {
   return (
     <span
@@ -29,7 +36,7 @@ export function LogoTile({ className, animated = false }: { className?: string; 
       )}
       aria-hidden
     >
-      <LogoMark className="size-[66%]" animated={animated} />
+      <LogoMark className="size-[74%]" animated={animated} />
     </span>
   );
 }
@@ -67,7 +74,7 @@ export function Logo({ className, showArabic = true, reverse = false }: { classN
   return (
     // A logo keeps one composition in both directions.
     <span dir="ltr" className={cn("inline-flex items-center gap-[0.3em] text-[17px]", reverse ? "text-ink-foreground" : "text-text", className)}>
-      <LogoMark tight className="h-[1.55em] w-auto" />
+      <LogoMark tight className="h-[1.3em] w-auto" />
       <Wordmark showArabic={showArabic} />
     </span>
   );

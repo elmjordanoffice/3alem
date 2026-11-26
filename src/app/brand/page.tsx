@@ -6,7 +6,6 @@ import path from "node:path";
 import { getLocale, getTranslations } from "next-intl/server";
 import { ArrowDownToLine, Ellipsis, Moon, RotateCcw, Search, X } from "lucide-react";
 import { LogoMark, LogoTile, Wordmark } from "@/components/brand/logo";
-import { AYN } from "@/components/brand/wordmark-paths";
 import { NarrowingChart, curve } from "@/components/landing/narrowing-chart";
 import { RangeScale } from "@/components/report/range-scale";
 import { LanguageToggle, ThemeMenu } from "@/components/app/preference-controls";
@@ -14,7 +13,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { contrastRatio } from "@/lib/contrast";
 import { cn } from "@/lib/utils";
-import { CORAL, ClearSpace, CoverMark, EyeFigure, INDIGO, LockupArt, Mark, MarkConstruction, NarrowingFigure, Sweep, WHITE, WordmarkGuides, WordmarkShape } from "./figures";
+import { CORAL, ClearSpace, CoverMark, FocusFigure, INDIGO, LockupArt, Mark, MarkConstruction, NarrowingFigure, Sweep, WHITE, WordmarkGuides, WordmarkShape } from "./figures";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("brandbook");
@@ -298,7 +297,7 @@ export default async function BrandPage() {
             <div className="mt-20 grid items-center gap-10 lg:grid-cols-12 lg:gap-8">
               <figure className="lg:col-span-7">
                 <Board tone="night" className="px-4 py-6 sm:px-10 sm:py-10">
-                  <EyeFigure labels={{ eye: t("idea.eyeLabels.eye"), pupil: t("idea.eyeLabels.pupil") }} />
+                  <FocusFigure labels={{ field: t("idea.eyeLabels.eye"), rings: t("idea.eyeLabels.eye"), point: t("idea.eyeLabels.pupil") }} />
                 </Board>
               </figure>
               <div className="lg:col-span-5">
@@ -328,7 +327,7 @@ export default async function BrandPage() {
             <div className="grid gap-10 lg:grid-cols-12 lg:gap-8">
               <figure className="lg:col-span-7">
                 <Board tone="white" className="p-3 sm:p-8">
-                  <MarkConstruction labels={{ units: t("mark.labels.units"), head: t("mark.labels.head"), bowl: t("mark.labels.bowl"), stroke: t("mark.labels.stroke"), pupil: t("mark.labels.pupil"), neck: t("mark.labels.neck") }} />
+                  <MarkConstruction labels={{ units: t("mark.labels.units"), outer: t("mark.labels.head"), inner: t("mark.labels.bowl"), stroke: t("mark.labels.stroke"), point: t("mark.labels.pupil"), gap: t("mark.labels.neck") }} />
                 </Board>
                 <figcaption className="sr-only">{t("mark.figureLabel")}</figcaption>
               </figure>
@@ -390,10 +389,10 @@ export default async function BrandPage() {
                   <Board tone="night" className="grid min-h-80 place-items-center p-8 sm:min-h-[26rem]">
                     <div aria-hidden className="pointer-events-none absolute size-72 rounded-full bg-[radial-gradient(closest-side,rgb(255_255_255/0.12),transparent)] blur-xl" />
                     {/* Replay without script: each toggle shows the other copy, and a newly shown animation starts from the top. */}
-                    <input id="ayn-replay" type="checkbox" className="peer sr-only motion-reduce:hidden" />
+                    <input id="mark-replay" type="checkbox" className="peer sr-only motion-reduce:hidden" />
                     <LogoMark animated className="relative size-44 text-white peer-checked:hidden sm:size-56" />
                     <LogoMark animated className="relative hidden size-44 text-white peer-checked:block sm:size-56" />
-                    <label htmlFor="ayn-replay" className="absolute bottom-4 end-4 inline-flex cursor-pointer items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm font-medium text-white transition-colors select-none hover:bg-white/20 peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-white motion-reduce:hidden">
+                    <label htmlFor="mark-replay" className="absolute bottom-4 end-4 inline-flex cursor-pointer items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm font-medium text-white transition-colors select-none hover:bg-white/20 peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-white motion-reduce:hidden">
                       <RotateCcw className="size-4" aria-hidden />
                       {t("mark.replay")}
                     </label>
@@ -495,11 +494,11 @@ export default async function BrandPage() {
                 <Mark className="size-14 -scale-x-100 sm:size-16" />
               </Dont>
               <Dont label={t("misuse.items.close")}>
-                <Mark closeHead className="size-14 sm:size-16" />
+                <Mark closed className="size-14 sm:size-16" />
               </Dont>
               <Dont label={t("misuse.items.pupil")}>
                 <span className="flex items-center gap-1">
-                  <Mark pupil={{ cx: AYN.bowl.cx, cy: AYN.bowl.cy }} className="size-12 sm:size-14" />
+                  <Mark dotAt={{ cx: 46, cy: 20 }} className="size-12 sm:size-14" />
                   <Mark dot="#25c6b6" className="size-12 sm:size-14" />
                 </span>
               </Dont>

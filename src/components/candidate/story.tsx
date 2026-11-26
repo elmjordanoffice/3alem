@@ -79,7 +79,7 @@ export function ColleagueNote({ note, tone = "paper", className }: { note: Story
 
 const LINES = ["l1", "l2", "l3", "l4", "l5", "l6"] as const;
 
-/** While the week is being set up: the ʿayn draws itself and looks about, and the office comes to life line by line. */
+/** While the week is being set up: the rings close in on the point, and the office comes to life line by line. */
 export function StoryLoading() {
   const t = useTranslations("candidate.loading");
   const [i, setI] = React.useState(0);

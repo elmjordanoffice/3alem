@@ -29,7 +29,7 @@ export const TASK_ICON: Record<string, LucideIcon> = {
   forced_choice: Scale,
 };
 
-/** The scene's own picture: the ʿayn's arcs sweeping round the coral pupil, composed from the title. */
+/** The scene's own picture: open rings closing in on the coral point (the brand's Focus), composed from the title. */
 export function SceneArt({ seed, className }: { seed: string; className?: string }) {
   const art = React.useMemo(() => sceneArt(seed), [seed]);
   return (

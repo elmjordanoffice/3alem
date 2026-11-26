@@ -1,5 +1,5 @@
 import type { CSSProperties, ReactNode } from "react";
-import { ARABIC, AYN, LATIN, LOCKUP } from "@/components/brand/wordmark-paths";
+import { ARABIC, LATIN, LOCKUP, MARK } from "@/components/brand/wordmark-paths";
 
 /**
  * Drawings for the brand book. Every number here comes from the mark's own
@@ -28,13 +28,28 @@ const TILE = ["#7564ee", "#1e2f86"] as const;
 const rad = (a: number) => (a * Math.PI) / 180;
 const onCircle = (c: { cx: number; cy: number; r: number }, a: number) => ({ x: c.cx + c.r * Math.cos(rad(a)), y: c.cy + c.r * Math.sin(rad(a)) });
 
-/** The ʿayn: one stroke and the pupil. `closeHead` and `pupil` exist only to draw what not to do. */
-function MarkShapes({ fg = INDIGO, dot = CORAL_DEEP, closeHead = false, pupil = AYN.pupil }: { fg?: string; dot?: string; closeHead?: boolean; pupil?: { cx: number; cy: number } }) {
+type Ring = (typeof MARK)["outer"];
+const ringPath = (g: Ring, turn = 0) => {
+  const p0 = onCircle({ cx: MARK.cx, cy: MARK.cy, r: g.r }, g.from + turn);
+  const p1 = onCircle({ cx: MARK.cx, cy: MARK.cy, r: g.r }, g.to + turn);
+  return `M${p0.x} ${p0.y}A${g.r} ${g.r} 0 1 1 ${p1.x} ${p1.y}`;
+};
+
+/**
+ * Focus: the two open rings and the point. `closed`, `flat`, `turn` and `dotAt`
+ * exist only to draw what not to do.
+ */
+function MarkShapes({ fg = INDIGO, dot = CORAL_DEEP, closed = false, flat = false, turn = 0, dotAt }: { fg?: string; dot?: string; closed?: boolean; flat?: boolean; turn?: number; dotAt?: { cx: number; cy: number } }) {
   return (
     <>
-      {closeHead ? <circle cx={AYN.head.cx} cy={AYN.head.cy} r={AYN.head.r} fill="none" stroke={fg} strokeWidth={AYN.stroke} /> : null}
-      <path d={AYN.d} fill="none" stroke={fg} strokeWidth={AYN.stroke} strokeLinecap="round" strokeLinejoin="round" />
-      <circle cx={pupil.cx} cy={pupil.cy} r={AYN.pupil.r} fill={dot} />
+      {[MARK.outer, MARK.inner].map((g) =>
+        closed ? (
+          <circle key={g.r} cx={MARK.cx} cy={MARK.cy} r={g.r} fill="none" stroke={fg} strokeWidth={g.w} strokeOpacity={flat ? 1 : g.opacity} />
+        ) : (
+          <path key={g.r} d={turn ? ringPath(g, turn) : g.d} fill="none" stroke={fg} strokeWidth={g.w} strokeOpacity={flat ? 1 : g.opacity} strokeLinecap="round" />
+        ),
+      )}
+      <circle cx={dotAt?.cx ?? MARK.cx} cy={dotAt?.cy ?? MARK.cy} r={MARK.dot.r} fill={dot} />
     </>
   );
 }
@@ -55,40 +70,31 @@ function Grid({ minor, major, size = 64 }: { minor: string; major: string; size?
 }
 
 /**
- * The ʿayn drawn on its grid: the two circles it is cut from (head and bowl)
- * and their centres, the stroke's centre line, its width, the neck, the round
- * terminals and the pupil.
+ * The mark drawn on its grid: both rings with their radii and widths, the
+ * gaps they open towards, the round ends and the point at the centre.
  */
-export function MarkConstruction({ labels }: { labels: { units: string; head: string; bowl: string; stroke: string; pupil: string; neck: string } }) {
-  const { head, bowl, pupil } = AYN;
+export function MarkConstruction({ labels }: { labels: { units: string; outer: string; inner: string; stroke: string; point: string; gap: string } }) {
+  const { outer, inner, cx, cy, dot } = MARK;
   const t = { fontSize: 2.5, fill: DIM, fontFamily: "var(--font-sans)" } as const;
   const dim = { stroke: DIM, strokeWidth: 0.16 } as const;
   const guide = { fill: "none", stroke: CORAL_DEEP, strokeWidth: 0.24, strokeDasharray: "1 0.8" } as const;
-  const neckA = onCircle(head, head.to);
-  const neckB = onCircle(bowl, bowl.from);
-  const tip = onCircle(head, head.from);
-  const tail = onCircle(bowl, bowl.to);
-  const neckY = (neckA.y + neckB.y) / 2;
+  const ends = [outer, inner].flatMap((g) => [onCircle({ cx, cy, r: g.r }, g.from), onCircle({ cx, cy, r: g.r }, g.to)]);
+  const gapMid = onCircle({ cx, cy, r: outer.r + 6 }, (outer.to - 360 + outer.from) / 2);
   return (
-    <svg viewBox="-22 -11 108 86" className="h-auto w-full" role="img" aria-label={[labels.units, labels.head, labels.bowl, labels.stroke, labels.neck, labels.pupil].join(", ")} direction="ltr">
+    <svg viewBox="-22 -11 108 86" className="h-auto w-full" role="img" aria-label={[labels.units, labels.outer, labels.inner, labels.stroke, labels.gap, labels.point].join(", ")} direction="ltr">
       <Grid minor={GRID} major={GRID_STRONG} />
       <rect x={0} y={0} width={64} height={64} fill="none" stroke={GRID_STRONG} strokeWidth={0.22} />
       <MarkShapes />
-      {/* On top of the letter: the stroke's centre line, the two circles it is cut from, and their centres. */}
-      <path d={AYN.d} fill="none" stroke={WHITE} strokeOpacity={0.55} strokeWidth={0.22} strokeDasharray="0.6 0.6" />
-      <circle cx={head.cx} cy={head.cy} r={head.r} {...guide} />
-      <circle cx={bowl.cx} cy={bowl.cy} r={bowl.r} {...guide} />
-      <line x1={bowl.cx} y1={bowl.cy} x2={onCircle(bowl, 200).x} y2={onCircle(bowl, 200).y} stroke={CORAL_DEEP} strokeWidth={0.24} />
-      <circle cx={bowl.cx} cy={bowl.cy} r={0.7} fill={CORAL_DEEP} />
-      {/* The head's centre sits inside the pupil: a white cross. */}
-      <g stroke={WHITE} strokeWidth={0.26} strokeLinecap="round">
-        <line x1={head.cx - 0.9} y1={head.cy} x2={head.cx + 0.9} y2={head.cy} />
-        <line x1={head.cx} y1={head.cy - 0.9} x2={head.cx} y2={head.cy + 0.9} />
-      </g>
-      {/* Round terminals at both ends of the stroke */}
-      {[tip, tail].map((p) => (
-        <circle key={p.x} cx={p.x} cy={p.y} r={AYN.stroke / 2 + 0.5} fill="none" stroke={CORAL_DEEP} strokeWidth={0.22} strokeDasharray="0.8 0.6" />
+      {/* The full circles each ring is cut from, and the centre they share. */}
+      <circle cx={cx} cy={cy} r={outer.r} {...guide} />
+      <circle cx={cx} cy={cy} r={inner.r} {...guide} />
+      {ends.map((p) => (
+        <circle key={`${p.x}-${p.y}`} cx={p.x} cy={p.y} r={3.6} fill="none" stroke={CORAL_DEEP} strokeWidth={0.22} strokeDasharray="0.8 0.6" />
       ))}
+      <g stroke={WHITE} strokeWidth={0.26} strokeLinecap="round">
+        <line x1={cx - 0.9} y1={cy} x2={cx + 0.9} y2={cy} />
+        <line x1={cx} y1={cy - 0.9} x2={cx} y2={cy + 0.9} />
+      </g>
       {/* 64 across the top */}
       <g {...dim}>
         <line x1={0} y1={-4} x2={64} y2={-4} />
@@ -98,43 +104,39 @@ export function MarkConstruction({ labels }: { labels: { units: string; head: st
       <text x={32} y={-5.8} textAnchor="middle" {...t}>
         {labels.units}
       </text>
-      {/* Head, neck and bowl, labelled on the left */}
+      {/* Radii, labelled on the right */}
       <g {...dim} strokeDasharray="0.5 0.5">
-        <line x1={head.cx - head.r - AYN.stroke / 2 - 0.6} y1={head.cy} x2={-3} y2={head.cy} />
-        <line x1={Math.min(neckA.x, neckB.x) - AYN.stroke / 2 - 0.6} y1={neckY} x2={-3} y2={neckY} />
-        <line x1={bowl.cx - bowl.r - AYN.stroke / 2 - 0.6} y1={bowl.cy} x2={-3} y2={bowl.cy} />
+        <line x1={cx + outer.r + outer.w / 2 + 0.6} y1={cy - 8} x2={67} y2={cy - 8} />
+        <line x1={cx + inner.r + inner.w / 2 + 0.6} y1={cy + 2} x2={67} y2={cy + 2} />
+        <line x1={cx + dot.r + 0.6} y1={cy + 12} x2={67} y2={cy + 12} />
       </g>
-      <text x={-4} y={head.cy + 0.9} textAnchor="end" {...t}>
-        {labels.head}
+      <text x={68} y={cy - 7.1} {...t}>
+        {labels.outer}
       </text>
-      <text x={-4} y={neckY + 0.9} textAnchor="end" {...t}>
-        {labels.neck}
+      <text x={68} y={cy + 2.9} {...t}>
+        {labels.inner}
       </text>
-      <text x={-4} y={bowl.cy + 0.9} textAnchor="end" {...t}>
-        {labels.bowl}
+      <text x={68} y={cy + 12.9} {...t}>
+        {labels.point}
       </text>
-      {/* The stroke, measured across the bowl at its lowest point */}
+      {/* Stroke width across the bottom of the outer ring */}
       <g {...dim}>
-        <line x1={bowl.cx} y1={bowl.cy + bowl.r - AYN.stroke / 2} x2={bowl.cx} y2={bowl.cy + bowl.r + AYN.stroke / 2} stroke={WHITE} strokeWidth={0.3} />
-        <line x1={bowl.cx + 1} y1={bowl.cy + bowl.r + AYN.stroke / 2} x2={bowl.cx + 1} y2={68} strokeDasharray="0.5 0.5" />
+        <line x1={cx} y1={cy + outer.r - outer.w / 2} x2={cx} y2={cy + outer.r + outer.w / 2} stroke={WHITE} strokeWidth={0.3} />
+        <line x1={cx + 1} y1={cy + outer.r + outer.w / 2} x2={cx + 1} y2={68} strokeDasharray="0.5 0.5" />
       </g>
-      <text x={bowl.cx + 2} y={70.5} {...t}>
+      <text x={cx + 2} y={70.5} {...t}>
         {labels.stroke}
       </text>
-      {/* The pupil, in the head's eye */}
-      <g {...dim}>
-        <line x1={pupil.cx + pupil.r + 0.8} y1={pupil.cy} x2={68} y2={pupil.cy} />
-      </g>
-      <text x={69} y={pupil.cy + 0.9} {...t}>
-        {labels.pupil}
+      {/* The gap both rings open towards */}
+      <text x={gapMid.x - 1} y={gapMid.y + 3} textAnchor="end" {...t}>
+        {labels.gap}
       </text>
     </svg>
   );
 }
 
-/** The mark on its grid, large, in white on night with the coral pupil, for the cover. */
+/** The mark on its grid, large, in white on night with the coral point, for the cover. */
 export function CoverMark() {
-  const { head, bowl } = AYN;
   return (
     <svg viewBox="-8 -8 80 80" className="h-auto w-full" aria-hidden>
       <g transform="translate(-8 -8)">
@@ -145,55 +147,55 @@ export function CoverMark() {
           </g>
         ))}
       </g>
-      {/* The two circles the letter is cut from, faint. */}
-      {[head, bowl].map((c) => (
-        <circle key={c.cy} cx={c.cx} cy={c.cy} r={c.r} fill="none" stroke={WHITE} strokeOpacity={0.22} strokeWidth={0.18} strokeDasharray="0.9 0.9" />
+      {/* The full circles the rings are cut from, faint. */}
+      {[MARK.outer, MARK.inner].map((g) => (
+        <circle key={g.r} cx={MARK.cx} cy={MARK.cy} r={g.r} fill="none" stroke={WHITE} strokeOpacity={0.22} strokeWidth={0.18} strokeDasharray="0.9 0.9" />
       ))}
-      <circle cx={AYN.pupil.cx} cy={AYN.pupil.cy} r={AYN.pupil.r * 2.8} fill={CORAL} opacity={0.24} style={{ filter: "blur(3px)" }} />
+      <circle cx={MARK.cx} cy={MARK.cy} r={MARK.dot.r * 2.4} fill={CORAL} opacity={0.26} style={{ filter: "blur(3px)" }} />
       <MarkShapes fg={WHITE} dot={CORAL} />
     </svg>
   );
 }
 
 /**
- * The eye: the hollow of the ʿayn's head, which calligraphers call its eye,
- * with the pupil in it. White on night, labelled on the open side.
+ * Focus, explained: the faint field of what we don't know yet, the rings
+ * closing in, and the point we can stand behind. White on night, labelled.
  */
-export function EyeFigure({ labels }: { labels: { eye: string; pupil: string } }) {
-  const { head, pupil } = AYN;
-  const eyeR = head.r - AYN.stroke / 2;
+export function FocusFigure({ labels }: { labels: { field: string; rings: string; point: string } }) {
   const t = { fontSize: 3.4, fill: WHITE, fontFamily: "var(--font-sans)", fontWeight: 600 } as const;
-  // The eye's leader leaves from its open side, below the pupil's.
-  const eyeAt = onCircle({ cx: head.cx, cy: head.cy, r: eyeR }, 45);
-  const eyeY = 28;
+  const field = [30, 36, 42].map((r, i) => (
+    <circle key={r} cx={MARK.cx} cy={MARK.cy} r={r} fill="none" stroke={WHITE} strokeOpacity={0.08 - i * 0.02} strokeWidth={1.4} strokeDasharray={`${4 + i * 3} ${3 + i * 2}`} />
+  ));
   return (
-    <svg viewBox="6 -1 80 66" className="h-auto w-full" role="img" aria-label={`${labels.eye}, ${labels.pupil}`} direction="ltr">
-      <circle cx={pupil.cx} cy={pupil.cy} r={pupil.r * 3} fill={CORAL} opacity={0.28} style={{ filter: "blur(3px)" }} />
+    <svg viewBox="-12 -12 112 88" className="h-auto w-full" role="img" aria-label={`${labels.field}, ${labels.rings}, ${labels.point}`} direction="ltr">
+      {field}
+      <circle cx={MARK.cx} cy={MARK.cy} r={MARK.dot.r * 2.6} fill={CORAL} opacity={0.28} style={{ filter: "blur(3px)" }} />
       <MarkShapes fg={WHITE} dot={CORAL} />
-      <circle cx={head.cx} cy={head.cy} r={eyeR} fill="none" stroke={CORAL} strokeWidth={0.35} strokeDasharray="1 0.8" />
       <g stroke={WHITE} strokeOpacity={0.6} strokeWidth={0.22} fill="none">
-        <polyline points={`${eyeAt.x},${eyeAt.y} ${eyeAt.x + eyeY - eyeAt.y},${eyeY} 62,${eyeY}`} />
-        <line x1={pupil.cx + pupil.r + 0.6} y1={pupil.cy} x2={62} y2={pupil.cy} />
+        <line x1={MARK.cx + 36} y1={MARK.cy - 18} x2={82} y2={MARK.cy - 18} />
+        <line x1={MARK.cx + MARK.outer.r + 3.6} y1={MARK.cy} x2={82} y2={MARK.cy} />
+        <line x1={MARK.cx + MARK.dot.r + 0.6} y1={MARK.cy + 2} x2={MARK.cx + 10} y2={MARK.cy + 18} />
+        <line x1={MARK.cx + 10} y1={MARK.cy + 18} x2={82} y2={MARK.cy + 18} />
       </g>
-      <text x={63.5} y={eyeY + 1.2} {...t}>
-        {labels.eye}
+      <text x={83.5} y={MARK.cy - 16.8} {...t} fillOpacity={0.75}>
+        {labels.field}
       </text>
-      <text x={63.5} y={pupil.cy + 1.2} {...t} fill={CORAL}>
-        {labels.pupil}
+      <text x={83.5} y={MARK.cy + 1.2} {...t}>
+        {labels.rings}
+      </text>
+      <text x={83.5} y={MARK.cy + 19.2} {...t} fill={CORAL}>
+        {labels.point}
       </text>
     </svg>
   );
 }
 
 /**
- * The supergraphic: the ʿayn's bowl, drawn very large as a crescent that
+ * The supergraphic: the outer ring, drawn very large as an open arc that
  * sweeps in from the edge, in the app tile's violet and navy.
  */
 export function Sweep({ className }: { className?: string }) {
-  const { bowl } = AYN;
-  const k = 4.4;
-  const from = onCircle(bowl, bowl.from);
-  const to = onCircle(bowl, bowl.to);
+  const k = 3.4;
   return (
     <svg viewBox="0 0 160 90" preserveAspectRatio="xMidYMid slice" className={className} aria-hidden>
       <defs>
@@ -202,8 +204,9 @@ export function Sweep({ className }: { className?: string }) {
           <stop offset="1" stopColor={TILE[1]} stopOpacity={0.15} />
         </linearGradient>
       </defs>
-      <g transform={`translate(${118 - bowl.cx * k} ${46 - bowl.cy * k}) scale(${k})`}>
-        <path d={`M${from.x} ${from.y}A${bowl.r} ${bowl.r} 0 1 0 ${to.x} ${to.y}`} fill="none" stroke="url(#bb-sweep)" strokeWidth={AYN.stroke} strokeLinecap="round" />
+      <g transform={`translate(${118 - MARK.cx * k} ${46 - MARK.cy * k}) scale(${k})`}>
+        <path d={MARK.outer.d} fill="none" stroke="url(#bb-sweep)" strokeWidth={MARK.outer.w} strokeLinecap="round" />
+        <path d={MARK.inner.d} fill="none" stroke="url(#bb-sweep)" strokeWidth={MARK.inner.w} strokeLinecap="round" strokeOpacity={0.6} />
       </g>
     </svg>
   );
@@ -279,11 +282,12 @@ function lockup(variant: LockupVariant) {
   const latinOnly = variant === "latin";
   const arabicOnly = variant === "arabic";
   const markTop = (H - mark) / 2;
+  const u = mark / 64;
   let x = 0;
   const at: { mark?: number; latin?: number; rule?: number; arabic?: number } = {};
   if (!arabicOnly) {
-    at.mark = x - mark * 0.2;
-    x += mark * 0.66 + gap;
+    at.mark = x - MARK.ink.x0 * u;
+    x += (MARK.ink.x1 - MARK.ink.x0) * u + gap;
     at.latin = x;
     x += LATIN.width;
   }
@@ -298,14 +302,14 @@ function lockup(variant: LockupVariant) {
   }
   if (arabicOnly) {
     x += H * LOCKUP.arabicGap;
-    at.mark = x - mark * 0.2;
-    x += mark * 0.66;
+    at.mark = x - MARK.ink.x0 * u;
+    x += (MARK.ink.x1 - MARK.ink.x0) * u;
   }
-  const top = Math.min(markTop, latinOnly ? 0 : H - H * LOCKUP.arabic);
-  const bottom = Math.max(H, markTop + mark, latinOnly ? 0 : H - ARABIC.baseline * scale + ARABIC.height * scale);
-  // The mark's ink spans about 12 to 56 of its 64-unit box.
-  const left = arabicOnly ? 0 : -mark * 0.2 + (mark / 64) * 12;
-  const right = arabicOnly ? at.mark! + (mark / 64) * 56 : x;
+  const top = Math.min(markTop + MARK.ink.y0 * u, latinOnly ? 0 : H - H * LOCKUP.arabic);
+  const bottom = Math.max(H, markTop + MARK.ink.y1 * u, latinOnly ? 0 : H - ARABIC.baseline * scale + ARABIC.height * scale);
+  // Placed by its ink, so the box starts and ends where the drawing does.
+  const left = 0;
+  const right = x;
   const parts = (fg: string, dot: string): ReactNode => (
     <>
       <g transform={`translate(${at.mark} ${markTop}) scale(${mark / 64})`}>
@@ -367,10 +371,10 @@ export function ClearSpace({ x }: { x: string }) {
  * The mark in fixed brand colours (for artboards), or in tokens when given CSS
  * variables. `closeHead` and `pupil` draw misuse examples only.
  */
-export function Mark({ fg = INDIGO, dot = CORAL_DEEP, closeHead, pupil, className, style }: { fg?: string; dot?: string; closeHead?: boolean; pupil?: { cx: number; cy: number }; className?: string; style?: CSSProperties }) {
+export function Mark({ fg = INDIGO, dot = CORAL_DEEP, closed, flat, turn, dotAt, className, style }: { fg?: string; dot?: string; closed?: boolean; flat?: boolean; turn?: number; dotAt?: { cx: number; cy: number }; className?: string; style?: CSSProperties }) {
   return (
     <svg viewBox="0 0 64 64" className={className} style={style} aria-hidden>
-      <MarkShapes fg={fg} dot={dot} closeHead={closeHead} pupil={pupil} />
+      <MarkShapes fg={fg} dot={dot} closed={closed} flat={flat} turn={turn} dotAt={dotAt} />
     </svg>
   );
 }

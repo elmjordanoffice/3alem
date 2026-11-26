@@ -14,13 +14,13 @@ const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 const STAGGER = 140;
 
 /**
- * A scene's cover art: the brand's own shapes (the ʿAyn), composed from the
- * scene's title by the shared generator: faint ripples round a coral pupil,
- * and two or three bold open arcs, like the letter's bowl, sweeping round it.
+ * A scene's cover art: the brand's own shapes (Focus), composed from the
+ * scene's title by the shared generator: faint ripples round a coral point,
+ * and two or three bold open rings closing in on it.
  * White light on the violet highlight card, in both themes, as on the web.
  *
  * It draws itself in once: each sweep draws round from its start, inner
- * first, then the pupil pops into place. Still under reduced motion.
+ * first, then the point pops into place. Still under reduced motion.
  * Abstract, so it never mirrors in Arabic.
  *
  * The composition is 360 × 200. A box taller than that keeps the full width
@@ -75,7 +75,7 @@ function Sweep({ arc, delay, animate }: { arc: ArtArc; delay: number; animate: b
   );
 }
 
-/** The coral pupil, popping into place once the sweeps have drawn. */
+/** The coral point, popping into place once the rings have drawn. */
 function Pupil({ cx, cy, r, color, delay, animate }: { cx: number; cy: number; r: number; color: string; delay: number; animate: boolean }) {
   const p = useSharedValue(animate ? 0 : 1);
   React.useEffect(() => {

@@ -1,8 +1,8 @@
 /**
  * Scene art: a small, deterministic composition for each scene's cover card,
- * made only from the brand's own shapes (the ʿAyn, D-063): a coral pupil, the
- * bold open arcs of the letter's bowl sweeping round it, and faint ripples
- * further out, the field of what we haven't looked at yet. The same title
+ * made only from the brand's own shapes (Focus, D-064): a coral point, bold
+ * open rings closing in on it, and faint ripples further out, the field of
+ * what we haven't looked at yet. The same title
  * always gives the same picture, so a scene looks the same on the web and in
  * the native app, and every scene looks a little different from the last.
  *
@@ -27,11 +27,11 @@ export interface ArtArc {
 export interface SceneArt {
   width: 360;
   height: 200;
-  /** Faint thin ripples round the pupil: the field of what we haven't looked at yet. */
+  /** Faint thin ripples round the point: the field of what we haven't looked at yet. */
   field: ArtArc[];
-  /** Two or three bold open arcs round the pupil, all open on the same side, like the ʿayn's bowl. */
+  /** Two or three bold open rings round the point, all open on the same side, like the mark's. */
   sweeps: ArtArc[];
-  /** The coral pupil. */
+  /** The coral point. */
   dot: { cx: number; cy: number; r: number };
 }
 
@@ -80,9 +80,9 @@ export function sceneArt(seed: string): SceneArt {
   const W = 360;
   const H = 200;
 
-  // The pupil: somewhere in the middle band, never near the edges.
+  // The point: somewhere in the middle band, never near the edges.
   const dot = { cx: round(90 + r() * 180), cy: round(70 + r() * 60), r: round(8 + r() * 2) };
-  // Which way the arcs open (the ʿayn opens to the right; scenes vary it).
+  // Which way the rings open (the mark opens to the lower left; scenes vary it).
   const open = r() * 360;
 
   // The sweeps: 2–3 bold arcs, each a little wider and a little thinner, all open towards `open`.
