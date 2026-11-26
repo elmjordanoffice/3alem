@@ -127,7 +127,8 @@ const symbolSvg = (bg: string | readonly [string, string], fg: string, dot: stri
 };
 
 /** Lockup geometry, shared with the in-app <Logo>: all in units of the Latin height (the l's ascender). */
-export const LOCKUP = { mark: 1.38, gap: 0.28, rule: 0.34, arabic: 1.06 };
+// arabicGap: wider than gap, because Arabic's first letter (ع) sits flush with the end of its box.
+export const LOCKUP = { mark: 1.38, gap: 0.28, arabicGap: 0.6, rule: 0.34, arabic: 1.06 };
 
 /** Horizontal lockup: the ʿayn, aalim, a hairline, عالم. */
 function lockup({ fg, dot = SIGNAL, arabicOnly = false, latinOnly = false }: { fg: string; dot?: string; arabicOnly?: boolean; latinOnly?: boolean }) {
@@ -163,7 +164,7 @@ function lockup({ fg, dot = SIGNAL, arabicOnly = false, latinOnly = false }: { f
     x += arabic.width * scale;
     bottom = Math.max(bottom, dy + arabic.height * scale);
     if (arabicOnly) {
-      x += gap;
+      x += H * LOCKUP.arabicGap;
       placeMark();
     }
   }
