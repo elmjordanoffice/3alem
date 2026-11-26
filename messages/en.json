@@ -2662,10 +2662,10 @@
   },
   "brandbook": {
     "title": "Brand book",
-    "metaDescription": "ʿAyn, the Aalim brand: the idea, the mark and its motion, lockups, colour in both themes, type, shape and light, motifs, the interface, voice and files, in English and Arabic.",
+    "metaDescription": "Focus, the Aalim brand: the idea, the mark and its motion, lockups, colour in both themes, type, shape and light, motifs, the interface, voice and files, in English and Arabic.",
     "topbar": {
       "label": "Brand book",
-      "version": "v3.0",
+      "version": "v3.1",
       "home": "Aalim home"
     },
     "navLabel": "Brand book sections",
@@ -2685,12 +2685,12 @@
     },
     "cover": {
       "eyebrow": "Aalim brand book",
-      "statement": "The mark is ع, the first letter of عالم, drawn in one rounded stroke. Calligraphers call the hollow of its head the eye, and we put a coral pupil there: an eye on real work, because that is where we look. The colours stay Night: deep indigo, violet for action, blue and teal for data, coral for what matters.",
+      "statement": "Two open rings close in on one coral point. Every answer brings what someone can do into sharper focus, and the point is the estimate: the same coral dot that marks it on every range in a report. The colours stay Night: deep indigo, violet for action, blue and teal for data, coral for what matters.",
       "contents": "Contents",
-      "poster": "An eye for real work",
+      "poster": "Every answer brings it into focus",
       "meta": {
         "version": "Version",
-        "versionValue": "3.0",
+        "versionValue": "3.1",
         "updated": "Updated",
         "updatedValue": "November 2026",
         "scope": "Covers",
@@ -2701,14 +2701,14 @@
       "title": "The idea",
       "lede": "Every answer narrows the range.",
       "body1": "An assessment starts out knowing almost nothing: the person could be anywhere on the scale. Each answer is evidence, and each piece of evidence rules something out. The band of plausible levels tightens until what is left is an estimate we can stand behind, with the person’s own words underneath it.",
-      "body2": "Reports draw this as a band on the 1–5 scale: wide while the evidence is thin, narrow once it settles, with a coral dot for the estimate. The bands are data and nothing else. The mark tells the other half of the story: where the evidence comes from.",
+      "body2": "Reports draw this as a band on the 1–5 scale: wide while the evidence is thin, narrow once it settles, with a coral dot for the estimate. The bands are data and nothing else. The mark is the same idea as a symbol: rings closing in on a point.",
       "figure": {
         "after": "After {count, plural, one {# answer} other {# answers}}",
         "estimate": "Estimate",
         "low": "Emerging",
         "high": "Expert",
         "caption": "One skill, measured. The band is where the level could be, and it narrows with every answer.",
-        "pupil": "The estimate is coral, like the pupil."
+        "point": "The estimate is coral, like the mark’s point."
       },
       "nameTitle": "The name",
       "nameBody": "In Arabic, the same four letters spell ʿālim, someone who knows a subject deeply, and ʿālam, a world. Aalim builds a world for each person, a realistic week at a fictional company, and finds out what they know in it.",
@@ -2718,31 +2718,21 @@
       "alam": "عالَم",
       "alamMeaning": "ʿālam: a world",
       "usage": "Write Aalim in English text, with a capital, and عالِم in Arabic. The lowercase aalim belongs to the wordmark.",
-      "lettersTitle": "One letter, four words",
-      "lettersBody": "ع, ʿayn, begins four words that together describe Aalim: a world built for each person, the knowledge we look for, the work we find it in, and the eye that looks. The mark is that one letter.",
-      "words": {
-        "alam": {
-          "sound": "ʿālam · ʿālim",
-          "meaning": "A world, and one who knows. Our name."
+      "focusTitle": "Into focus",
+      "focusBody": "Before the first answer, what someone can do is a wide, faint field. Each answer closes in on it, the way a lens finds focus, until what is left is a point we can stand behind. The mark draws exactly that, and it needs no alphabet: in either language it reads as precision, a lens, a target. We look closely and conclude carefully.",
+      "focusParts": {
+        "unknown": {
+          "name": "The unknown",
+          "body": "What we don’t know yet: wide and faint before the first answer."
         },
-        "ilm": {
-          "sound": "ʿilm",
-          "meaning": "Knowledge. What we measure."
+        "rings": {
+          "name": "The rings",
+          "body": "Each answer closes in. The outer ring is wider and lighter, the inner one stronger, and both stay open."
         },
-        "amal": {
-          "sound": "ʿamal",
-          "meaning": "Work. Where we find it."
-        },
-        "ayn": {
-          "sound": "ʿayn",
-          "meaning": "An eye. How we look."
+        "point": {
+          "name": "The point",
+          "body": "The estimate we can stand behind, in solid coral: the same dot as on every range."
         }
-      },
-      "eyeTitle": "The eye",
-      "eyeBody": "Calligraphers call the hollow inside the head of ع its eye: عين, the letter’s own name. We put a coral pupil there. So the mark is an eye that looks at real work and finds the evidence in it, which is what the product promises: we look at what people actually do. To readers of Latin it is simply a friendly, open letter with an eye.",
-      "eyeLabels": {
-        "eye": "The eye",
-        "pupil": "The pupil"
       },
       "traitsTitle": "Three words",
       "traits": {
@@ -2762,35 +2752,35 @@
     },
     "mark": {
       "title": "The mark",
-      "lede": "One letter, one stroke, one eye.",
-      "body": "The ʿayn is cut from two circles on a 64-unit square: a small head that opens to the right, over a larger bowl that sweeps round to an open tail. A short neck joins them. One stroke, 8.5 units wide, draws all three with round caps and round joins, so the letter has no corners and no sharp ends. The pupil sits in the head’s eye, a touch right of centre, looking out of the open side.",
-      "figureLabel": "The ʿayn on its 64-unit grid: the two circles it is cut from, the stroke, the neck and the pupil",
+      "lede": "Two open rings, one point, no corners.",
+      "body": "Focus is drawn on a 64-unit square around a single centre. The outer ring has a radius of 24 and a stroke of 6, and runs 280° clockwise, leaving a gap of 80°. The inner ring has a radius of 15.5 and a stroke of 6.5, and runs 260°, leaving a gap of 100°. Both gaps open towards the lower left, one inside the other. The outer ring is the lighter, at 55% of the mark’s colour, and the inner the stronger, at 85%, so the weight gathers towards the centre. Every end is round. The point, radius 6.5, sits exactly at the centre.",
+      "figureLabel": "Focus on its 64-unit grid: the two circles the rings are cut from, their radii, strokes and gaps, the round ends, and the point at the centre",
       "labels": {
         "units": "64",
-        "head": "Head r 10",
-        "bowl": "Bowl r 16",
-        "stroke": "Stroke 8.5",
-        "pupil": "Pupil r 3.6",
-        "neck": "Neck"
+        "outer": "Outer r 24",
+        "inner": "Inner r 15.5",
+        "stroke": "Strokes 6 and 6.5",
+        "point": "Point r 6.5",
+        "gap": "Gaps 80° · 100°"
       },
       "specs": {
         "grid": "Grid",
-        "gridValue": "64 × 64 units",
-        "head": "Head",
-        "headValue": "Circle r 10, open to the right",
-        "bowl": "Bowl",
-        "bowlValue": "Circle r 16, 2 units right of the head",
-        "stroke": "Stroke",
-        "strokeValue": "8.5 wide, about 106 long",
-        "neck": "Neck",
-        "neckValue": "About 5.6, head to bowl",
-        "pupil": "Pupil",
-        "pupilValue": "r 3.6, coral, in the eye",
-        "ends": "Terminals",
-        "endsValue": "Round caps and round joins"
+        "gridValue": "64 × 64 units, centre (32, 32); angles run clockwise from 3 o’clock",
+        "outer": "Outer ring",
+        "outerValue": "r 24, stroke 6, 280° from 200°, at 55%",
+        "inner": "Inner ring",
+        "innerValue": "r 15.5, stroke 6.5, 260° from 230°, at 85%",
+        "gaps": "Gaps",
+        "gapsValue": "80° and 100°, both towards the lower left",
+        "ends": "Ends",
+        "endsValue": "Round",
+        "point": "Point",
+        "pointValue": "r 6.5, solid coral, at the centre",
+        "balance": "Balance",
+        "balanceValue": "Ink spans about x 6.4–59 and y 5–59; lockups are placed by it"
       },
       "colourTitle": "Colour",
-      "colourBody": "The letter takes the opposite of its ground: white on night and on the app tile, deep indigo on lavender and white. The pupil is coral, bright on dark grounds and a step deeper on light ones. Two exceptions: in one-colour print the pupil takes the letter’s colour, and on the coral marketing tile the letter is indigo and the pupil white.",
+      "colourBody": "The rings take the opposite of their ground: white on night and on the app tile, deep indigo on lavender and white, the outer ring at 55% and the inner at 85%. The point is coral, bright on dark grounds and a step deeper on light ones. Two exceptions: in one colour, both rings go to full strength and the point takes their colour; on the coral marketing tile, the rings are solid indigo and the point white.",
       "onNight": "On night",
       "onLavender": "On lavender",
       "onWhite": "On white",
@@ -2798,14 +2788,14 @@
       "onTile": "App tile",
       "signalTile": "Marketing tile",
       "motionTitle": "Motion",
-      "motionBody": "In the product the mark comes alive. The stroke draws itself once, from the tip of the head, the way a pen would write it; then the pupil pops into the eye, and every few seconds it glances right, then left, and blinks. It appears where people wait or arrive: the sign-in panel, the candidate’s loading and finish screens, and the “all caught up” card. In the interface it takes violet, or white on a raised card. With reduced motion it stands still, fully drawn.",
+      "motionBody": "In the product the mark comes alive. The outer ring draws in, then the inner, and the point lands with a small overshoot. Then, every seven seconds or so, the rings turn a little in opposite directions and settle back as the point pulses, like a lens finding focus. It appears where people wait or arrive: the sign-in panel, the candidate’s loading and finish screens, and the “all caught up” card. In the interface it takes violet, or white on a raised card. With reduced motion it stands still, fully drawn.",
       "motionSpecs": {
         "draw": "Draw",
-        "drawValue": "1.1 s, once",
-        "pupil": "Pupil",
-        "pupilValue": "Pops in after 1 s",
-        "glance": "Glance and blink",
-        "glanceValue": "Every 6 s",
+        "drawValue": "Outer ring, then inner: 1.2 s, once",
+        "point": "Point",
+        "pointValue": "Lands at 1 s, with a small overshoot",
+        "focus": "Finding focus",
+        "focusValue": "Rings turn, point pulses, every 7 s",
         "still": "Reduced motion",
         "stillValue": "Still, fully drawn"
       },
@@ -2819,7 +2809,7 @@
       "items": {
         "horizontal": {
           "name": "Horizontal, bilingual",
-          "body": "The primary logo, wherever both languages appear: the ʿayn, aalim and عالم, with a hairline between the words."
+          "body": "The primary logo, wherever both languages appear: the mark, aalim and عالم, with a hairline between the words."
         },
         "english": {
           "name": "English",
@@ -2831,15 +2821,15 @@
         },
         "mono": {
           "name": "One colour",
-          "body": "Stamps, embossing and one-colour print. The pupil joins the letter."
+          "body": "Stamps, embossing and one-colour print. Both rings go to full strength and the point takes their colour."
         },
         "reverse": {
           "name": "Reversed",
-          "body": "On night: the letter and the words in white, the pupil still coral."
+          "body": "On night: the rings and the words in white, the point still coral."
         },
         "tile": {
           "name": "App tile",
-          "body": "The white ʿayn on a squircle running violet to navy, with a coral pupil. It stands in for the logo where space is tight: the app, the browser tab, a profile picture. Corners are 30% of the side in the app and 22.5% in the icon files."
+          "body": "White rings on a squircle running violet to navy, with a coral point. It stands in for the logo where space is tight: the app, the browser tab, a profile picture. Corners are 30% of the side in the app and 22.5% in the icon files."
         }
       },
       "wordmarkTitle": "The wordmark",
@@ -2857,7 +2847,7 @@
       "clearBody": "Keep x clear on every side, where x is the height of aalim, from the baseline to the top of the l. Around the mark or the app tile on its own, keep half its width. Text, edges and other logos stay outside.",
       "x": "x",
       "minTitle": "Minimum sizes",
-      "minBody": "Shown at actual size. Any smaller and the eye fills in and the pupil is lost: use the app tile instead.",
+      "minBody": "Shown at actual size. Any smaller and the gaps close up and the rings run into the point: use the app tile instead.",
       "sizes": {
         "mark": "Mark",
         "tile": "App tile",
@@ -2871,12 +2861,12 @@
       "title": "Misuse",
       "lede": "The logo is a drawing, not a typeface. Don’t change it.",
       "items": {
-        "mirror": "Mirror the letter",
-        "close": "Close the head",
-        "pupil": "Move the pupil or change its colour",
-        "recolour": "Recolour the letter or the wordmark",
+        "close": "Close the rings",
+        "point": "Move the point off centre",
+        "recolour": "Recolour the point or the rings",
+        "weights": "Change the ring weights or strengths",
+        "turn": "Turn the gaps away from the lower left",
         "stretch": "Stretch or squash it",
-        "rotate": "Rotate it",
         "effects": "Add shadows or glows",
         "retype": "Retype the wordmark",
         "busy": "Put it on a busy picture",
@@ -2897,7 +2887,7 @@
         },
         "coral": {
           "name": "Coral",
-          "role": "The signal: the mark’s pupil, the estimate dot, the evidence band and the one call to action that matters. Deeper in the light theme."
+          "role": "The signal: the mark’s point, the estimate dot, the evidence band and the one call to action that matters. Deeper in the light theme."
         },
         "blue": {
           "name": "Blue",
@@ -2967,7 +2957,7 @@
         "lavender": "Lavender"
       },
       "ruleTitle": "The coral rule",
-      "ruleBody": "Coral marks what matters, so keep it rare: the pupil, the estimate, the evidence band and one button. On night it reads at {ratio}:1; on lavender use the deeper coral. Text on a coral button is deep indigo in the dark theme and white in the light."
+      "ruleBody": "Coral marks what matters, so keep it rare: the mark’s point, the estimate, the evidence band and one button. On night it reads at {ratio}:1; on lavender use the deeper coral. Text on a coral button is deep indigo in the dark theme and white in the light."
     },
     "type": {
       "title": "Typography",
@@ -3055,11 +3045,18 @@
       "title": "Motifs",
       "lede": "The mark’s shapes, used as graphics, and the product idea, drawn as data.",
       "sweepTitle": "The sweep",
-      "sweepBody": "The ʿayn’s bowl, drawn very large, is the brand’s supergraphic: a crescent that sweeps in from the edge of a poster, a slide or a social image. Keep it big, behind the type and running off the page. Never use it as a frame or a container.",
+      "sweepBody": "Open rings, drawn very large, are the brand’s supergraphic: arcs that sweep in from the edge of a poster, a slide or a social image and open towards the type. Keep them big, behind the type and running off the page, with the outer ring the lighter. Never use them as a frame or a container.",
       "sweepPoster": "Evidence, not impressions",
       "sweepStatus": "Adaptive skills assessment",
+      "scenesTitle": "Scene covers",
+      "scenesBody": "Every scene in an assessment opens with its own cover: two or three open rings closing in on a coral point, with faint ripples further out for what we haven’t looked at yet. The picture is composed from the scene’s title, so it is the same on the web and in the phone app, and no two scenes look quite alike.",
+      "scenes": [
+        "Monday’s backlog",
+        "The late delivery",
+        "Two orders, one truck"
+      ],
       "dotTitle": "The coral dot",
-      "dotBody": "The pupil travels on its own as a coral dot: the status dot in a pill, the estimate where a chart lands, and the full stop at the end of a headline. It marks what matters, so keep it to one or two in view.",
+      "dotBody": "The mark’s point travels on its own as a coral dot: the status dot in a pill, the estimate where a chart lands, and the full stop at the end of a headline. It marks what matters, so keep it to one or two in view.",
       "dots": {
         "status": "Status",
         "estimate": "Estimate",
@@ -3067,7 +3064,7 @@
       },
       "dotPill": "In progress",
       "signTitle": "The watermark",
-      "signBody": "A raised card may carry the ʿayn faintly in its corner: the letter at a tenth of white, the pupil still coral. It sits behind the content, and appears once per screen at most.",
+      "signBody": "A raised card may carry the rings faintly in its corner: white, at about a seventh of their usual strength, with the point still coral. It sits behind the content, and appears once per screen at most.",
       "sign": {
         "eyebrow": "Your week at Northwind Logistics",
         "title": "Welcome to the team",
@@ -3289,16 +3286,18 @@
         "logoPng": "Horizontal",
         "logoReversePng": "Horizontal, reversed",
         "symbolPng": "App tile, 1024 px",
+        "symbol512": "App tile, 512 px",
+        "symbol192": "App tile, 192 px",
         "maskable": "Android icon",
         "email": "Email header, 3×",
         "ogEn": "Social image, English",
         "ogAr": "Social image, Arabic"
       },
-      "socialBody": "Link previews on night: the promise in large type, its full stop the coral dot, and the ʿayn beside it.",
+      "socialBody": "Link previews on night: the promise in large type, its full stop the coral dot, and the mark glowing beside it.",
       "download": "Download {name}"
     },
     "footer": {
-      "line": "ʿAyn is the Aalim brand, in Night colours. Version 3.0, November 2026.",
+      "line": "Focus is the Aalim brand, in Night colours. Version 3.1, November 2026.",
       "back": "Back to Aalim"
     }
   },

@@ -1,5 +1,6 @@
 import type { CSSProperties, ReactNode } from "react";
 import { ARABIC, LATIN, LOCKUP, MARK } from "@/components/brand/wordmark-paths";
+import { arcPath, sceneArt } from "@/lib/brand/scene-art";
 
 /**
  * Drawings for the brand book. Every number here comes from the mark's own
@@ -8,13 +9,13 @@ import { ARABIC, LATIN, LOCKUP, MARK } from "@/components/brand/wordmark-paths";
  * Artboards use fixed Night colours; figures on the page itself use the tokens.
  */
 
-/** Deep indigo: the letter on lavender and white. */
+/** Deep indigo: the rings on lavender and white. */
 export const INDIGO = "#1b1840";
 /** The night artboard. */
 export const NIGHT = "#141235";
 export const LAVENDER = "#efedfb";
 export const WHITE = "#ffffff";
-/** The pupil on night (dark --saffron) and on light grounds (light --saffron). */
+/** The point on night (dark --saffron) and on light grounds (light --saffron). */
 export const CORAL = "#ff5c7c";
 export const CORAL_DEEP = "#e8436b";
 /** Coral as small text on white (light --signal-hover). */
@@ -28,6 +29,14 @@ const TILE = ["#7564ee", "#1e2f86"] as const;
 const rad = (a: number) => (a * Math.PI) / 180;
 const onCircle = (c: { cx: number; cy: number; r: number }, a: number) => ({ x: c.cx + c.r * Math.cos(rad(a)), y: c.cy + c.r * Math.sin(rad(a)) });
 
+/**
+ * A label in a drawing set `direction="ltr"`: an Arabic label is laid out right
+ * to left (so numbers and ° stay with their words), keeping the side it grows
+ * from: `anchor` is where the label sits, as for Latin text.
+ */
+const labelDir = (text: string, anchor: "start" | "end" = "start") =>
+  /[؀-ۿ]/.test(text) ? ({ direction: "rtl", textAnchor: anchor === "start" ? "end" : "start" } as const) : ({ textAnchor: anchor } as const);
+
 type Ring = (typeof MARK)["outer"];
 const ringPath = (g: Ring, turn = 0) => {
   const p0 = onCircle({ cx: MARK.cx, cy: MARK.cy, r: g.r }, g.from + turn);
@@ -35,20 +44,26 @@ const ringPath = (g: Ring, turn = 0) => {
   return `M${p0.x} ${p0.y}A${g.r} ${g.r} 0 1 1 ${p1.x} ${p1.y}`;
 };
 
+/** A ring's stroke width and strength, to draw a don't with the weights changed. */
+export type RingWeight = { w: number; opacity: number };
+
 /**
- * Focus: the two open rings and the point. `closed`, `flat`, `turn` and `dotAt`
- * exist only to draw what not to do.
+ * Focus: the two open rings and the point. `flat` draws the one-colour version
+ * (both rings at full strength; pass the ring colour as `dot` too). `closed`,
+ * `turn`, `weights` and `dotAt` exist only to draw what not to do.
  */
-function MarkShapes({ fg = INDIGO, dot = CORAL_DEEP, closed = false, flat = false, turn = 0, dotAt }: { fg?: string; dot?: string; closed?: boolean; flat?: boolean; turn?: number; dotAt?: { cx: number; cy: number } }) {
+function MarkShapes({ fg = INDIGO, dot = CORAL_DEEP, closed = false, flat = false, turn = 0, weights, dotAt }: { fg?: string; dot?: string; closed?: boolean; flat?: boolean; turn?: number; weights?: readonly [RingWeight, RingWeight]; dotAt?: { cx: number; cy: number } }) {
   return (
     <>
-      {[MARK.outer, MARK.inner].map((g) =>
-        closed ? (
-          <circle key={g.r} cx={MARK.cx} cy={MARK.cy} r={g.r} fill="none" stroke={fg} strokeWidth={g.w} strokeOpacity={flat ? 1 : g.opacity} />
+      {[MARK.outer, MARK.inner].map((g, i) => {
+        const w = weights?.[i]?.w ?? g.w;
+        const opacity = flat ? 1 : (weights?.[i]?.opacity ?? g.opacity);
+        return closed ? (
+          <circle key={g.r} cx={MARK.cx} cy={MARK.cy} r={g.r} fill="none" stroke={fg} strokeWidth={w} strokeOpacity={opacity} />
         ) : (
-          <path key={g.r} d={turn ? ringPath(g, turn) : g.d} fill="none" stroke={fg} strokeWidth={g.w} strokeOpacity={flat ? 1 : g.opacity} strokeLinecap="round" />
-        ),
-      )}
+          <path key={g.r} d={turn ? ringPath(g, turn) : g.d} fill="none" stroke={fg} strokeWidth={w} strokeOpacity={opacity} strokeLinecap="round" />
+        );
+      })}
       <circle cx={dotAt?.cx ?? MARK.cx} cy={dotAt?.cy ?? MARK.cy} r={MARK.dot.r} fill={dot} />
     </>
   );
@@ -75,11 +90,28 @@ function Grid({ minor, major, size = 64 }: { minor: string; major: string; size?
  */
 export function MarkConstruction({ labels }: { labels: { units: string; outer: string; inner: string; stroke: string; point: string; gap: string } }) {
   const { outer, inner, cx, cy, dot } = MARK;
+  const at = (r: number, a: number) => onCircle({ cx, cy, r }, a);
   const t = { fontSize: 2.5, fill: DIM, fontFamily: "var(--font-sans)" } as const;
   const dim = { stroke: DIM, strokeWidth: 0.16 } as const;
   const guide = { fill: "none", stroke: CORAL_DEEP, strokeWidth: 0.24, strokeDasharray: "1 0.8" } as const;
-  const ends = [outer, inner].flatMap((g) => [onCircle({ cx, cy, r: g.r }, g.from), onCircle({ cx, cy, r: g.r }, g.to)]);
-  const gapMid = onCircle({ cx, cy, r: outer.r + 6 }, (outer.to - 360 + outer.from) / 2);
+  const ends = [outer, inner].flatMap((g) => [at(g.r, g.from), at(g.r, g.to)]);
+  // Each gap runs from where its ring ends (past 360°) round to where it starts.
+  const gaps = [
+    { from: outer.to - 360, to: outer.from, r: outer.r + outer.w / 2 + 2.4 }, // outside the outer ring
+    { from: inner.to - 360, to: inner.from, r: (dot.r + inner.r - inner.w / 2) / 2 }, // in the hollow round the point
+  ];
+  const arc = (g: (typeof gaps)[number]) => {
+    const p0 = at(g.r, g.from);
+    const p1 = at(g.r, g.to);
+    return `M${p0.x} ${p0.y}A${g.r} ${g.r} 0 0 1 ${p1.x} ${p1.y}`;
+  };
+  const gapLabel = at(gaps[0]!.r + 4, (gaps[0]!.from + gaps[0]!.to) / 2);
+  // Leaders to the labels on the right: each starts on the part it names.
+  const rows = [
+    { y: cy - 15, x: cx + Math.sqrt(outer.r ** 2 - 15 ** 2), label: labels.outer },
+    { y: cy - 6, x: cx + Math.sqrt(inner.r ** 2 - 6 ** 2), label: labels.inner },
+    { y: cy + 3, x: cx + Math.sqrt(dot.r ** 2 - 3 ** 2) - 1.2, label: labels.point },
+  ];
   return (
     <svg viewBox="-22 -11 108 86" className="h-auto w-full" role="img" aria-label={[labels.units, labels.outer, labels.inner, labels.stroke, labels.gap, labels.point].join(", ")} direction="ltr">
       <Grid minor={GRID} major={GRID_STRONG} />
@@ -105,30 +137,37 @@ export function MarkConstruction({ labels }: { labels: { units: string; outer: s
         {labels.units}
       </text>
       {/* Radii, labelled on the right */}
-      <g {...dim} strokeDasharray="0.5 0.5">
-        <line x1={cx + outer.r + outer.w / 2 + 0.6} y1={cy - 8} x2={67} y2={cy - 8} />
-        <line x1={cx + inner.r + inner.w / 2 + 0.6} y1={cy + 2} x2={67} y2={cy + 2} />
-        <line x1={cx + dot.r + 0.6} y1={cy + 12} x2={67} y2={cy + 12} />
-      </g>
-      <text x={68} y={cy - 7.1} {...t}>
-        {labels.outer}
-      </text>
-      <text x={68} y={cy + 2.9} {...t}>
-        {labels.inner}
-      </text>
-      <text x={68} y={cy + 12.9} {...t}>
-        {labels.point}
-      </text>
-      {/* Stroke width across the bottom of the outer ring */}
+      {rows.map((row) => (
+        <g key={row.y}>
+          <line x1={row.x} y1={row.y} x2={67} y2={row.y} {...dim} strokeDasharray="0.5 0.5" />
+          <circle cx={row.x} cy={row.y} r={0.55} fill={WHITE} stroke={DIM} strokeWidth={0.18} />
+          <text x={68} y={row.y + 0.9} {...t} {...labelDir(row.label)}>
+            {row.label}
+          </text>
+        </g>
+      ))}
+      {/* Stroke widths across the bottom of both rings */}
       <g {...dim}>
-        <line x1={cx} y1={cy + outer.r - outer.w / 2} x2={cx} y2={cy + outer.r + outer.w / 2} stroke={WHITE} strokeWidth={0.3} />
+        {[outer, inner].map((g) => (
+          <line key={g.r} x1={cx} y1={cy + g.r - g.w / 2} x2={cx} y2={cy + g.r + g.w / 2} stroke={WHITE} strokeWidth={0.3} />
+        ))}
         <line x1={cx + 1} y1={cy + outer.r + outer.w / 2} x2={cx + 1} y2={68} strokeDasharray="0.5 0.5" />
       </g>
-      <text x={cx + 2} y={70.5} {...t}>
+      <text x={cx + 2} y={70.5} {...t} {...labelDir(labels.stroke)}>
         {labels.stroke}
       </text>
-      {/* The gap both rings open towards */}
-      <text x={gapMid.x - 1} y={gapMid.y + 3} textAnchor="end" {...t}>
+      {/* The two gaps, both towards the lower left */}
+      {gaps.map((g) => (
+        <g key={g.r} fill="none" stroke={CORAL_DEEP} strokeWidth={0.24}>
+          <path d={arc(g)} strokeDasharray="0.7 0.5" />
+          {[g.from, g.to].map((a) => {
+            const p0 = at(g.r - 0.9, a);
+            const p1 = at(g.r + 0.9, a);
+            return <line key={a} x1={p0.x} y1={p0.y} x2={p1.x} y2={p1.y} />;
+          })}
+        </g>
+      ))}
+      <text x={gapLabel.x} y={gapLabel.y + 1.6} {...t} {...labelDir(labels.gap, "end")} fill={CORAL_TEXT}>
         {labels.gap}
       </text>
     </svg>
@@ -163,27 +202,35 @@ export function CoverMark() {
  */
 export function FocusFigure({ labels }: { labels: { field: string; rings: string; point: string } }) {
   const t = { fontSize: 3.4, fill: WHITE, fontFamily: "var(--font-sans)", fontWeight: 600 } as const;
+  const starts = [
+    { x: MARK.cx + Math.sqrt(42 ** 2 - 18 ** 2), y: MARK.cy - 18 },
+    { x: MARK.cx + MARK.outer.r, y: MARK.cy },
+    onCircle({ cx: MARK.cx, cy: MARK.cy, r: MARK.dot.r - 1 }, 50),
+  ];
   const field = [30, 36, 42].map((r, i) => (
     <circle key={r} cx={MARK.cx} cy={MARK.cy} r={r} fill="none" stroke={WHITE} strokeOpacity={0.08 - i * 0.02} strokeWidth={1.4} strokeDasharray={`${4 + i * 3} ${3 + i * 2}`} />
   ));
   return (
-    <svg viewBox="-12 -12 112 88" className="h-auto w-full" role="img" aria-label={`${labels.field}, ${labels.rings}, ${labels.point}`} direction="ltr">
+    <svg viewBox="-12 -12 122 88" className="h-auto w-full" role="img" aria-label={`${labels.field}, ${labels.rings}, ${labels.point}`} direction="ltr">
       {field}
       <circle cx={MARK.cx} cy={MARK.cy} r={MARK.dot.r * 2.6} fill={CORAL} opacity={0.28} style={{ filter: "blur(3px)" }} />
       <MarkShapes fg={WHITE} dot={CORAL} />
+      {/* Leaders, each starting on what it names: the outermost ripple, the outer ring, the point. */}
       <g stroke={WHITE} strokeOpacity={0.6} strokeWidth={0.22} fill="none">
-        <line x1={MARK.cx + 36} y1={MARK.cy - 18} x2={82} y2={MARK.cy - 18} />
-        <line x1={MARK.cx + MARK.outer.r + 3.6} y1={MARK.cy} x2={82} y2={MARK.cy} />
-        <line x1={MARK.cx + MARK.dot.r + 0.6} y1={MARK.cy + 2} x2={MARK.cx + 10} y2={MARK.cy + 18} />
-        <line x1={MARK.cx + 10} y1={MARK.cy + 18} x2={82} y2={MARK.cy + 18} />
+        <line x1={starts[0]!.x} y1={starts[0]!.y} x2={82} y2={starts[0]!.y} />
+        <line x1={starts[1]!.x} y1={starts[1]!.y} x2={82} y2={starts[1]!.y} />
+        <polyline points={`${starts[2]!.x},${starts[2]!.y} ${MARK.cx + 12},${MARK.cy + 18} 82,${MARK.cy + 18}`} />
       </g>
-      <text x={83.5} y={MARK.cy - 16.8} {...t} fillOpacity={0.75}>
+      {starts.map((p) => (
+        <circle key={p.y} cx={p.x} cy={p.y} r={0.75} fill={WHITE} />
+      ))}
+      <text x={83.5} y={MARK.cy - 16.8} {...t} {...labelDir(labels.field)} fillOpacity={0.75}>
         {labels.field}
       </text>
-      <text x={83.5} y={MARK.cy + 1.2} {...t}>
+      <text x={83.5} y={MARK.cy + 1.2} {...t} {...labelDir(labels.rings)}>
         {labels.rings}
       </text>
-      <text x={83.5} y={MARK.cy + 19.2} {...t} fill={CORAL}>
+      <text x={83.5} y={MARK.cy + 19.2} {...t} {...labelDir(labels.point)} fill={CORAL}>
         {labels.point}
       </text>
     </svg>
@@ -191,23 +238,47 @@ export function FocusFigure({ labels }: { labels: { field: string; rings: string
 }
 
 /**
- * The supergraphic: the outer ring, drawn very large as an open arc that
- * sweeps in from the edge, in the app tile's violet and navy.
+ * The supergraphic: both rings drawn very large, centred off the board's
+ * lower right so they sweep in from the edge with their round ends and open
+ * towards the type, in the app tile's violet and navy. The outer ring stays
+ * the lighter one, as in the mark; the point stays off the board.
  */
 export function Sweep({ className }: { className?: string }) {
-  const k = 3.4;
+  const k = 3;
   return (
     <svg viewBox="0 0 160 90" preserveAspectRatio="xMidYMid slice" className={className} aria-hidden>
       <defs>
         <linearGradient id="bb-sweep" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stopColor={TILE[0]} stopOpacity={0.9} />
-          <stop offset="1" stopColor={TILE[1]} stopOpacity={0.15} />
+          <stop offset="0" stopColor={TILE[0]} stopOpacity={0.95} />
+          <stop offset="0.6" stopColor={TILE[1]} stopOpacity={0.2} />
         </linearGradient>
       </defs>
-      <g transform={`translate(${118 - MARK.cx * k} ${46 - MARK.cy * k}) scale(${k})`}>
-        <path d={MARK.outer.d} fill="none" stroke="url(#bb-sweep)" strokeWidth={MARK.outer.w} strokeLinecap="round" />
-        <path d={MARK.inner.d} fill="none" stroke="url(#bb-sweep)" strokeWidth={MARK.inner.w} strokeLinecap="round" strokeOpacity={0.6} />
+      <g transform={`translate(${150 - MARK.cx * k} ${74 - MARK.cy * k}) scale(${k})`}>
+        <path d={MARK.outer.d} fill="none" stroke="url(#bb-sweep)" strokeWidth={MARK.outer.w} strokeLinecap="round" strokeOpacity={0.6} />
+        <path d={MARK.inner.d} fill="none" stroke="url(#bb-sweep)" strokeWidth={MARK.inner.w} strokeLinecap="round" />
       </g>
+    </svg>
+  );
+}
+
+/**
+ * A scene's cover art as the product draws it (src/lib/brand/scene-art.ts):
+ * open rings closing in on the coral point, faint ripples further out,
+ * composed from the scene's title. For a raised (hero) card.
+ */
+export function SceneCover({ seed, className }: { seed: string; className?: string }) {
+  const art = sceneArt(seed);
+  return (
+    <svg viewBox={`0 0 ${art.width} ${art.height}`} preserveAspectRatio="xMidYMid slice" className={className} aria-hidden>
+      <g fill="none" stroke="var(--hero-foreground)" strokeLinecap="round">
+        {art.field.map((a, i) => (
+          <path key={i} d={arcPath(a)} strokeWidth={a.w} strokeOpacity={a.strength} />
+        ))}
+        {art.sweeps.map((a, i) => (
+          <path key={`s${i}`} d={arcPath(a)} strokeWidth={a.w} strokeOpacity={0.24 + a.strength * 0.5} />
+        ))}
+      </g>
+      <circle cx={art.dot.cx} cy={art.dot.cy} r={art.dot.r} fill="var(--signal)" />
     </svg>
   );
 }
@@ -215,7 +286,7 @@ export function Sweep({ className }: { className?: string }) {
 /**
  * One skill, measured: the band of plausible levels after each answer,
  * narrowing towards the estimate, drawn bottom-up in the page's own tokens so
- * it follows the theme. The estimate wears the pupil's coral.
+ * it follows the theme. The estimate wears the coral of the mark's point.
  */
 export function NarrowingFigure({ rows, estimate, scale, rtl }: { rows: { label: string; lo: number; hi: number }[]; estimate: { label: string; value: number }; scale: [string, string]; rtl: boolean }) {
   const W = 150;
@@ -270,7 +341,7 @@ export function NarrowingFigure({ rows, estimate, scale, rtl }: { rows: { label:
 type LockupVariant = "both" | "latin" | "arabic";
 
 /**
- * The horizontal lockups as scripts/brand-assets.mts draws them (the ʿayn,
+ * The horizontal lockups as scripts/brand-assets.mts draws them (the mark,
  * aalim, a rounded hairline, عالم; sizes in units of the Latin height), in
  * any colours. Arabic alone puts the mark on the right, where reading starts.
  */
@@ -310,10 +381,10 @@ function lockup(variant: LockupVariant) {
   // Placed by its ink, so the box starts and ends where the drawing does.
   const left = 0;
   const right = x;
-  const parts = (fg: string, dot: string): ReactNode => (
+  const parts = (fg: string, dot: string, flat = false): ReactNode => (
     <>
       <g transform={`translate(${at.mark} ${markTop}) scale(${mark / 64})`}>
-        <MarkShapes fg={fg} dot={dot} />
+        <MarkShapes fg={fg} dot={dot} flat={flat} />
       </g>
       {at.latin !== undefined ? <path transform={`translate(${at.latin} 0)`} d={LATIN.d} fill={fg} /> : null}
       {at.rule !== undefined ? <rect x={at.rule} y={H * 0.12} width={H * 0.07} height={H * 0.88} rx={H * 0.035} fill={fg} opacity={0.24} /> : null}
@@ -327,13 +398,13 @@ function lockup(variant: LockupVariant) {
   return { H, left, width: right - left, top, height: bottom - top, parts };
 }
 
-/** A lockup in fixed brand colours, drawn live (no font needed). */
-export function LockupArt({ variant = "both", fg = INDIGO, dot = CORAL_DEEP, className, style }: { variant?: LockupVariant; fg?: string; dot?: string; className?: string; style?: CSSProperties }) {
+/** A lockup in fixed brand colours, drawn live (no font needed). `flat`, with `dot` the same as `fg`, is the one-colour logo. */
+export function LockupArt({ variant = "both", fg = INDIGO, dot = CORAL_DEEP, flat = false, className, style }: { variant?: LockupVariant; fg?: string; dot?: string; flat?: boolean; className?: string; style?: CSSProperties }) {
   const l = lockup(variant);
   const pad = l.H * 0.06;
   return (
     <svg viewBox={`${l.left - pad} ${l.top - pad} ${l.width + pad * 2} ${l.height + pad * 2}`} className={className} style={style} role="img" aria-label="Aalim">
-      {l.parts(fg, dot)}
+      {l.parts(fg, dot, flat)}
     </svg>
   );
 }
@@ -369,12 +440,13 @@ export function ClearSpace({ x }: { x: string }) {
 
 /**
  * The mark in fixed brand colours (for artboards), or in tokens when given CSS
- * variables. `closeHead` and `pupil` draw misuse examples only.
+ * variables. `flat`, with `dot` the same as `fg`, is the one-colour mark;
+ * `closed`, `turn`, `weights` and `dotAt` draw misuse examples only.
  */
-export function Mark({ fg = INDIGO, dot = CORAL_DEEP, closed, flat, turn, dotAt, className, style }: { fg?: string; dot?: string; closed?: boolean; flat?: boolean; turn?: number; dotAt?: { cx: number; cy: number }; className?: string; style?: CSSProperties }) {
+export function Mark({ fg = INDIGO, dot = CORAL_DEEP, closed, flat, turn, weights, dotAt, className, style }: { fg?: string; dot?: string; closed?: boolean; flat?: boolean; turn?: number; weights?: readonly [RingWeight, RingWeight]; dotAt?: { cx: number; cy: number }; className?: string; style?: CSSProperties }) {
   return (
     <svg viewBox="0 0 64 64" className={className} style={style} aria-hidden>
-      <MarkShapes fg={fg} dot={dot} closed={closed} flat={flat} turn={turn} dotAt={dotAt} />
+      <MarkShapes fg={fg} dot={dot} closed={closed} flat={flat} turn={turn} weights={weights} dotAt={dotAt} />
     </svg>
   );
 }

@@ -13,7 +13,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { contrastRatio } from "@/lib/contrast";
 import { cn } from "@/lib/utils";
-import { CORAL, ClearSpace, CoverMark, FocusFigure, INDIGO, LockupArt, Mark, MarkConstruction, NarrowingFigure, Sweep, WHITE, WordmarkGuides, WordmarkShape } from "./figures";
+import { CORAL, ClearSpace, CoverMark, FocusFigure, INDIGO, LockupArt, Mark, MarkConstruction, NarrowingFigure, SceneCover, Sweep, WHITE, WordmarkGuides, WordmarkShape } from "./figures";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("brandbook");
@@ -36,14 +36,6 @@ const BOARD = {
   /** A stand-in for a busy photograph, for the misuse example. */
   busy: "bg-[#c9a27e] bg-[radial-gradient(40%_55%_at_20%_30%,#f4d35e,transparent),radial-gradient(45%_60%_at_80%_20%,#3a7d44,transparent),radial-gradient(50%_60%_at_60%_90%,#6b2d5c,transparent),repeating-linear-gradient(115deg,rgb(255_255_255/0.28)_0_6px,transparent_6px_14px)] text-[#1b1840]",
 } as const;
-
-/** The four words that start with ع (the product's name first). */
-const WORDS = [
-  ["alam", "عالم"],
-  ["ilm", "علم"],
-  ["amal", "عمل"],
-  ["ayn", "عين"],
-] as const;
 
 function Board({ tone = "white", className, children }: { tone?: keyof typeof BOARD; className?: string; children: ReactNode }) {
   return <div className={cn("relative overflow-hidden rounded-card", BOARD[tone], className)}>{children}</div>;
@@ -102,7 +94,7 @@ const THEME_TOKENS = [
   ["highlight", "highlight"],
 ] as const;
 
-/** The brand book: the ʿAyn in Night colours, built from the product's own components, in both languages and both themes. */
+/** The brand book: Focus in Night colours, built from the product's own components, in both languages and both themes. */
 export default async function BrandPage() {
   const t = await getTranslations("brandbook");
   const tf = await getTranslations("landing.hero.figure");
@@ -114,13 +106,13 @@ export default async function BrandPage() {
   const D = tk.dark;
   const L = tk.light;
   const n = (k: string) => t(`colour.names.${k}`);
-  // The edition's name in both scripts. In display the ʿayn sign is set as a turned comma (‘), which the brand face has.
+  // The edition's name in both scripts, in both languages: a name, like the logo, so it isn't translated.
   const names = [
     <span key="en" lang="en" dir="ltr" style={JAKARTA} className="font-extrabold leading-[0.9] tracking-[-0.045em]">
-      ‘Ayn
+      Focus
     </span>,
     <span key="ar" lang="ar" dir="rtl" style={READEX} className="font-bold leading-[1.1]">
-      عين
+      تركيز
     </span>,
   ];
 
@@ -243,7 +235,7 @@ export default async function BrandPage() {
                   />
                   <div className="flex items-center gap-4 rounded-[18px] bg-surface-sunken p-4 sm:flex-col sm:items-start">
                     <Mark fg="var(--text)" dot="var(--saffron)" className="size-16 shrink-0 sm:size-20" />
-                    <p className="text-sm leading-snug text-secondary">{t("idea.figure.pupil")}</p>
+                    <p className="text-sm leading-snug text-secondary">{t("idea.figure.point")}</p>
                   </div>
                 </div>
                 <figcaption className="mt-3 px-1 text-sm text-tertiary">{t("idea.figure.caption")}</figcaption>
@@ -273,36 +265,35 @@ export default async function BrandPage() {
               </div>
             </div>
 
-            {/* One letter, four words: ع begins the name, knowledge, work and the eye. */}
-            <div className="mt-20 grid gap-10 lg:grid-cols-12 lg:gap-8">
-              <div className="lg:col-span-5">
-                <h3 className="r-label text-tertiary">{t("idea.lettersTitle")}</h3>
-                <p className="mt-3 text-[17px] leading-relaxed text-secondary">{t("idea.lettersBody")}</p>
-              </div>
-              <ul className="grid grid-cols-2 gap-4 lg:col-span-7">
-                {WORDS.map(([k, word]) => (
-                  <li key={k} className={cn(CARD, "flex flex-col p-5 sm:p-6")}>
-                    <p lang="ar" dir="rtl" style={READEX} className="w-fit text-[2.75rem] font-bold leading-[1.3] text-text sm:text-[3.5rem]">
-                      <span className="text-[var(--signal)]">{word.slice(0, 1)}</span>
-                      {word.slice(1)}
-                    </p>
-                    <p className="mt-2 text-sm font-semibold text-text">{t(`idea.words.${k}.sound`)}</p>
-                    <p className="mt-1 text-sm leading-snug text-secondary">{t(`idea.words.${k}.meaning`)}</p>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* The eye: the hollow of the head, with the pupil in it. */}
+            {/* Into focus: the field of what we don't know, the rings closing in, the point we can stand behind. */}
             <div className="mt-20 grid items-center gap-10 lg:grid-cols-12 lg:gap-8">
               <figure className="lg:col-span-7">
                 <Board tone="night" className="px-4 py-6 sm:px-10 sm:py-10">
-                  <FocusFigure labels={{ field: t("idea.eyeLabels.eye"), rings: t("idea.eyeLabels.eye"), point: t("idea.eyeLabels.pupil") }} />
+                  <FocusFigure labels={{ field: t("idea.focusParts.unknown.name"), rings: t("idea.focusParts.rings.name"), point: t("idea.focusParts.point.name") }} />
                 </Board>
               </figure>
               <div className="lg:col-span-5">
-                <h3 className="r-label text-tertiary">{t("idea.eyeTitle")}</h3>
-                <p className="mt-3 text-[17px] leading-relaxed text-secondary">{t("idea.eyeBody")}</p>
+                <h3 className="r-label text-tertiary">{t("idea.focusTitle")}</h3>
+                <p className="mt-3 text-[17px] leading-relaxed text-secondary">{t("idea.focusBody")}</p>
+                <dl className={cn(CARD, "mt-8 px-5 py-1")}>
+                  {(
+                    [
+                      ["unknown", <span key="u" className="size-4 rounded-full border-[1.5px] border-dashed border-[var(--text-tertiary)]" />],
+                      ["rings", <Mark key="r" fg="var(--text)" dot="transparent" className="size-5" />],
+                      ["point", <span key="p" className="size-3 rounded-full bg-[var(--signal)] shadow-[0_0_8px_var(--signal)]" />],
+                    ] as const
+                  ).map(([k, icon]) => (
+                    <div key={k} className="border-b border-border py-3.5 last:border-b-0">
+                      <dt className="flex items-center gap-3.5 text-sm font-semibold text-text">
+                        <span className="grid h-6 w-5 shrink-0 place-items-center" aria-hidden>
+                          {icon}
+                        </span>
+                        {t(`idea.focusParts.${k}.name`)}
+                      </dt>
+                      <dd className="mt-0.5 ps-[2.125rem] text-sm leading-relaxed text-secondary">{t(`idea.focusParts.${k}.body`)}</dd>
+                    </div>
+                  ))}
+                </dl>
               </div>
             </div>
 
@@ -327,14 +318,14 @@ export default async function BrandPage() {
             <div className="grid gap-10 lg:grid-cols-12 lg:gap-8">
               <figure className="lg:col-span-7">
                 <Board tone="white" className="p-3 sm:p-8">
-                  <MarkConstruction labels={{ units: t("mark.labels.units"), outer: t("mark.labels.head"), inner: t("mark.labels.bowl"), stroke: t("mark.labels.stroke"), point: t("mark.labels.pupil"), gap: t("mark.labels.neck") }} />
+                  <MarkConstruction labels={{ units: t("mark.labels.units"), outer: t("mark.labels.outer"), inner: t("mark.labels.inner"), stroke: t("mark.labels.stroke"), point: t("mark.labels.point"), gap: t("mark.labels.gap") }} />
                 </Board>
                 <figcaption className="sr-only">{t("mark.figureLabel")}</figcaption>
               </figure>
               <div className="lg:col-span-5">
                 <p className="text-[17px] leading-relaxed text-secondary">{t("mark.body")}</p>
                 <dl className={cn(CARD, "mt-8 px-5 py-2")}>
-                  {(["grid", "head", "bowl", "stroke", "neck", "pupil", "ends"] as const).map((k) => (
+                  {(["grid", "outer", "inner", "gaps", "ends", "point", "balance"] as const).map((k) => (
                     <div key={k} className="grid grid-cols-[7rem_minmax(0,1fr)] gap-4 border-b border-border py-3 text-sm last:border-b-0">
                       <dt className="text-tertiary">{t(`mark.specs.${k}`)}</dt>
                       <dd className="text-text tabular">{t(`mark.specs.${k}Value`)}</dd>
@@ -357,13 +348,13 @@ export default async function BrandPage() {
                   <Mark className="size-20 sm:size-24" />
                 </Swatch>
                 <Swatch label={t("mark.oneColour")} tone="white">
-                  <Mark dot={INDIGO} className="size-20 sm:size-24" />
+                  <Mark dot={INDIGO} flat className="size-20 sm:size-24" />
                 </Swatch>
                 <Swatch label={t("mark.onTile")} tone="lavender">
                   <LogoTile className="size-20 sm:size-24" />
                 </Swatch>
                 <Swatch label={t("mark.signalTile")} tone="lavender">
-                  {/* The coral tile, as the icon file draws it: indigo letter, white pupil. */}
+                  {/* The coral tile, as the icon file draws it: solid indigo rings, white point. */}
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src="/brand/symbol-signal.svg" alt="" className="size-20 sm:size-24" />
                 </Swatch>
@@ -376,7 +367,7 @@ export default async function BrandPage() {
                 <h3 className="r-label text-tertiary">{t("mark.motionTitle")}</h3>
                 <p className="mt-3 leading-relaxed text-secondary">{t("mark.motionBody")}</p>
                 <dl className={cn(CARD, "mt-8 px-5 py-2")}>
-                  {(["draw", "pupil", "glance", "still"] as const).map((k) => (
+                  {(["draw", "point", "focus", "still"] as const).map((k) => (
                     <div key={k} className="grid grid-cols-[8.5rem_minmax(0,1fr)] gap-4 border-b border-border py-3 text-sm last:border-b-0">
                       <dt className="text-tertiary">{t(`mark.motionSpecs.${k}`)}</dt>
                       <dd className="text-text tabular">{t(`mark.motionSpecs.${k}Value`)}</dd>
@@ -426,7 +417,7 @@ export default async function BrandPage() {
                 <LockupArt variant="arabic" className="h-14 w-auto max-w-full sm:h-16" />
               </Lockup>
               <Lockup className="md:col-span-2" tone="white" name={t("lockups.items.mono.name")} body={t("lockups.items.mono.body")}>
-                <LockupArt dot={INDIGO} className="h-9 w-auto max-w-full" />
+                <LockupArt dot={INDIGO} flat className="h-9 w-auto max-w-full" />
               </Lockup>
               <Lockup className="md:col-span-2" tone="night" name={t("lockups.items.reverse.name")} body={t("lockups.items.reverse.body")}>
                 <LockupArt fg={WHITE} dot={CORAL} className="h-9 w-auto max-w-full" />
@@ -490,29 +481,33 @@ export default async function BrandPage() {
           <Section id="misuse" n={4} title={t("misuse.title")} lede={t("misuse.lede")}>
             {/* Each example breaks exactly the rule under it, and nothing else. */}
             <ul className="grid grid-cols-2 gap-x-4 gap-y-6 md:grid-cols-5">
-              <Dont label={t("misuse.items.mirror")}>
-                <Mark className="size-14 -scale-x-100 sm:size-16" />
-              </Dont>
               <Dont label={t("misuse.items.close")}>
                 <Mark closed className="size-14 sm:size-16" />
               </Dont>
-              <Dont label={t("misuse.items.pupil")}>
-                <span className="flex items-center gap-1">
-                  <Mark dotAt={{ cx: 46, cy: 20 }} className="size-12 sm:size-14" />
-                  <Mark dot="#25c6b6" className="size-12 sm:size-14" />
-                </span>
+              <Dont label={t("misuse.items.point")}>
+                <Mark dotAt={{ cx: 36, cy: 28.5 }} className="size-14 sm:size-16" />
               </Dont>
               <Dont label={t("misuse.items.recolour")}>
                 <span className="flex items-center gap-2" dir="ltr">
-                  <Mark fg="#2d9cdb" className="size-8 sm:size-10" />
-                  <WordmarkShape fill="#2d9cdb" className="h-4 w-auto sm:h-5" />
+                  <Mark dot="#25c6b6" className="size-12 sm:size-14" />
+                  <Mark fg="#2d9cdb" className="size-12 sm:size-14" />
                 </span>
+              </Dont>
+              <Dont label={t("misuse.items.weights")}>
+                {/* Strong thin outer ring, heavy faint inner one: the weights swapped and changed. */}
+                <Mark
+                  weights={[
+                    { w: 2.5, opacity: 1 },
+                    { w: 9, opacity: 0.35 },
+                  ]}
+                  className="size-14 sm:size-16"
+                />
+              </Dont>
+              <Dont label={t("misuse.items.turn")}>
+                <Mark turn={150} className="size-14 sm:size-16" />
               </Dont>
               <Dont label={t("misuse.items.stretch")}>
                 <LockupArt variant="latin" className="h-6 w-auto scale-x-[1.3] scale-y-[0.7] sm:h-8" />
-              </Dont>
-              <Dont label={t("misuse.items.rotate")}>
-                <LockupArt variant="latin" className="h-6 w-auto -rotate-[14deg] sm:h-8" />
               </Dont>
               <Dont label={t("misuse.items.effects")}>
                 <LockupArt variant="latin" className="h-6 w-auto [filter:drop-shadow(0_6px_5px_rgb(0_0_0/0.45))_drop-shadow(0_0_14px_rgb(108_92_231/0.9))] sm:h-8" />
@@ -834,7 +829,7 @@ export default async function BrandPage() {
             </div>
           </Section>
 
-          {/* 09 Motifs: the ʿayn's bowl and pupil as graphics, then the narrowing as data */}
+          {/* 09 Motifs: the rings and the point as graphics, then the narrowing as data */}
           <Section id="motif" n={8} title={t("motif.title")} lede={t("motif.lede")}>
             <div className="grid gap-10 lg:grid-cols-12 lg:gap-8">
               <div className="lg:col-span-5">
@@ -842,7 +837,8 @@ export default async function BrandPage() {
                 <p className="mt-3 leading-relaxed text-secondary">{t("motif.sweepBody")}</p>
               </div>
               <Board tone="night" className="isolate flex min-h-80 flex-col justify-between gap-12 p-6 sm:min-h-[24rem] sm:p-9 lg:col-span-7">
-                <Sweep className="absolute inset-0 -z-10 size-full" />
+                {/* A layout graphic, not the logo: it mirrors in Arabic so it opens towards the type there too. */}
+                <Sweep className="absolute inset-0 -z-10 size-full rtl:-scale-x-100" />
                 <span className="flex items-center gap-2.5 self-start" dir="ltr">
                   <LogoTile className="size-9" />
                   <Wordmark className="h-[18px] text-white" />
@@ -857,6 +853,25 @@ export default async function BrandPage() {
                   </p>
                 </div>
               </Board>
+            </div>
+
+            <div className="mt-16 grid gap-10 lg:grid-cols-12 lg:gap-8">
+              <div className="lg:col-span-5">
+                <h3 className="r-label text-tertiary">{t("motif.scenesTitle")}</h3>
+                <p className="mt-3 leading-relaxed text-secondary">{t("motif.scenesBody")}</p>
+              </div>
+              <ul className="grid grid-cols-2 gap-3 self-start sm:grid-cols-3 sm:gap-4 lg:col-span-7">
+                {(t.raw("motif.scenes") as string[]).map((title, i) => (
+                  <li key={title} className={cn("hero-card flex flex-col rounded-[20px]", i === 0 && "col-span-2 sm:col-span-1")}>
+                    {/* As on the candidate's cover card: the art as a strip, the title below it on the card. */}
+                    <div className="relative aspect-[9/5] overflow-hidden">
+                      <SceneCover seed={title} className="absolute inset-0 size-full" />
+                      <span aria-hidden className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-[var(--hero-from)] to-transparent" />
+                    </div>
+                    <p className="px-3.5 pb-3.5 pt-1 text-sm font-bold leading-snug text-hero-foreground sm:px-4 sm:pb-4">{title}</p>
+                  </li>
+                ))}
+              </ul>
             </div>
 
             <div className="mt-16 grid gap-10 lg:grid-cols-12 lg:gap-8">
@@ -1200,7 +1215,7 @@ export default async function BrandPage() {
                               <img src={href} alt="" className="size-full object-contain" />
                             </span>
                             <span className="min-w-0 flex-1">
-                              <span className="block truncate text-sm text-text">{name}</span>
+                              <span className="block text-sm leading-snug text-text">{name}</span>
                               <span className="mt-0.5 block truncate font-mono text-[11px] text-tertiary" dir="ltr">
                                 {file}
                                 {size ? ` · ${size}` : ""}
@@ -1301,6 +1316,8 @@ const DOWNLOADS: { key: "logos" | "marks" | "raster" | "social"; items: [string,
       ["logoPng", "logo.png", "lavender"],
       ["logoReversePng", "logo-reverse.png", "night"],
       ["symbolPng", "symbol-1024.png", "white"],
+      ["symbol512", "symbol-512.png", "white"],
+      ["symbol192", "symbol-192.png", "white"],
       ["maskable", "symbol-maskable-512.png", "white"],
       ["email", "logo-email.png", "white"],
     ],
@@ -1314,7 +1331,7 @@ const DOWNLOADS: { key: "logos" | "marks" | "raster" | "social"; items: [string,
   },
 ];
 
-/** The last word keeps the full stop, drawn as the pupil's coral dot. */
+/** The last word keeps the full stop, drawn as the mark's coral point. */
 function WithDot({ text }: { text: string }) {
   const at = text.lastIndexOf(" ") + 1;
   return (
