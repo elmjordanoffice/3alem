@@ -1,18 +1,16 @@
-# Aalim brand: ʿAyn, in Night
+# Aalim brand: Focus, in Night
 
 The live, bilingual brand book is at **/brand** in the app (`src/app/brand/`). It is built from the product's own components, tokens and logo geometry, so it can't drift. This file is the written summary.
 
 ## The idea
 
-**ع: one letter for the world, knowledge, work and the eye.** In Arabic, عالم (ʿālam, a world; ʿālim, one who knows: our name), علم (knowledge), عمل (work) and عين (eye) all begin with the letter ʿayn. That is the product in four words: a world built around real work, an eye that looks at what people actually do, and knowledge we can stand behind.
+**Every answer narrows the range.** An assessment starts out knowing almost nothing: the person could be anywhere on the scale. Each answer is evidence, and each piece of evidence rules something out, until what is left is an estimate we can stand behind, with the person's own words underneath it.
 
-The mark is that letter. In calligraphy the inside of ع's head is called its **eye** (عين); we put a coral **pupil** there. It looks at the work, not at the person's CV or their confidence.
-
-**Every answer narrows the range** stays the product's idea: an assessment starts out knowing almost nothing; each answer is evidence, and the band of plausible levels tightens until what is left is an estimate we can stand behind, with the person's own words underneath it. The range bands in reports draw that; the logo no longer does.
+**Focus** is that idea as a mark: two open rings closing in on one coral point. The rings are the picture coming into focus; the point is the estimate, the same coral dot that marks it on every range in a report. It reads as precision, a lens, a target: we look closely and conclude carefully.
 
 Three words: **exact** (measured, aligned; every line means something), **warm** (soft light, rounded shapes, a friendly voice) and **honest about certainty** (ranges, not verdicts).
 
-Since D-061 the product wears Night (a deep indigo canvas lit by violet, navy blue and teal); since D-063 the mark is the ʿAyn. It replaced Range (stacked bands narrowing into a dot).
+History: Range (stacked bands narrowing into a dot, v2), then briefly the ʿAyn (the letter ع with a coral pupil, D-063), then Focus (D-064), chosen by the owner from four directions. Night (D-061) is the colour system throughout.
 
 ## Name
 
@@ -22,28 +20,27 @@ Write **Aalim** in English text and **عالِم** in Arabic. The lowercase **aa
 
 ## The mark
 
-One rounded stroke on a 64-unit square: a small head open to the right over a larger bowl, joined by a short neck, with the pupil in the head.
+Two rings and a point on a 64-unit square, centred on (32, 32):
 
 | Part | Measure |
 |---|---|
-| Head | Circle r 10 at (30.6, 17), drawn from −28° (the tip, upper right) round the top and left to its foot |
-| Neck | A short stroke from the head's foot to the bowl |
-| Bowl | Circle r 16 at (32.6, 41), from the upper left round the left and bottom to the tail at 22° |
-| Stroke | 8.5, round caps and joins; about 106 long (for drawing it on) |
-| Pupil | Circle r 3.6 at (31.8, 17.4), coral, a little towards the head's opening |
-| Balance | Optically centred: the ink spans about x 12–52 and y 4–62 |
+| Outer ring | r 24, stroke 6, clockwise from 200° to 480°: a 280° arc, open 80° towards the lower left; 55% of the mark's colour |
+| Inner ring | r 15.5, stroke 6.5, from 230° to 490°: 260°, open 100°, also towards the lower left; 85% |
+| Ends | Fully round |
+| Point | r 6.5 at the centre, coral |
+| Balance | The ink spans about x 6.4–59 and y 5–59; lockups place the mark by its ink |
 
-The letter takes the opposite of the ground (indigo `#1B1840` on light, white on dark and on the tile). The pupil is coral, always, except in one-colour reproduction, where it joins the letter. The geometry lives in one place, `scripts/brand-assets.mts` (`AYN`, `LOCKUP`), which also writes `src/components/brand/wordmark-paths.ts` for the in-app `<Logo>` and the phone app.
+The rings take the opposite of the ground (indigo `#1B1840` on light, white on dark and on the tile). The point is coral, always, except in one-colour reproduction, where both rings go to full strength and the point joins them. The geometry lives in one place, `scripts/brand-assets.mts` (`MARK`, `LOCKUP`), which writes `src/lib/brand/mark.ts` (shared with the phone app) and `src/components/brand/wordmark-paths.ts` for the in-app `<Logo>`.
 
-**Motion.** In the product the mark comes alive (`<LogoMark animated>`, `.ayn-live`): the stroke draws itself once, the pupil pops in, then it glances right and left and blinks every few seconds. It appears where the product is thinking or done: the sign-in panel, the candidate loading and finish screens, and "all caught up". Still under reduced motion.
+**Motion.** In the product the mark comes alive (`<LogoMark animated>`, `.mark-live`): the outer ring draws in, then the inner, and the point lands with a small overshoot; then every few seconds the rings turn a little in opposite directions and the point pulses, like a lens finding focus. It appears where the product is thinking or done: the sign-in panel, the candidate loading and finish screens, and "all caught up". Still under reduced motion.
 
 ## Wordmark and lockups
 
 - **aalim** in lowercase, Plus Jakarta Sans ExtraBold, set tight (−42/1000). **عالم** in Readex Pro Bold, never tracked; its alif rises about 6% above the Latin ascender, baselines aligned, with a rounded hairline at 24% between them. Both are outlined with HarfBuzz from static cuts in `brand/fonts/` (made from the product's variable fonts with fontTools), so the Arabic joins exactly as a browser shapes it and no font is needed to open a file.
-- **Lockups:** horizontal bilingual (primary), English, Arabic (the mark on the right, where Arabic reading starts), one colour, reversed, and the app tile: the white ʿayn on a squircle running violet `#7564EE` to navy `#1E2F86`, the pupil coral (30% radius in the app, 22.5% in icon files). A coral tile (indigo letter, white pupil) is for marketing only.
+- **Lockups:** horizontal bilingual (primary), English, Arabic (the mark on the right, where Arabic reading starts), one colour, reversed, and the app tile: the white rings on a squircle running violet `#7564EE` to navy `#1E2F86`, the point coral (30% radius in the app, 22.5% in icon files). A coral tile (solid indigo rings, white point) is for marketing only.
 - **Clear space:** x on every side, where x is the height of aalim; around the mark alone, half its width.
 - **Minimum sizes:** mark 16 px, app tile 20 px, horizontal lockup 120 px wide, English lockup 80 px wide. In print: lockup 30 mm, mark 5 mm.
-- **Don't:** mirror the letter, close or reshape the head, move, resize or recolour the pupil, recolour the letter outside the palette, stretch, rotate, add effects to the mark itself (the tile's gradient and a soft glow behind it are the only exceptions), put it on coral or a busy picture, or retype the wordmark.
+- **Don't:** close the rings, turn the gaps, change the rings' weights or strengths, move the point off centre or recolour it, recolour the mark outside the palette, stretch, add effects to the mark itself (the tile's gradient and a soft glow behind it are the only exceptions), put it on coral or a busy picture, or retype the wordmark.
 
 ## Colour: Night
 
@@ -83,13 +80,13 @@ Rules for Arabic:
 
 ## Motifs
 
-- **The pupil:** the coral dot recurs wherever something is being looked at or concluded: the estimate on every range, status dots, the full stop in a headline.
-- **The sweep:** the ʿayn's bowl as a bold open arc. Each scene's cover art (`src/lib/brand/scene-art.ts`, shared with the phone app) is two or three sweeps round a coral pupil with faint ripples further out, composed from the scene's title so it is the same everywhere and different for every scene.
+- **The coral point:** wherever something is concluded: the estimate on every range, status dots, the full stop in a headline.
+- **The sweep:** the rings drawn very large as open arcs sweeping in from an edge. Each scene's cover art (`src/lib/brand/scene-art.ts`, shared with the phone app) is two or three open rings closing in on a coral point with faint ripples further out, composed from the scene's title so it is the same everywhere and different for every scene.
 - **Range bands** (`src/components/report/range-scale.tsx`): every estimate is a coral band on the 1–5 scale, wide while the evidence is thin and narrow once it settles; the dot is the estimate and the tick is the level the role expects. These are data, not decoration.
-- **The highlight card** (`.hero-card`): one raised violet card per screen, holding its verdict or its one next step; it may carry the ʿayn faintly in a corner (`.hero-sign`).
+- **The highlight card** (`.hero-card`): one raised violet card per screen, holding its verdict or its one next step; it may carry the rings faintly in a corner (`.hero-sign`).
 - **The evidence highlight** (`.evidence-mark`): a soft violet highlighter under a person's own words, used for verbatim quotes only. Evidence cards carry a violet-to-teal edge.
 - **Glow, used for meaning:** the weekly ring, chart lines and stat tiles glow; text and reading surfaces do not.
-- No characters, mascots or illustrations of people: the product shows real work and real evidence. The ʿayn's eye is a letter's, not a face's.
+- No characters, mascots or illustrations of people: the product shows real work and real evidence.
 
 ## Voice
 
@@ -110,7 +107,7 @@ Tone shifts by audience: calm and reassuring with **candidates** ("Take the time
 `npm run brand:assets` regenerates everything: `scripts/brand-assets.mts` writes the outlined SVGs and the in-app paths, then `scripts/brand-render.spec.ts` (Playwright, fonts embedded as data URIs) renders the PNGs.
 
 - `public/brand/`: `logo*.svg` (horizontal, English, Arabic, reversed, one colour), `mark*.svg`, `symbol.svg` and `symbol-signal.svg` (app tiles), `wordmark*.svg`; PNGs `logo.png` and `logo-reverse.png` (transparent, clear space built in), `symbol-{1024,512,192}.png`, `symbol-maskable-512.png`, `logo-email.png`.
-- Colours (Night): marks and logos are indigo `#1B1840` on light grounds and white on dark ones; the pupil is coral `#E8436B` (3:1 or more on white and on the indigo canvas). The app tile is the white ʿayn on the violet-to-navy squircle (`#7564EE` → `#1E2F86`), as in the app's `LogoTile`.
-- Social images: `og-en.png` and `og-ar.png` (1200 × 630): the indigo canvas lit violet and blue, the white logo, the promise as a huge Plus Jakarta Sans (or Readex Pro) headline ending in the coral dot, the glowing ʿayn, and a violet strip with the line "Every score comes with the person's own words." Set as the site's Open Graph image in `src/app/layout.tsx`.
+- Colours (Night): marks and logos are indigo `#1B1840` on light grounds and white on dark ones; the point is coral `#E8436B` (3:1 or more on white and on the indigo canvas). The app tile is the white rings on the violet-to-navy squircle (`#7564EE` → `#1E2F86`), as in the app's `LogoTile`.
+- Social images: `og-en.png` and `og-ar.png` (1200 × 630): the indigo canvas lit violet and blue, the white logo, the promise as a huge Plus Jakarta Sans (or Readex Pro) headline ending in the coral dot, the glowing rings, and a violet strip with the line "Every score comes with the person's own words." Set as the site's Open Graph image in `src/app/layout.tsx`.
 - App icons: `src/app/icon.svg` (browser tab), `src/app/apple-icon.png` (full-bleed blue), the PWA manifest (`src/app/manifest.ts`, including a maskable icon), and the phone app's icon, adaptive icon and splash in `mobile/assets/`.
 - Email: one layout (`src/lib/mail/templates.ts`) for invitations, renewed links, team invitations, password resets, shared reports and reminders, in the recipient's language and direction, with a plain-text twin. A lavender ground around a rounded white card, `logo-email.png` at 140 px, a violet tick, indigo text and one violet pill button with white text.
