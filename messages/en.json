@@ -2662,10 +2662,10 @@
   },
   "brandbook": {
     "title": "Brand book",
-    "metaDescription": "Night, the Aalim brand: the idea, the mark, lockups, colour in both themes, type, shape and light, the narrowing, the interface, voice and files, in English and Arabic.",
+    "metaDescription": "ʿAyn, the Aalim brand: the idea, the mark and its motion, lockups, colour in both themes, type, shape and light, motifs, the interface, voice and files, in English and Arabic.",
     "topbar": {
       "label": "Brand book",
-      "version": "v2.0",
+      "version": "v3.0",
       "home": "Aalim home"
     },
     "navLabel": "Brand book sections",
@@ -2678,19 +2678,19 @@
       "colour": "Colour",
       "type": "Typography",
       "shape": "Shape and light",
-      "motif": "The narrowing",
+      "motif": "Motifs",
       "ui": "Interface",
       "voice": "Voice",
       "downloads": "Downloads"
     },
     "cover": {
       "eyebrow": "Aalim brand book",
-      "statement": "Every answer narrows what we know about a person. The mark draws that: wide bands of uncertainty tightening, step by step, into one point. Night sets it on a deep indigo canvas, with violet for action, glowing blue and teal for data, and a single coral signal for the estimate.",
+      "statement": "The mark is ع, the first letter of عالم, drawn in one rounded stroke. Calligraphers call the hollow of its head the eye, and we put a coral pupil there: an eye on real work, because that is where we look. The colours stay Night: deep indigo, violet for action, blue and teal for data, coral for what matters.",
       "contents": "Contents",
-      "poster": "Every answer narrows the range",
+      "poster": "An eye for real work",
       "meta": {
         "version": "Version",
-        "versionValue": "2.0",
+        "versionValue": "3.0",
         "updated": "Updated",
         "updatedValue": "November 2026",
         "scope": "Covers",
@@ -2701,14 +2701,14 @@
       "title": "The idea",
       "lede": "Every answer narrows the range.",
       "body1": "An assessment starts out knowing almost nothing: the person could be anywhere on the scale. Each answer is evidence, and each piece of evidence rules something out. The band of plausible levels tightens until what is left is an estimate we can stand behind, with the person’s own words underneath it.",
-      "body2": "The mark draws exactly that. Wide bands below, narrower above, and one coral point at the top: the estimate. Centre the bands and they stack into an A, for Aalim.",
+      "body2": "Reports draw this as a band on the 1–5 scale: wide while the evidence is thin, narrow once it settles, with a coral dot for the estimate. The bands are data and nothing else. The mark tells the other half of the story: where the evidence comes from.",
       "figure": {
         "after": "After {count, plural, one {# answer} other {# answers}}",
         "estimate": "Estimate",
         "low": "Emerging",
         "high": "Expert",
         "caption": "One skill, measured. The band is where the level could be, and it narrows with every answer.",
-        "centred": "Centre the same drawing and it becomes the mark."
+        "pupil": "The estimate is coral, like the pupil."
       },
       "nameTitle": "The name",
       "nameBody": "In Arabic, the same four letters spell ʿālim, someone who knows a subject deeply, and ʿālam, a world. Aalim builds a world for each person, a realistic week at a fictional company, and finds out what they know in it.",
@@ -2717,7 +2717,33 @@
       "alimMeaning": "ʿālim: one who knows",
       "alam": "عالَم",
       "alamMeaning": "ʿālam: a world",
-      "usage": "Write Aalim in English text and عالِم in Arabic. The capitals AALIM belong to the wordmark.",
+      "usage": "Write Aalim in English text, with a capital, and عالِم in Arabic. The lowercase aalim belongs to the wordmark.",
+      "lettersTitle": "One letter, four words",
+      "lettersBody": "ع, ʿayn, begins four words that together describe Aalim: a world built for each person, the knowledge we look for, the work we find it in, and the eye that looks. The mark is that one letter.",
+      "words": {
+        "alam": {
+          "sound": "ʿālam · ʿālim",
+          "meaning": "A world, and one who knows. Our name."
+        },
+        "ilm": {
+          "sound": "ʿilm",
+          "meaning": "Knowledge. What we measure."
+        },
+        "amal": {
+          "sound": "ʿamal",
+          "meaning": "Work. Where we find it."
+        },
+        "ayn": {
+          "sound": "ʿayn",
+          "meaning": "An eye. How we look."
+        }
+      },
+      "eyeTitle": "The eye",
+      "eyeBody": "Calligraphers call the hollow inside the head of ع its eye: عين, the letter’s own name. We put a coral pupil there. So the mark is an eye that looks at real work and finds the evidence in it, which is what the product promises: we look at what people actually do. To readers of Latin it is simply a friendly, open letter with an eye.",
+      "eyeLabels": {
+        "eye": "The eye",
+        "pupil": "The pupil"
+      },
       "traitsTitle": "Three words",
       "traits": {
         "exact": {
@@ -2736,9 +2762,9 @@
     },
     "mark": {
       "title": "The mark",
-      "lede": "Four rows on a 64-unit square.",
-      "body": "Every row is 11 units tall, 3.5 apart. The bands step in by 8 units a side, 58, 42, 26, and the fourth row is the step after that: a band too narrow to be a band, the dot. The ends are fully round. A line through the band ends meets just above the dot: the legs of the A.",
-      "figureLabel": "The mark on its 64-unit grid, with its measurements",
+      "lede": "One letter, one stroke, one eye.",
+      "body": "The ʿayn is cut from two circles on a 64-unit square: a small head that opens to the right, over a larger bowl that sweeps round to an open tail. A short neck joins them. One stroke, 8.5 units wide, draws all three with round caps and round joins, so the letter has no corners and no sharp ends. The pupil sits in the head’s eye, a touch right of centre, looking out of the open side.",
+      "figureLabel": "The ʿayn on its 64-unit grid: the two circles it is cut from, the stroke, the neck and the pupil",
       "labels": {
         "units": "64",
         "head": "Head r 10",
@@ -2750,23 +2776,42 @@
       "specs": {
         "grid": "Grid",
         "gridValue": "64 × 64 units",
-        "rows": "Rows",
-        "rowsValue": "11 tall, 3.5 apart",
-        "bands": "Bands",
-        "bandsValue": "58 · 42 · 26, centred",
-        "dot": "Dot",
-        "dotValue": "⌀ 11, coral",
-        "ends": "Ends",
-        "endsValue": "Fully round, r 5.5",
-        "legs": "Legs",
-        "legsValue": "Tangent to every band end"
+        "head": "Head",
+        "headValue": "Circle r 10, open to the right",
+        "bowl": "Bowl",
+        "bowlValue": "Circle r 16, 2 units right of the head",
+        "stroke": "Stroke",
+        "strokeValue": "8.5 wide, about 106 long",
+        "neck": "Neck",
+        "neckValue": "About 5.6, head to bowl",
+        "pupil": "Pupil",
+        "pupilValue": "r 3.6, coral, in the eye",
+        "ends": "Terminals",
+        "endsValue": "Round caps and round joins"
       },
       "colourTitle": "Colour",
-      "colourBody": "The bands take the opposite of the ground: white on night and on the blue disc, deep indigo on lavender and white. The dot is coral, always, except where only one colour can be printed.",
+      "colourBody": "The letter takes the opposite of its ground: white on night and on the app tile, deep indigo on lavender and white. The pupil is coral, bright on dark grounds and a step deeper on light ones. Two exceptions: in one-colour print the pupil takes the letter’s colour, and on the coral marketing tile the letter is indigo and the pupil white.",
       "onNight": "On night",
       "onLavender": "On lavender",
+      "onWhite": "On white",
       "oneColour": "One colour",
-      "onTile": "On the blue disc, the app tile"
+      "onTile": "App tile",
+      "signalTile": "Marketing tile",
+      "motionTitle": "Motion",
+      "motionBody": "In the product the mark comes alive. The stroke draws itself once, from the tip of the head, the way a pen would write it; then the pupil pops into the eye, and every few seconds it glances right, then left, and blinks. It appears where people wait or arrive: the sign-in panel, the candidate’s loading and finish screens, and the “all caught up” card. In the interface it takes violet, or white on a raised card. With reduced motion it stands still, fully drawn.",
+      "motionSpecs": {
+        "draw": "Draw",
+        "drawValue": "1.1 s, once",
+        "pupil": "Pupil",
+        "pupilValue": "Pops in after 1 s",
+        "glance": "Glance and blink",
+        "glanceValue": "Every 6 s",
+        "still": "Reduced motion",
+        "stillValue": "Still, fully drawn"
+      },
+      "replay": "Replay",
+      "liveCaption": "Live: the product’s own component, not a recording.",
+      "inProduct": "In the product"
     },
     "lockups": {
       "title": "Lockups",
@@ -2774,7 +2819,7 @@
       "items": {
         "horizontal": {
           "name": "Horizontal, bilingual",
-          "body": "The primary logo, wherever both languages appear."
+          "body": "The primary logo, wherever both languages appear: the ʿayn, aalim and عالم, with a hairline between the words."
         },
         "english": {
           "name": "English",
@@ -2782,37 +2827,37 @@
         },
         "arabic": {
           "name": "Arabic",
-          "body": "Arabic-only layouts."
+          "body": "Arabic-only layouts. The mark moves to the right, where Arabic reading starts."
         },
         "mono": {
           "name": "One colour",
-          "body": "Stamps, embossing and one-colour print. The dot joins the bands."
+          "body": "Stamps, embossing and one-colour print. The pupil joins the letter."
         },
         "reverse": {
           "name": "Reversed",
-          "body": "On night. Bands and letters in white; the dot stays coral."
+          "body": "On night: the letter and the words in white, the pupil still coral."
         },
         "tile": {
           "name": "App tile",
-          "body": "The mark in white on a glowing blue disc, the dot in coral. It stands in for the logo where space is tight: the app, the browser tab, a profile picture."
+          "body": "The white ʿayn on a squircle running violet to navy, with a coral pupil. It stands in for the logo where space is tight: the app, the browser tab, a profile picture. Corners are 30% of the side in the app and 22.5% in the icon files."
         }
       },
       "wordmarkTitle": "The wordmark",
-      "wordmarkBody": "AALIM is drawn from Archivo Expanded ExtraBold, tracked open a little; عالم from Beiruti Black, never tracked, its alif rising 18% above the Latin capitals so both read at the same size. Baselines align, and a hairline at 22% separates them. The wordmark is a drawing: the text around it is set in Plus Jakarta Sans and Readex Pro.",
+      "wordmarkBody": "aalim is set in lowercase Plus Jakarta Sans ExtraBold, tracked tight (−42/1000). عالم is Readex Pro Bold, never tracked, its alif rising about 6% above the Latin ascender so the two words read at one size. The baselines align, and a rounded hairline at 24% opacity stands between them. Both are outlined with HarfBuzz from static cuts of the product’s own variable fonts: the wordmark is a drawing, and the text around it is set live in the same two families.",
       "guides": {
-        "cap": "Cap height",
+        "ascender": "Ascender",
         "baseline": "Baseline",
-        "rise": "Alif +18%"
+        "rise": "Alif +6%"
       }
     },
     "space": {
       "title": "Space and size",
       "lede": "Give the logo room, and never draw it smaller than it can be read.",
       "clearTitle": "Clear space",
-      "clearBody": "Keep x clear on every side, where x is the height of the capitals in AALIM. Around the mark on its own, keep half its width. Text, edges and other logos stay outside.",
+      "clearBody": "Keep x clear on every side, where x is the height of aalim, from the baseline to the top of the l. Around the mark or the app tile on its own, keep half its width. Text, edges and other logos stay outside.",
       "x": "x",
       "minTitle": "Minimum sizes",
-      "minBody": "Shown at actual size. Smaller than this, the bands close up: use the mark alone.",
+      "minBody": "Shown at actual size. Any smaller and the eye fills in and the pupil is lost: use the app tile instead.",
       "sizes": {
         "mark": "Mark",
         "tile": "App tile",
@@ -2820,21 +2865,22 @@
         "english": "English"
       },
       "px": "{value} px",
-      "print": "In print: the horizontal lockup at least 30 mm wide, the mark at least 5 mm."
+      "print": "In print: the horizontal lockup at least 30 mm wide, the mark at least 6 mm tall. On screen, only the browser tab goes smaller: the app tile at 16 px."
     },
     "misuse": {
       "title": "Misuse",
       "lede": "The logo is a drawing, not a typeface. Don’t change it.",
-      "dont": "Don’t",
       "items": {
-        "recolour": "Recolour the bands or the dot",
+        "mirror": "Mirror the letter",
+        "close": "Close the head",
+        "pupil": "Move the pupil or change its colour",
+        "recolour": "Recolour the letter or the wordmark",
         "stretch": "Stretch or squash it",
         "rotate": "Rotate it",
-        "effects": "Add shadows, glows or gradients to the logo itself",
-        "ground": "Put it on coral or a busy picture",
-        "retype": "Retype the wordmark in another font",
-        "rearrange": "Rearrange the parts",
-        "redraw": "Redraw the bands or change their steps"
+        "effects": "Add shadows or glows",
+        "retype": "Retype the wordmark",
+        "busy": "Put it on a busy picture",
+        "rearrange": "Rearrange the parts"
       }
     },
     "colour": {
@@ -2851,11 +2897,11 @@
         },
         "coral": {
           "name": "Coral",
-          "role": "The signal: the estimate dot, the evidence band and the one call to action that matters. Deeper in the light theme."
+          "role": "The signal: the mark’s pupil, the estimate dot, the evidence band and the one call to action that matters. Deeper in the light theme."
         },
         "blue": {
           "name": "Blue",
-          "role": "Data: stat tiles, chart lines and the app tile."
+          "role": "Data: stat tiles and chart lines. The app tile’s gradient ends in navy."
         },
         "teal": {
           "name": "Teal",
@@ -2921,7 +2967,7 @@
         "lavender": "Lavender"
       },
       "ruleTitle": "The coral rule",
-      "ruleBody": "Coral marks what matters, so keep it rare: the estimate, the evidence band and one button. On night it reads at {ratio}:1; on lavender use the deeper coral. Text on a coral button is deep indigo in the dark theme and white in the light."
+      "ruleBody": "Coral marks what matters, so keep it rare: the pupil, the estimate, the evidence band and one button. On night it reads at {ratio}:1; on lavender use the deeper coral. Text on a coral button is deep indigo in the dark theme and white in the light."
     },
     "type": {
       "title": "Typography",
@@ -2970,14 +3016,14 @@
       "arabicRules": [
         "Arabic is set in Readex Pro, never in Plus Jakarta. Arabic has no capitals and is never letter-spaced: tracking breaks the joins.",
         "Give it room: line height 1.65 for reading and about 1.3 for display, so dots and marks never touch.",
-        "Set Arabic a step larger than the Latin beside it: Readex Pro reads small. In the logo, عالم rises 18% above the capitals.",
+        "Set Arabic a step larger than the Latin beside it: Readex Pro reads small. In the logo, the alif of عالم rises about 6% above the Latin ascender.",
         "Use the font’s own weights, up to Bold. Never stretch, slant or fake bold Arabic.",
         "Mirror the layout, not the content: direction, alignment and range bands flip; logos, numbers, links and code don’t.",
         "Latin digits by default; Arabic-Indic digits are a personal setting. Use Arabic punctuation: ، ؛ ؟"
       ],
       "latinTitle": "Rules for Latin",
       "latinRules": [
-        "Sentence case everywhere, display included. Capitals belong to the wordmark.",
+        "Sentence case everywhere, display included. The wordmark goes further: aalim is all lowercase.",
         "Display is ExtraBold and tracked tight; reading is Regular at 16 px or more and never tracked.",
         "Small labels are SemiBold in sentence case. Numbers use tabular figures."
       ]
@@ -3006,8 +3052,27 @@
       "glowBody": "Glow belongs to data and to the one highlight: violet and blue light pooled behind a hero, a soft glow under a chart line, a halo on the estimate. Never on body text, never on the logo."
     },
     "motif": {
-      "title": "The narrowing",
-      "lede": "The mark’s idea, at work in the product.",
+      "title": "Motifs",
+      "lede": "The mark’s shapes, used as graphics, and the product idea, drawn as data.",
+      "sweepTitle": "The sweep",
+      "sweepBody": "The ʿayn’s bowl, drawn very large, is the brand’s supergraphic: a crescent that sweeps in from the edge of a poster, a slide or a social image. Keep it big, behind the type and running off the page. Never use it as a frame or a container.",
+      "sweepPoster": "Evidence, not impressions",
+      "sweepStatus": "Adaptive skills assessment",
+      "dotTitle": "The coral dot",
+      "dotBody": "The pupil travels on its own as a coral dot: the status dot in a pill, the estimate where a chart lands, and the full stop at the end of a headline. It marks what matters, so keep it to one or two in view.",
+      "dots": {
+        "status": "Status",
+        "estimate": "Estimate",
+        "stop": "Full stop"
+      },
+      "dotPill": "In progress",
+      "signTitle": "The watermark",
+      "signBody": "A raised card may carry the ʿayn faintly in its corner: the letter at a tenth of white, the pupil still coral. It sits behind the content, and appears once per screen at most.",
+      "sign": {
+        "eyebrow": "Your week at Northwind Logistics",
+        "title": "Welcome to the team",
+        "body": "Five days, four scenes and the people you’ll work with. Answer the way you would at work: there are no trick questions."
+      },
       "bandsTitle": "Range bands",
       "bandsBody": "Every estimate is a band on the 1–5 scale: wide while the evidence is thin, narrow once it settles. The dot is the estimate and the tick is the level the role expects. Bands are coral, horizontal and always data.",
       "states": {
@@ -3026,7 +3091,7 @@
       "evidenceBody": "The person’s own words, marked like a reviewer’s highlighter. Only verbatim quotes get it.",
       "evidenceSample": "Before I reply to the client, I’d check",
       "evidenceMark": "whether the delay affects the other two orders on the same route.",
-      "rule": "Bands run horizontally, wider means less certain, and the dot is the conclusion. Outside the logo, bands only ever show data."
+      "rule": "Bands run horizontally, wider means less certain, and the dot is the conclusion. Bands only ever show data: they are never decoration, and never part of the logo."
     },
     "ui": {
       "title": "Interface",
@@ -3200,11 +3265,11 @@
     },
     "downloads": {
       "title": "Downloads",
-      "lede": "Outlined vectors (no fonts needed) and PNG renders, generated from the brand fonts by <code>npm run brand:assets</code>.",
+      "lede": "Outlined vectors (no fonts needed) and PNG renders, generated from the brand fonts by <code>npm run brand:assets</code>, so every file matches the logo in the product.",
       "groups": {
         "logos": "Logos",
-        "marks": "Mark, tiles and wordmarks",
-        "raster": "PNG renders",
+        "marks": "Marks, tiles and wordmarks",
+        "raster": "PNG renders and icons",
         "social": "Social images"
       },
       "items": {
@@ -3215,23 +3280,25 @@
         "logoAr": "Arabic",
         "logoArReverse": "Arabic, reversed",
         "logoMono": "One colour",
-        "mark": "Mark",
-        "markReverse": "Mark, reversed",
+        "mark": "Mark, indigo",
+        "markReverse": "Mark, white",
         "symbol": "App tile",
-        "symbolSignal": "App tile, signal colour",
-        "wordmark": "Wordmark",
-        "wordmarkAr": "Arabic wordmark",
+        "symbolSignal": "Marketing tile, coral",
+        "wordmark": "Wordmark, aalim",
+        "wordmarkAr": "Wordmark, عالم",
         "logoPng": "Horizontal",
         "logoReversePng": "Horizontal, reversed",
         "symbolPng": "App tile, 1024 px",
+        "maskable": "Android icon",
+        "email": "Email header, 3×",
         "ogEn": "Social image, English",
-        "ogAr": "Social image, Arabic",
-        "email": "Email header"
+        "ogAr": "Social image, Arabic"
       },
+      "socialBody": "Link previews on night: the promise in large type, its full stop the coral dot, and the ʿayn beside it.",
       "download": "Download {name}"
     },
     "footer": {
-      "line": "Night is the Aalim brand. Version 2.0, November 2026.",
+      "line": "ʿAyn is the Aalim brand, in Night colours. Version 3.0, November 2026.",
       "back": "Back to Aalim"
     }
   },

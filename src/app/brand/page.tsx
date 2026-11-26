@@ -4,8 +4,9 @@ import Link from "next/link";
 import { readFileSync, statSync } from "node:fs";
 import path from "node:path";
 import { getLocale, getTranslations } from "next-intl/server";
-import { ArrowDownToLine, ArrowRight, Ellipsis, Moon, Search, X } from "lucide-react";
-import { LogoTile, Wordmark } from "@/components/brand/logo";
+import { ArrowDownToLine, Ellipsis, Moon, RotateCcw, Search, X } from "lucide-react";
+import { LogoMark, LogoTile, Wordmark } from "@/components/brand/logo";
+import { AYN } from "@/components/brand/wordmark-paths";
 import { NarrowingChart, curve } from "@/components/landing/narrowing-chart";
 import { RangeScale } from "@/components/report/range-scale";
 import { LanguageToggle, ThemeMenu } from "@/components/app/preference-controls";
@@ -13,7 +14,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { contrastRatio } from "@/lib/contrast";
 import { cn } from "@/lib/utils";
-import { CORAL, ClearSpace, CoverMark, INDIGO, LockupArt, Mark, MarkConstruction, NarrowingFigure, WHITE, WordmarkGuides, WordmarkShape } from "./figures";
+import { CORAL, ClearSpace, CoverMark, EyeFigure, INDIGO, LockupArt, Mark, MarkConstruction, NarrowingFigure, Sweep, WHITE, WordmarkGuides, WordmarkShape } from "./figures";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("brandbook");
@@ -33,7 +34,17 @@ const BOARD = {
   lavender: "bg-[#efedfb] text-[#1b1840] ring-1 ring-inset ring-[#e1ddf5]",
   night: "bg-[#141235] bg-[radial-gradient(90%_80%_at_85%_0%,rgb(108_92_231/0.35),transparent_70%)] text-white dark:ring-1 dark:ring-inset dark:ring-white/10",
   coral: "bg-[#ff5c7c] text-[#1b1840]",
+  /** A stand-in for a busy photograph, for the misuse example. */
+  busy: "bg-[#c9a27e] bg-[radial-gradient(40%_55%_at_20%_30%,#f4d35e,transparent),radial-gradient(45%_60%_at_80%_20%,#3a7d44,transparent),radial-gradient(50%_60%_at_60%_90%,#6b2d5c,transparent),repeating-linear-gradient(115deg,rgb(255_255_255/0.28)_0_6px,transparent_6px_14px)] text-[#1b1840]",
 } as const;
+
+/** The four words that start with ع (the product's name first). */
+const WORDS = [
+  ["alam", "عالم"],
+  ["ilm", "علم"],
+  ["amal", "عمل"],
+  ["ayn", "عين"],
+] as const;
 
 function Board({ tone = "white", className, children }: { tone?: keyof typeof BOARD; className?: string; children: ReactNode }) {
   return <div className={cn("relative overflow-hidden rounded-card", BOARD[tone], className)}>{children}</div>;
@@ -92,10 +103,11 @@ const THEME_TOKENS = [
   ["highlight", "highlight"],
 ] as const;
 
-/** The brand book: Night, built from the product's own components, in both languages and both themes. */
+/** The brand book: the ʿAyn in Night colours, built from the product's own components, in both languages and both themes. */
 export default async function BrandPage() {
   const t = await getTranslations("brandbook");
   const tf = await getTranslations("landing.hero.figure");
+  const th = await getTranslations("home");
   const locale = await getLocale();
   const rtl = locale === "ar";
   const q = rtl ? ["«", "»"] : ["“", "”"];
@@ -103,12 +115,13 @@ export default async function BrandPage() {
   const D = tk.dark;
   const L = tk.light;
   const n = (k: string) => t(`colour.names.${k}`);
+  // The edition's name in both scripts. In display the ʿayn sign is set as a turned comma (‘), which the brand face has.
   const names = [
     <span key="en" lang="en" dir="ltr" style={JAKARTA} className="font-extrabold leading-[0.9] tracking-[-0.045em]">
-      Night
+      ‘Ayn
     </span>,
     <span key="ar" lang="ar" dir="rtl" style={READEX} className="font-bold leading-[1.1]">
-      الليل
+      عين
     </span>,
   ];
 
@@ -230,9 +243,8 @@ export default async function BrandPage() {
                     scale={[t("idea.figure.low"), t("idea.figure.high")]}
                   />
                   <div className="flex items-center gap-4 rounded-[18px] bg-surface-sunken p-4 sm:flex-col sm:items-start">
-                    <ArrowRight className="size-5 shrink-0 text-tertiary flip-rtl sm:hidden" aria-hidden />
                     <Mark fg="var(--text)" dot="var(--saffron)" className="size-16 shrink-0 sm:size-20" />
-                    <p className="text-sm leading-snug text-secondary">{t("idea.figure.centred")}</p>
+                    <p className="text-sm leading-snug text-secondary">{t("idea.figure.pupil")}</p>
                   </div>
                 </div>
                 <figcaption className="mt-3 px-1 text-sm text-tertiary">{t("idea.figure.caption")}</figcaption>
@@ -259,6 +271,39 @@ export default async function BrandPage() {
                 </dl>
                 <p className="mt-8 text-[17px] leading-relaxed text-secondary">{t("idea.nameBody")}</p>
                 <p className="mt-4 text-sm text-tertiary">{t("idea.usage")}</p>
+              </div>
+            </div>
+
+            {/* One letter, four words: ع begins the name, knowledge, work and the eye. */}
+            <div className="mt-20 grid gap-10 lg:grid-cols-12 lg:gap-8">
+              <div className="lg:col-span-5">
+                <h3 className="r-label text-tertiary">{t("idea.lettersTitle")}</h3>
+                <p className="mt-3 text-[17px] leading-relaxed text-secondary">{t("idea.lettersBody")}</p>
+              </div>
+              <ul className="grid grid-cols-2 gap-4 lg:col-span-7">
+                {WORDS.map(([k, word]) => (
+                  <li key={k} className={cn(CARD, "flex flex-col p-5 sm:p-6")}>
+                    <p lang="ar" dir="rtl" style={READEX} className="w-fit text-[2.75rem] font-bold leading-[1.3] text-text sm:text-[3.5rem]">
+                      <span className="text-[var(--signal)]">{word.slice(0, 1)}</span>
+                      {word.slice(1)}
+                    </p>
+                    <p className="mt-2 text-sm font-semibold text-text">{t(`idea.words.${k}.sound`)}</p>
+                    <p className="mt-1 text-sm leading-snug text-secondary">{t(`idea.words.${k}.meaning`)}</p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* The eye: the hollow of the head, with the pupil in it. */}
+            <div className="mt-20 grid items-center gap-10 lg:grid-cols-12 lg:gap-8">
+              <figure className="lg:col-span-7">
+                <Board tone="night" className="px-4 py-6 sm:px-10 sm:py-10">
+                  <EyeFigure labels={{ eye: t("idea.eyeLabels.eye"), pupil: t("idea.eyeLabels.pupil") }} />
+                </Board>
+              </figure>
+              <div className="lg:col-span-5">
+                <h3 className="r-label text-tertiary">{t("idea.eyeTitle")}</h3>
+                <p className="mt-3 text-[17px] leading-relaxed text-secondary">{t("idea.eyeBody")}</p>
               </div>
             </div>
 
@@ -290,7 +335,7 @@ export default async function BrandPage() {
               <div className="lg:col-span-5">
                 <p className="text-[17px] leading-relaxed text-secondary">{t("mark.body")}</p>
                 <dl className={cn(CARD, "mt-8 px-5 py-2")}>
-                  {(["grid", "rows", "bands", "dot", "ends", "legs"] as const).map((k) => (
+                  {(["grid", "head", "bowl", "stroke", "neck", "pupil", "ends"] as const).map((k) => (
                     <div key={k} className="grid grid-cols-[7rem_minmax(0,1fr)] gap-4 border-b border-border py-3 text-sm last:border-b-0">
                       <dt className="text-tertiary">{t(`mark.specs.${k}`)}</dt>
                       <dd className="text-text tabular">{t(`mark.specs.${k}Value`)}</dd>
@@ -302,20 +347,70 @@ export default async function BrandPage() {
             <div className="mt-16">
               <h3 className="r-label text-tertiary">{t("mark.colourTitle")}</h3>
               <p className="mt-3 max-w-2xl leading-relaxed text-secondary">{t("mark.colourBody")}</p>
-              <ul className="mt-6 grid grid-cols-2 gap-4 lg:grid-cols-4">
+              <ul className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 xl:grid-cols-6">
                 <Swatch label={t("mark.onNight")} tone="night">
                   <Mark fg={WHITE} dot={CORAL} className="size-20 sm:size-24" />
                 </Swatch>
                 <Swatch label={t("mark.onLavender")} tone="lavender">
                   <Mark className="size-20 sm:size-24" />
                 </Swatch>
+                <Swatch label={t("mark.onWhite")} tone="white">
+                  <Mark className="size-20 sm:size-24" />
+                </Swatch>
                 <Swatch label={t("mark.oneColour")} tone="white">
                   <Mark dot={INDIGO} className="size-20 sm:size-24" />
                 </Swatch>
-                <Swatch label={t("mark.onTile")} tone="night">
-                  <LogoTile className="size-24 sm:size-28" />
+                <Swatch label={t("mark.onTile")} tone="lavender">
+                  <LogoTile className="size-20 sm:size-24" />
+                </Swatch>
+                <Swatch label={t("mark.signalTile")} tone="lavender">
+                  {/* The coral tile, as the icon file draws it: indigo letter, white pupil. */}
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="/brand/symbol-signal.svg" alt="" className="size-20 sm:size-24" />
                 </Swatch>
               </ul>
+            </div>
+
+            {/* Motion: the product's own animated mark, live. */}
+            <div className="mt-16 grid gap-10 lg:grid-cols-12 lg:gap-8">
+              <div className="lg:col-span-5">
+                <h3 className="r-label text-tertiary">{t("mark.motionTitle")}</h3>
+                <p className="mt-3 leading-relaxed text-secondary">{t("mark.motionBody")}</p>
+                <dl className={cn(CARD, "mt-8 px-5 py-2")}>
+                  {(["draw", "pupil", "glance", "still"] as const).map((k) => (
+                    <div key={k} className="grid grid-cols-[8.5rem_minmax(0,1fr)] gap-4 border-b border-border py-3 text-sm last:border-b-0">
+                      <dt className="text-tertiary">{t(`mark.motionSpecs.${k}`)}</dt>
+                      <dd className="text-text tabular">{t(`mark.motionSpecs.${k}Value`)}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </div>
+              <div className="flex flex-col gap-4 lg:col-span-7">
+                <figure>
+                  <Board tone="night" className="grid min-h-80 place-items-center p-8 sm:min-h-[26rem]">
+                    <div aria-hidden className="pointer-events-none absolute size-72 rounded-full bg-[radial-gradient(closest-side,rgb(255_255_255/0.12),transparent)] blur-xl" />
+                    {/* Replay without script: each toggle shows the other copy, and a newly shown animation starts from the top. */}
+                    <input id="ayn-replay" type="checkbox" className="peer sr-only motion-reduce:hidden" />
+                    <LogoMark animated className="relative size-44 text-white peer-checked:hidden sm:size-56" />
+                    <LogoMark animated className="relative hidden size-44 text-white peer-checked:block sm:size-56" />
+                    <label htmlFor="ayn-replay" className="absolute bottom-4 end-4 inline-flex cursor-pointer items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm font-medium text-white transition-colors select-none hover:bg-white/20 peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-white motion-reduce:hidden">
+                      <RotateCcw className="size-4" aria-hidden />
+                      {t("mark.replay")}
+                    </label>
+                  </Board>
+                  <figcaption className="mt-3 px-1 text-sm text-tertiary">{t("mark.liveCaption")}</figcaption>
+                </figure>
+                <div>
+                  <p className="r-label px-1 text-tertiary">{t("mark.inProduct")}</p>
+                  <div className="mt-3 flex items-center gap-5 rounded-card bg-surface p-5 shadow-card">
+                    <LogoMark animated className="size-14 shrink-0 text-accent" />
+                    <div>
+                      <p className="text-lg font-semibold text-text">{th("caughtUp.title")}</p>
+                      <p className="text-sm text-secondary">{th("caughtUp.body")}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </Section>
 
@@ -348,8 +443,8 @@ export default async function BrandPage() {
                 <h3 className="r-label text-tertiary">{t("lockups.wordmarkTitle")}</h3>
                 <p className="mt-3 leading-relaxed text-secondary">{t("lockups.wordmarkBody")}</p>
               </div>
-              <Board tone="white" className="p-5 sm:p-10 lg:col-span-8">
-                <WordmarkGuides labels={{ cap: t("lockups.guides.cap"), baseline: t("lockups.guides.baseline"), rise: t("lockups.guides.rise") }} />
+              <Board tone="white" className="flex items-center p-5 sm:p-10 lg:col-span-8">
+                <WordmarkGuides labels={{ ascender: t("lockups.guides.ascender"), baseline: t("lockups.guides.baseline"), rise: t("lockups.guides.rise") }} />
               </Board>
             </div>
           </Section>
@@ -374,7 +469,7 @@ export default async function BrandPage() {
               <ul className="grid grid-cols-2 gap-px overflow-hidden rounded-card bg-[#e1ddf5] ring-1 ring-inset ring-[#e1ddf5] sm:grid-cols-4 lg:col-span-7">
                 {(
                   [
-                    ["mark", 16, <Mark key="m" style={{ width: 16, height: 16 }} />],
+                    ["mark", 20, <Mark key="m" style={{ width: 20, height: 20 }} />],
                     ["tile", 20, <LogoTile key="t" className="size-5" />],
                     ["horizontal", 120, <LockupArt key="h" style={{ width: 120 }} />],
                     ["english", 80, <LockupArt key="e" variant="latin" style={{ width: 80 }} />],
@@ -394,24 +489,34 @@ export default async function BrandPage() {
 
           {/* 05 Misuse */}
           <Section id="misuse" n={4} title={t("misuse.title")} lede={t("misuse.lede")}>
-            <ul className="grid grid-cols-2 gap-x-4 gap-y-6 lg:grid-cols-4">
+            {/* Each example breaks exactly the rule under it, and nothing else. */}
+            <ul className="grid grid-cols-2 gap-x-4 gap-y-6 md:grid-cols-5">
+              <Dont label={t("misuse.items.mirror")}>
+                <Mark className="size-14 -scale-x-100 sm:size-16" />
+              </Dont>
+              <Dont label={t("misuse.items.close")}>
+                <Mark closeHead className="size-14 sm:size-16" />
+              </Dont>
+              <Dont label={t("misuse.items.pupil")}>
+                <span className="flex items-center gap-1">
+                  <Mark pupil={{ cx: AYN.bowl.cx, cy: AYN.bowl.cy }} className="size-12 sm:size-14" />
+                  <Mark dot="#25c6b6" className="size-12 sm:size-14" />
+                </span>
+              </Dont>
               <Dont label={t("misuse.items.recolour")}>
-                <span className="flex items-center gap-2">
-                  <Mark fg="#2d5bd7" dot="#1f9d55" className="size-8 sm:size-10" />
-                  <WordmarkShape fill="#2d5bd7" className="h-4 w-auto sm:h-5" />
+                <span className="flex items-center gap-2" dir="ltr">
+                  <Mark fg="#2d9cdb" className="size-8 sm:size-10" />
+                  <WordmarkShape fill="#2d9cdb" className="h-4 w-auto sm:h-5" />
                 </span>
               </Dont>
               <Dont label={t("misuse.items.stretch")}>
-                <LockupArt variant="latin" className="h-6 w-auto scale-x-[1.25] scale-y-[0.7] sm:h-9 sm:scale-x-[1.35]" />
+                <LockupArt variant="latin" className="h-6 w-auto scale-x-[1.3] scale-y-[0.7] sm:h-8" />
               </Dont>
               <Dont label={t("misuse.items.rotate")}>
-                <LockupArt variant="latin" className="h-6 w-auto -rotate-[14deg] sm:h-9" />
+                <LockupArt variant="latin" className="h-6 w-auto -rotate-[14deg] sm:h-8" />
               </Dont>
               <Dont label={t("misuse.items.effects")}>
-                <LockupArt variant="latin" className="h-6 w-auto [filter:drop-shadow(0_6px_5px_rgb(0_0_0/0.45))_drop-shadow(0_0_14px_rgb(108_92_231/0.9))] sm:h-9" />
-              </Dont>
-              <Dont label={t("misuse.items.ground")} tone="coral">
-                <LockupArt variant="latin" className="h-6 w-auto sm:h-9" />
+                <LockupArt variant="latin" className="h-6 w-auto [filter:drop-shadow(0_6px_5px_rgb(0_0_0/0.45))_drop-shadow(0_0_14px_rgb(108_92_231/0.9))] sm:h-8" />
               </Dont>
               <Dont label={t("misuse.items.retype")}>
                 <span className="flex items-center gap-2" dir="ltr">
@@ -421,14 +526,14 @@ export default async function BrandPage() {
                   </span>
                 </span>
               </Dont>
-              <Dont label={t("misuse.items.rearrange")}>
-                <span className="flex flex-col items-center gap-1.5" dir="ltr">
-                  <WordmarkShape fill={INDIGO} className="h-4 w-auto sm:h-5" />
-                  <Mark className="size-7 rotate-180 sm:size-9" />
-                </span>
+              <Dont label={t("misuse.items.busy")} tone="busy">
+                <LockupArt variant="latin" className="h-6 w-auto sm:h-8" />
               </Dont>
-              <Dont label={t("misuse.items.redraw")}>
-                <Mark className="size-10 -scale-x-100 sm:size-14" />
+              <Dont label={t("misuse.items.rearrange")}>
+                <span className="flex flex-col items-center gap-1" dir="ltr">
+                  <Mark className="size-9 sm:size-11" />
+                  <WordmarkShape fill={INDIGO} className="h-4 w-auto sm:h-5" />
+                </span>
               </Dont>
             </ul>
           </Section>
@@ -730,9 +835,76 @@ export default async function BrandPage() {
             </div>
           </Section>
 
-          {/* 09 The narrowing */}
+          {/* 09 Motifs: the ʿayn's bowl and pupil as graphics, then the narrowing as data */}
           <Section id="motif" n={8} title={t("motif.title")} lede={t("motif.lede")}>
             <div className="grid gap-10 lg:grid-cols-12 lg:gap-8">
+              <div className="lg:col-span-5">
+                <h3 className="r-label text-tertiary">{t("motif.sweepTitle")}</h3>
+                <p className="mt-3 leading-relaxed text-secondary">{t("motif.sweepBody")}</p>
+              </div>
+              <Board tone="night" className="isolate flex min-h-80 flex-col justify-between gap-12 p-6 sm:min-h-[24rem] sm:p-9 lg:col-span-7">
+                <Sweep className="absolute inset-0 -z-10 size-full" />
+                <span className="flex items-center gap-2.5 self-start" dir="ltr">
+                  <LogoTile className="size-9" />
+                  <Wordmark className="h-[18px] text-white" />
+                </span>
+                <div>
+                  <p className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs text-white/85 rtl:text-[13px]">
+                    <span className="size-2 rounded-full shadow-[0_0_8px_#ff5c7c]" style={{ background: CORAL }} aria-hidden />
+                    {t("motif.sweepStatus")}
+                  </p>
+                  <p className="display-x mt-4 max-w-[13ch] text-[clamp(2.2rem,5vw,3.75rem)] text-white">
+                    <WithDot text={t("motif.sweepPoster")} />
+                  </p>
+                </div>
+              </Board>
+            </div>
+
+            <div className="mt-16 grid gap-10 lg:grid-cols-12 lg:gap-8">
+              <div className="lg:col-span-5">
+                <h3 className="r-label text-tertiary">{t("motif.dotTitle")}</h3>
+                <p className="mt-3 leading-relaxed text-secondary">{t("motif.dotBody")}</p>
+              </div>
+              <ul className={cn(CARD, "grid gap-8 p-6 sm:grid-cols-3 sm:gap-6 sm:p-8 lg:col-span-7")}>
+                <li className="flex flex-col justify-between gap-5">
+                  <div className="flex min-h-16 items-center">
+                    <span className="inline-flex items-center gap-2 rounded-full bg-surface-sunken px-3 py-1.5 text-sm text-text">
+                      <span className="size-2 shrink-0 rounded-full bg-[var(--signal)] shadow-[0_0_8px_var(--signal)]" aria-hidden />
+                      {t("motif.dotPill")}
+                    </span>
+                  </div>
+                  <p className="text-xs text-tertiary rtl:text-[13px]">{t("motif.dots.status")}</p>
+                </li>
+                <li className="flex flex-col justify-between gap-5">
+                  <div className="flex min-h-16 items-center">
+                    <EstimateLine rtl={rtl} />
+                  </div>
+                  <p className="text-xs text-tertiary rtl:text-[13px]">{t("motif.dots.estimate")}</p>
+                </li>
+                <li className="flex flex-col justify-between gap-5">
+                  <div className="flex min-h-16 items-center">
+                    <p className="display-x text-[2.5rem] text-text">
+                      <WithDot text={t("ui.hero.verdict")} />
+                    </p>
+                  </div>
+                  <p className="text-xs text-tertiary rtl:text-[13px]">{t("motif.dots.stop")}</p>
+                </li>
+              </ul>
+            </div>
+
+            <div className="mt-16 grid gap-10 lg:grid-cols-12 lg:gap-8">
+              <div className="lg:col-span-5">
+                <h3 className="r-label text-tertiary">{t("motif.signTitle")}</h3>
+                <p className="mt-3 leading-relaxed text-secondary">{t("motif.signBody")}</p>
+              </div>
+              <div className="hero-card hero-sign rounded-[28px] p-7 pb-32 [--sign-inset:20px] [--sign-size:96px] sm:p-9 sm:[--sign-inset:28px] sm:[--sign-size:132px] lg:col-span-7">
+                <p className="text-sm text-hero-secondary">{t("motif.sign.eyebrow")}</p>
+                <p className="display-x mt-3 max-w-[14ch] text-[2.25rem] sm:text-[2.75rem]">{t("motif.sign.title")}</p>
+                <p className="mt-4 max-w-[22rem] text-[15px] leading-relaxed text-hero-secondary">{t("motif.sign.body")}</p>
+              </div>
+            </div>
+
+            <div className="mt-16 grid gap-10 lg:grid-cols-12 lg:gap-8">
               <div className="lg:col-span-5">
                 <h3 className="r-label text-tertiary">{t("motif.bandsTitle")}</h3>
                 <p className="mt-3 leading-relaxed text-secondary">{t("motif.bandsBody")}</p>
@@ -1024,7 +1196,7 @@ export default async function BrandPage() {
                       return (
                         <li key={k}>
                           <a href={href} download aria-label={t("downloads.download", { name })} className="group -mx-2 flex items-center gap-4 rounded-[16px] p-2 transition-colors hover:bg-surface-subtle focus-visible:outline-2 focus-visible:outline-focus">
-                            <span className={cn("grid h-14 w-24 shrink-0 place-items-center rounded-[12px] p-2.5 transition-transform group-hover:scale-[1.03]", BOARD[tone])}>
+                            <span className={cn("flex h-14 w-24 shrink-0 items-center justify-center rounded-[12px] p-2.5 transition-transform group-hover:scale-[1.03]", BOARD[tone])}>
                               {/* eslint-disable-next-line @next/next/no-img-element */}
                               <img src={href} alt="" className="size-full object-contain" />
                             </span>
@@ -1045,6 +1217,7 @@ export default async function BrandPage() {
               ))}
             </div>
             <h3 className="r-label mt-14 text-tertiary">{t("downloads.groups.social")}</h3>
+            <p className="mt-2 max-w-2xl text-sm leading-relaxed text-secondary">{t("downloads.socialBody")}</p>
             <ul className="mt-5 grid gap-4 sm:grid-cols-2">
               {DOWNLOADS.find((g) => g.key === "social")!.items.map(([k, file]) => {
                 const href = `/brand/${file}`;
@@ -1129,6 +1302,7 @@ const DOWNLOADS: { key: "logos" | "marks" | "raster" | "social"; items: [string,
       ["logoPng", "logo.png", "lavender"],
       ["logoReversePng", "logo-reverse.png", "night"],
       ["symbolPng", "symbol-1024.png", "white"],
+      ["maskable", "symbol-maskable-512.png", "white"],
       ["email", "logo-email.png", "white"],
     ],
   },
@@ -1141,7 +1315,7 @@ const DOWNLOADS: { key: "logos" | "marks" | "raster" | "social"; items: [string,
   },
 ];
 
-/** The last word keeps the full stop, drawn as the mark's coral dot. */
+/** The last word keeps the full stop, drawn as the pupil's coral dot. */
 function WithDot({ text }: { text: string }) {
   const at = text.lastIndexOf(" ") + 1;
   return (
@@ -1392,6 +1566,20 @@ function AreaDemo({ rtl, weeks }: { rtl: boolean; weeks: string[] }) {
         ))}
       </div>
     </div>
+  );
+}
+
+/** The coral dot where a chart lands: a short violet line ending in the estimate. */
+function EstimateLine({ rtl }: { rtl: boolean }) {
+  const W = 140;
+  const vals = [2.3, 2.9, 2.8, 3.4, 3.8];
+  const pts = vals.map((v, i) => [rtl ? W - (8 + i * 30) : 8 + i * 30, 52 - (v - 1) * 12] as [number, number]);
+  const end = pts[pts.length - 1]!;
+  return (
+    <svg viewBox={`0 0 ${W} 56`} className="block h-14 w-auto max-w-full overflow-visible" aria-hidden>
+      <path d={curve(pts)} fill="none" stroke="var(--chart-1)" strokeWidth={3} strokeLinecap="round" />
+      <circle cx={end[0]} cy={end[1]} r={6.5} fill="var(--signal)" stroke="var(--surface)" strokeWidth={2.5} style={{ filter: "drop-shadow(0 0 6px var(--signal))" }} />
+    </svg>
   );
 }
 
