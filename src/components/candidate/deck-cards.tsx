@@ -3,7 +3,7 @@ import * as React from "react";
 import { useTranslations } from "next-intl";
 import { ArrowUpDown, BarChart3, FileText, Inbox, LayoutTemplate, ListChecks, Mail, MessagesSquare, PenLine, PieChart, Route, Scale, Table2, type LucideIcon } from "lucide-react";
 import type { Material } from "@/lib/assessment/materials";
-import { castIn, sceneArt } from "@/lib/brand/scene-art";
+import { arcPath, castIn, sceneArt } from "@/lib/brand/scene-art";
 import { MaterialView } from "@/components/assessment/document-viewer";
 import { initials, cn } from "@/lib/utils";
 import type { StoryNote } from "@/lib/hire/story";
@@ -29,35 +29,28 @@ export const TASK_ICON: Record<string, LucideIcon> = {
   forced_choice: Scale,
 };
 
-/** The scene's own picture: the brand's bands narrowing into the dot, composed from the title. */
+/** The scene's own picture: the ʿayn's arcs sweeping round the coral pupil, composed from the title. */
 export function SceneArt({ seed, className }: { seed: string; className?: string }) {
   const art = React.useMemo(() => sceneArt(seed), [seed]);
-  const cx = art.stack[0]!.x + art.stack[0]!.w / 2;
-  const cy = (art.stack[0]!.y + art.dot.cy) / 2;
   return (
     <svg viewBox={`0 0 ${art.width} ${art.height}`} className={className} preserveAspectRatio="xMidYMid slice" aria-hidden>
-      <g>
-        {art.field.map((b, i) => (
-          <rect key={i} x={b.x} y={b.y} width={b.w} height={b.h} rx={b.h / 2} fill="var(--hero-foreground)" opacity={b.strength} />
+      <g fill="none" stroke="var(--hero-foreground)" strokeLinecap="round">
+        {art.field.map((a, i) => (
+          <path key={i} d={arcPath(a)} strokeWidth={a.w} strokeOpacity={a.strength} />
         ))}
-      </g>
-      <g transform={`rotate(${art.tilt} ${cx} ${cy})`}>
-        {art.stack.map((b, i) => (
-          <rect
-            key={i}
-            className="art-band"
-            x={b.x}
-            y={b.y}
-            width={b.w}
-            height={b.h}
-            rx={b.h / 2}
-            fill="var(--hero-foreground)"
-            opacity={0.22 + b.strength * 0.5}
-            style={{ animationDelay: `${120 + i * 110}ms` }}
+        {art.sweeps.map((a, i) => (
+          <path
+            key={`s${i}`}
+            className="art-sweep"
+            d={arcPath(a)}
+            pathLength={100}
+            strokeWidth={a.w}
+            strokeOpacity={0.24 + a.strength * 0.5}
+            style={{ animationDelay: `${120 + i * 140}ms` }}
           />
         ))}
-        <circle className="art-dot" cx={art.dot.cx} cy={art.dot.cy} r={art.dot.r} fill="var(--signal)" style={{ animationDelay: `${180 + art.stack.length * 110}ms` }} />
       </g>
+      <circle className="art-dot" cx={art.dot.cx} cy={art.dot.cy} r={art.dot.r} fill="var(--signal)" style={{ animationDelay: `${260 + art.sweeps.length * 140}ms` }} />
     </svg>
   );
 }

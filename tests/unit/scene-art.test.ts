@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { castIn, sceneArt } from "@/lib/brand/scene-art";
+import { arcPath, castIn, sceneArt } from "@/lib/brand/scene-art";
 
 describe("scene art", () => {
   it("is deterministic and differs between scenes", () => {
@@ -7,19 +7,28 @@ describe("scene art", () => {
     expect(sceneArt("The afternoon queue")).not.toEqual(sceneArt("Splitting the improvement budget"));
   });
 
-  it("narrows upward into the dot, inside the box", () => {
+  it("sweeps bold open arcs round the pupil, which stays inside the box", () => {
     for (const seed of ["a", "The afternoon queue", "طابور ما بعد الظهر", "x".repeat(40)]) {
       const a = sceneArt(seed);
-      expect(a.stack.length).toBeGreaterThanOrEqual(3);
-      for (let i = 1; i < a.stack.length; i++) {
-        expect(a.stack[i]!.w).toBeLessThan(a.stack[i - 1]!.w);
-        expect(a.stack[i]!.y).toBeLessThan(a.stack[i - 1]!.y);
+      expect(a.sweeps.length).toBeGreaterThanOrEqual(2);
+      for (let i = 0; i < a.sweeps.length; i++) {
+        const s = a.sweeps[i]!;
+        expect(s.cx).toBe(a.dot.cx);
+        expect(s.cy).toBe(a.dot.cy);
+        // Open: never a full circle, never a sliver.
+        expect(s.end - s.start).toBeGreaterThan(180);
+        expect(s.end - s.start).toBeLessThan(330);
+        if (i > 0) {
+          expect(s.r).toBeGreaterThan(a.sweeps[i - 1]!.r);
+          expect(s.w).toBeLessThan(a.sweeps[i - 1]!.w);
+        }
       }
-      for (const b of a.stack) {
-        expect(b.x).toBeGreaterThanOrEqual(0);
-        expect(b.x + b.w).toBeLessThanOrEqual(360);
-      }
-      expect(a.dot.cy).toBeGreaterThan(0);
+      expect(a.dot.cx).toBeGreaterThan(40);
+      expect(a.dot.cx).toBeLessThan(320);
+      expect(a.dot.cy).toBeGreaterThan(40);
+      expect(a.dot.cy).toBeLessThan(160);
+      expect(a.field.length).toBeGreaterThan(10);
+      expect(arcPath(a.sweeps[0]!)).toMatch(/^M[\d.-]+ [\d.-]+A/);
     }
   });
 

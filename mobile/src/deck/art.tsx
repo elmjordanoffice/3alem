@@ -1,30 +1,30 @@
 import * as React from "react";
 import { View } from "react-native";
-import Svg, { Circle, G, Rect } from "react-native-svg";
-import Animated, { useAnimatedProps, useSharedValue, withDelay, withSpring } from "react-native-reanimated";
+import Svg, { Circle, Path } from "react-native-svg";
+import Animated, { Easing, useAnimatedProps, useSharedValue, withDelay, withSpring, withTiming } from "react-native-reanimated";
 // Shared with the web app (metro.config.js watches ../src/lib/brand): the same title draws the same picture everywhere.
-import { sceneArt, type ArtBand } from "../../../src/lib/brand/scene-art";
+import { arcLength, arcPath, sceneArt, type ArtArc } from "../../../src/lib/brand/scene-art";
 import { palette, spring, useTheme } from "../theme";
 import { ARRIVE } from "../ui/motion";
 
-const AnimatedRect = Animated.createAnimatedComponent(Rect);
+const AnimatedPath = Animated.createAnimatedComponent(Path);
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
-/** Between one band of the stack starting to narrow and the next. */
-const STAGGER = 80;
+/** Between one sweep starting to draw and the next. */
+const STAGGER = 140;
 
 /**
- * A scene's cover art: the brand's own shapes, composed from the scene's
- * title by the shared generator (a faint field of thin bands; a stack of
- * rounded bands narrowing upward into the coral dot, leaning by `tilt`).
+ * A scene's cover art: the brand's own shapes (the ʿAyn), composed from the
+ * scene's title by the shared generator: faint ripples round a coral pupil,
+ * and two or three bold open arcs, like the letter's bowl, sweeping round it.
  * White light on the violet highlight card, in both themes, as on the web.
  *
- * It draws itself in once: each band of the stack narrows from the full width
- * to its own, bottom first, then the dot drops into place, on springs. Still
- * under reduced motion. Abstract, so it never mirrors in Arabic.
+ * It draws itself in once: each sweep draws round from its start, inner
+ * first, then the pupil pops into place. Still under reduced motion.
+ * Abstract, so it never mirrors in Arabic.
  *
  * The composition is 360 × 200. A box taller than that keeps the full width
- * and lets the field run on upward (mirrored, so it never visibly repeats); a
+ * and shows more of the ripples above (they run out to a wide radius); a
  * wider one crops the sides.
  */
 export const SceneArt = React.memo(function SceneArt({ seed, width, height, play = true }: { seed: string; width: number; height: number; play?: boolean }) {
@@ -35,65 +35,52 @@ export const SceneArt = React.memo(function SceneArt({ seed, width, height, play
   const slice = aspect >= art.width / art.height;
   const vbH = slice ? art.height : art.width / aspect;
   const extra = vbH - art.height;
-
-  const field = React.useMemo(() => {
-    const out: ArtBand[] = [...art.field];
-    if (extra > 0) {
-      const tiles = Math.ceil(extra / 180);
-      for (let k = 1; k <= tiles; k++) {
-        for (const b of art.field) {
-          const y = b.y - 180 * k;
-          if (y + b.h < -extra) continue;
-          out.push({ ...b, y, x: k % 2 ? art.width - b.x - b.w : b.x });
-        }
-      }
-    }
-    return out;
-  }, [art, extra]);
-
-  // The stack leans around its own centre (dot included).
-  const bottom = art.stack[0]!;
-  const minX = Math.min(...art.stack.map((b) => b.x));
-  const maxX = Math.max(...art.stack.map((b) => b.x + b.w));
-  const cx = (minX + maxX) / 2;
-  const cy = (art.dot.cy - art.dot.r + bottom.y + bottom.h) / 2;
-  const dotDelay = ARRIVE + art.stack.length * STAGGER + 140;
+  const dotDelay = ARRIVE + art.sweeps.length * STAGGER + 260;
 
   return (
     <View style={{ width, height, overflow: "hidden" }} accessibilityElementsHidden importantForAccessibility="no-hide-descendants" pointerEvents="none">
       <Svg width={width} height={height} viewBox={`0 ${-extra} ${art.width} ${vbH}`} preserveAspectRatio={slice ? "xMidYMax slice" : "xMidYMid meet"}>
-        {field.map((b, i) => (
-          // The lowest rows fade out, so the field melts into the card instead of stopping at a line.
-          <Rect key={i} x={b.x} y={b.y} width={b.w} height={b.h} rx={b.h / 2} fill={palette.heroText} fillOpacity={b.strength * Math.min(1, Math.max(0.25, (art.height - 14 - (b.y + b.h)) / 50))} />
+        {art.field.map((a, i) => (
+          <Path key={i} d={arcPath(a)} fill="none" stroke={palette.heroText} strokeWidth={a.w} strokeOpacity={a.strength} strokeLinecap="round" />
         ))}
-        <G transform={art.tilt ? `rotate(${art.tilt} ${cx} ${cy})` : undefined}>
-          {art.stack.map((b, i) => (
-            <StackBand key={i} band={b} full={art.width} delay={ARRIVE + i * STAGGER} animate={animate} />
-          ))}
-          <Dot cx={art.dot.cx} cy={art.dot.cy} r={art.dot.r} color={palette.coral} delay={dotDelay} animate={animate} />
-        </G>
+        {art.sweeps.map((a, i) => (
+          <Sweep key={i} arc={a} delay={ARRIVE + i * STAGGER} animate={animate} />
+        ))}
+        <Pupil cx={art.dot.cx} cy={art.dot.cy} r={art.dot.r} color={palette.coral} delay={dotDelay} animate={animate} />
       </Svg>
     </View>
   );
 });
 
-/** One band of the stack, narrowing from the full width to its own. */
-function StackBand({ band, full, delay, animate }: { band: ArtBand; full: number; delay: number; animate: boolean }) {
+/** One bold arc, drawing round from its start. */
+function Sweep({ arc, delay, animate }: { arc: ArtArc; delay: number; animate: boolean }) {
+  const length = arcLength(arc);
   const p = useSharedValue(animate ? 0 : 1);
   React.useEffect(() => {
-    if (animate) p.value = withDelay(delay, withSpring(1, spring.rise));
+    if (animate) p.value = withDelay(delay, withTiming(1, { duration: 1000, easing: Easing.out(Easing.cubic) }));
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
-  const props = useAnimatedProps(() => ({ x: band.x * p.value, width: full + (band.w - full) * p.value }));
-  // White light, solid enough to read as the mark, soft enough to sit in the violet (the web's 0.22 + 0.5 × strength).
-  return <AnimatedRect y={band.y} height={band.h} rx={band.h / 2} fill={palette.heroText} fillOpacity={0.22 + band.strength * 0.5} animatedProps={props} />;
+  const props = useAnimatedProps(() => ({ strokeDashoffset: length * (1 - p.value) }));
+  // White light, solid enough to read as the mark, soft enough to sit in the violet (the web's 0.24 + 0.5 × strength).
+  return (
+    <AnimatedPath
+      d={arcPath(arc)}
+      fill="none"
+      stroke={palette.heroText}
+      strokeWidth={arc.w}
+      strokeOpacity={0.24 + arc.strength * 0.5}
+      strokeLinecap="round"
+      strokeDasharray={`${length}`}
+      animatedProps={props}
+    />
+  );
 }
 
-/** The coral dot, dropping into place once the stack has narrowed. */
-function Dot({ cx, cy, r, color, delay, animate }: { cx: number; cy: number; r: number; color: string; delay: number; animate: boolean }) {
+/** The coral pupil, popping into place once the sweeps have drawn. */
+function Pupil({ cx, cy, r, color, delay, animate }: { cx: number; cy: number; r: number; color: string; delay: number; animate: boolean }) {
   const p = useSharedValue(animate ? 0 : 1);
   React.useEffect(() => {
     if (animate) p.value = withDelay(delay, withSpring(1, spring.settle));
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
-  const props = useAnimatedProps(() => ({ cy: cy - 30 * (1 - p.value), opacity: p.value > 0.01 ? 1 : 0 }));
-  return <AnimatedCircle cx={cx} r={r} fill={color} animatedProps={props} />;
+  const props = useAnimatedProps(() => ({ r: r * p.value, opacity: p.value > 0.01 ? 1 : 0 }));
+  return <AnimatedCircle cx={cx} cy={cy} fill={color} animatedProps={props} />;
 }

@@ -641,12 +641,12 @@ html[data-r-motion] [data-narrow]:not([data-in]) .r-fade { opacity: 0; }
 @keyframes deck-nudge { 0%, 100% { transform: translateY(0); } 30% { transform: translateY(-16px); } 55% { transform: translateY(0); } 72% { transform: translateY(-6px); } }
 .deck-nudge { animation: deck-nudge 1.1s var(--ease-out) 2; }
 /* Scene art: each band arrives wide and settles to its own width, then the dot lands. */
-@keyframes art-band { from { transform: scaleX(1.7); opacity: 0; } }
-@keyframes art-dot { 0% { transform: translateY(-24px) scale(0.4); opacity: 0; } 70% { transform: translateY(2px) scale(1.1); opacity: 1; } 100% { transform: none; } }
-.art-band { transform-box: fill-box; transform-origin: center; animation: art-band 900ms var(--ease-enter) both; }
+@keyframes art-sweep { from { stroke-dashoffset: 100; } to { stroke-dashoffset: 0; } }
+@keyframes art-dot { 0% { transform: scale(0.2); opacity: 0; } 70% { transform: scale(1.2); opacity: 1; } 100% { transform: none; } }
+.art-sweep { stroke-dasharray: 100; animation: art-sweep 1000ms var(--ease-enter) both; }
 .art-dot { transform-box: fill-box; transform-origin: center; animation: art-dot 620ms var(--ease-hero) both; }
 @media (prefers-reduced-motion: reduce) {
-  .deck-nudge, .art-band, .art-dot { animation: none; }
+  .deck-nudge, .art-sweep, .art-dot { animation: none; }
 }
 
 /* The week, alive (src/components/candidate/story.tsx). */

@@ -6,9 +6,8 @@ export function PageContainer({ className, ...props }: React.ComponentProps<"div
 }
 
 /**
- * Every page opens the same way: a hairline rule with a vermilion tick, an
- * optional eyebrow, the title in Archivo (a little wide) and one line of
- * context. Actions sit at the end of the row.
+ * Every page opens the same way: an optional eyebrow, a bold title with
+ * tight tracking and one line of context. Actions sit at the end of the row.
  */
 export function PageHeader({
   title,

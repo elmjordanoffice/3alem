@@ -198,3 +198,9 @@ All motion is CSS or Reanimated, uses springs and short eases, and goes still un
 
 **D-062: A navy blue.** The owner liked Night but found the blue too bright, then asked for it a step more navy. Stat tiles now run `#21409E` → `#12245E`, the logo disc and app icons `#2A4BB0` → `#142966`, and the blue data colour is `#3558C4` (dark) / `#22449F` (light), with chart lines at `#5874CC` on dark so they stay visible. The phone app uses the same values. *(Design)*
 
+**D-063: A new mark, the ʿAyn.** The owner asked for a new, creative logo and brand. Range (stacked bands narrowing into a dot) drew the product's method; the new mark draws its point of view.
+- **The mark** is the letter ع, the first letter of عالم (world, and our name), علم (knowledge), عمل (work) and عين (eye), drawn as one rounded stroke. Calligraphers call the inside of its head the letter's eye; a coral pupil sits there. It reads as Arabic to Arabic readers and as a friendly open glyph with an eye to everyone else, which suits a bilingual, Arabic-first product better than a Latin initial.
+- **The wordmark** moves to the product's own fonts: aalim in lowercase Plus Jakarta Sans ExtraBold, عالم in Readex Pro Bold, outlined from static cuts in `brand/fonts/`.
+- **Alive in the product:** the mark draws itself and keeps an eye out (glances, blinks) on the sign-in panel and on loading, finish and caught-up moments. Scene cover art moves from bands to sweeps round a coral pupil (web and phone share the generator).
+- **Kept:** Night colours and type, the range bands in reports (they are data), and every fairness and healthy-habit rule. Three directions were sketched (the ʿayn, a constellation "A", an orbiting world); the other two read as generic. *(Design)*
+
