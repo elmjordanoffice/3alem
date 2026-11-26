@@ -45,9 +45,10 @@ export function Symbol({ size = 40 }: { size?: number }) {
 }
 
 function Ring({ ring, t, from, to, color }: { ring: (typeof MARK)["outer"]; t: SharedValue<number>; from: number; to: number; color: string }) {
-  const props = useAnimatedProps(() => ({ strokeDashoffset: interpolate(t.value, [from, to], [ring.length, 0], Extrapolation.CLAMP) }));
+  // Hidden until it starts drawing: a round cap would otherwise show as a dot where the ring begins.
+  const props = useAnimatedProps(() => ({ strokeDashoffset: interpolate(t.value, [from, to], [ring.length, 0], Extrapolation.CLAMP), strokeOpacity: t.value > from ? ring.opacity : 0 }));
   return (
-    <AnimatedPath d={ring.d} fill="none" stroke={color} strokeWidth={ring.w} strokeOpacity={ring.opacity} strokeLinecap="round" strokeDasharray={`${ring.length}`} animatedProps={props} />
+    <AnimatedPath d={ring.d} fill="none" stroke={color} strokeWidth={ring.w} strokeLinecap="round" strokeDasharray={`${ring.length}`} animatedProps={props} />
   );
 }
 
