@@ -9,6 +9,7 @@ import { getGrowProfile } from "@/lib/grow/profile";
 import { withTenant } from "@/lib/db";
 import { formatNumber } from "@/lib/i18n/format";
 import { PageContainer } from "@/components/app/page-header";
+import { LogoMark } from "@/components/brand/logo";
 import { Alert } from "@/components/ui/alert";
 import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -214,16 +215,11 @@ function SectionTitle({ id, title, count, href, linkLabel }: { id: string; title
 }
 
 /** The pipeline as a to-do list: the most urgent first, each one a link to where it's done. */
-/** Inbox zero for hiring: the bands have narrowed, the dot has landed. */
+/** Inbox zero for hiring: the ʿayn draws itself and takes a look round. */
 function CaughtUp({ t }: { t: T }) {
   return (
     <section aria-labelledby="caught-h" className="flex items-center gap-5 rounded-card bg-surface p-5 shadow-card">
-      <span className="flex w-14 shrink-0 flex-col-reverse items-center gap-1.5" aria-hidden>
-        {[100, 70, 40].map((w, i) => (
-          <span key={i} className="narrow-band block h-2.5 rounded-full bg-accent" style={{ width: `${w}%`, animationDelay: `${80 + i * 110}ms` }} />
-        ))}
-        <span className="narrow-dot block size-2.5 rounded-full bg-saffron" style={{ animationDelay: "420ms" }} />
-      </span>
+      <LogoMark animated className="size-14 shrink-0 text-accent" />
       <div>
         <h2 id="caught-h" className="text-lg font-semibold text-text">{t("caughtUp.title")}</h2>
         <p className="text-sm text-secondary">{t("caughtUp.body")}</p>

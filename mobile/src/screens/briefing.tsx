@@ -10,7 +10,7 @@ import { Button } from "../ui/button";
 import { Card, hairline, HeroCard, IconCircle, NumberBadge, SignalRule } from "../ui/primitives";
 import { T } from "../ui/text";
 import { Avatar } from "../ui/avatar";
-import { Narrowing } from "../ui/brand";
+import { MarkLive } from "../ui/brand";
 import { NextHint } from "../deck/chrome";
 import { Pager } from "../deck/pager";
 import type { PagerHandle } from "../deck/pager-context";
@@ -79,7 +79,7 @@ function World({ v, onBegin }: { v: V<"briefing">; onBegin: () => Promise<void> 
           <HeroCard>
             <View style={{ gap: 18 }}>
               <View style={{ alignItems: "flex-start" }}>
-                <Narrowing width={84} rows={3} loop={false} onHero />
+                <MarkLive width={72} loop={false} onHero />
               </View>
               <T variant="label" tone="heroSecondary">
                 {t("eyebrow")}

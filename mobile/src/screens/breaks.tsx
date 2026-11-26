@@ -7,7 +7,7 @@ import { useLocale, useT } from "../i18n";
 import { palette, radius, spring, useTheme } from "../theme";
 import { haptic } from "../lib/haptics";
 import { Button } from "../ui/button";
-import { Narrowing } from "../ui/brand";
+import { MarkLive } from "../ui/brand";
 import { ARRIVE, Entrance, FADE, OUT, Swap, useEntrance, useOnce } from "../ui/motion";
 import { Card, HeroCard, IconCircle } from "../ui/primitives";
 import { T } from "../ui/text";
@@ -305,7 +305,7 @@ function useLoadingLine() {
  * While the week is set up (the world, then the first scene): the bands
  * narrow, over and over, into the dot; the title; and a playful line about
  * what's happening, changing every couple of seconds with a soft rise. Under
- * reduced motion the Narrowing is still and the lines crossfade.
+ * reduced motion the mark is still and the lines crossfade.
  */
 export function Preparing({ branding }: { branding?: Branding }) {
   const t = useT("candidate.loading");
@@ -313,7 +313,7 @@ export function Preparing({ branding }: { branding?: Branding }) {
   return (
     <Screen testID="screen-preparing" header={<OrgHeader branding={branding} />} scroll={false}>
       <View accessibilityRole="progressbar" accessibilityLabel={t("title")} style={{ flexGrow: 1, alignItems: "center", justifyContent: "center", gap: 32, paddingBottom: 60 }}>
-        <Narrowing width={132} rows={3} loop />
+        <MarkLive width={96} loop />
         <View style={{ alignSelf: "stretch", gap: 10 }}>
           <T variant="displaySm" align="center" accessibilityRole="header">
             {t("title")}

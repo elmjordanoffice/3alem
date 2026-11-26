@@ -1,5 +1,5 @@
 import type { CSSProperties, ReactNode } from "react";
-import { ARABIC, LATIN, MARK } from "@/components/brand/wordmark-paths";
+import { ARABIC, AYN, LATIN, LOCKUP } from "@/components/brand/wordmark-paths";
 
 /**
  * Drawings for the brand book. Every number here comes from the mark's own
@@ -8,13 +8,13 @@ import { ARABIC, LATIN, MARK } from "@/components/brand/wordmark-paths";
  * Artboards use fixed Night colours; figures on the page itself use the tokens.
  */
 
-/** Deep indigo: the bands on lavender and white. */
+/** Deep indigo: the letter on lavender and white. */
 export const INDIGO = "#1b1840";
 /** The night artboard. */
 export const NIGHT = "#141235";
 export const LAVENDER = "#efedfb";
 export const WHITE = "#ffffff";
-/** The dot on night (dark --saffron) and on light grounds (light --saffron). */
+/** The pupil on night (dark --saffron) and on light grounds (light --saffron). */
 export const CORAL = "#ff5c7c";
 export const CORAL_DEEP = "#e8436b";
 /** Coral as small text on white (light --signal-hover). */
@@ -24,17 +24,14 @@ const GRID_STRONG = "#c3bcec";
 const DIM = "#5f5a8c";
 
 const fmt = (n: number) => String(Math.round(n * 100) / 100);
-const GAP = MARK.bars[1]!.y + MARK.h - MARK.bars[0]!.y; // negative: rows go up
-const ROW_GAP = Math.abs(GAP);
-const STEP = MARK.bars[1]!.x - MARK.bars[0]!.x;
+const rad = (a: number) => (a * Math.PI) / 180;
+const onCircle = (c: { cx: number; cy: number; r: number }, a: number) => ({ x: c.cx + c.r * Math.cos(rad(a)), y: c.cy + c.r * Math.sin(rad(a)) });
 
 function MarkShapes({ fg = INDIGO, dot = CORAL_DEEP }: { fg?: string; dot?: string }) {
   return (
     <>
-      {MARK.bars.map((b) => (
-        <rect key={b.y} x={b.x} y={b.y} width={b.w} height={MARK.h} rx={MARK.h / 2} fill={fg} />
-      ))}
-      <circle cx={MARK.dot.cx} cy={MARK.dot.cy} r={MARK.dot.r} fill={dot} />
+      <path d={AYN.d} fill="none" stroke={fg} strokeWidth={AYN.stroke} strokeLinecap="round" strokeLinejoin="round" />
+      <circle cx={AYN.pupil.cx} cy={AYN.pupil.cy} r={AYN.pupil.r} fill={dot} />
     </>
   );
 }
@@ -55,44 +52,30 @@ function Grid({ minor, major, size = 64 }: { minor: string; major: string; size?
 }
 
 /**
- * The tangent through the rounded band ends: the legs of the A. Returns the
- * apex and the foot of the left leg (the right one mirrors it).
+ * The ʿayn drawn on its grid: the two circles it is cut from (head and bowl),
+ * their centres, the stroke, the neck and the pupil.
  */
-function aLeg() {
-  const [b0, b1] = MARK.bars as [{ x: number; y: number; w: number }, { x: number; y: number; w: number }];
-  const r = MARK.h / 2;
-  const c0 = { x: b0.x + r, y: b0.y + r };
-  const c1 = { x: b1.x + r, y: b1.y + r };
-  const len = Math.hypot(c1.x - c0.x, c1.y - c0.y);
-  const n = { x: (c1.y - c0.y) / len, y: -(c1.x - c0.x) / len }; // outward normal, to the left
-  const p = { x: c0.x + n.x * r, y: c0.y + n.y * r };
-  const slope = (c1.x - c0.x) / (c1.y - c0.y); // dx per dy
-  const xAt = (y: number) => p.x + (y - p.y) * slope;
-  const apexY = p.y + (32 - p.x) / slope;
-  return { apex: { x: 32, y: apexY }, foot: { x: xAt(63), y: 63 } };
-}
-
-/** The mark drawn on its grid, with every measurement. */
-export function MarkConstruction({ labels }: { labels: { units: string; row: string; gap: string; step: string; dot: string; radius: string } }) {
-  const { apex, foot } = aLeg();
-  const [b0, b1] = MARK.bars as [{ x: number; y: number; w: number }, { x: number; y: number; w: number }];
-  const r = MARK.h / 2;
+export function MarkConstruction({ labels }: { labels: { units: string; head: string; bowl: string; stroke: string; pupil: string; neck: string } }) {
+  const { head, bowl, pupil } = AYN;
   const t = { fontSize: 2.5, fill: DIM, fontFamily: "var(--font-sans)" } as const;
   const dim = { stroke: DIM, strokeWidth: 0.16 } as const;
+  const guide = { fill: "none", stroke: CORAL_DEEP, strokeWidth: 0.22, strokeDasharray: "1 0.8" } as const;
+  const neckA = onCircle(head, head.to);
+  const neckB = onCircle(bowl, bowl.from);
+  const tail = onCircle(bowl, bowl.to);
   return (
     <svg viewBox="-17 -11 100 86" className="h-auto w-full" role="img" aria-label={labels.units} direction="ltr">
       <Grid minor={GRID} major={GRID_STRONG} />
       <rect x={0} y={0} width={64} height={64} fill="none" stroke={GRID_STRONG} strokeWidth={0.22} />
-      {/* The legs of the A, tangent to every band end. */}
-      <g stroke={CORAL_DEEP} strokeWidth={0.22} strokeDasharray="1 0.8">
-        <line x1={apex.x} y1={apex.y} x2={foot.x} y2={foot.y} />
-        <line x1={apex.x} y1={apex.y} x2={64 - foot.x} y2={foot.y} />
-      </g>
+      {/* The two circles the letter is cut from. */}
+      <circle cx={head.cx} cy={head.cy} r={head.r} {...guide} />
+      <circle cx={bowl.cx} cy={bowl.cy} r={bowl.r} {...guide} />
       <MarkShapes />
-      {MARK.bars.map((b) => (
-        <text key={b.y} x={32} y={b.y + r + 1.05} textAnchor="middle" fontSize={3} fontWeight={600} fill={WHITE} fontFamily="var(--font-sans)" className="tabular">
-          {fmt(b.w)}
-        </text>
+      {[head, bowl].map((c) => (
+        <g key={c.cy}>
+          <circle cx={c.cx} cy={c.cy} r={0.7} fill={CORAL_DEEP} />
+          <line x1={c.cx} y1={c.cy} x2={onCircle(c, 200).x} y2={onCircle(c, 200).y} stroke={CORAL_DEEP} strokeWidth={0.22} />
+        </g>
       ))}
       {/* 64 across the top */}
       <g {...dim}>
@@ -101,36 +84,31 @@ export function MarkConstruction({ labels }: { labels: { units: string; row: str
         <line x1={64} y1={-5.2} x2={64} y2={-2.8} />
       </g>
       <text x={32} y={-5.8} textAnchor="middle" {...t}>{labels.units}</text>
-      {/* Row height and gap down the left */}
+      {/* Head and bowl radii, labelled on the left */}
       <g {...dim}>
-        <line x1={-4} y1={b0.y} x2={-4} y2={b0.y + MARK.h} />
-        <line x1={-5.2} y1={b0.y} x2={-2.8} y2={b0.y} />
-        <line x1={-5.2} y1={b0.y + MARK.h} x2={-2.8} y2={b0.y + MARK.h} />
-        <line x1={-4} y1={b1.y + MARK.h} x2={-4} y2={b0.y} strokeDasharray="0.5 0.5" />
-        <line x1={-5.2} y1={b1.y + MARK.h} x2={-2.8} y2={b1.y + MARK.h} />
+        <line x1={onCircle(head, 200).x - 0.6} y1={onCircle(head, 200).y} x2={-3} y2={onCircle(head, 200).y} strokeDasharray="0.5 0.5" />
+        <line x1={onCircle(bowl, 200).x - 0.6} y1={onCircle(bowl, 200).y} x2={-3} y2={onCircle(bowl, 200).y} strokeDasharray="0.5 0.5" />
       </g>
-      <text x={-6} y={b0.y + r + 0.9} textAnchor="end" {...t}>{labels.row}</text>
-      <text x={-6} y={b0.y - ROW_GAP / 2 + 0.9} textAnchor="end" {...t}>{labels.gap}</text>
-      {/* The step in from one band to the next */}
+      <text x={-4} y={onCircle(head, 200).y + 0.9} textAnchor="end" {...t}>{labels.head}</text>
+      <text x={-4} y={onCircle(bowl, 200).y + 0.9} textAnchor="end" {...t}>{labels.bowl}</text>
+      {/* The stroke, measured across the bowl at its lowest point */}
       <g {...dim}>
-        <line x1={b0.x} y1={67.5} x2={b1.x} y2={67.5} />
-        <line x1={b0.x} y1={66.3} x2={b0.x} y2={68.7} />
-        <line x1={b1.x} y1={66.3} x2={b1.x} y2={68.7} />
-        <line x1={b0.x} y1={b0.y + MARK.h} x2={b0.x} y2={66.3} strokeDasharray="0.5 0.5" />
-        <line x1={b1.x} y1={b1.y + MARK.h} x2={b1.x} y2={66.3} strokeDasharray="0.5 0.5" />
+        <line x1={bowl.cx} y1={bowl.cy + bowl.r - AYN.stroke / 2} x2={bowl.cx} y2={bowl.cy + bowl.r + AYN.stroke / 2} stroke={WHITE} strokeWidth={0.3} />
+        <line x1={bowl.cx + 1} y1={bowl.cy + bowl.r + AYN.stroke / 2} x2={bowl.cx + 1} y2={68} strokeDasharray="0.5 0.5" />
       </g>
-      <text x={b0.x + STEP / 2} y={71.6} textAnchor="middle" {...t}>{labels.step}</text>
-      {/* The dot */}
+      <text x={bowl.cx + 2} y={70.5} {...t}>{labels.stroke}</text>
+      {/* The neck between head and bowl */}
       <g {...dim}>
-        <line x1={MARK.dot.cx + MARK.dot.r + 1} y1={MARK.dot.cy} x2={48} y2={MARK.dot.cy} />
+        <line x1={(neckA.x + neckB.x) / 2} y1={(neckA.y + neckB.y) / 2} x2={-3} y2={(neckA.y + neckB.y) / 2 + 0.01} strokeDasharray="0.5 0.5" />
       </g>
-      <text x={49} y={MARK.dot.cy + 0.9} {...t}>{labels.dot}</text>
-      {/* Full round ends */}
-      <circle cx={b0.x + b0.w - r} cy={b0.y + r} r={r} fill="none" stroke={CORAL_DEEP} strokeWidth={0.22} strokeDasharray="0.8 0.6" />
+      <text x={-4} y={(neckA.y + neckB.y) / 2 + 0.9} textAnchor="end" {...t}>{labels.neck}</text>
+      {/* The pupil, in the head's eye */}
       <g {...dim}>
-        <line x1={b0.x + b0.w - r} y1={b0.y + r} x2={68} y2={b0.y + r} />
+        <line x1={pupil.cx + pupil.r + 0.8} y1={pupil.cy} x2={68} y2={pupil.cy} />
       </g>
-      <text x={69} y={b0.y + r + 0.9} {...t}>{labels.radius}</text>
+      <text x={69} y={pupil.cy + 0.9} {...t}>{labels.pupil}</text>
+      {/* Round terminals */}
+      <circle cx={tail.x} cy={tail.y} r={AYN.stroke / 2} fill="none" stroke={CORAL_DEEP} strokeWidth={0.22} strokeDasharray="0.8 0.6" />
     </svg>
   );
 }
@@ -147,7 +125,7 @@ export function CoverMark() {
           </g>
         ))}
       </g>
-      <circle cx={MARK.dot.cx} cy={MARK.dot.cy} r={MARK.dot.r * 2.6} fill={CORAL} opacity={0.22} style={{ filter: "blur(3px)" }} />
+      <circle cx={AYN.pupil.cx} cy={AYN.pupil.cy} r={AYN.pupil.r * 2.8} fill={CORAL} opacity={0.24} style={{ filter: "blur(3px)" }} />
       <MarkShapes fg={WHITE} dot={CORAL} />
     </svg>
   );
@@ -211,39 +189,52 @@ export function NarrowingFigure({ rows, estimate, scale, rtl }: { rows: { label:
 type LockupVariant = "both" | "latin" | "arabic";
 
 /**
- * The horizontal lockups as scripts/brand-assets.mts draws them (mark, AALIM,
- * a hairline, عالم; heights in Latin cap-height units), in any colours.
+ * The horizontal lockups as scripts/brand-assets.mts draws them (the ʿayn,
+ * aalim, a rounded hairline, عالم; sizes in units of the Latin height), in
+ * any colours. Arabic alone puts the mark on the right, where reading starts.
  */
 function lockup(variant: LockupVariant) {
   const H = LATIN.height;
-  const mark = H * 1.62;
-  const gap = H * 0.42;
-  const scale = (H * 1.18) / ARABIC.baseline;
-  const latin = variant === "latin";
-  let x = mark + gap;
-  const at: { latin?: number; rule?: number; arabic?: number } = {};
-  if (variant !== "arabic") {
+  const mark = H * LOCKUP.mark;
+  const gap = H * LOCKUP.gap;
+  const scale = (H * LOCKUP.arabic) / ARABIC.baseline;
+  const latinOnly = variant === "latin";
+  const arabicOnly = variant === "arabic";
+  const markTop = (H - mark) / 2;
+  let x = 0;
+  const at: { mark?: number; latin?: number; rule?: number; arabic?: number } = {};
+  if (!arabicOnly) {
+    at.mark = x - mark * 0.2;
+    x += mark * 0.66 + gap;
     at.latin = x;
     x += LATIN.width;
   }
   if (variant === "both") {
-    x += gap * 0.8;
+    x += H * LOCKUP.rule;
     at.rule = x;
-    x += gap * 0.8;
+    x += H * 0.07 + H * LOCKUP.rule;
   }
-  if (!latin) {
+  if (!latinOnly) {
     at.arabic = x;
     x += ARABIC.width * scale;
   }
-  const top = Math.min((H - mark) / 2, H - (latin ? H : H * 1.18));
-  const bottom = latin ? Math.max(H, (H + mark) / 2) : Math.max((H + mark) / 2, H - ARABIC.baseline * scale + ARABIC.height * scale);
+  if (arabicOnly) {
+    x += gap;
+    at.mark = x - mark * 0.2;
+    x += mark * 0.66;
+  }
+  const top = Math.min(markTop, latinOnly ? 0 : H - H * LOCKUP.arabic);
+  const bottom = Math.max(H, markTop + mark, latinOnly ? 0 : H - ARABIC.baseline * scale + ARABIC.height * scale);
+  // The mark's ink spans about 12 to 56 of its 64-unit box.
+  const left = arabicOnly ? 0 : -mark * 0.2 + (mark / 64) * 12;
+  const right = arabicOnly ? at.mark! + (mark / 64) * 56 : x;
   const parts = (fg: string, dot: string): ReactNode => (
     <>
-      <g transform={`translate(0 ${(H - mark) / 2}) scale(${mark / 64})`}>
+      <g transform={`translate(${at.mark} ${markTop}) scale(${mark / 64})`}>
         <MarkShapes fg={fg} dot={dot} />
       </g>
       {at.latin !== undefined ? <path transform={`translate(${at.latin} 0)`} d={LATIN.d} fill={fg} /> : null}
-      {at.rule !== undefined ? <rect x={at.rule} y={H * 0.02} width={H * 0.05} height={H * 0.96} fill={fg} opacity={0.22} /> : null}
+      {at.rule !== undefined ? <rect x={at.rule} y={H * 0.12} width={H * 0.07} height={H * 0.88} rx={H * 0.035} fill={fg} opacity={0.24} /> : null}
       {at.arabic !== undefined ? (
         <g transform={`translate(${at.arabic} ${H - ARABIC.baseline * scale}) scale(${scale})`}>
           <path d={ARABIC.d} fill={fg} />
@@ -251,7 +242,7 @@ function lockup(variant: LockupVariant) {
       ) : null}
     </>
   );
-  return { H, width: x, top, height: bottom - top, parts };
+  return { H, left, width: right - left, top, height: bottom - top, parts };
 }
 
 /** A lockup in fixed brand colours, drawn live (no font needed). */
@@ -259,24 +250,24 @@ export function LockupArt({ variant = "both", fg = INDIGO, dot = CORAL_DEEP, cla
   const l = lockup(variant);
   const pad = l.H * 0.06;
   return (
-    <svg viewBox={`${-pad} ${l.top - pad} ${l.width + pad * 2} ${l.height + pad * 2}`} className={className} style={style} role="img" aria-label="Aalim">
+    <svg viewBox={`${l.left - pad} ${l.top - pad} ${l.width + pad * 2} ${l.height + pad * 2}`} className={className} style={style} role="img" aria-label="Aalim">
       {l.parts(fg, dot)}
     </svg>
   );
 }
 
-/** Geometry of the bilingual lockup (cap-height units). */
+/** Geometry of the bilingual lockup (Latin-height units). */
 export function lockupBox() {
   const l = lockup("both");
   return { H: l.H, width: l.width, top: l.top, height: l.height };
 }
 
-/** Clear space: x (the cap height of AALIM) on every side of the lockup. */
+/** Clear space: x (the height of aalim) on every side of the lockup. */
 export function ClearSpace({ x }: { x: string }) {
   const l = lockup("both");
   const { H, width, top, height } = l;
   const pad = H * 0.06;
-  const vb = { x: -pad, y: top - pad, w: width + pad * 2, h: height + pad * 2 };
+  const vb = { x: l.left - pad, y: top - pad, w: width + pad * 2, h: height + pad * 2 };
   const m = H * 2.2;
   const zone = { x: vb.x - H, y: vb.y - H, w: vb.w + H * 2, h: vb.h + H * 2 };
   const sq = (cx: number, cy: number, key: string) => (
@@ -301,18 +292,15 @@ export function ClearSpace({ x }: { x: string }) {
 }
 
 /** The mark in fixed brand colours (for artboards), or in tokens when given CSS variables. */
-export function Mark({ fg = INDIGO, dot = CORAL_DEEP, bars, className, style }: { fg?: string; dot?: string; bars?: { x: number; y: number; w: number }[]; className?: string; style?: CSSProperties }) {
+export function Mark({ fg = INDIGO, dot = CORAL_DEEP, className, style }: { fg?: string; dot?: string; className?: string; style?: CSSProperties }) {
   return (
     <svg viewBox="0 0 64 64" className={className} style={style} aria-hidden>
-      {(bars ?? MARK.bars).map((b) => (
-        <rect key={b.y} x={b.x} y={b.y} width={b.w} height={MARK.h} rx={MARK.h / 2} fill={fg} />
-      ))}
-      <circle cx={MARK.dot.cx} cy={MARK.dot.cy} r={MARK.dot.r} fill={dot} />
+      <MarkShapes fg={fg} dot={dot} />
     </svg>
   );
 }
 
-/** "AALIM" as a drawing (no live text), for colour samples. */
+/** "aalim" as a drawing (no live text), for colour samples. */
 export function WordmarkShape({ fill, className }: { fill: string; className?: string }) {
   return (
     <svg viewBox={`0 0 ${LATIN.width} ${LATIN.height}`} className={className} aria-hidden>
@@ -324,10 +312,10 @@ export function WordmarkShape({ fill, className }: { fill: string; className?: s
 /** The two wordmarks on their shared baseline, with the guides that set them. */
 export function WordmarkGuides({ labels }: { labels: { cap: string; baseline: string; rise: string } }) {
   const H = LATIN.height;
-  const scale = (H * 1.18) / ARABIC.baseline;
+  const scale = (H * LOCKUP.arabic) / ARABIC.baseline;
   const dy = H - ARABIC.baseline * scale;
-  const gap = H * 0.34;
-  const arX = LATIN.width + gap * 2;
+  const ruleX = LATIN.width + H * LOCKUP.rule;
+  const arX = ruleX + H * 0.07 + H * LOCKUP.rule;
   const width = arX + ARABIC.width * scale;
   const bottom = dy + ARABIC.height * scale;
   const fs = H * 0.13;
@@ -343,10 +331,10 @@ export function WordmarkGuides({ labels }: { labels: { cap: string; baseline: st
       <g strokeWidth={H * 0.012}>
         <line x1={left} y1={0} x2={width + H * 0.2} y2={0} stroke={GRID_STRONG} />
         <line x1={left} y1={H} x2={width + H * 0.2} y2={H} stroke={GRID_STRONG} />
-        <line x1={arX - gap * 0.3} y1={dy} x2={width + H * 0.2} y2={dy} stroke={CORAL_DEEP} strokeDasharray={`${H * 0.05} ${H * 0.04}`} />
+        <line x1={arX - H * 0.1} y1={dy} x2={width + H * 0.2} y2={dy} stroke={CORAL_DEEP} strokeDasharray={`${H * 0.05} ${H * 0.04}`} />
       </g>
       <path d={LATIN.d} fill={INDIGO} />
-      <rect x={LATIN.width + gap * 0.95} y={H * 0.02} width={H * 0.05} height={H * 0.96} fill={INDIGO} opacity={0.22} />
+      <rect x={ruleX} y={H * 0.12} width={H * 0.07} height={H * 0.88} rx={H * 0.035} fill={INDIGO} opacity={0.24} />
       <g transform={`translate(${arX} ${dy}) scale(${scale})`}>
         <path d={ARABIC.d} fill={INDIGO} />
       </g>

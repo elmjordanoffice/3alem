@@ -23,7 +23,7 @@ export async function LandingNav({ signedIn }: { signedIn: boolean }) {
       <div className="r-wrap flex h-16 items-center gap-3 lg:h-[4.75rem]">
         <Link href="/" className="-m-1 flex shrink-0 items-center gap-2.5 rounded-full p-1">
           <LogoTile className="size-9 sm:size-10" />
-          <Wordmark className="h-[13px] text-text sm:h-[14px]" />
+          <Wordmark className="h-[19px] text-text sm:h-[21px]" />
         </Link>
         <nav aria-label={t("navLabel")} className="ms-6 hidden items-center gap-1 rounded-full bg-surface/60 p-1 shadow-card lg:flex xl:ms-12">
           {SECTIONS.map(([id, key]) => (

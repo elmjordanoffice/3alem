@@ -1,6 +1,7 @@
 "use client";
 import * as React from "react";
 import { useTranslations } from "next-intl";
+import { LogoMark } from "@/components/brand/logo";
 import type { StoryClock as Clock, StoryNote } from "@/lib/hire/story";
 import { useLocaleSettings, useNumbers } from "@/components/providers";
 import { initials, cn } from "@/lib/utils";
@@ -78,7 +79,7 @@ export function ColleagueNote({ note, tone = "paper", className }: { note: Story
 
 const LINES = ["l1", "l2", "l3", "l4", "l5", "l6"] as const;
 
-/** While the week is being set up: the Narrowing, and the office coming to life line by line. */
+/** While the week is being set up: the ʿayn draws itself and looks about, and the office comes to life line by line. */
 export function StoryLoading() {
   const t = useTranslations("candidate.loading");
   const [i, setI] = React.useState(0);
@@ -88,12 +89,7 @@ export function StoryLoading() {
   }, []);
   return (
     <div className="flex flex-col items-center gap-6 py-28 text-center" role="status" aria-live="polite">
-      <span className="loading-narrow flex w-20 flex-col-reverse items-center gap-1.5" aria-hidden>
-        {[100, 72, 44].map((w, k) => (
-          <span key={k} className="block h-3 rounded-full bg-accent" style={{ width: `${w}%`, "--i": k } as React.CSSProperties} />
-        ))}
-        <span className="block size-3 rounded-full bg-saffron" style={{ "--i": 3 } as React.CSSProperties} />
-      </span>
+      <LogoMark animated className="size-20 text-accent" />
       <div className="flex flex-col gap-1.5">
         <p className="font-display text-xl font-extrabold text-text [font-stretch:112%]">{t("title")}</p>
         <p className="h-6 overflow-hidden text-sm text-secondary">

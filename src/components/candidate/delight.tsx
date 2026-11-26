@@ -2,6 +2,7 @@
 import * as React from "react";
 import { useTranslations } from "next-intl";
 import { Burst } from "@/components/brand/burst";
+import { LogoMark } from "@/components/brand/logo";
 import { useNumbers } from "@/components/providers";
 
 /**
@@ -58,16 +59,14 @@ export function CountUp({ value, duration = 900, delay = 0 }: { value: number; d
   );
 }
 
-/** The finish: three bands narrow into the dot, which lands with a small burst. */
+/** The finish: the ʿayn draws itself, and its pupil lands with a small burst. */
 export function FinishMark() {
   return (
-    <div className="relative flex w-24 flex-col-reverse items-center gap-2" aria-hidden>
-      {[100, 72, 44].map((w, i) => (
-        <span key={i} className="narrow-band block h-4 rounded-full bg-accent" style={{ width: `${w}%`, animationDelay: `${100 + i * 120}ms` }} />
-      ))}
-      <span className="relative block size-4">
-        <span className="narrow-dot absolute inset-0 rounded-full bg-saffron" style={{ animationDelay: "520ms" }} />
-        <Burst count={12} distance={30} delay={780} />
+    <div className="relative size-24" aria-hidden>
+      <LogoMark animated className="size-24 text-accent" />
+      {/* The burst sits on the pupil (AYN.pupil, as a share of the 64-unit box). */}
+      <span className="absolute block size-0" style={{ left: `${(31.8 / 64) * 100}%`, top: `${(17.4 / 64) * 100}%` }}>
+        <Burst count={12} distance={30} delay={1300} />
       </span>
     </div>
   );

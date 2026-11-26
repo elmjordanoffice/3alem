@@ -221,7 +221,7 @@ function SidebarContent({ user, organizations, activeOrganizationId, nav }: Pick
       <div className="flex h-20 items-center px-5">
         <Link href="/app" className="flex items-center gap-3 rounded-full focus-visible:outline-2 focus-visible:outline-focus">
           <LogoTile className="size-11" />
-          <Wordmark className="h-[15px] text-sidebar-foreground" />
+          <Wordmark className="h-[22px] text-sidebar-foreground" />
         </Link>
       </div>
 

@@ -1,9 +1,8 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
-import { Logo } from "@/components/brand/logo";
+import { Logo, LogoMark } from "@/components/brand/logo";
 import { LanguageToggle, ThemeMenu } from "@/components/app/preference-controls";
 import { RangeScale } from "@/components/report/range-scale";
-import { Narrowing } from "@/components/brand/narrowing";
 
 export default async function AuthLayout({ children }: { children: React.ReactNode }) {
   const t = await getTranslations("auth.brand");
@@ -27,7 +26,11 @@ export default async function AuthLayout({ children }: { children: React.ReactNo
       {/* Brand panel: the idea, at billboard scale. */}
       <aside className="hero-card hidden lg:m-3 lg:flex lg:flex-col lg:justify-between lg:gap-10 lg:rounded-[20px] lg:p-12 xl:p-14" aria-label={t("label")}>
         <p className="display-x max-w-lg text-[2.6rem] xl:text-[3.1rem]">{t("title")}</p>
-        <Narrowing rows={5} className="mx-auto w-full max-w-sm" />
+        {/* The ʿayn at billboard scale: it draws itself, then keeps an eye out. */}
+        <div className="relative mx-auto grid place-items-center">
+          <span className="absolute size-56 rounded-full bg-[radial-gradient(circle,rgb(255_255_255/0.18),transparent_68%)] blur-xl" aria-hidden />
+          <LogoMark animated className="relative size-52 text-white [filter:drop-shadow(0_24px_40px_rgb(20_18_60/0.45))]" />
+        </div>
         <figure className="max-w-md">
           <blockquote className="text-[15px] leading-relaxed text-hero-foreground" dir="auto">
             “{t("quoteStart")} <mark className="evidence-mark">{t("quoteEvidence")}</mark> {t("quoteEnd")}”

@@ -1,7 +1,7 @@
 /**
- * Generates the Aalim brand assets ("Range") from the brand fonts, so every
- * file is outlined (no font needed to open it) and identical to the in-app
- * logo.
+ * Generates the Aalim brand assets ("ʿAyn", D-063) from the brand fonts, so
+ * every file is outlined (no font needed to open it) and identical to the
+ * in-app logo.
  *
  *   npm run brand:assets
  *
@@ -11,8 +11,8 @@
  *
  * The wordmarks are shaped with HarfBuzz (the engine browsers use), so the
  * Arabic joins exactly as it does on screen. Fonts are static instances in
- * brand/fonts (SIL Open Font License): Archivo Expanded ExtraBold for "AALIM",
- * Beiruti Black for "عالم".
+ * brand/fonts (SIL Open Font License), cut from the product's variable fonts:
+ * Plus Jakarta Sans ExtraBold for "aalim", Readex Pro Bold for "عالم".
  */
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import path from "node:path";
@@ -27,8 +27,8 @@ mkdirSync(OUT, { recursive: true });
 export const INK = "#1b1840";
 export const BONE = "#ffffff";
 export const SIGNAL = "#e8436b";
-/** The app tile's ground: the in-app LogoTile's blue gradient. */
-export const TILE = ["#2a4bb0", "#142966"] as const;
+/** The app tile's ground: violet into navy, as the in-app LogoTile. */
+export const TILE = ["#7564ee", "#1e2f86"] as const;
 
 const r = (n: number) => Math.round(n * 100) / 100;
 
@@ -87,65 +87,92 @@ function normalise(o: ReturnType<typeof outline>) {
   return { d, width: r(o.width), height: r(o.height), baseline: r(-o.minY) };
 }
 
-// Wordmarks. "AALIM" is tracked open a little; "عالم" is never tracked (it would break the joins).
-const latin = normalise(outline("archivo-expanded-800.ttf", "AALIM", 24));
-const arabic = normalise(outline("beiruti-900.ttf", "عالم"));
+// Wordmarks: "aalim" in lowercase, set tight; "عالم" never tracked (it would break the joins).
+const latin = normalise(outline("plus-jakarta-sans-800.ttf", "aalim", -42));
+const arabic = normalise(outline("readex-pro-700.ttf", "عالم"));
 
 /**
- * The mark: bands of uncertainty narrowing, step by step, into one point, the
- * estimate. Stacked, they also read as an A. 64-unit box.
+ * The mark: ʿayn (ع), the first letter of عالم (world), علم (knowledge),
+ * عمل (work) and عين (eye). One rounded stroke: a small head open to the
+ * right over a larger bowl, joined by a short neck. The head's counter is
+ * the letter's "eye" in calligraphy; the coral pupil sits in it, looking
+ * toward what comes next. 64-unit box, optically centred.
  */
-export const MARK = {
-  // Four rows, equal height and gap; widths step down evenly to the dot (a band of no width).
-  bars: [
-    { x: 3, y: 48.25, w: 58 },
-    { x: 11, y: 33.75, w: 42 },
-    { x: 19, y: 19.25, w: 26 },
-  ],
-  h: 11,
-  dot: { cx: 32, cy: 10.25, r: 5.5 },
-};
+const deg = (a: number) => (a * Math.PI) / 180;
+const at = (cx: number, cy: number, rr: number, a: number) => [r(cx + rr * Math.cos(deg(a))), r(cy + rr * Math.sin(deg(a)))] as const;
+export const AYN = (() => {
+  const head = { cx: 30.6, cy: 17, r: 10, from: -28, to: -262 };
+  const bowl = { cx: 32.6, cy: 41, r: 16, from: 236, to: 22 };
+  const stroke = 8.5;
+  const [sx, sy] = at(head.cx, head.cy, head.r, head.from);
+  const [hx, hy] = at(head.cx, head.cy, head.r, head.to);
+  const [bx, by] = at(bowl.cx, bowl.cy, bowl.r, bowl.from);
+  const [ex, ey] = at(bowl.cx, bowl.cy, bowl.r, bowl.to);
+  // Head: counter-clockwise from the upper-right tip, over the top, down to its foot (large arc).
+  // Neck: a short stroke to the bowl. Bowl: counter-clockwise round the left and bottom to the tail.
+  const d = `M${sx} ${sy}A${head.r} ${head.r} 0 1 0 ${hx} ${hy}L${bx} ${by}A${bowl.r} ${bowl.r} 0 1 0 ${ex} ${ey}`;
+  // Length of the stroke (arcs and neck), for drawing it on: SVG pathLength isn't available everywhere.
+  const length = r(head.r * deg(Math.abs(head.to - head.from)) + Math.hypot(bx - hx, by - hy) + bowl.r * deg(Math.abs(bowl.from - bowl.to)));
+  return { d, stroke, length, head, bowl, pupil: { cx: r(head.cx + 1.2), cy: r(head.cy + 0.4), r: 3.6 } };
+})();
 const markInner = (fg: string, dot: string) =>
-  MARK.bars.map((b) => `<rect x="${b.x}" y="${b.y}" width="${b.w}" height="${MARK.h}" rx="${MARK.h / 2}" fill="${fg}"/>`).join("") +
-  `<circle cx="${MARK.dot.cx}" cy="${MARK.dot.cy}" r="${MARK.dot.r}" fill="${dot}"/>`;
+  `<path d="${AYN.d}" fill="none" stroke="${fg}" stroke-width="${AYN.stroke}" stroke-linecap="round" stroke-linejoin="round"/>` +
+  `<circle cx="${AYN.pupil.cx}" cy="${AYN.pupil.cy}" r="${AYN.pupil.r}" fill="${dot}"/>`;
 const markSvg = (fg: string, dot = SIGNAL) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">${markInner(fg, dot)}</svg>`;
 /** App icon: the mark on a tile. The tile radius follows the iOS/Android squircle proportion (22.5%). */
 const symbolSvg = (bg: string | readonly [string, string], fg: string, dot: string, size = 64) => {
   const fill = typeof bg === "string" ? bg : "url(#tile)";
   const defs = typeof bg === "string" ? "" : `<defs><linearGradient id="tile" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${bg[0]}"/><stop offset="1" stop-color="${bg[1]}"/></linearGradient></defs>`;
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="${size}" height="${size}">${defs}<rect width="64" height="64" rx="14.4" fill="${fill}"/><g transform="translate(9.6 9.6) scale(0.7)">${markInner(fg, dot)}</g></svg>`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="${size}" height="${size}">${defs}<rect width="64" height="64" rx="14.4" fill="${fill}"/><g transform="translate(11.2 11.2) scale(0.65)">${markInner(fg, dot)}</g></svg>`;
 };
 
-/** Horizontal lockup: mark, AALIM, a hairline, عالم. All heights in Latin cap-height units. */
+/** Lockup geometry, shared with the in-app <Logo>: all in units of the Latin height (the l's ascender). */
+export const LOCKUP = { mark: 1.38, gap: 0.28, rule: 0.34, arabic: 1.06 };
+
+/** Horizontal lockup: the ʿayn, aalim, a hairline, عالم. */
 function lockup({ fg, dot = SIGNAL, arabicOnly = false, latinOnly = false }: { fg: string; dot?: string; arabicOnly?: boolean; latinOnly?: boolean }) {
-  const H = latin.height; // cap height of AALIM
-  const mark = H * 1.62;
-  const gap = H * 0.42;
+  const H = latin.height; // ascender height of "aalim" (no descenders)
+  const mark = H * LOCKUP.mark;
+  const gap = H * LOCKUP.gap;
   const parts: string[] = [];
   let x = 0;
-  // The mark's optical centre sits on the cap-height centre.
-  parts.push(`<g transform="translate(0 ${r((H - mark) / 2)}) scale(${r(mark / 64)})">${markInner(fg, dot)}</g>`);
-  x += mark + gap;
+  // The mark's centre sits on the centre of the Latin height. Its ink spans about x 14–54 of its 64-unit box.
+  const markTop = (H - mark) / 2;
+  const placeMark = () => {
+    parts.push(`<g transform="translate(${r(x - mark * 0.2)} ${r(markTop)}) scale(${r(mark / 64)})">${markInner(fg, dot)}</g>`);
+    x += mark * 0.66;
+  };
+  // Arabic alone reads right to left, so the mark leads on the right.
   if (!arabicOnly) {
+    placeMark();
+    x += gap;
     parts.push(`<path transform="translate(${r(x)} 0)" d="${latin.d}" fill="${fg}"/>`);
     x += latin.width;
   }
   if (!arabicOnly && !latinOnly) {
-    x += gap * 0.8;
-    parts.push(`<rect x="${r(x)}" y="${r(H * 0.02)}" width="${r(H * 0.05)}" height="${r(H * 0.96)}" fill="${fg}" opacity="0.22"/>`);
-    x += gap * 0.8;
+    x += H * LOCKUP.rule;
+    parts.push(`<rect x="${r(x)}" y="${r(H * 0.12)}" width="${r(H * 0.07)}" height="${r(H * 0.88)}" rx="${r(H * 0.035)}" fill="${fg}" opacity="0.24"/>`);
+    x += H * 0.07 + H * LOCKUP.rule;
   }
+  let bottom = Math.max(H, markTop + mark);
   if (!latinOnly) {
-    // Arabic: the alif/lam ascender rises a touch above the Latin caps (optical match), baselines aligned.
-    const scale = (H * 1.18) / arabic.baseline;
+    // Arabic: the alif rises a touch above the Latin ascenders (optical match), baselines aligned.
+    const scale = (H * LOCKUP.arabic) / arabic.baseline;
     const dy = H - arabic.baseline * scale;
     parts.push(`<g transform="translate(${r(x)} ${r(dy)}) scale(${r(scale)})"><path d="${arabic.d}" fill="${fg}"/></g>`);
     x += arabic.width * scale;
+    bottom = Math.max(bottom, dy + arabic.height * scale);
+    if (arabicOnly) {
+      x += gap;
+      placeMark();
+    }
   }
-  const top = Math.min((H - mark) / 2, H - (latinOnly ? H : H * 1.18));
-  const bottom = latinOnly ? Math.max(H, (H + mark) / 2) : Math.max((H + mark) / 2, H - arabic.baseline * ((H * 1.18) / arabic.baseline) + arabic.height * ((H * 1.18) / arabic.baseline));
+  const top = Math.min(markTop, latinOnly ? 0 : H - H * LOCKUP.arabic);
   const pad = H * 0.06;
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${r(-pad)} ${r(top - pad)} ${r(x + pad * 2)} ${r(bottom - top + pad * 2)}">${parts.join("")}</svg>`;
+  // The mark's ink starts about 12 units into its box and ends about 56 in.
+  const left = arabicOnly ? -pad : -mark * 0.2 + (mark / 64) * 12 - pad;
+  const right = arabicOnly ? x - mark * 0.66 - mark * 0.2 + (mark / 64) * 56 + pad : x + pad;
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${r(left)} ${r(top - pad)} ${r(right - left)} ${r(bottom - top + pad * 2)}">${parts.join("")}</svg>`;
 }
 
 const files: Record<string, string> = {
@@ -173,6 +200,7 @@ writeFileSync(
   `// Generated by scripts/brand-assets.mts. Do not edit by hand.\n` +
     `export const LATIN = { width: ${latin.width}, height: ${latin.height}, baseline: ${latin.baseline}, d: "${latin.d}" };\n` +
     `export const ARABIC = { width: ${arabic.width}, height: ${arabic.height}, baseline: ${arabic.baseline}, d: "${arabic.d}" };\n` +
-    `export const MARK = ${JSON.stringify(MARK)};\n`,
+    `export const AYN = ${JSON.stringify(AYN)};\n` +
+    `export const LOCKUP = ${JSON.stringify(LOCKUP)};\n`,
 );
 console.log(`brand: ${Object.keys(files).length} SVGs, icon.svg and wordmark-paths.ts written`);

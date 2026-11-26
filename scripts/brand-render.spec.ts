@@ -26,7 +26,7 @@ const NIGHT = "#1b1840";
 const WHITE = "#ffffff";
 const SECONDARY = "#bdb8e3";
 const SIGNAL = "#e8436b";
-const TILE_DEEP = "#142966";
+const TILE_DEEP = "#1e2f86";
 
 const font = (pkg: string, file: string) =>
   `url(data:font/woff2;base64,${readFileSync(path.join(ROOT, "node_modules", pkg, "files", file)).toString("base64")}) format("woff2")`;
@@ -107,7 +107,7 @@ test("render brand assets", async ({ page }) => {
         background:radial-gradient(60% 70% at 8% 0%, rgb(108 92 231 / 0.55), transparent 62%), radial-gradient(55% 65% at 100% 100%, rgb(33 60 150 / 0.45), transparent 60%), ${NIGHT}}
       .page{position:relative;height:100%;display:flex;flex-direction:column}
       .top{display:flex;align-items:center;justify-content:space-between;margin:0 64px;height:116px;border-bottom:1.5px solid rgb(255 255 255 / 0.12)}
-      .top svg{height:46px;width:auto;display:block}
+      .top svg{height:58px;width:auto;display:block}
       .eyebrow{font-family:${ar ? "Readex" : "Jakarta"};font-weight:600;font-size:${ar ? 24 : 21}px;color:${SECONDARY};padding:8px 18px;border-radius:999px;background:rgb(255 255 255 / 0.08)}
       .body{flex:1;margin:0 64px;display:flex;align-items:center}
       .stage{position:relative;width:100%}

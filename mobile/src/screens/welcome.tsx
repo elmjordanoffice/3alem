@@ -10,7 +10,7 @@ import { fonts, radius, useTheme } from "../theme";
 import { haptic } from "../lib/haptics";
 import { useSession } from "../state/session";
 import { Button, RoundButton } from "../ui/button";
-import { Narrowing } from "../ui/brand";
+import { MarkLive } from "../ui/brand";
 import { Card, HeroCard, IconCircle, noOutline, Notice, Segmented, useFieldStyle } from "../ui/primitives";
 import { Press } from "../ui/press";
 import { Sheet } from "../ui/sheet";
@@ -110,7 +110,7 @@ export function Welcome() {
       <HeroCard style={{ marginTop: 6 }}>
         <View style={{ gap: 18 }}>
           <View style={{ alignItems: "flex-start" }}>
-            <Narrowing width={72} rows={3} loop={false} onHero />
+            <MarkLive width={64} loop={false} onHero />
           </View>
           <Animated.View entering={FadeInDown.delay(500).springify().damping(20)} style={{ gap: 12 }}>
             <T variant="label" tone="heroSecondary">

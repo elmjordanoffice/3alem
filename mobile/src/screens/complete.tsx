@@ -6,7 +6,7 @@ import { useLocale, useT } from "../i18n";
 import { fonts, lift, radius, tiles, useTheme, type TileTone } from "../theme";
 import { haptic } from "../lib/haptics";
 import { Button } from "../ui/button";
-import { Narrowing } from "../ui/brand";
+import { MarkLive } from "../ui/brand";
 import { Entrance, useCountUp } from "../ui/motion";
 import { Card, Chip, HeroCard, NumberBadge, TextArea, Tile } from "../ui/primitives";
 import { Press } from "../ui/press";
@@ -40,7 +40,7 @@ export function Complete({ v, onFeedback, onFairness }: { v: V<"complete">; onFe
       <HeroCard style={{ marginTop: 8 }}>
         <View style={{ gap: 20 }}>
           <View style={{ alignItems: "flex-start" }}>
-            <Narrowing width={132} rows={5} loop={false} burst onLand={haptic.success} onHero />
+            <MarkLive width={112} loop={false} burst onLand={haptic.success} onHero />
           </View>
           <Entrance delay={FINISH.title} y={22} style={{ gap: 12 }}>
             <T variant="display" tone="heroText" accessibilityRole="header">

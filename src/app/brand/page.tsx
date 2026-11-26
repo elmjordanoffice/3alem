@@ -6,7 +6,6 @@ import path from "node:path";
 import { getLocale, getTranslations } from "next-intl/server";
 import { ArrowDownToLine, ArrowRight, Ellipsis, Moon, Search, X } from "lucide-react";
 import { LogoTile, Wordmark } from "@/components/brand/logo";
-import { MARK } from "@/components/brand/wordmark-paths";
 import { NarrowingChart, curve } from "@/components/landing/narrowing-chart";
 import { RangeScale } from "@/components/report/range-scale";
 import { LanguageToggle, ThemeMenu } from "@/components/app/preference-controls";
@@ -128,7 +127,7 @@ export default async function BrandPage() {
         <div className="mx-auto flex h-20 max-w-[1360px] items-center justify-between gap-4 px-4 sm:px-8">
           <Link href="/" aria-label={t("topbar.home")} className="flex items-center gap-2.5 rounded-full focus-visible:outline-2 focus-visible:outline-focus">
             <LogoTile className="size-10" />
-            <Wordmark className="h-[13px] text-text sm:h-[14px]" />
+            <Wordmark className="h-[19px] text-text sm:h-[21px]" />
           </Link>
           <div className="flex items-center gap-1 sm:gap-2">
             <span className="r-pill r-label px-4! max-sm:hidden!">
@@ -186,7 +185,7 @@ export default async function BrandPage() {
             <div className="relative flex flex-col gap-8 lg:col-span-7 lg:ps-6">
               <span className="flex items-center gap-3" dir="ltr">
                 <LogoTile className="size-12 sm:size-14" />
-                <Wordmark className="h-[18px] text-white sm:h-[22px]" />
+                <Wordmark className="h-[26px] text-white sm:h-[32px]" />
               </span>
               <p className="display-x text-[clamp(2.3rem,6vw,5rem)]">
                 <WithDot text={t("cover.poster")} />
@@ -284,7 +283,7 @@ export default async function BrandPage() {
             <div className="grid gap-10 lg:grid-cols-12 lg:gap-8">
               <figure className="lg:col-span-7">
                 <Board tone="white" className="p-3 sm:p-8">
-                  <MarkConstruction labels={{ units: t("mark.labels.units"), row: t("mark.labels.row"), gap: t("mark.labels.gap"), step: t("mark.labels.step"), dot: t("mark.labels.dot"), radius: t("mark.labels.radius") }} />
+                  <MarkConstruction labels={{ units: t("mark.labels.units"), head: t("mark.labels.head"), bowl: t("mark.labels.bowl"), stroke: t("mark.labels.stroke"), pupil: t("mark.labels.pupil"), neck: t("mark.labels.neck") }} />
                 </Board>
                 <figcaption className="sr-only">{t("mark.figureLabel")}</figcaption>
               </figure>
@@ -429,7 +428,7 @@ export default async function BrandPage() {
                 </span>
               </Dont>
               <Dont label={t("misuse.items.redraw")}>
-                <Mark className="size-10 sm:size-14" bars={MARK.bars.map((b, i) => ({ x: 7 + i * 3, y: b.y, w: 50 - i * 6 }))} />
+                <Mark className="size-10 -scale-x-100 sm:size-14" />
               </Dont>
             </ul>
           </Section>
@@ -1078,7 +1077,7 @@ export default async function BrandPage() {
         <div className="mx-auto flex max-w-[1360px] flex-col gap-4 px-4 py-10 text-sm text-tertiary sm:flex-row sm:items-center sm:justify-between sm:px-8">
           <span className="flex items-center gap-2.5" dir="ltr">
             <LogoTile className="size-8" />
-            <Wordmark className="h-[12px] text-text" />
+            <Wordmark className="h-[18px] text-text" />
           </span>
           <p>{t("footer.line")}</p>
           <Link href="/" className="rounded-full text-secondary underline-offset-4 hover:text-text hover:underline">

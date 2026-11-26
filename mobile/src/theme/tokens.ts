@@ -22,9 +22,9 @@ export const palette = {
   heroTo: "#4836C4",
   heroText: "#FFFFFF",
   heroSecondary: "#E3DFFF",
-  /** The logo tile: a glowing blue disc. */
-  logoFrom: "#2A4BB0",
-  logoTo: "#142966",
+  /** The logo tile: violet turning to navy. */
+  logoFrom: "#7564EE",
+  logoTo: "#1E2F86",
 } as const;
 
 /**

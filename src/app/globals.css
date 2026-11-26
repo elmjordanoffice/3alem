@@ -317,7 +317,7 @@
   background: radial-gradient(120% 90% at 20% 0%, rgb(255 255 255 / 0.12), transparent 55%), linear-gradient(160deg, var(--hero-from), var(--hero-via) 55%, var(--hero-to));
   box-shadow: var(--shadow-raised), inset 0 1px 0 rgb(255 255 255 / 0.18);
 }
-/* The signature, opt-in: the mark's bands, faint, in a corner of an ink panel; the estimate dot stays vermilion. */
+/* The signature, opt-in: the ʿayn, faint, in a corner of a raised card; its pupil stays coral. */
 .hero-sign::after {
   content: "";
   position: absolute;
@@ -327,7 +327,7 @@
   width: var(--sign-size, 120px);
   height: var(--sign-size, 120px);
   pointer-events: none;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cg fill='%23f2f0eb' fill-opacity='.08'%3E%3Crect x='3' y='48.25' width='58' height='11' rx='5.5'/%3E%3Crect x='11' y='33.75' width='42' height='11' rx='5.5'/%3E%3Crect x='19' y='19.25' width='26' height='11' rx='5.5'/%3E%3C/g%3E%3Ccircle cx='32' cy='10.25' r='5.5' fill='%23f04a23'/%3E%3C/svg%3E") no-repeat center / contain;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath d='M39.43 12.31A10 10 0 1 0 29.21 26.9L23.65 27.74A16 16 0 1 0 47.43 46.99' fill='none' stroke='%23ffffff' stroke-opacity='.1' stroke-width='8.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='31.8' cy='17.4' r='3.6' fill='%23ff5c7c'/%3E%3C/svg%3E") no-repeat center / contain;
 }
 /* Tiles inside a hero (numbers, must-haves): a hairline on ink. */
 .hero-tile {
@@ -658,15 +658,31 @@ html[data-r-motion] [data-narrow]:not([data-in]) .r-fade { opacity: 0; }
 .note-in { animation: note-in 520ms var(--ease-hero) 650ms both; }
 [dir="rtl"] .note-in { animation-name: note-in-rtl; }
 @keyframes loading-band { 0%, 100% { transform: scaleX(1); opacity: 1; } 50% { transform: scaleX(1.25); opacity: 0.55; } }
-.loading-narrow > span { animation: loading-band 1.8s var(--ease-move) infinite; animation-delay: calc(var(--i) * 140ms); }
 @keyframes loading-dot { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.35); } }
-.loading-narrow > span:last-child { animation-name: loading-dot; }
 @media (prefers-reduced-motion: reduce) {
-  .clock-tick, .loading-narrow > span { animation: none; }
-  .note-in { animation: note-fade 300ms linear 300ms both; }
+  .clock-tick,   .note-in { animation: note-fade 300ms linear 300ms both; }
 }
 
 /* A new card turns over once (src/components/grow/momentum.tsx). */
 @keyframes card-reveal { 0% { opacity: 0; transform: perspective(700px) rotateY(80deg) scale(0.9); } 60% { opacity: 1; transform: perspective(700px) rotateY(-8deg) scale(1.02); } 100% { transform: none; } }
 .card-reveal { animation: card-reveal 900ms var(--ease-hero) 450ms both; }
 @media (prefers-reduced-motion: reduce) { .card-reveal { animation: none; } }
+
+/* The ʿayn, alive (LogoMark animated): the stroke draws once, then the pupil glances and blinks. */
+.ayn-live .ayn-stroke { stroke-dasharray: 100; stroke-dashoffset: 100; animation: ayn-draw 1100ms var(--ease-enter) 120ms forwards; }
+.ayn-live .ayn-pupil { transform-box: fill-box; transform-origin: center; opacity: 0; animation: ayn-pupil-in 360ms var(--ease-enter) 1050ms forwards, ayn-glance 6s ease-in-out 1.8s infinite; }
+@keyframes ayn-draw { to { stroke-dashoffset: 0; } }
+@keyframes ayn-pupil-in { from { opacity: 0; transform: scale(0.2); } to { opacity: 1; transform: scale(1); } }
+@keyframes ayn-glance {
+  0%, 18%, 100% { transform: translate(0, 0) scale(1); opacity: 1; }
+  24%, 40% { transform: translate(1.6px, -0.4px) scale(1); opacity: 1; }
+  46%, 60% { transform: translate(-1.4px, 0.4px) scale(1); opacity: 1; }
+  66% { transform: translate(0, 0) scale(1); opacity: 1; }
+  70% { transform: translate(0, 0) scale(1, 0.15); opacity: 1; }
+  74% { transform: translate(0, 0) scale(1); opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ayn-live .ayn-stroke { animation: none; stroke-dashoffset: 0; }
+  .ayn-live .ayn-pupil { animation: none; opacity: 1; }
+}
+
