@@ -1,4 +1,5 @@
 import type * as React from "react";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { ArrowRight, BriefcaseBusiness, ChartSpline, Languages, LockKeyhole, MessagesSquare, Quote, Scale, Sprout, UserCheck, UserRoundSearch, UsersRound, type LucideIcon } from "lucide-react";
@@ -11,7 +12,12 @@ import { SectionHead } from "@/components/landing/section-head";
 import { LandingFooter } from "@/components/landing/footer";
 import { EvidenceFragment, FairnessChart, GrowFragment, HireFragment, NarrowingCard, ReportFragment, SceneCard, TeamFragment } from "@/components/landing/fragments";
 import { getViewer } from "@/lib/auth/session";
+import { publicRobots } from "@/lib/legal";
 import { cn } from "@/lib/utils";
+
+export function generateMetadata(): Metadata {
+  return { robots: publicRobots(), alternates: { canonical: "/" } };
+}
 
 /** A round gradient icon in a stat tile's colour. White marks on violet and blue; ink on teal. */
 function Orb({ icon: Icon, tone, className }: { icon: LucideIcon; tone: "violet" | "blue" | "teal"; className?: string }) {

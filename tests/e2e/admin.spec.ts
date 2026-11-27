@@ -141,3 +141,43 @@ test("a person exports and deletes their own data", async ({ page, context, base
   const left = await withDb(async (c) => (await c.query(`SELECT count(*)::int AS n FROM "user" WHERE email = $1`, [email])).rows[0].n);
   expect(left).toBe(0);
 });
+
+test("an admin deletes their organisation and everything in it", async ({ page, context, baseURL }) => {
+  await setPrefs(context, baseURL!, { locale: "en" });
+  const email = `org-delete-${Date.now()}@test.aalim`;
+  const orgName = `Short Lived ${Date.now()}`;
+  await page.goto("/sign-up");
+  await page.locator('input[name="name"]').fill("Dana Admin");
+  await page.locator('input[name="email"]').fill(email);
+  await page.locator('input[name="password"]').fill("a-strong-password-123");
+  await page.locator('button[type="submit"]').click();
+  await expect(page).toHaveURL(/\/onboarding/);
+  await page.getByRole("radio", { name: /For my organisation/ }).click();
+  await page.getByLabel("Organisation name").fill(orgName);
+  await page.getByRole("button", { name: "Create organisation" }).click();
+  await expect(page).toHaveURL(/\/app$/);
+  const orgId = await withDb(async (c) => (await c.query(`SELECT id FROM organization WHERE name = $1`, [orgName])).rows[0]?.id as string);
+  expect(orgId).toBeTruthy();
+
+  await page.goto("/app/org/settings");
+  await page.getByRole("button", { name: "Delete organisation" }).click();
+  const dialog = page.getByRole("dialog");
+  const confirm = dialog.getByRole("button", { name: "Delete organisation" });
+  await expect(confirm).toBeDisabled();
+  await dialog.getByLabel(`Type ${orgName} to confirm`).fill("wrong name");
+  await expect(confirm).toBeDisabled();
+  await dialog.getByLabel(`Type ${orgName} to confirm`).fill(orgName);
+  expect(await axeClean(page)).toEqual([]);
+  await confirm.click();
+  // Back in the workspace (or onboarding, with no organisation left).
+  await expect(page).toHaveURL(/\/app\?orgDeleted=1|\/onboarding/, { timeout: 30_000 });
+
+  const left = await withDb(async (c) => ({
+    org: (await c.query(`SELECT count(*)::int AS n FROM organization WHERE id = $1`, [orgId])).rows[0].n,
+    audit: (await c.query(`SELECT count(*)::int AS n FROM audit_log WHERE "organizationId" = $1`, [orgId])).rows[0].n,
+    user: (await c.query(`SELECT count(*)::int AS n FROM "user" WHERE email = $1`, [email])).rows[0].n,
+  }));
+  expect(left).toEqual({ org: 0, audit: 0, user: 1 });
+  // Clean up the account this test created.
+  await withDb((c) => c.query(`DELETE FROM "user" WHERE email = $1`, [email]));
+});

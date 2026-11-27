@@ -10,7 +10,7 @@ import { encrypt } from "@/lib/crypto";
 import { WEBHOOK_EVENTS, dispatchWebhook, validateWebhookUrl } from "@/lib/webhooks";
 import { saveLibraryEntry as saveEntry, type LibraryEntryInput } from "@/lib/library";
 import { retentionSweep } from "@/lib/retention";
-import { deleteSessionData, deleteUserData } from "@/lib/privacy";
+import { deleteOrganizationData, deleteSessionData, deleteUserData } from "@/lib/privacy";
 import { BANK } from "@/lib/itembank";
 import { auth } from "@/lib/auth/auth";
 import { headers } from "next/headers";
@@ -133,9 +133,32 @@ export async function deleteMyAccount(confirmEmail: string): Promise<Result> {
     const members = await systemDb.membership.count({ where: { organizationId: m.organizationId, userId: { not: viewer.user.id } } });
     if (members > 0 && others === 0) return { ok: false, error: "lastAdmin" };
   }
+  // Organisations where this person is the only member would be left with nobody to manage
+  // or delete their candidates' data, so they go too.
+  const soleMemberOf: string[] = [];
+  for (const m of await systemDb.membership.findMany({ where: { userId: viewer.user.id }, select: { organizationId: true } })) {
+    if ((await systemDb.membership.count({ where: { organizationId: m.organizationId, userId: { not: viewer.user.id } } })) === 0) soleMemberOf.push(m.organizationId);
+  }
   await auth.api.signOut({ headers: await headers() }).catch(() => undefined);
+  for (const organizationId of soleMemberOf) await deleteOrganizationData(organizationId, viewer.user.id);
   await deleteUserData(viewer.user.id);
   redirect("/?deleted=1");
+}
+
+/** An admin deletes the active organisation and everything in it, after typing its name. */
+export async function deleteOrganization(confirmName: string): Promise<Result> {
+  const viewer = await requirePermission("org.settings");
+  if (!viewer.activeOrganization.roles.includes("ORG_ADMIN")) return { ok: false, error: "forbidden" };
+  const org = viewer.activeOrganization;
+  if (confirmName.trim().toLocaleLowerCase() !== org.name.trim().toLocaleLowerCase()) return { ok: false, error: "confirmMismatch" };
+  try {
+    await deleteOrganizationData(org.id, viewer.user.id);
+  } catch (e) {
+    console.error("[org] delete failed", e);
+    return { ok: false, error: "failed" };
+  }
+  revalidatePath("/app", "layout");
+  redirect("/app?orgDeleted=1");
 }
 
 // ───────────── Outcomes (validity) ─────────────

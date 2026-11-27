@@ -4,16 +4,27 @@ import { LogoTile, Wordmark } from "@/components/brand/logo";
 import { LanguageToggle, ThemeMenu } from "@/components/app/preference-controls";
 import { SECTIONS } from "./nav";
 
-/** A recessed panel: the promise, the name, the links, and the wordmark at full width, glowing out of the dark. */
-export async function LandingFooter({ signedIn }: { signedIn: boolean }) {
+const LEGAL = [
+  ["/privacy", "footer.privacy"],
+  ["/terms", "footer.terms"],
+  ["/ai", "footer.ai"],
+  ["/security", "footer.security"],
+] as const;
+
+/**
+ * A recessed panel: the promise, the name, the links, and the wordmark at full
+ * width, glowing out of the dark. Other public pages pass `base="/"` so the
+ * section links lead back to the landing page, and `current` to mark their own link.
+ */
+export async function LandingFooter({ signedIn, base = "", current }: { signedIn: boolean; base?: string; current?: string }) {
   const t = await getTranslations("landing");
-  const link = "rounded-full text-secondary underline-offset-4 transition-colors hover:text-text hover:underline";
+  const link = "rounded-full text-secondary underline-offset-4 transition-colors hover:text-text hover:underline aria-[current=page]:font-semibold aria-[current=page]:text-text";
   return (
     <footer className="relative isolate overflow-hidden rounded-t-[32px] bg-surface-sunken sm:rounded-t-[40px]">
       <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-[60%] bg-[radial-gradient(60%_80%_at_50%_100%,var(--wash-1),transparent_70%)]" />
       <div className="r-wrap pb-8 pt-[clamp(3.5rem,7vw,6rem)]">
-        <div className="grid gap-y-12 lg:grid-cols-12 lg:gap-x-6">
-          <div className="lg:col-span-6">
+        <div className="grid grid-cols-2 gap-x-6 gap-y-12 sm:grid-cols-3 lg:grid-cols-12">
+          <div className="col-span-2 sm:col-span-3 lg:col-span-5">
             <LogoTile className="size-11" />
             <p className="display-x mt-6 text-[clamp(1.875rem,3.2vw,3rem)] leading-[1.05] rtl:leading-[1.35]">{t("footer.promise")}</p>
             <p className="r-body mt-6 max-w-md text-secondary">
@@ -37,12 +48,12 @@ export async function LandingFooter({ signedIn }: { signedIn: boolean }) {
               ))}
             </dl>
           </div>
-          <nav aria-label={t("footer.product")} className="lg:col-span-2 lg:col-start-9">
+          <nav aria-label={t("footer.product")} className="lg:col-span-2 lg:col-start-7">
             <p className="r-label text-tertiary">{t("footer.product")}</p>
             <ul className="mt-5 flex flex-col gap-3 text-[15px]">
               {SECTIONS.map(([id, key]) => (
                 <li key={id}>
-                  <a href={`#${id}`} className={link}>{t(key)}</a>
+                  <a href={`${base}#${id}`} className={link}>{t(key)}</a>
                 </li>
               ))}
             </ul>
@@ -61,6 +72,18 @@ export async function LandingFooter({ signedIn }: { signedIn: boolean }) {
                   <Link href="/sign-up" className={link}>{t("getStarted")}</Link>
                 </li>
               ) : null}
+            </ul>
+          </nav>
+          <nav aria-label={t("footer.legal")} className="lg:col-span-2">
+            <p className="r-label text-tertiary">{t("footer.legal")}</p>
+            <ul className="mt-5 flex flex-col gap-3 text-[15px]">
+              {LEGAL.map(([href, key]) => (
+                <li key={href}>
+                  <Link href={href} className={link} aria-current={current === href ? "page" : undefined}>
+                    {t(key)}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </nav>
         </div>

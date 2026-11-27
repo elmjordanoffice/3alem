@@ -15,11 +15,15 @@ export const SECTIONS = [
  * Clear over the hero, frosted once the page moves (see LandingMotion). The
  * logo is the blue tile, the section links are pills, and the call to action
  * is violet: the hero keeps the page's one coral button.
+ *
+ * Other public pages (the legal and trust pages) reuse it with `base="/"`, so
+ * the section links lead back to the landing page, and `solid`, so it is
+ * frosted from the start over long text.
  */
-export async function LandingNav({ signedIn }: { signedIn: boolean }) {
+export async function LandingNav({ signedIn, base = "", solid = false }: { signedIn: boolean; base?: string; solid?: boolean }) {
   const t = await getTranslations("landing");
   return (
-    <header data-r-nav className="r-nav sticky top-0 z-50">
+    <header data-r-nav data-scrolled={solid ? "" : undefined} className="r-nav sticky top-0 z-50">
       <div className="r-wrap flex h-16 items-center gap-3 lg:h-[4.75rem]">
         <Link href="/" className="-m-1 flex shrink-0 items-center gap-2.5 rounded-full p-1">
           <LogoTile className="size-9 sm:size-10" />
@@ -27,7 +31,7 @@ export async function LandingNav({ signedIn }: { signedIn: boolean }) {
         </Link>
         <nav aria-label={t("navLabel")} className="ms-6 hidden items-center gap-1 rounded-full bg-surface/60 p-1 shadow-card lg:flex xl:ms-12">
           {SECTIONS.map(([id, key]) => (
-            <a key={id} href={`#${id}`} className="rounded-full px-4 py-2 text-[14px] font-medium text-secondary transition-colors hover:bg-surface hover:text-text">
+            <a key={id} href={`${base}#${id}`} className="rounded-full px-4 py-2 text-[14px] font-medium text-secondary transition-colors hover:bg-surface hover:text-text">
               {t(key)}
             </a>
           ))}

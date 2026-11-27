@@ -226,7 +226,7 @@ export async function submitPractice(userId: string, locale: "en" | "ar", id: st
         strongIndicators: item.hidden.strongIndicators.map((s) => s.text),
         embeddedDetail: item.hidden.embeddedDetail?.description ?? null,
         response: responseText(parsed, item.content),
-      });
+      }, { sessionId: id });
       // Quotes must be the person's own words.
       output.didWell = output.didWell.filter((d) => words.includes(d.quote.trim()));
       feedback = { ...output, mode: "anthropic" };

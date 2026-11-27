@@ -31,6 +31,9 @@ export async function deleteUserData(userId: string) {
   const orgs = (await systemDb.assessmentSession.findMany({ where: { subjectUserId: userId }, select: { organizationId: true } })).map((s) => s.organizationId).filter(Boolean) as string[];
   await systemDb.$transaction(async (tx) => {
     const sessionIds = (await tx.assessmentSession.findMany({ where: { subjectUserId: userId }, select: { id: true } })).map((s) => s.id);
+    const practiceIds = (await tx.practiceSession.findMany({ where: { userId }, select: { id: true } })).map((s) => s.id);
+    // AI request logs carry the person's words; they go with everything else (see aiLogKeys).
+    await tx.aiCallLog.deleteMany({ where: { sessionId: { in: [...sessionIds, ...practiceIds, coachLogKey(userId)] } } });
     await tx.fairnessResponse.deleteMany({ where: { sessionRef: { in: sessionIds } } });
     await tx.outcomeRating.deleteMany({ where: { sessionId: { in: sessionIds } } });
     await tx.assessmentSession.deleteMany({ where: { subjectUserId: userId } });
@@ -45,9 +48,40 @@ export async function deleteUserData(userId: string) {
 /** An organisation deletes one candidate's assessment data. */
 export async function deleteSessionData(sessionId: string, actorUserId: string, organizationId: string) {
   await systemDb.$transaction(async (tx) => {
+    await tx.aiCallLog.deleteMany({ where: { sessionId } });
     await tx.fairnessResponse.deleteMany({ where: { sessionRef: sessionId } });
     await tx.outcomeRating.deleteMany({ where: { sessionId } });
     await tx.assessmentSession.delete({ where: { id: sessionId } });
   });
   await audit({ organizationId, actorUserId, action: "privacy.session_deleted", targetType: "session", targetId: sessionId });
+}
+
+/**
+ * The key Grow coach conversations are logged under in ai_call_log.sessionId
+ * (they have no session of their own), so they can be deleted with the person.
+ */
+export function coachLogKey(userId: string) {
+  return `coach:${userId}`;
+}
+
+/**
+ * An organisation's admin deletes the organisation and everything in it:
+ * roles, assessments (with answers, scores and reports), teams, invitations,
+ * integrations, AI request logs and its audit log. People's own accounts and
+ * personal Grow data stay; they simply stop being members. A platform-level
+ * audit record keeps only the fact that it happened.
+ */
+export async function deleteOrganizationData(organizationId: string, actorUserId: string) {
+  const sessionIds = (await systemDb.assessmentSession.findMany({ where: { organizationId }, select: { id: true } })).map((s) => s.id);
+  await systemDb.$transaction(async (tx) => {
+    // Rows keyed by organisation or session without a foreign key go first.
+    await tx.aiCallLog.deleteMany({ where: { OR: [{ organizationId }, { sessionId: { in: sessionIds } }] } });
+    await tx.fairnessResponse.deleteMany({ where: { OR: [{ organizationId }, { sessionRef: { in: sessionIds } }] } });
+    await tx.outcomeRating.deleteMany({ where: { OR: [{ organizationId }, { sessionId: { in: sessionIds } }] } });
+    await tx.auditLog.deleteMany({ where: { organizationId } });
+    await tx.authSession.updateMany({ where: { activeOrganizationId: organizationId }, data: { activeOrganizationId: null } });
+    // Everything else belongs to the organisation and is removed with it (onDelete: Cascade).
+    await tx.organization.delete({ where: { id: organizationId } });
+  });
+  await audit({ actorUserId, action: "organization.deleted", targetType: "organization", targetId: organizationId, metadata: { sessions: sessionIds.length } });
 }

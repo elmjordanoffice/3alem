@@ -6,6 +6,7 @@ import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, Di
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/field";
+import { PolicyLinks } from "@/components/legal/policy-links";
 
 /**
  * "How AI is used in this assessment": what AI does, what it never does, who
@@ -26,6 +27,7 @@ export function AiExplainer({
 }) {
   const t = useTranslations("candidate.ai");
   const tc = useTranslations("common");
+  const tl = useTranslations("legal.links");
   return (
     <Dialog>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
@@ -60,6 +62,10 @@ export function AiExplainer({
           <section>
             <h3 className="font-semibold text-text">{t("decideTitle")}</h3>
             <p className="mt-2 text-secondary">{t("decide", { org })}</p>
+          </section>
+          <section>
+            <h3 className="font-semibold text-text">{tl("more")}</h3>
+            <PolicyLinks policies={["ai", "privacy"]} className="mt-2" />
           </section>
           {onHumanReviewChange ? (
             <section className="rounded-card bg-surface-subtle p-4 shadow-[inset_0_0_0_1px_var(--border)]">

@@ -2,6 +2,7 @@ import "server-only";
 import { withTenant } from "@/lib/db";
 import { coach, type CoachReply } from "@/lib/ai/prompts/coach";
 import { getProvider, runAgent } from "@/lib/ai/run";
+import { coachLogKey } from "@/lib/privacy";
 import type { ReportContent } from "@/lib/hire/report-types";
 import { getGrowProfile } from "./profile";
 import { offlineCoach } from "./offline-coach";
@@ -47,7 +48,7 @@ export async function askCoach(userId: string, name: string, locale: "en" | "ar"
         reflections: practice.slice(0, 8).map((p) => p.reflectionNote).filter(Boolean).join("\n"),
         selfView: Object.entries((profile?.selfView as Record<string, number> | undefined) ?? {}).map(([k, v]) => `${k}: ${v}`).join("\n"),
         conversation: [...history.map((m) => ({ role: m.role as "user" | "assistant", content: m.content })), { role: "user" as const, content: text }],
-      });
+      }, { sessionId: coachLogKey(userId) });
       reply = output;
     } catch (e) {
       console.warn("[coach] model failed; using offline coach", e);

@@ -161,9 +161,9 @@ New organisations start a 14-day trial with 5 candidate invitations. When a plan
 
 ## Legal and trust
 
-The site has a privacy policy (`/privacy`), terms (`/terms`), "How Aalim uses AI" (`/ai`) and a security page (`/security`), in English and Arabic. Until `LEGAL_ENTITY_NAME` is set they show a "draft" notice, so placeholders can't go live unnoticed.
+The site has a privacy policy (`/privacy`), terms (`/terms`), "How Aalim uses AI" (`/ai`) and a security page (`/security`), in English and Arabic. Until `LEGAL_ENTITY_NAME` is set they show a "draft" notice, so placeholders can't go live unnoticed, and search engines are asked not to index the site (a staging copy is never indexed either). Once it is set, the public pages (home, sign-in, sign-up, brand and the legal pages) become indexable, with a sitemap at `/sitemap.xml`.
 
-1. Set your company details: `LEGAL_ENTITY_NAME`, `LEGAL_ADDRESS`, `CONTACT_EMAIL`, `PRIVACY_EMAIL`, `SECURITY_EMAIL`, `GOVERNING_LAW`, and your providers: `HOSTING_PROVIDER`, `HOSTING_REGION`, `DATABASE_PROVIDER`, `EMAIL_PROVIDER`.
+1. Set your company details: `LEGAL_ENTITY_NAME`, `LEGAL_ADDRESS`, `CONTACT_EMAIL`, `PRIVACY_EMAIL`, `SECURITY_EMAIL`, `GOVERNING_LAW`, and your providers: `HOSTING_PROVIDER`, `HOSTING_REGION`, `DATABASE_PROVIDER`, `EMAIL_PROVIDER`. Optionally add Arabic versions of the name, address, governing law and region with an `_AR` suffix (for example `LEGAL_ENTITY_NAME_AR`). When the texts change, update `LEGAL_LAST_UPDATED` in `src/lib/legal.ts`.
 2. Have a lawyer review the pages and the data processing agreement template. `docs/legal/README.md` lists what to check and the regimes that may apply (for example GDPR and the EU AI Act, UK GDPR, New York City's rules on automated employment decision tools, and Saudi, UAE and Jordanian data protection laws).
 3. In each organisation's settings, set the retention period (default 12 months).
 
@@ -245,6 +245,8 @@ Everything optional, with its default. Required settings are in step A3.
 | `LEGAL_ENTITY_NAME`, `LEGAL_ADDRESS`, `GOVERNING_LAW` | draft placeholders | Company details on the legal pages |
 | `CONTACT_EMAIL`, `PRIVACY_EMAIL`, `SECURITY_EMAIL` | placeholders | Contact addresses on the legal and trust pages |
 | `HOSTING_PROVIDER`, `HOSTING_REGION`, `DATABASE_PROVIDER`, `EMAIL_PROVIDER` | placeholders | Subprocessors listed in the privacy policy |
+| `LEGAL_ENTITY_NAME_AR`, `LEGAL_ADDRESS_AR`, `GOVERNING_LAW_AR`, `HOSTING_REGION_AR` | the English value | Arabic versions for the Arabic legal pages |
+| `AI_LOG_RETENTION_DAYS` | `30` | Days the text of AI requests is kept before it's cleared (rows go after 13 months) |
 | `SENTRY_DSN` | none | Sends server errors to Sentry |
 | `ERROR_WEBHOOK_URL` | none | Posts error summaries to Slack or Teams |
 | `APP_VERSION` | detected or `dev` | Shown in `/api/health` |

@@ -139,6 +139,20 @@ export function SignUpForm() {
             <Input id={id} name="password" type="password" autoComplete="new-password" aria-describedby={describedBy} aria-invalid={invalid || undefined} />
           )}
         </Field>
+        <p className="text-sm leading-relaxed text-secondary">
+          {t.rich("signUp.consent", {
+            terms: (chunks) => (
+              <Link href="/terms" className="font-medium text-accent-text underline underline-offset-4 hover:no-underline">
+                {chunks}
+              </Link>
+            ),
+            privacy: (chunks) => (
+              <Link href="/privacy" className="font-medium text-accent-text underline underline-offset-4 hover:no-underline">
+                {chunks}
+              </Link>
+            ),
+          })}
+        </p>
         <Button type="submit" size="lg" loading={pending}>
           {t("signUp.submit")}
         </Button>

@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { cookies } from "next/headers";
-import { getLocale } from "next-intl/server";
-import { NextIntlClientProvider } from "next-intl";
+import { getLocale, getMessages } from "next-intl/server";
+import { NextIntlClientProvider, type AbstractIntlMessages } from "next-intl";
 // Night type: Plus Jakarta Sans for Latin, Readex Pro for Arabic, everywhere.
 import "@fontsource-variable/plus-jakarta-sans";
 import "@fontsource-variable/readex-pro";
@@ -43,11 +43,15 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const numerals = isNumeralSystem(numeralsCookie) ? numeralsCookie : "latn";
   const textSize = jar.get("AALIM_TEXT_SIZE")?.value === "large" ? "large" : undefined;
   const dir = directionOf(locale);
+  // The long-form legal pages render on the server; the browser only needs their link labels.
+  const { legal, ...messages } = await getMessages();
+  const legalLinks = typeof legal === "object" && legal !== null ? (legal as AbstractIntlMessages).links : undefined;
+  const clientMessages: AbstractIntlMessages = legalLinks ? { ...messages, legal: { links: legalLinks } } : messages;
 
   return (
     <html lang={locale} dir={dir} data-text-size={textSize} suppressHydrationWarning>
       <body className="min-h-dvh">
-        <NextIntlClientProvider>
+        <NextIntlClientProvider messages={clientMessages}>
           <Providers locale={locale} numerals={numerals} dir={dir}>
             {children}
           </Providers>

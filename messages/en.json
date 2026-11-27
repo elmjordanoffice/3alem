@@ -248,7 +248,12 @@
       "note": "Early version: use alongside interviews.",
       "product": "Product",
       "more": "More",
-      "brand": "Brand"
+      "brand": "Brand",
+      "legal": "Policies",
+      "privacy": "Privacy policy",
+      "terms": "Terms of service",
+      "ai": "How Aalim uses AI",
+      "security": "Security"
     }
   },
   "auth": {
@@ -274,7 +279,8 @@
       "submit": "Create account",
       "dataNote": "We use your email to sign you in and to send messages about your account. We never train models on your data.",
       "haveAccount": "Already have an account?",
-      "signIn": "Sign in"
+      "signIn": "Sign in",
+      "consent": "By creating an account you agree to the <terms>Terms of service</terms> and the <privacy>Privacy policy</privacy>."
     },
     "forgot": {
       "title": "Reset your password",
@@ -311,6 +317,865 @@
       "level": "Proficient",
       "range": "3.3–3.9",
       "footer": "Aalim informs decisions. People make them."
+    }
+  },
+  "legal": {
+    "common": {
+      "skip": "Skip to content",
+      "lastUpdated": "Last updated",
+      "contents": "On this page",
+      "show": "Show",
+      "hide": "Hide",
+      "related": "Related pages",
+      "anchor": "Link to the section “{title}”",
+      "draftTitle": "Draft",
+      "draftBody": "Complete the company details and have these reviewed by a lawyer before launch. Highlighted text shows what is still missing."
+    },
+    "placeholders": {
+      "entity": "[Company legal name]",
+      "address": "[Registered address]",
+      "email": "[email address]",
+      "law": "[country or state]",
+      "hosting": "[hosting provider]",
+      "region": "[hosting region]",
+      "database": "[database provider]",
+      "emailProvider": "[email provider]"
+    },
+    "links": {
+      "privacy": "Privacy policy",
+      "terms": "Terms of service",
+      "ai": "How Aalim uses AI",
+      "security": "Security",
+      "navLabel": "Policies",
+      "more": "Learn more",
+      "newTab": "(opens in a new tab)"
+    },
+    "meta": {
+      "privacy": {
+        "title": "Privacy policy",
+        "description": "What Aalim collects, why, how long we keep it, who processes it and how to use your rights."
+      },
+      "terms": {
+        "title": "Terms of service",
+        "description": "The terms for organisations using Aalim, with a section for candidates and individuals."
+      },
+      "ai": {
+        "title": "How Aalim uses AI",
+        "description": "What AI does at each step of an Aalim assessment, what it never does, and how people stay in charge."
+      },
+      "security": {
+        "title": "Security",
+        "description": "How Aalim protects data, where it is stored and how to report a vulnerability."
+      }
+    },
+    "tables": {
+      "subprocessors": {
+        "caption": "Subprocessors",
+        "cols": {
+          "provider": "Provider",
+          "purpose": "What they do",
+          "location": "Where"
+        },
+        "rows": {
+          "hosting": {
+            "service": "Hosting",
+            "purpose": "Runs the application and keeps its files and logs.",
+            "location": "{region}"
+          },
+          "database": {
+            "service": "Database",
+            "purpose": "Stores account, assessment and Grow data.",
+            "location": "{region}"
+          },
+          "email": {
+            "service": "Email delivery",
+            "purpose": "Sends invitations, password resets, reports and reminders, so it receives the recipient's address and the message.",
+            "location": "May include the United States"
+          },
+          "ai": {
+            "service": "AI models",
+            "purpose": "Writes scenarios and conversation turns, scores answers, drafts reports and gives Grow feedback, using only the text each task needs.",
+            "location": "May include the United States"
+          },
+          "payments": {
+            "service": "Payments",
+            "purpose": "Processes subscription payments and holds card details; we never see card numbers.",
+            "location": "May include the United States"
+          },
+          "errors": {
+            "service": "Error monitoring",
+            "purpose": "Receives error reports, without cookies, tokens or request headers.",
+            "location": "Depends on the account's region"
+          }
+        }
+      },
+      "cookies": {
+        "caption": "Cookies",
+        "cols": [
+          "Name",
+          "What it's for",
+          "How long"
+        ],
+        "rows": [
+          [
+            "better-auth.session_token",
+            "Keeps you signed in. Over HTTPS its name starts with __Secure-.",
+            "14 days after your last visit, or until you sign out"
+          ],
+          [
+            "NEXT_LOCALE",
+            "Remembers your language.",
+            "1 year"
+          ],
+          [
+            "AALIM_NUMERALS",
+            "Remembers how digits are written (0–9 or ٠–٩).",
+            "1 year"
+          ],
+          [
+            "AALIM_TEXT_SIZE",
+            "Remembers if you chose larger text.",
+            "1 year"
+          ]
+        ]
+      },
+      "retention": {
+        "caption": "Retention periods",
+        "cols": [
+          "Data",
+          "How long we keep it"
+        ],
+        "rows": [
+          [
+            "Hire assessments: answers, scores, reports, equal-opportunity answers and outcome ratings",
+            "The period the organisation sets (12 months unless it chooses otherwise), then deleted automatically. The organisation can delete a candidate's data sooner."
+          ],
+          [
+            "Candidate invitations",
+            "The same period as the organisation's assessments."
+          ],
+          [
+            "Team assessments",
+            "Until the member deletes their account, or we delete them on the organisation's instructions."
+          ],
+          [
+            "Personal Grow data",
+            "Until you delete it or your account."
+          ],
+          [
+            "Account details and settings",
+            "Until you delete your account. An organisation's admin can delete the organisation, with all its data, at any time in its settings; we also delete it on request."
+          ],
+          [
+            "Audit log",
+            "As long as the organisation's account exists. It records that something happened, not the content."
+          ],
+          [
+            "AI request logs",
+            "The text sent to and from the AI for 30 days, then only cost and timing, for up to 13 months. Logs that belong to an assessment or an account are deleted with it."
+          ],
+          [
+            "Billing records",
+            "As long as tax and accounting law requires."
+          ],
+          [
+            "Server logs",
+            "As set by our hosting provider's log retention."
+          ]
+        ]
+      }
+    },
+    "privacy": {
+      "eyebrow": "Legal",
+      "title": "Privacy policy",
+      "intro": "How {entity} handles personal data in Aalim: what we collect, why, how long we keep it, who helps us process it, and how you can see, download or delete it.",
+      "sections": [
+        {
+          "id": "summary",
+          "title": "The short version",
+          "blocks": [
+            {
+              "list": [
+                "Organisations use Aalim to assess candidates (Hire) and develop their teams (Team). For that data, **the organisation decides** how it is used, and we process it on its behalf.",
+                "Individuals use Aalim for their own development (Grow). That data is **private to you**: no employer sees it unless you choose to share it.",
+                "We don't sell personal data, show advertising, or use tracking or analytics cookies.",
+                "AI helps write scenarios, score answers against written rubrics and draft reports. **People make every decision**, and Aalim never rejects anyone automatically.",
+                "You can download or delete your data from Settings at any time."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "who",
+          "title": "Who we are and our role",
+          "blocks": [
+            "Aalim is provided by {entity}, {address} (“we”, “us”). How we handle your data depends on how you use Aalim:",
+            {
+              "list": [
+                "**Processor for organisations.** When an organisation invites candidates or team members, the organisation is the controller of that assessment data, and we process it only on its instructions, under our terms and data processing agreement.",
+                "**Controller for accounts and personal Grow.** We decide how account data (your name, email, sign-in and settings), billing records and your personal Grow data are used, as this policy describes."
+              ]
+            },
+            "If an organisation invited you, its own privacy notice also applies, and it is the first place to go with questions about your assessment. We'll help it answer you."
+          ]
+        },
+        {
+          "id": "collect",
+          "title": "What we collect",
+          "blocks": [
+            {
+              "h": "If you work for an organisation using Aalim"
+            },
+            {
+              "list": [
+                "Account details: name, work email, a password (stored only as a salted hash), and language, number and display settings.",
+                "Your organisation and roles: organisation name, retention setting, team memberships, and roles such as recruiter, hiring manager, team manager or admin.",
+                "What you create: job descriptions, assessments, invitations, notes, interview scorecards, hiring decisions and their reasons, review notes and level adjustments, and later performance ratings if you choose to record them.",
+                "Activity: an audit log of sensitive actions (for example viewing, sharing, exporting, changing or deleting a report), and sign-in sessions, including IP address and browser type.",
+                "Billing: the billing contact and subscription details. Payments are processed by {payments}, so we don't receive or store card numbers."
+              ]
+            },
+            {
+              "h": "If you are a candidate"
+            },
+            {
+              "list": [
+                "Your name and email from the invitation, and the role you were invited for.",
+                "Your choices on the start screen: language, accommodations (extra time, untimed mode, larger text), your consent, and whether you asked for a person to review every score.",
+                "Your answers: written replies, choices, rankings, conversation turns, and how long each answer took.",
+                "Integrity context: when text is pasted (and how much), when you switch away from the page, and sudden changes in writing style. Reviewers see these as context; they never lower a score.",
+                "Results: scores with quotes from your own answers as evidence, your report, and what the organisation records afterwards, such as interview scorecards and its decision.",
+                "Optional equal-opportunity answers (gender, age band, disability, first language). Every question can be skipped. They are stored apart from your assessment, never shown to reviewers, and only used in groups of five or more to check fairness.",
+                "Optional feedback on the experience."
+              ]
+            },
+            {
+              "note": "We don't record audio or video, and we don't analyse faces or voices. If you use dictation, your browser's own speech recognition turns your speech into text (some browsers use their maker's speech service for this); we receive only the text you send."
+            },
+            {
+              "h": "If you use Aalim for your own development (Grow)"
+            },
+            {
+              "list": [
+                "Your account details and settings.",
+                "Your Grow profile: current role, years of experience, goal, weekly time, your own view of your skills, and a CV if you add one (with what our own code reads from it, such as recent job titles, years and skills).",
+                "Your assessments, practice answers and feedback, reflection notes, coach conversations, collected scenes, progress and reminder setting."
+              ]
+            },
+            {
+              "h": "If you are invited to a team assessment"
+            },
+            {
+              "list": [
+                "Your email, your consent to take part, and whether you chose to share your answers with your manager.",
+                "Your assessment and report, which you see first. Your manager sees your skill levels and themes, or only anonymised team totals if fewer than five people take part, and never your answers unless you opt in. You can withdraw at any time."
+              ]
+            },
+            {
+              "h": "Everyone"
+            },
+            "Technical data needed to run and protect the service: server logs (time, address, page and errors, with the secret part of private links masked), and the few cookies described below."
+          ]
+        },
+        {
+          "id": "use",
+          "title": "Why we use it",
+          "blocks": [
+            {
+              "list": [
+                "To provide Aalim: run assessments and practice, score answers, write reports, keep your settings, and send the emails the service needs (invitations, password resets, reports and the reminders you turn on).",
+                "To keep it secure: sign-in, rate limiting, the audit log and investigating misuse.",
+                "To keep it accurate and fair: checking that scoring is consistent, retiring scenarios that don't work, and giving organisations aggregate fairness and validity reports.",
+                "To support you, bill subscriptions and meet our legal obligations."
+              ]
+            },
+            "We **don't** sell or rent personal data, show advertising, build marketing profiles, or use your answers to train AI models."
+          ]
+        },
+        {
+          "id": "bases",
+          "title": "Legal bases",
+          "blocks": [
+            "Where data protection law asks for a legal basis (for example the EU's GDPR or similar laws), we rely on:",
+            {
+              "list": [
+                "**Contract**: to provide the service to account holders and customers.",
+                "**Legitimate interests**: to secure, maintain and improve the service and to compile aggregate statistics, in ways people would reasonably expect and that don't override their rights.",
+                "**Consent**: for optional things you choose, such as the equal-opportunity questions, sharing your answers with a team manager, and Grow reminders. You can withdraw consent at any time; this doesn't affect what happened before.",
+                "**Legal obligation**: for tax and accounting records and lawful requests."
+              ]
+            },
+            "For candidate and team data, the organisation is responsible for its own legal basis. Aalim records each candidate's consent before an assessment starts. Equal-opportunity answers can include sensitive data, so they are always optional and asked for separately."
+          ]
+        },
+        {
+          "id": "ai",
+          "title": "AI processing",
+          "blocks": [
+            "Aalim uses AI models to write scenarios, play colleagues in conversations, score answers against written rubrics, draft reports, analyse job descriptions, and give feedback and coaching in Grow. [How Aalim uses AI](/ai) explains each step in plain language.",
+            {
+              "list": [
+                "**What is sent:** only the text a task needs, for example a scenario, its rubric and the answer to be scored. The scorer doesn't receive names or other answers.",
+                "**Who processes it:** our AI provider, listed with our subprocessors below. It processes this data on our behalf under its commercial terms. We don't use your data to train AI models.",
+                "**What is kept:** we log every AI request (input, output, cost and timing) to run, check and troubleshoot the service. The text is cleared after 30 days, and logs that belong to an assessment or an account are deleted with it. Only our platform team can see this log, never organisations.",
+                "**Without AI:** if no AI provider is configured, or an organisation reaches its monthly AI budget, Aalim uses its own offline engine and nothing is sent to an AI provider."
+              ]
+            },
+            "**No automated decisions.** Aalim never rejects anyone automatically. It gives people evidence: people at the organisation make every decision, can change any level with a recorded reason, and must complete a review before a report is shared when a candidate asks for one."
+          ]
+        },
+        {
+          "id": "sharing",
+          "title": "Who we share data with",
+          "blocks": [
+            {
+              "list": [
+                "**The organisation that invited you**, for Hire and Team assessments, as described above.",
+                "**People given a report link.** Links expire and can be revoked. Only people at the organisation can share a candidate's report; you decide whether to share your own Grow profile.",
+                "**Integrations your organisation turns on**, such as webhooks to its applicant tracking system, which receive the events it chooses.",
+                "**Subprocessors** that help us run Aalim, listed below, who are bound by contract to protect the data.",
+                "**Authorities**, only when the law requires it; and a buyer or successor if the business changes hands, with notice to you."
+              ]
+            },
+            {
+              "table": "subprocessors"
+            },
+            "We'll update this list before adding or replacing a subprocessor that handles customer personal data, and tell customers in advance as our data processing agreement describes."
+          ]
+        },
+        {
+          "id": "transfers",
+          "title": "International transfers",
+          "blocks": [
+            "Aalim's application and database are hosted in {region}. Some subprocessors, such as email delivery, payments and the AI provider, may process data in other countries, including the United States. Where the law requires it, we use recognised safeguards for these transfers, such as standard contractual clauses, and assess the protection in the receiving country."
+          ]
+        },
+        {
+          "id": "retention",
+          "title": "How long we keep data",
+          "blocks": [
+            {
+              "table": "retention"
+            },
+            "Deleted data can remain in our providers' backups for a short time, until the backups are replaced. The audit log keeps the fact that a deletion happened, not what was deleted."
+          ]
+        },
+        {
+          "id": "security",
+          "title": "How we protect data",
+          "blocks": [
+            {
+              "list": [
+                "Each organisation's data is separated in the database with row-level security, enforced through a separate, least-privilege database role, and checked again in the application.",
+                "Personal Grow data can only be read by its owner, and equal-opportunity answers can't be read by the application at all, only counted in aggregate.",
+                "Encryption in transit (HTTPS, with HSTS); passwords and private link tokens stored only as hashes; integration secrets encrypted.",
+                "Role-based access, an audit log of sensitive actions, sign-in rate limiting, and strict browser security headers with no third-party scripts."
+              ]
+            },
+            "No system is perfectly secure. If a breach affects your data, we'll tell you and the authorities as the law requires. There's more on our [security page](/security)."
+          ]
+        },
+        {
+          "id": "cookies",
+          "title": "Cookies and browser storage",
+          "blocks": [
+            "Aalim uses only the cookies it needs to work. There are no analytics, advertising or third-party cookies, and no tracking pixels. Fonts are served from our own site, so opening a page doesn't contact anyone else.",
+            {
+              "table": "cookies"
+            },
+            "Aalim also keeps a few things in your browser's local storage: your theme (light or dark) and, during an assessment, drafts of your answers, so nothing is lost if the connection drops. Each draft is cleared once the answer is sent."
+          ]
+        },
+        {
+          "id": "rights",
+          "title": "Your rights",
+          "blocks": [
+            "Depending on where you live, you may have the right to access, copy, correct or delete your data, to restrict or object to how it is used, to withdraw consent, and not to be subject to decisions based solely on automated processing. In Aalim:",
+            {
+              "list": [
+                "**Download your data:** Settings → Your data → Download gives you everything we hold about you as a JSON file.",
+                "**Delete your account:** Settings → Your data → Delete account removes your account and every assessment, answer, report and development record.",
+                "**Correct your details:** change your name in Settings → Profile. To change the email you sign in with, or for anything else, write to {privacyEmail}.",
+                "**Object or ask a question:** write to {privacyEmail}. We may need to confirm who you are first, and we'll reply within the time the law allows."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "candidates",
+          "title": "If you are a candidate",
+          "blocks": [
+            {
+              "list": [
+                "**Ask the organisation first.** It controls your assessment data. Reply to your invitation email to ask for a copy, a correction or deletion. You can also write to {privacyEmail}; we'll pass your request on and help the organisation answer it.",
+                "**Human review.** Before you start, you can ask for a person to review every score. Until someone at the organisation has done so, your report can't be shared, sent or exported.",
+                "**People decide.** Aalim never rejects anyone automatically. Reviewers see the evidence for every score and can change any level, and each change is recorded with a reason.",
+                "**Your own account.** Aalim creates an account without a password for the email your invitation was sent to. Set a password with “Forgot your password?” on the sign-in page to see reports shared with you and to use Settings → Your data."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "children",
+          "title": "Children",
+          "blocks": [
+            "Aalim is for people aged 16 and over. Organisations must not invite anyone younger, and people under 16 must not create an account. If we learn that we hold data about a child under 16, we'll delete it."
+          ]
+        },
+        {
+          "id": "changes",
+          "title": "Changes to this policy",
+          "blocks": [
+            "When we change this policy, we'll update the date at the top. If a change is significant, we'll tell account holders by email or in the app before it takes effect."
+          ]
+        },
+        {
+          "id": "contact",
+          "title": "Contact and complaints",
+          "blocks": [
+            "{entity}, {address}.",
+            {
+              "list": [
+                "Privacy questions and requests: {privacyEmail}",
+                "Everything else: {contactEmail}"
+              ]
+            },
+            "If you're unhappy with how we've handled your data, please tell us first so we can put it right. You can also complain to the data protection authority where you live or work."
+          ]
+        }
+      ]
+    },
+    "terms": {
+      "eyebrow": "Legal",
+      "title": "Terms of service",
+      "intro": "These terms govern how organisations use Aalim. The [last section](#individuals) covers candidates and people using Aalim for their own development.",
+      "sections": [
+        {
+          "id": "agreement",
+          "title": "The agreement",
+          "blocks": [
+            "These terms are an agreement between {entity}, {address} (“we”), and the organisation that creates an Aalim account (the “customer”). The person who accepts them confirms that they may bind the customer.",
+            "Where there is a signed order form or data processing agreement, it takes precedence over these terms where they differ. Our [privacy policy](/privacy) explains how we handle personal data."
+          ]
+        },
+        {
+          "id": "accounts",
+          "title": "Accounts",
+          "blocks": [
+            {
+              "list": [
+                "Give accurate details and keep them up to date.",
+                "Each account is for one person. Keep your password private, and tell us at {contactEmail} if you think someone else has used your account.",
+                "The customer is responsible for what happens under its organisation's accounts."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "admins",
+          "title": "Organisation admins",
+          "blocks": [
+            "Every organisation has at least one admin. Admins invite colleagues and set their roles, choose how long candidate data is kept, manage integrations, see the audit log and fairness report, and can delete a candidate's data. The customer decides who gets access and is responsible for its admins' choices."
+          ]
+        },
+        {
+          "id": "service",
+          "title": "The service",
+          "blocks": [
+            "Aalim provides adaptive skills assessments for hiring (Hire), personal development (Grow) and team development (Team), with reports, interview kits and fairness monitoring. It is an early version: we improve it regularly, and features may change. We'll give notice before removing anything significant that you pay for.",
+            "If an organisation's monthly AI budget is reached, or AI is unavailable, Aalim carries on with its offline engine, which is coarser."
+          ]
+        },
+        {
+          "id": "acceptable-use",
+          "title": "Acceptable use",
+          "blocks": [
+            "You agree not to:",
+            {
+              "list": [
+                "break the law, or use Aalim to discriminate against anyone;",
+                "make or influence decisions about people based on protected characteristics, such as sex or gender, age, disability, race or ethnicity, religion, nationality, pregnancy, or marital or family status, or add job requirements that unfairly exclude people;",
+                "use Team mode for dismissals, performance ratings or pay decisions: it is for development only;",
+                "try to identify individuals from the fairness report or equal-opportunity answers;",
+                "present the AI interviewer as a person, or hide from candidates that AI is involved;",
+                "invite people under 16, or anyone without a lawful basis and the notices the law requires;",
+                "copy, resell or publish Aalim's scenarios, rubrics or framework, or use them to build a competing product;",
+                "probe, scan or test Aalim's security except under our [vulnerability reporting rules](/security#report), overload it, or get around its limits;",
+                "upload malware, or content that is unlawful or infringes others' rights."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "decisions",
+          "title": "Fair use of results",
+          "blocks": [
+            {
+              "list": [
+                "**People decide.** Aalim's results are evidence for a person to weigh, alongside interviews and other information. Don't use them as the only basis for rejecting someone.",
+                "**Honour review requests.** When a candidate asks for a person to review every score, someone at the customer must read the answers and confirm or change each level before the report is used.",
+                "**Offer accommodations** that the law or fairness requires, such as extra time or untimed mode.",
+                "**Check fairness.** Review the fairness report and look into any group the four-fifths rule flags.",
+                "**Meet local rules** on assessments and AI in hiring, such as notices to candidates, bias audits or impact assessments where the law requires them. The customer is responsible for these."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "customer-data",
+          "title": "Customer data",
+          "blocks": [
+            "The customer owns the data that it and its candidates put into Aalim: job descriptions, invitations, answers, reports, notes and decisions (“customer data”). The customer allows us to process customer data only to provide, secure and support Aalim, as our data processing agreement describes. We don't sell customer data or use it to train AI models.",
+            "We may use aggregated statistics that identify no customer or person, for example how often a scenario is used and how its scores spread, to maintain and improve Aalim.",
+            "The customer is responsible for having a lawful basis to collect and use the data it puts into Aalim, and for telling candidates and team members how it is used. Admins can export candidate lists and reports while the account is open. When the account closes, we delete customer data as the data processing agreement describes."
+          ]
+        },
+        {
+          "id": "confidentiality",
+          "title": "Confidentiality",
+          "blocks": [
+            "Each party keeps the other's non-public information confidential, uses it only for this agreement, and protects it with at least reasonable care. This doesn't apply to information that is public, already known to the recipient, independently developed, or that must be disclosed by law (with notice where allowed)."
+          ]
+        },
+        {
+          "id": "ai-outputs",
+          "title": "AI outputs",
+          "blocks": [
+            {
+              "list": [
+                "Results are **estimates with evidence, not verdicts**: each level is a range with a confidence, backed by quotes from the person's own answers.",
+                "AI can make mistakes, and Aalim is an early version that has not yet been calibrated against job performance. Read the evidence, and use results alongside interviews.",
+                "The customer remains responsible for its decisions about people, and for complying with the employment, anti-discrimination, data protection and AI laws that apply to it."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "billing",
+          "title": "Subscriptions, trials and fees",
+          "blocks": [
+            {
+              "list": [
+                "Plans and prices are shown on our website or in an order form. Paid plans are billed in advance through our payment processor, {payments}.",
+                "A free trial, where offered, lasts for the period shown when you start it, on the terms shown then.",
+                "Subscriptions renew automatically for the same period unless cancelled before the renewal date. You can cancel at any time; access continues until the end of the period you have paid for.",
+                "Fees exclude taxes, which are added where required. Except where the law requires otherwise, fees already paid are not refundable.",
+                "We'll tell you at least 30 days before a price change takes effect. It applies from your next renewal."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "suspension",
+          "title": "Suspension and termination",
+          "blocks": [
+            "We may suspend access, after notice where we reasonably can, if fees are overdue, if these terms are seriously breached, or to prevent harm to Aalim, its users or others. We'll restore access once the issue is resolved.",
+            "The customer can stop using Aalim and cancel at any time. Either party may end the agreement if the other seriously breaches it and doesn't fix the breach within 30 days of notice. Sections that by their nature should survive, such as confidentiality, liability and payment of amounts due, continue after the agreement ends."
+          ]
+        },
+        {
+          "id": "ip",
+          "title": "Intellectual property",
+          "blocks": [
+            "We own Aalim, including its software, competency framework, scenarios, rubrics and design. The customer may use Aalim during its subscription under these terms. If you send us feedback, we may use it without any obligation to you."
+          ]
+        },
+        {
+          "id": "warranties",
+          "title": "Warranties",
+          "blocks": [
+            "We provide Aalim with reasonable skill and care, in line with these terms. Otherwise, and to the extent the law allows, Aalim is provided “as is”: we don't promise that it will be uninterrupted or error-free, or that results will suit a particular purpose."
+          ]
+        },
+        {
+          "id": "liability",
+          "title": "Liability",
+          "blocks": [
+            {
+              "list": [
+                "Neither party is liable for indirect or consequential loss, or for lost profits, revenue or data, even if it was foreseeable.",
+                "Each party's total liability under these terms in any 12 months is limited to the fees the customer paid for Aalim in the 12 months before the claim.",
+                "These limits don't apply to the customer's payment obligations, to a breach of confidentiality, or to liability that can't be limited by law, such as for fraud, or for death or personal injury caused by negligence."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "changes",
+          "title": "Changes to these terms",
+          "blocks": [
+            "We may update these terms. We'll give at least 30 days' notice of significant changes by email or in the app. If you don't agree, you can cancel before they take effect; continuing to use Aalim afterwards means you accept them."
+          ]
+        },
+        {
+          "id": "law",
+          "title": "Governing law",
+          "blocks": [
+            "These terms are governed by the laws of {law}. The courts of {law} have exclusive jurisdiction over any dispute, unless the law of the country where the customer is based requires otherwise."
+          ]
+        },
+        {
+          "id": "individuals",
+          "title": "For candidates and individuals",
+          "blocks": [
+            {
+              "h": "Candidates"
+            },
+            {
+              "list": [
+                "You take an assessment because an organisation invited you. It costs you nothing, and the organisation decides what happens next.",
+                "Answer in your own words. Use the materials in each scene, but don't ask someone else to answer for you.",
+                "Scenarios are confidential: please don't copy or share them.",
+                "You can ask for a person to review every score, and you can ask the organisation for a copy of your data or for it to be deleted. See the [privacy policy](/privacy#candidates)."
+              ]
+            },
+            {
+              "h": "People using Grow"
+            },
+            {
+              "list": [
+                "Your Grow data belongs to you and is private: download or delete it from Settings at any time.",
+                "Paid personal plans, where offered, follow the subscription terms above.",
+                "Feedback and coaching are guidance for practice. They aren't professional career, legal, medical or psychological advice."
+              ]
+            },
+            "The acceptable use rules above apply to everyone, and you must be 16 or over to use Aalim."
+          ]
+        },
+        {
+          "id": "contact",
+          "title": "Contact",
+          "blocks": [
+            "{entity}, {address}. Questions about these terms: {contactEmail}."
+          ]
+        }
+      ]
+    },
+    "ai": {
+      "eyebrow": "Trust",
+      "title": "How Aalim uses AI",
+      "intro": "You have a right to know where AI is involved in an assessment. This page explains, in plain language, what it does at each step, what it never does, and how people stay in charge.",
+      "sections": [
+        {
+          "id": "summary",
+          "title": "In short",
+          "blocks": [
+            {
+              "list": [
+                "AI writes realistic scenarios and plays the colleagues you talk to.",
+                "AI scores what you write against written descriptions of each skill level, and must quote your own words for every score.",
+                "Our own tested code, not AI, decides what to ask next, when to stop and how well someone fits a role.",
+                "AI never decides whether anyone is hired. People do, and any candidate can ask for a person to review every score."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "steps",
+          "title": "What AI does at each step",
+          "blocks": [
+            {
+              "h": "1. Reading the job description"
+            },
+            "AI suggests the skills the role needs and how much each matters, and flags requirements that could exclude people unfairly, such as age, gender, nationality, “native speaker” or appearance. The assessment can't be published until someone at the organisation has reviewed those flags.",
+            {
+              "h": "2. Building the week"
+            },
+            "AI writes a fictional company, the people who work there and the storyline of the candidate's week, so the assessment feels like real work rather than a test.",
+            {
+              "h": "3. Adapting each scene"
+            },
+            "After each answer, our own engine (tested code, not AI) works out which skills it is least sure about and chooses what to measure next. AI then writes a scene for those skills, set in the same story. A separate check plays a clever non-expert trying to guess the “right” option, and scenes that are easy to guess are rewritten.",
+            {
+              "h": "4. Conversations"
+            },
+            "In role-play scenes, AI plays a colleague, client or manager. It is always labelled as AI, and never presented as a person.",
+            {
+              "h": "5. Scoring against written rubrics"
+            },
+            "A separate scorer sees only the scene, its written rubric and the answer: not your name, CV or other answers. Every score must quote your own words as evidence, and a quote that doesn't appear word for word in your answer is discarded. Length, confident tone, grammar, spelling and accent are not scored; for written communication skills, only clarity and structure can count.",
+            {
+              "h": "6. A second opinion on high-stakes answers"
+            },
+            "The answers that matter most are scored twice, independently. If the two scores are more than one level apart, a third pass settles it.",
+            {
+              "h": "7. Writing the report"
+            },
+            "AI drafts the report: strengths, areas to develop and questions to ask at interview, each tied to quoted evidence. The ranges, confidence and role fit are calculated by our code, not written by AI.",
+            {
+              "h": "8. The interview kit"
+            },
+            "Our code assembles the interview kit from the report and the competency framework: questions for the gaps, what to listen for, and a scorecard. Interviewers rate each answer before they see the assessment's levels, so the assessment doesn't anchor their judgement.",
+            {
+              "h": "9. Grow feedback and the coach"
+            },
+            "In Grow, AI gives feedback on practice answers (what you did well, what an expert would add and what to try next), and the coach talks through your results and plans next steps with you. It is honest and direct, and never diagnoses you. Grow data is private to you."
+          ]
+        },
+        {
+          "id": "never",
+          "title": "What AI never does",
+          "blocks": [
+            {
+              "list": [
+                "Reject anyone, or decide who is hired, promoted or paid what.",
+                "Analyse faces, video, voice, tone or emotions. Aalim doesn't record audio or video.",
+                "Score accent, grammar, spelling or typing speed.",
+                "Use protected characteristics. The scorer never sees names, photos, age, gender or nationality, and equal-opportunity answers never reach the AI or reviewers.",
+                "Treat a paste or a switched tab as cheating. These are context for the reviewer and never lower a score."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "oversight",
+          "title": "People stay in charge",
+          "blocks": [
+            {
+              "list": [
+                "Reviewers see the quote behind every score and can open the full answer in context.",
+                "They can change any skill level. A written reason is required, the change shows on the report with their name and the date, it is kept in the audit log, and the assessment's own estimate stays visible beside it.",
+                "People record hiring decisions with a reason, and a hire or decline waits for any human review the candidate asked for.",
+                "Integrity signals, such as pastes and tab switches, are shown as context, never as a verdict."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "accommodations",
+          "title": "Accommodations",
+          "blocks": [
+            "If the organisation allows them, candidates choose accommodations privately on the start screen, without having to ask anyone: 25% or 50% extra time, an untimed mode with no countdown, and larger text. Reports never show who used an accommodation. Typing always works; speaking an answer is optional."
+          ]
+        },
+        {
+          "id": "fairness",
+          "title": "Fairness monitoring",
+          "blocks": [
+            {
+              "list": [
+                "After the assessment, candidates can answer optional equal-opportunity questions, and each one can be skipped.",
+                "The answers are stored apart from the assessment, can't be read by the application or reviewers, and are only ever counted in groups.",
+                "The fairness report shows, for each group, how many people reached the chosen level. The four-fifths rule flags any group whose rate is below 80% of the highest group's, as a prompt to review the role and its scenarios, not as proof of bias.",
+                "Groups of fewer than five people are hidden, so no one can be singled out."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "limits",
+          "title": "Spending caps and the offline engine",
+          "blocks": [
+            "Each organisation has a monthly AI budget, and admins are warned at 80% and 100%. When the budget is reached, or no AI provider is configured, Aalim switches to its offline engine: curated scenarios, rubric-based scoring and template reports. It is coarser but follows the same rules. An assessment already scored by AI can finish on it, up to a hard limit, so a report never mixes the two engines."
+          ]
+        },
+        {
+          "id": "provider",
+          "title": "Our AI provider",
+          "blocks": [
+            "Aalim uses AI models from a third-party provider, named with our other subprocessors in the [privacy policy](/privacy#sharing). We send only the text each task needs. The provider processes it on our behalf under its commercial terms, and we don't use your data to train AI models. Every AI request is logged, so we can check quality and cost and investigate problems."
+          ]
+        },
+        {
+          "id": "validity",
+          "title": "How far to trust the results",
+          "blocks": [
+            "Aalim is an early version. Its scoring is tested against 30 simulated candidates, whose true levels it must recover within one level on at least 80% of skills, and against hand-written strong, average and weak answers in English and Arabic. It has **not yet been calibrated against job performance**.",
+            "To change that, organisations can record how the people they hire perform after 6 and 12 months. The fairness report shows how this relates to role fit once there are at least 20 ratings, marked as an early result. Until there is more evidence, use Aalim alongside interviews, not instead of them."
+          ]
+        },
+        {
+          "id": "questions",
+          "title": "Questions and human review",
+          "blocks": [
+            {
+              "list": [
+                "**Before you start:** open “How AI is used in this assessment” on the start screen and tick “Ask for a person to review every score”.",
+                "**After the assessment:** reply to your invitation email to ask the organisation a question, request a review or challenge a result. The organisation makes the decisions and can change any level.",
+                "**Anything else:** write to {privacyEmail}. If your question is about an organisation's assessment, we'll pass it on and help it answer."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "security": {
+      "eyebrow": "Trust",
+      "title": "Security",
+      "intro": "How we protect the data in Aalim: the protections built into the product, where data is stored, and how to report a vulnerability.",
+      "sections": [
+        {
+          "id": "isolation",
+          "title": "Each organisation's data kept apart",
+          "blocks": [
+            {
+              "list": [
+                "Every table that holds organisation or personal data has row-level security in the database. The application connects through a separate, least-privilege database role that can't bypass these policies, and the organisation and person behind each request are set inside that request's own transaction.",
+                "Permissions are checked again in the application, and automated tests prove that one organisation can't read another's data.",
+                "Personal Grow data can only be read by its owner. Equal-opportunity answers and AI request logs can't be read by the application role at all."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "access",
+          "title": "Access and accountability",
+          "blocks": [
+            {
+              "list": [
+                "Role-based access: recruiters, hiring managers, team managers and organisation admins each see only what their role needs.",
+                "An audit log records sensitive actions, such as viewing, sharing, exporting, adjusting and deleting reports.",
+                "Report share links expire and can be revoked. A report the candidate asked to have reviewed can't be shared or exported until a person has reviewed it."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "encryption",
+          "title": "Encryption and secrets",
+          "blocks": [
+            {
+              "list": [
+                "All traffic uses HTTPS, with HSTS so that browsers never fall back to plain HTTP.",
+                "Passwords are stored only as salted hashes. Candidate, invitation and report links carry a random token, and we store only its hash.",
+                "Integration signing secrets are encrypted at rest (AES-256-GCM), and every webhook is signed so the receiver can verify it.",
+                "Encryption of stored data and backups is provided by our database and hosting providers."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "hardening",
+          "title": "Built-in protections",
+          "blocks": [
+            {
+              "list": [
+                "A strict content security policy: no third-party scripts, fonts or trackers, and other sites can't frame our pages.",
+                "Rate limiting on sign-in.",
+                "Links that carry a token are never indexed by search engines or passed on to other sites.",
+                "Webhooks can't point at private or internal network addresses, and don't follow redirects.",
+                "Spreadsheet exports are protected against formula injection.",
+                "Error reports never include cookies or tokens, and mask the secret part of private links."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "location",
+          "title": "Where data is stored",
+          "blocks": [
+            "Aalim runs on {hosting} and stores data with {database}, in {region}. The location depends on the hosting region chosen for each deployment. The companies that process data for us are listed in the [privacy policy](/privacy#sharing)."
+          ]
+        },
+        {
+          "id": "report",
+          "title": "Report a vulnerability",
+          "blocks": [
+            "If you think you've found a security problem, email {securityEmail} with what you found and the steps to reproduce it. We'll acknowledge your report, keep you updated and tell you when it's fixed.",
+            "Please act in good faith: don't access or change other people's data beyond what you need to show the problem, don't degrade the service, and give us reasonable time to fix it before telling anyone else. We won't take legal action against research that follows these rules."
+          ]
+        }
+      ]
     }
   },
   "onboarding": {
@@ -2628,7 +3493,7 @@
     "exportBody": "Your profile, assessments, answers, reports, practice and coach conversations, as a JSON file.",
     "exportAction": "Download",
     "deleteTitle": "Delete your account",
-    "deleteBody": "Removes your account and every assessment, answer, report and development record. This can't be undone.",
+    "deleteBody": "Removes your account and every assessment, answer, report and development record. Organisations where you're the only member are deleted with it. This can't be undone.",
     "deleteAction": "Delete account",
     "confirmTitle": "Delete your account and all your data?",
     "confirmBody": "Organisations you were assessed by will see that a deletion happened, but not what was deleted. You'll be signed out.",
@@ -2637,6 +3502,21 @@
     "errors": {
       "confirmMismatch": "That doesn't match your email address.",
       "lastAdmin": "You're the only admin of an organisation with other members. Make someone else an admin first."
+    },
+    "org": {
+      "title": "Delete this organisation",
+      "body": "Removes the organisation and everything in it: roles, candidates' assessments and reports, teams, integrations and the audit log. Members keep their own accounts and personal Grow data. This can't be undone.",
+      "action": "Delete organisation",
+      "confirmTitle": "Delete {name} and all its data?",
+      "confirmBody": "Export any reports you need to keep first. If the organisation has a subscription, it is cancelled.",
+      "inProgress": "{n, plural, one {# candidate has an assessment in progress and will lose access to it.} other {# candidates have an assessment in progress and will lose access to it.}}",
+      "confirmLabel": "Type {name} to confirm",
+      "confirmAction": "Delete organisation",
+      "errors": {
+        "confirmMismatch": "That doesn't match the organisation's name.",
+        "forbidden": "Only an admin of this organisation can delete it.",
+        "failed": "The organisation couldn't be deleted. Try again."
+      }
     }
   },
   "outcomes": {

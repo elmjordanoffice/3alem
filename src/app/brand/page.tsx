@@ -12,12 +12,13 @@ import { LanguageToggle, ThemeMenu } from "@/components/app/preference-controls"
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { contrastRatio } from "@/lib/contrast";
+import { publicRobots } from "@/lib/legal";
 import { cn } from "@/lib/utils";
 import { CORAL, ClearSpace, CoverMark, FocusFigure, INDIGO, LockupArt, Mark, MarkConstruction, NarrowingFigure, SceneCover, Sweep, WHITE, WordmarkGuides, WordmarkShape } from "./figures";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("brandbook");
-  return { title: t("title"), description: t("metaDescription") };
+  return { title: t("title"), description: t("metaDescription"), robots: publicRobots() };
 }
 
 const SECTIONS = ["idea", "mark", "lockups", "space", "misuse", "colour", "type", "shape", "motif", "ui", "voice", "downloads"] as const;

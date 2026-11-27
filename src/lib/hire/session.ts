@@ -492,9 +492,14 @@ export async function minutesLeft(s: { id: string; timeBudgetMinutes: number; el
   return remainingMinutes(await sessionBudget(s));
 }
 
+/**
+ * The candidate's optional rating of the experience. The finish screen
+ * promises it is anonymous to the hiring team, so it is stored at platform
+ * level with no link to the session, the person or the organisation.
+ */
 export async function recordFeedback(sessionId: string, feedback: { rating: number; comment: string }) {
-  const s = await systemDb.assessmentSession.findUniqueOrThrow({ where: { id: sessionId } });
-  await audit({ organizationId: s.organizationId, actorUserId: s.subjectUserId, action: "assessment.feedback", targetType: "session", targetId: sessionId, metadata: feedback });
+  const s = await systemDb.assessmentSession.findUniqueOrThrow({ where: { id: sessionId }, select: { mode: true } });
+  await audit({ action: "assessment.feedback", metadata: { ...feedback, mode: s.mode, month: new Date().toISOString().slice(0, 7) } });
 }
 
 export type { ResponseContent };

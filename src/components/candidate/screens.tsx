@@ -14,6 +14,7 @@ import { Person } from "@/components/ui/avatar";
 import { useLocaleSettings, useNumbers } from "@/components/providers";
 import { CandidateShell } from "./shell";
 import { AiExplainer } from "./ai-explainer";
+import { PolicyLinks } from "@/components/legal/policy-links";
 import { PracticeScene } from "./practice-scene";
 import { cn } from "@/lib/utils";
 import { CountUp, FinishMark } from "./delight";
@@ -92,6 +93,7 @@ export function Landing({ v, onStart }: { v: View<"landing">; onStart: (o: { loc
                 </button>
               }
             />
+            <PolicyLinks policies={["ai", "privacy"]} className="mt-3" />
           </section>
         </section>
 
