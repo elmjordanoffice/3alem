@@ -2,6 +2,7 @@ import "server-only";
 import type { Prisma } from "@/generated/prisma/client";
 import { systemDb } from "@/lib/db";
 import { AnthropicProvider, costUsd } from "./anthropic";
+import { checkBudget, recordSpend } from "./budget";
 import { AgentError, type AgentDefinition, type CompletionResult, type ModelProvider } from "./types";
 
 /**
@@ -13,6 +14,8 @@ import { AgentError, type AgentDefinition, type CompletionResult, type ModelProv
  *   ai_call_log with the system client; the log is invisible to tenants.
  * - Retries once on invalid output; refusals and provider errors surface as
  *   AgentError so callers can fall back to the curated bank / offline logic.
+ * - Respects the monthly spending caps (./budget.ts): over budget, it throws
+ *   an "unsupported" AgentError and callers use their offline path.
  */
 
 let cached: ModelProvider | null | undefined;
@@ -47,6 +50,8 @@ export async function runAgent<I, O>(
 ): Promise<{ output: O; meta: CompletionResult<O> }> {
   const provider = getProvider();
   if (!provider) throw new AgentError("No language model configured", "unsupported");
+  const verdict = await checkBudget(ctx);
+  if (!verdict.allowed) throw new AgentError(`Monthly AI budget reached (${verdict.pool})`, "unsupported");
 
   let lastError: AgentError | null = null;
   for (let attempt = 0; attempt < 2; attempt++) {
@@ -54,6 +59,7 @@ export async function runAgent<I, O>(
     try {
       const meta = await provider.complete({ definition, input });
       await log(definition, input, ctx, provider, { meta, ok: true });
+      await recordSpend(ctx, costUsd(meta));
       return { output: meta.output, meta };
     } catch (e) {
       const err = e instanceof AgentError ? e : new AgentError(String(e), "provider");
