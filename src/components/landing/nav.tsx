@@ -9,6 +9,7 @@ export const SECTIONS = [
   ["report", "nav.report"],
   ["modes", "nav.modes"],
   ["trust", "nav.trust"],
+  ["pricing", "pricing.nav"],
 ] as const;
 
 /**

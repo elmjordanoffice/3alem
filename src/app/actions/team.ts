@@ -2,10 +2,12 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
-import { requirePermission, requireViewer } from "@/lib/auth/session";
+import { requirePermission, requireViewer, tenantOf, viewerCan } from "@/lib/auth/session";
 import { assignTrack, createTeam, inviteMembers, respondToTeamInvite, startTeamSession } from "@/lib/team";
 import { parseCandidateList } from "@/lib/hire/invitations";
-import { systemDb } from "@/lib/db";
+import { systemDb, withTenant } from "@/lib/db";
+import { canInvite } from "@/lib/billing";
+import type { BillingBlock } from "@/lib/billing/core";
 
 export async function createTeamAction(input: { name: string; goals: string[]; description: string }) {
   const viewer = await requirePermission("team.manage");
@@ -15,10 +17,14 @@ export async function createTeamAction(input: { name: string; goals: string[]; d
   redirect(`/app/teams/${team.id}`);
 }
 
-export async function inviteTeamAction(teamId: string, list: string) {
+export async function inviteTeamAction(teamId: string, list: string): Promise<{ ok: true; count: number; links: { email: string; link: string }[] } | { ok: false; error: "noEmails" } | BillingBlock> {
   const viewer = await requirePermission("team.manage");
   const people = parseCandidateList(list);
   if (!people.length) return { ok: false as const, error: "noEmails" };
+  // The plan's allowance (D-066): only people new to this team count; re-inviting reuses their row.
+  const known = new Set((await withTenant(tenantOf(viewer), (tx) => tx.teamMember.findMany({ where: { teamId }, select: { email: true } }))).map((m) => m.email));
+  const gate = await canInvite(viewer.activeOrganization.id, people.filter((p) => !known.has(p.email)).length);
+  if (!gate.allowed) return { ok: false, error: "billing", reason: gate.reason, remaining: gate.remaining, canManage: viewerCan(viewer, "billing.manage") };
   const created = await inviteMembers(viewer, teamId, people);
   revalidatePath(`/app/teams/${teamId}`);
   return { ok: true as const, count: created.length, links: created };

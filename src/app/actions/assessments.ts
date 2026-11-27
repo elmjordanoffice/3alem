@@ -3,7 +3,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { withTenant, systemDb } from "@/lib/db";
-import { requirePermission, tenantOf } from "@/lib/auth/session";
+import { requirePermission, tenantOf, viewerCan } from "@/lib/auth/session";
 import { audit } from "@/lib/audit";
 import { analyzeJobDescription } from "@/lib/hire/jd";
 import { initialSkillWeights, templateAnalysis, type TemplateRow } from "@/lib/hire/templates";
@@ -12,6 +12,8 @@ import { generateToken, hashToken } from "@/lib/hire/tokens";
 import { sendMail } from "@/lib/mail";
 import { brandedEmail } from "@/lib/mail/templates";
 import { appUrl } from "@/lib/hire/invitations";
+import { canInvite } from "@/lib/billing";
+import type { BillingBlock } from "@/lib/billing/core";
 
 type Result<T = object> = ({ ok: true } & T) | { ok: false; error: string };
 
@@ -130,8 +132,12 @@ const inviteSchema = z.object({
   send: z.boolean(),
 });
 
-/** Invite candidates by email list or CSV. With send=false, returns links to share yourself. */
-export async function inviteCandidates(input: z.input<typeof inviteSchema>): Promise<Result<{ created: { email: string; link: string }[]; skipped: number }>> {
+/**
+ * Invite candidates by email list or CSV. With send=false, returns links to share yourself.
+ * With billing on, the plan's allowance is checked first (D-066): only people never invited
+ * to this assessment count, and a refusal comes back as a typed `billing` error.
+ */
+export async function inviteCandidates(input: z.input<typeof inviteSchema>): Promise<Result<{ created: { email: string; link: string }[]; skipped: number }> | BillingBlock> {
   const viewer = await requirePermission("candidate.invite");
   const p = inviteSchema.safeParse(input);
   if (!p.success) return { ok: false, error: "invalid" };
@@ -141,9 +147,11 @@ export async function inviteCandidates(input: z.input<typeof inviteSchema>): Pro
   const template = await withTenant(tenantOf(viewer), (tx) => tx.assessmentTemplate.findUnique({ where: { id: p.data.templateId } }));
   if (!template) return { ok: false, error: "notFound" };
   if (template.status !== "PUBLISHED") return { ok: false, error: "notPublished" };
-  const existing = new Set(
-    (await withTenant(tenantOf(viewer), (tx) => tx.invitation.findMany({ where: { templateId: template.id, status: { not: "REVOKED" } }, select: { email: true } }))).map((i) => i.email),
-  );
+  const prior = await withTenant(tenantOf(viewer), (tx) => tx.invitation.findMany({ where: { templateId: template.id }, select: { email: true, status: true } }));
+  const existing = new Set(prior.filter((i) => i.status !== "REVOKED").map((i) => i.email));
+  const everInvited = new Set(prior.map((i) => i.email));
+  const gate = await canInvite(template.organizationId, people.filter((x) => !everInvited.has(x.email)).length);
+  if (!gate.allowed) return { ok: false, error: "billing", reason: gate.reason, remaining: gate.remaining, canManage: viewerCan(viewer, "billing.manage") };
   const created: { email: string; link: string }[] = [];
   let skipped = 0;
   const analysis = templateAnalysis(template as unknown as TemplateRow);

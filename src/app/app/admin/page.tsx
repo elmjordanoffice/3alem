@@ -6,6 +6,9 @@ import { systemDb } from "@/lib/db";
 import { PageContainer, PageHeader } from "@/components/app/page-header";
 import { Card, CardContent } from "@/components/ui/card";
 import { FormattedNumber } from "@/components/app/formatted";
+import { AdminBillingDialog } from "@/components/billing/admin-billing-dialog";
+import { billingEnabled } from "@/lib/billing";
+import { isPlanKey } from "@/lib/billing/plans";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("admin");
@@ -17,8 +20,9 @@ export default async function AdminPage() {
   const viewer = await requireViewer();
   if (!viewer.user.isPlatformAdmin) redirect("/app?denied=1");
   const t = await getTranslations("admin");
+  const tb = await getTranslations("billing");
   const [orgs, users, audits] = await Promise.all([
-    systemDb.organization.findMany({ orderBy: { createdAt: "desc" }, include: { _count: { select: { memberships: true } } }, take: 50 }),
+    systemDb.organization.findMany({ orderBy: { createdAt: "desc" }, include: { _count: { select: { memberships: true } }, billing: true }, take: 50 }),
     systemDb.user.count(),
     systemDb.auditLog.findMany({ orderBy: { createdAt: "desc" }, take: 10 }),
   ]);
@@ -33,11 +37,27 @@ export default async function AdminPage() {
       <div className="mb-10 overflow-hidden rounded-card bg-surface shadow-card">
         <table className="w-full text-sm">
           <thead className="bg-surface-subtle text-xs text-secondary">
-            <tr><th className="px-4 py-2.5 text-start font-medium">{t("name")}</th><th className="px-4 py-2.5 text-end font-medium">{t("members")}</th></tr>
+            <tr>
+              <th className="px-4 py-2.5 text-start font-medium">{t("name")}</th>
+              <th className="px-4 py-2.5 text-end font-medium">{t("members")}</th>
+              <th className="px-4 py-2.5 text-start font-medium">{tb("admin.column")}</th>
+              <th className="px-4 py-2.5"><span className="sr-only">{tb("admin.edit")}</span></th>
+            </tr>
           </thead>
           <tbody>
             {orgs.map((o) => (
-              <tr key={o.id} className="border-t border-border"><td className="px-4 py-3">{o.name}</td><td className="px-4 py-3 text-end tabular"><FormattedNumber value={o._count.memberships} /></td></tr>
+              <tr key={o.id} className="border-t border-border">
+                <td className="px-4 py-3">{o.name}</td>
+                <td className="px-4 py-3 text-end tabular"><FormattedNumber value={o._count.memberships} /></td>
+                <td className="px-4 py-3 text-secondary">{o.billing ? `${tb(`plans.${isPlanKey(o.billing.plan) ? o.billing.plan : "trial"}`)} · ${tb(`status.${o.billing.status}`)}` : tb("admin.none")}</td>
+                <td className="px-4 py-2 text-end">
+                  <AdminBillingDialog
+                    org={{ id: o.id, name: o.name }}
+                    billingOn={billingEnabled(o.id)}
+                    current={o.billing ? { plan: o.billing.plan, customInvitations: o.billing.customInvitations, customAiBudgetUsd: o.billing.customAiBudgetUsd, trialEndsAt: o.billing.trialEndsAt.toISOString() } : null}
+                  />
+                </td>
+              </tr>
             ))}
           </tbody>
         </table>

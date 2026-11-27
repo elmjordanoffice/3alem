@@ -18,6 +18,7 @@ import { FitPill } from "@/components/report/fit";
 import { INK_PRIMARY } from "@/components/ui/ink";
 import { RolePipelineList } from "@/components/recruiter/role-pipeline";
 import { ActivityChart } from "@/components/recruiter/activity-chart";
+import { BillingBanner } from "@/components/billing/billing-banner";
 import { cn } from "@/lib/utils";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -67,6 +68,7 @@ export default async function AppHome({ searchParams }: { searchParams: Promise<
 
   return (
     <PageContainer className="max-w-6xl">
+      <BillingBanner viewer={viewer} />
       {/* The brief: what changed and what to do next, before any list (docs/design-references.md). */}
       <section aria-labelledby="brief-h" className="hero-card mb-10 rounded-card p-6 sm:p-8 lg:p-9">
         <div className="flex flex-wrap items-end justify-between gap-6">

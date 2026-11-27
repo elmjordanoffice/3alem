@@ -140,4 +140,22 @@ describe.skipIf(!ready)("row-level security", () => {
       withTenant({ userId: ids.userB, organizationId: ids.orgB }, (tx) => tx.hiringDecision.create({ data: { organizationId: ids.orgA, sessionId: session.id, outcome: "DECLINE", reason: "Written from another organisation.", decidedById: ids.userB } })),
     ).rejects.toThrow();
   });
+
+  it("lets members read their organisation's billing, and nobody write it through the app role", async () => {
+    const trialEndsAt = new Date(Date.now() + 14 * 86400_000);
+    await system.organizationBilling.create({ data: { organizationId: ids.orgA, trialEndsAt } });
+    await system.stripeEvent.create({ data: { id: `evt_${run}`, type: "invoice.paid", organizationId: ids.orgA } });
+    const asA = await withTenant({ userId: ids.userA, organizationId: ids.orgA }, (tx) => tx.organizationBilling.findMany());
+    const asB = await withTenant({ userId: ids.userB, organizationId: ids.orgB }, (tx) => tx.organizationBilling.findMany());
+    // Even naming another organisation as active doesn't help a non-member.
+    const spoofed = await withTenant({ userId: ids.userB, organizationId: ids.orgA }, (tx) => tx.organizationBilling.findMany());
+    expect(asA.map((r) => r.organizationId)).toEqual([ids.orgA]);
+    expect(asB).toHaveLength(0);
+    expect(spoofed).toHaveLength(0);
+    const upgraded = await withTenant({ userId: ids.userA, organizationId: ids.orgA }, (tx) => tx.organizationBilling.updateMany({ data: { plan: "growth", status: "ACTIVE" } }));
+    expect(upgraded.count).toBe(0);
+    await expect(withTenant({ userId: ids.userB, organizationId: ids.orgB }, (tx) => tx.organizationBilling.create({ data: { organizationId: ids.orgB, plan: "enterprise", trialEndsAt } }))).rejects.toThrow();
+    expect(await withTenant({ userId: ids.userA, organizationId: ids.orgA }, (tx) => tx.stripeEvent.count())).toBe(0);
+    await system.stripeEvent.deleteMany({ where: { id: `evt_${run}` } });
+  });
 });

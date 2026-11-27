@@ -72,6 +72,16 @@ export function coachLogKey(userId: string) {
  * audit record keeps only the fact that it happened.
  */
 export async function deleteOrganizationData(organizationId: string, actorUserId: string) {
+  // Stop charging first: if Stripe can't be reached, nothing is deleted and the admin can retry.
+  const billing = await systemDb.organizationBilling.findUnique({ where: { organizationId }, select: { stripeSubscriptionId: true, status: true } });
+  if (billing?.stripeSubscriptionId && billing.status !== "CANCELED" && process.env.STRIPE_SECRET_KEY) {
+    const { stripe } = await import("@/lib/billing/stripe");
+    await stripe()
+      .subscriptions.cancel(billing.stripeSubscriptionId)
+      .catch((e: { code?: string }) => {
+        if (e?.code !== "resource_missing") throw e;
+      });
+  }
   const sessionIds = (await systemDb.assessmentSession.findMany({ where: { organizationId }, select: { id: true } })).map((s) => s.id);
   await systemDb.$transaction(async (tx) => {
     // Rows keyed by organisation or session without a foreign key go first.

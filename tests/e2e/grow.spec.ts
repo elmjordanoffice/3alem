@@ -27,6 +27,8 @@ test("an individual onboards, takes a baseline, practises and talks to the coach
   await expect(page.getByText("What we read from your CV")).toBeVisible();
   await expect(page.getByText(/Recent roles: Software Engineer/)).toBeVisible();
   await expect(page.getByText(/Industry: software and technology/)).toBeVisible();
+  // Wait for streaming to settle: React briefly keeps a hidden copy of streamed content.
+  await expect(page.getByLabel("Your current role")).toHaveCount(1);
   await page.getByLabel("Your current role").fill("Software engineer");
   await page.getByLabel("Your goal").fill("Move from engineer to team lead");
   await page.getByRole("radio", { name: "3 hours" }).click();

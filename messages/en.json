@@ -254,6 +254,44 @@
       "terms": "Terms of service",
       "ai": "How Aalim uses AI",
       "security": "Security"
+    },
+    "pricing": {
+      "nav": "Pricing",
+      "label": "Pricing",
+      "title": "Start free. Pick a plan when you're ready.",
+      "sub": "Every plan has Hire and Team modes and every report and export, in Arabic and English. Personal development is always free.",
+      "plans": {
+        "trial": "Free trial",
+        "starter": "Starter",
+        "growth": "Growth",
+        "enterprise": "Enterprise"
+      },
+      "blurbs": {
+        "trial": "Try everything on a real role.",
+        "starter": "For a team hiring for a few roles at a time.",
+        "growth": "For teams that hire and develop people every week.",
+        "enterprise": "For larger organisations that need their own limits, invoicing and onboarding."
+      },
+      "free": "Free",
+      "custom": "Custom",
+      "trialTerm": "for {days, plural, one {# day} other {# days}}",
+      "perMonth": "a month",
+      "yearly": "or {price} a year, {months, plural, one {# month} other {# months}} free",
+      "points": {
+        "trialInvites": "{count, plural, one {# candidate invitation} other {# candidate invitations}}",
+        "allFeatures": "Every feature included",
+        "noCard": "No card needed",
+        "invitations": "{count, plural, one {# candidate invitation a month} other {# candidate invitations a month}}",
+        "aiBudget": "AI budget of {amount} a month",
+        "features": "Hire and Team modes, every report and export",
+        "customInvitations": "Candidate invitations to suit your hiring",
+        "customBudget": "An AI budget set for you",
+        "invoicing": "Invoicing, security review and onboarding"
+      },
+      "start": "Start free trial",
+      "contact": "Talk to us",
+      "contactSubject": "Aalim Enterprise",
+      "note": "Prices in US dollars, excluding tax. The trial ends after {days, plural, one {# day} other {# days}} or {count, plural, one {# candidate} other {# candidates}}, whichever comes first. Each person counts once per assessment or team; re-sent links don't count again."
     }
   },
   "auth": {
@@ -1502,6 +1540,155 @@
     "runNowHint": "Apply the retention period now instead of waiting for tonight's sweep.",
     "runNow": "Run retention now",
     "runNowDone": "{n, plural, =0 {Nothing was old enough to delete.} one {Deleted # assessment.} other {Deleted # assessments.}}"
+  },
+  "billing": {
+    "nav": "Billing",
+    "title": "Billing",
+    "description": "Your plan, what you've used this month, and your invoices.",
+    "off": {
+      "title": "Billing is off on this installation",
+      "body": "Everything here is unlimited: invitations, teams, reports and exports. Billing turns on when the installation is connected to Stripe."
+    },
+    "plans": {
+      "trial": "Free trial",
+      "starter": "Starter",
+      "growth": "Growth",
+      "enterprise": "Enterprise"
+    },
+    "blurbs": {
+      "starter": "For a team hiring for a few roles at a time.",
+      "growth": "For teams that hire and develop people every week.",
+      "enterprise": "For larger organisations that need their own limits, invoicing and onboarding."
+    },
+    "status": {
+      "TRIALING": "Trial",
+      "ACTIVE": "Active",
+      "PAST_DUE": "Payment overdue",
+      "CANCELED": "Ended",
+      "INCOMPLETE": "Payment incomplete"
+    },
+    "current": {
+      "eyebrow": "Your plan",
+      "trialEnds": "Your trial ends on {date}, or after {count, plural, one {# candidate invitation} other {# candidate invitations}}, whichever comes first.",
+      "trialEnded": "Your free trial has ended. Choose a plan to invite new candidates; everything else stays available.",
+      "renews": "Renews on {date}.",
+      "endsOn": "Ends on {date}. Everything stays available until then, and reports stay available after.",
+      "ended": "This plan has ended. Reports, decisions and exports stay available.",
+      "pastDue": "We couldn't take the last payment. Update your payment details by {date} to keep inviting candidates.",
+      "pastDueOver": "We couldn't take the last payment, so new invitations are paused. Candidates already invited can still finish.",
+      "incomplete": "The first payment hasn't gone through yet. Finish it in the billing portal.",
+      "enterprise": "A custom plan, invoiced separately.",
+      "monthly": "Billed monthly",
+      "yearly": "Billed yearly",
+      "manage": "Manage billing and invoices",
+      "choose": "Choose a plan"
+    },
+    "usage": {
+      "title": "Candidate invitations",
+      "trialTitle": "Trial invitations",
+      "period": "{start} – {end}",
+      "ringLabel": "{used} of {allowance} candidate invitations used",
+      "of": "of {allowance}",
+      "unlimited": "No limit",
+      "unlimitedLabel": "{used} candidate invitations sent this month, with no limit",
+      "sent": "sent",
+      "left": "{remaining, plural, =0 {None left this period} one {# left this period} other {# left this period}}",
+      "rule": "Each person counts once per assessment or team. Re-sent and renewed links don't count again, and personal development is always free."
+    },
+    "ai": {
+      "title": "AI budget this month",
+      "of": "of {budget}",
+      "label": "{spent} of the {budget} AI budget used this month",
+      "body": "Past the budget, new assessments are scored by Aalim's built-in engine until the month ends. Assessments already under way finish as they started."
+    },
+    "choose": {
+      "title": "Plans",
+      "description": "Every plan includes Hire and Team modes, every report, decision and export, in Arabic and English.",
+      "period": "Billing period",
+      "monthly": "Monthly",
+      "yearly": "Yearly",
+      "save": "{months, plural, one {# month free} other {# months free}}",
+      "perMonth": "a month",
+      "perYear": "a year",
+      "invitations": "{count, plural, one {# candidate invitation a month} other {# candidate invitations a month}}",
+      "aiBudget": "AI budget of {amount} a month",
+      "features": "Hire and Team modes, every report and export",
+      "customInvitations": "Candidate invitations to suit your hiring",
+      "customBudget": "An AI budget set for you",
+      "invoicing": "Invoicing, security review and onboarding",
+      "select": "Choose {plan}",
+      "change": "Change plan",
+      "current": "Your plan",
+      "custom": "Custom",
+      "contact": "Talk to us",
+      "contactSubject": "Aalim Enterprise for {org}",
+      "tax": "Prices in US dollars. Tax is added at checkout where it applies.",
+      "noTax": "Prices in US dollars, excluding tax.",
+      "growFree": "Personal development (Grow) is always free."
+    },
+    "checkout": {
+      "success": "Payment received. Your plan is active.",
+      "pending": "Payment received. Your plan will show here in a moment.",
+      "canceled": "Checkout was cancelled. Nothing was charged."
+    },
+    "errors": {
+      "off": "Billing is off on this installation.",
+      "notConfigured": "Payments aren't set up on this installation yet.",
+      "usePortal": "Your organisation already has a subscription. Change plan in the billing portal.",
+      "noCustomer": "There's nothing to manage yet. Choose a plan first.",
+      "stripe": "Stripe didn't respond. Try again in a moment.",
+      "invalid": "That didn't work. Try again.",
+      "denied": "Only platform admins can change this.",
+      "notFound": "That organisation no longer exists."
+    },
+    "gate": {
+      "trial_ended": {
+        "title": "Your free trial has ended",
+        "body": "Choose a plan to invite new candidates. Everyone already invited can still finish, and every report stays available."
+      },
+      "limit_reached": {
+        "title": "Not enough invitations left",
+        "body": "{remaining, plural, =0 {This period's candidate invitations are used up.} one {You can invite # more candidate this period.} other {You can invite # more candidates this period.}} Invite fewer people, or move to a bigger plan."
+      },
+      "past_due": {
+        "title": "Payment needed for new invitations",
+        "body": "The last payment didn't go through. Update the payment details to invite new candidates. Everyone already invited can still finish."
+      },
+      "canceled": {
+        "title": "Your plan has ended",
+        "body": "Choose a plan to invite new candidates. Reports, decisions and exports stay available."
+      },
+      "seePlans": "See plans",
+      "askAdmin": "Ask an admin of your organisation to choose a plan."
+    },
+    "allowance": {
+      "trial": "Trial invitations left: {n} of {total}",
+      "paid": "Candidate invitations left this month: {n} of {total}",
+      "rule": "Each person counts once per assessment or team."
+    },
+    "banner": {
+      "label": "Billing",
+      "trial_ending": "Your free trial ends on {date}. Choose a plan to keep inviting candidates.",
+      "trial_ended": "Your free trial has ended. Choose a plan to invite new candidates; reports stay available.",
+      "payment_failed": "Your last payment didn't go through. Update your payment details to keep inviting candidates.",
+      "canceled": "Your plan has ended. Choose a plan to invite new candidates; reports stay available.",
+      "plans": "See plans",
+      "payment": "Update payment"
+    },
+    "admin": {
+      "column": "Plan",
+      "edit": "Billing",
+      "editFor": "Billing for {org}",
+      "description": "Enterprise plans are invoiced outside Stripe. Leave a field empty for unlimited invitations or the default AI budget.",
+      "plan": "Plan",
+      "invitations": "Candidate invitations a month",
+      "aiBudget": "AI budget a month (USD)",
+      "trialEnds": "Trial ends on",
+      "save": "Save",
+      "saved": "Billing updated.",
+      "off": "Billing is off on this installation. These settings apply once it's on.",
+      "none": "No plan yet"
+    }
   },
   "admin": {
     "title": "Platform admin",
@@ -3335,7 +3522,8 @@
       "integrations": "Integrations",
       "framework": "Competency library",
       "teams": "Teams",
-      "outcomes": "Outcomes"
+      "outcomes": "Outcomes",
+      "billing": "Billing and AI budget"
     },
     "emptyTitle": "Nothing recorded",
     "emptyBody": "Activity appears here as your team works.",
@@ -3400,7 +3588,18 @@
       "team_member_viewed": "Viewed a member's profile",
       "team_track_assigned": "Assigned a development track",
       "grow_profile_shared": "Shared a development profile",
-      "outcome_recorded": "Recorded a performance outcome"
+      "outcome_recorded": "Recorded a performance outcome",
+      "billing_trial_started": "Trial started",
+      "billing_checkout_started": "Opened checkout for a plan",
+      "billing_checkout_completed": "Subscribed to a plan",
+      "billing_subscription_updated": "Subscription updated",
+      "billing_subscription_canceled": "Subscription ended",
+      "billing_invoice_paid": "Invoice paid",
+      "billing_payment_failed": "Payment failed",
+      "billing_portal_opened": "Opened billing and invoices",
+      "billing_admin_updated": "Platform admin changed the plan",
+      "ai_budget_80": "80% of this month's AI budget used",
+      "ai_budget_100": "This month's AI budget reached"
     }
   },
   "library": {
@@ -4255,6 +4454,15 @@
       "heading": "The AI budget is reached, {name}",
       "p1": "{org} has used its monthly AI budget of {budget}. New assessments are now scored by Aalim's built-in engine until the month ends; assessments already under way finish as they started. To raise the budget, change your plan.",
       "cta": "See your plan",
+      "note": "You get this because you're an admin of {org}."
+    },
+    "paymentFailed": {
+      "subject": "Payment for {org}'s Aalim plan didn't go through",
+      "preheader": "Candidates already invited can still finish their assessments.",
+      "heading": "Your payment didn't go through, {name}",
+      "p1": "We couldn't take the payment of {amount} for {org}'s Aalim plan. Stripe will try again over the next few days.",
+      "p2": "Update the payment details to keep inviting candidates. If it's still unpaid after {days, plural, one {# day} other {# days}}, new invitations pause; everyone already invited can still finish, and every report stays available.",
+      "cta": "Update payment details",
       "note": "You get this because you're an admin of {org}."
     }
   },

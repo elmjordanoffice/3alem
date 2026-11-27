@@ -20,7 +20,8 @@ test.describe("roles", () => {
     await expect(page.getByRole("navigation", { name: "Northwind Logistics" }).getByRole("link", { name: "Settings" })).toHaveCount(0);
     await page.goto("/app/org/settings");
     await expect(page).toHaveURL(/denied=1/);
-    await expect(page.getByText("You do not have access to that page")).toBeVisible();
+    // While React streams the page, a hidden copy of the text can exist too; match the visible one.
+    await expect(page.getByText("You do not have access to that page").filter({ visible: true }).first()).toBeVisible();
     await page.goto("/app/org/members");
     await expect(page.getByRole("button", { name: "Add member" })).toHaveCount(0);
   });

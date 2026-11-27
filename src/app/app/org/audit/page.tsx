@@ -23,6 +23,7 @@ const CATEGORIES: Record<string, string[]> = {
   framework: ["library."],
   teams: ["team.", "grow."],
   outcomes: ["outcome."],
+  billing: ["billing.", "ai.budget."],
 };
 const PAGE = 50;
 

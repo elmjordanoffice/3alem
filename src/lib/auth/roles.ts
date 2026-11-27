@@ -25,6 +25,8 @@ export const PERMISSIONS = [
   "itembank.review",
   "audit.view",
   "fairness.view",
+  // Plan, payment and invoices (D-066). Org admins only.
+  "billing.manage",
 ] as const;
 
 export type Permission = (typeof PERMISSIONS)[number];

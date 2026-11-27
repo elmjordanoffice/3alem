@@ -19,6 +19,7 @@ export default defineConfig({
     url: `http://localhost:${PORT}`,
     reuseExistingServer: true,
     timeout: 120_000,
-    env: { AUTH_RATE_LIMIT: "off" },
+    // The design gallery is hidden in production builds unless switched on.
+    env: { AUTH_RATE_LIMIT: "off", DESIGN_GALLERY: "on" },
   },
 });

@@ -47,10 +47,16 @@ export async function orgBudgetUsd(organizationId: string): Promise<number> {
   return fromPlan ?? num(process.env.AI_BUDGET_ORG_MONTHLY_USD, 100);
 }
 
-/** Hook for billing: a plan's AI budget, or null for the default. */
-let planBudget: (organizationId: string) => Promise<number | null> = async () => null;
-export function setPlanBudgetResolver(fn: (organizationId: string) => Promise<number | null>) {
-  planBudget = fn;
+/**
+ * Hook for billing: a plan's AI budget, or null for the default. Kept on
+ * globalThis because the server can load this module more than once
+ * (instrumentation, where billing registers it, and the routes that use it).
+ */
+type PlanBudgetResolver = (organizationId: string) => Promise<number | null>;
+const hook = globalThis as unknown as { aalimPlanBudgetResolver?: PlanBudgetResolver };
+const planBudget: PlanBudgetResolver = (organizationId) => (hook.aalimPlanBudgetResolver ? hook.aalimPlanBudgetResolver(organizationId) : Promise.resolve(null));
+export function setPlanBudgetResolver(fn: PlanBudgetResolver) {
+  hook.aalimPlanBudgetResolver = fn;
 }
 
 async function budgetOf(p: Pool): Promise<number | null> {
@@ -69,6 +75,11 @@ async function spendOf(p: Pool): Promise<number> {
   const spend = Number(agg._sum.costUsd ?? 0);
   cache.set(key, { spend, at: Date.now(), month });
   return spend;
+}
+
+/** The organisation's AI spend this month in USD (shown on the billing page). */
+export async function orgSpendUsd(organizationId: string): Promise<number> {
+  return spendOf({ kind: "org", id: organizationId });
 }
 
 export type BudgetVerdict = { allowed: true } | { allowed: false; reason: "budget"; pool: string };
@@ -131,8 +142,18 @@ async function maybeWarn(organizationId: string) {
   const base = (process.env.APP_URL ?? process.env.BETTER_AUTH_URL ?? "http://localhost:3000").replace(/\/$/, "");
   const lang = org?.defaultLocale === "ar" ? "ar" : "en";
   for (const a of admins) {
-    const mail = brandedEmail(level === 100 ? "budgetReached" : "budgetNear", lang, { name: a.user.name.split(" ")[0] ?? a.user.name, org: org?.name ?? "", budget: `$${budget}` }, { url: `${base}/app/org/settings`, org: org?.name });
+    const mail = brandedEmail(level === 100 ? "budgetReached" : "budgetNear", lang, { name: a.user.name.split(" ")[0] ?? a.user.name, org: org?.name ?? "", budget: `$${budget}` }, { url: `${base}${(await billingPage(organizationId)) ? "/app/org/billing" : "/app/org/settings"}`, org: org?.name });
     await sendMail({ to: a.user.email, ...mail });
+  }
+}
+
+/** With billing on, the budget comes from the plan, so the email points to the billing page. */
+async function billingPage(organizationId: string): Promise<boolean> {
+  try {
+    const { billingEnabled } = await import("@/lib/billing/core");
+    return billingEnabled(organizationId);
+  } catch {
+    return false;
   }
 }
 

@@ -9,12 +9,14 @@ const ORG_TABS = [
   { href: "/app/org/integrations", key: "integrations", permission: "org.settings" },
   { href: "/app/org/audit", key: "audit", permission: "audit.view" },
   { href: "/app/org/settings", key: "settings", permission: "org.settings" },
+  { href: "/app/org/billing", key: "billing", permission: "billing.manage" },
 ] as const;
 
 export default async function OrgLayout({ children }: { children: React.ReactNode }) {
   const viewer = await requireViewer();
   const t = await getTranslations("shell");
-  const tabs = ORG_TABS.filter((x) => !x.permission || viewerCan(viewer, x.permission)).map((x) => ({ href: x.href, label: t(`nav.${x.key}`) }));
+  const tb = await getTranslations("billing");
+  const tabs = ORG_TABS.filter((x) => !x.permission || viewerCan(viewer, x.permission)).map((x) => ({ href: x.href, label: x.key === "billing" ? tb("nav") : t(`nav.${x.key}`) }));
   return (
     <>
       <SectionNavOrg title={viewer.activeOrganization?.name ?? t("nav.organization")} tabs={tabs} />

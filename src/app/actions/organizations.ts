@@ -8,6 +8,7 @@ import { requirePermission, requireViewer, tenantOf } from "@/lib/auth/session";
 import { ORG_ROLES, wouldRemoveLastAdmin } from "@/lib/auth/roles";
 import { audit } from "@/lib/audit";
 import { slugify } from "@/lib/utils";
+import { startTrial } from "@/lib/billing";
 
 type Result = { ok: true } | { ok: false; error: string };
 
@@ -29,6 +30,8 @@ export async function createOrganization(input: { name: string }): Promise<Resul
     return created;
   });
   await audit({ organizationId: org.id, actorUserId: viewer.user.id, action: "organization.created", targetType: "organization", targetId: org.id });
+  // With billing on, the free trial starts now (D-066).
+  await startTrial(org.id, org.createdAt);
   revalidatePath("/app", "layout");
   redirect("/app");
 }

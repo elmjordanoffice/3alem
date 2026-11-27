@@ -133,6 +133,7 @@ model Organization {
   reportAdjustments   ReportAdjustment[]
   hiringDecisions     HiringDecision[]
   interviewScorecards InterviewScorecard[]
+  billing             OrganizationBilling?
 
   @@map("organization")
 }
@@ -999,4 +1000,62 @@ model InterviewScorecard {
 
   @@unique([sessionId, interviewerId])
   @@map("interview_scorecard")
+}
+
+// ───────────────────────── Billing (D-066) ─────────────────────────
+
+enum BillingStatus {
+  TRIALING
+  ACTIVE
+  PAST_DUE
+  CANCELED
+  INCOMPLETE
+}
+
+enum BillingInterval {
+  MONTH
+  YEAR
+}
+
+/// One per organisation, created when billing is on (STRIPE_SECRET_KEY). Org
+/// members read it through the runtime role; only trusted code writes it (the
+/// Stripe webhook, and server actions after a permission check), via systemDb.
+model OrganizationBilling {
+  id                   String           @id @default(cuid())
+  organizationId       String           @unique
+  /// A plan key from src/lib/billing/plans.ts: trial, starter, growth or enterprise.
+  plan                 String           @default("trial")
+  status               BillingStatus    @default(TRIALING)
+  interval             BillingInterval?
+  stripeCustomerId     String?          @unique
+  stripeSubscriptionId String?          @unique
+  stripePriceId        String?
+  trialStartedAt       DateTime         @default(now())
+  trialEndsAt          DateTime
+  currentPeriodStart   DateTime?
+  currentPeriodEnd     DateTime?
+  cancelAtPeriodEnd    Boolean          @default(false)
+  /// When the current run of failed payments began; the grace period counts from here.
+  pastDueSince         DateTime?
+  /// Enterprise: candidate invitations a month (null = unlimited), set by a platform admin.
+  customInvitations    Int?
+  /// Enterprise: monthly AI budget in USD (null = the installation default).
+  customAiBudgetUsd    Int?
+  createdAt            DateTime         @default(now())
+  updatedAt            DateTime         @updatedAt
+  organization         Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@map("organization_billing")
+}
+
+/// Stripe webhook events already applied, so a retried delivery changes nothing. System only.
+model StripeEvent {
+  /// The Stripe event id (evt_…).
+  id             String   @id
+  type           String
+  organizationId String?
+  createdAt      DateTime @default(now())
+
+  @@index([createdAt])
+  @@map("stripe_event")
 }

@@ -138,15 +138,20 @@ To update later: `git pull && docker compose up -d --build`. To add Redis and th
 
 Billing stays off, and everything is unlimited, until `STRIPE_SECRET_KEY` is set. Do this first in Stripe's **test mode**, then repeat with live keys.
 
-1. **Products and prices.** In Stripe, create two products, *Starter* and *Growth*, each with a monthly and (optionally) a yearly recurring price. Prices and allowances shown on the site come from `src/lib/billing/plans.ts`; keep them in step with Stripe.
-2. **Keys and price IDs.** Set `STRIPE_SECRET_KEY`, `STRIPE_PRICE_STARTER_MONTHLY`, `STRIPE_PRICE_STARTER_YEARLY`, `STRIPE_PRICE_GROWTH_MONTHLY` and `STRIPE_PRICE_GROWTH_YEARLY`. Leave the yearly ones empty to offer monthly only.
-3. **Webhook.** Add an endpoint at `https://your-domain/api/billing/webhook` with the events `checkout.session.completed`, `customer.subscription.created`, `customer.subscription.updated`, `customer.subscription.deleted`, `invoice.paid` and `invoice.payment_failed`. Put its signing secret in `STRIPE_WEBHOOK_SECRET`.
-4. **Customer portal.** In Stripe's billing portal settings, allow updating payment methods, viewing invoices, switching between your plans and cancelling.
-5. **Tax.** If you charge tax (VAT and similar), turn on Stripe Tax for your registrations and set `STRIPE_AUTOMATIC_TAX=on`. Checkout then collects addresses and tax IDs.
-6. **Enterprise.** Set `SALES_EMAIL` for the "Talk to us" button. A platform admin sets a custom allowance on the organisation's billing record.
-7. **Test** with card `4242 4242 4242 4242`: subscribe from **Organisation → Billing**, check the plan shows as active, open the portal, and cancel.
+1. **Products and prices.** In Stripe, create two products: *Starter* (USD 149 a month, and optionally 1,490 a year) and *Growth* (USD 399 a month, optionally 3,990 a year). The prices, allowances and AI budgets shown in the app come from `src/lib/billing/plans.ts`; keep them in step with Stripe.
+2. **Keys and price IDs.** Set `STRIPE_SECRET_KEY`, `STRIPE_PRICE_STARTER_MONTHLY` and `STRIPE_PRICE_GROWTH_MONTHLY`. The monthly/yearly switch appears only when both `STRIPE_PRICE_STARTER_YEARLY` and `STRIPE_PRICE_GROWTH_YEARLY` are set.
+3. **Webhook.** Add an endpoint at `https://your-domain/api/billing/webhook` with the events `checkout.session.completed`, `customer.subscription.created`, `customer.subscription.updated`, `customer.subscription.deleted`, `invoice.paid` and `invoice.payment_failed`, on API version `2026-11-18.endive` (the version the Stripe library in the app uses). Put its signing secret in `STRIPE_WEBHOOK_SECRET`.
+4. **Customer portal.** In Stripe's billing portal settings, allow updating payment methods, viewing invoices, switching between the four prices, and cancelling at the end of the billing period. Plan changes for existing subscribers happen there.
+5. **Tax.** If you charge tax (VAT and similar), turn on Stripe Tax for your registrations and set `STRIPE_AUTOMATIC_TAX=on`. Checkout then requires a billing address and collects tax IDs.
+6. **Enterprise.** Set `SALES_EMAIL` to show a "Talk to us" button. For an Enterprise customer, a platform admin opens **Platform admin → Billing** on the organisation and sets its invitation allowance and AI budget (or extends a trial). If you bill them through Stripe with a custom price, add `plan=enterprise` to that price's metadata.
+7. **Test** with card `4242 4242 4242 4242`: subscribe from **Organisation → Billing**, check the plan shows as active, open "Manage billing and invoices", and cancel. Stripe's own pages don't offer Arabic, so they follow the browser's language.
 
-New organisations start a 14-day trial with 5 candidate invitations. When a plan runs out, only *new* invitations stop: anyone already invited can always finish, and reports, exports and data rights stay available.
+How limits work:
+- New organisations start a 14-day trial with 5 candidate invitations, whichever ends first. Organisations that existed before billing was turned on get the same trial from that moment.
+- Paid plans count candidate invitations per month of the billing period (yearly plans too). A Hire invitation counts once per person per assessment, however often the link is re-sent; a Team member counts once per team. Personal Grow use is never counted.
+- When a plan runs out, or a payment has failed for more than 7 days, only *new* invitations stop. Anyone already invited can always finish, and reports, decisions, exports and data rights stay available. Admins see a banner on Home and get an email when a payment fails.
+- Deleting an organisation cancels its subscription in Stripe first.
+- For trying the limits locally without Stripe, `BILLING_FORCE=all` (or a list of organisation ids) turns billing on outside production; it is ignored in production.
 
 ## AI
 
@@ -217,7 +222,7 @@ Until then, candidates use the website on their phones, which already uses the s
 - [ ] `/api/health` is `ok` on the real domain, over HTTPS
 - [ ] A password reset email arrives, and isn't in spam (SPF, DKIM, DMARC)
 - [ ] `npm run ai:smoke` passes; budgets and the Anthropic console limit are set
-- [ ] Stripe: test subscription, portal and cancellation work; webhook shows deliveries succeeding; live keys swapped in
+- [ ] Stripe: test subscription, portal and cancellation work; webhook shows deliveries succeeding; live keys, live price IDs and the live webhook secret swapped in
 - [ ] Company details set; lawyer has reviewed privacy, terms and the DPA
 - [ ] Uptime monitor and error reporting are on, and a test error reached you
 - [ ] Backups are on, and one restore has been tried
@@ -241,7 +246,8 @@ Everything optional, with its default. Required settings are in step A3.
 | `STRIPE_WEBHOOK_SECRET` | none | Verifies Stripe's webhook calls |
 | `STRIPE_PRICE_STARTER_MONTHLY`, `STRIPE_PRICE_STARTER_YEARLY`, `STRIPE_PRICE_GROWTH_MONTHLY`, `STRIPE_PRICE_GROWTH_YEARLY` | none | Stripe price IDs; yearly ones are optional |
 | `STRIPE_AUTOMATIC_TAX` | off | `on` to calculate tax and collect tax IDs at checkout |
-| `SALES_EMAIL` | `CONTACT_EMAIL` | Enterprise "Talk to us" address |
+| `SALES_EMAIL` | none (button hidden) | Enterprise "Talk to us" address |
+| `BILLING_FORCE` | none | Development and tests only: turn billing on without Stripe (`all` or organisation ids); ignored in production |
 | `LEGAL_ENTITY_NAME`, `LEGAL_ADDRESS`, `GOVERNING_LAW` | draft placeholders | Company details on the legal pages |
 | `CONTACT_EMAIL`, `PRIVACY_EMAIL`, `SECURITY_EMAIL` | placeholders | Contact addresses on the legal and trust pages |
 | `HOSTING_PROVIDER`, `HOSTING_REGION`, `DATABASE_PROVIDER`, `EMAIL_PROVIDER` | placeholders | Subprocessors listed in the privacy policy |

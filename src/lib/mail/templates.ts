@@ -4,7 +4,7 @@ import en from "../../../messages/en.json";
 import ar from "../../../messages/ar.json";
 
 type Lang = "en" | "ar";
-type Kind = "invite" | "renew" | "team" | "reset" | "report" | "rep" | "budgetNear" | "budgetReached";
+type Kind = "invite" | "renew" | "team" | "reset" | "report" | "rep" | "budgetNear" | "budgetReached" | "paymentFailed";
 
 function appUrl() {
   return (process.env.APP_URL ?? process.env.BETTER_AUTH_URL ?? "http://localhost:3000").replace(/\/$/, "");

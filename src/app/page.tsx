@@ -10,6 +10,7 @@ import { LandingNav } from "@/components/landing/nav";
 import { Hero } from "@/components/landing/hero";
 import { SectionHead } from "@/components/landing/section-head";
 import { LandingFooter } from "@/components/landing/footer";
+import { Pricing } from "@/components/landing/pricing";
 import { EvidenceFragment, FairnessChart, GrowFragment, HireFragment, NarrowingCard, ReportFragment, SceneCard, TeamFragment } from "@/components/landing/fragments";
 import { getViewer } from "@/lib/auth/session";
 import { publicRobots } from "@/lib/legal";
@@ -188,6 +189,9 @@ export default async function Home() {
             </ol>
           </div>
         </section>
+
+        {/* ── 05 Pricing ── */}
+        <Pricing index="05" className={cn(section, "pt-0!")} headClassName={head} startHref={primaryHref} startLabel={viewer ? t("openApp") : t("pricing.start")} />
 
         {/* ── Closing: the raised violet card, the page's last coral button ── */}
         <section aria-labelledby="cta-h" className="pb-[clamp(4rem,8vw,7rem)]">

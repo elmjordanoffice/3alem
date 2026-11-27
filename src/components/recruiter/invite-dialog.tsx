@@ -10,8 +10,11 @@ import { Textarea } from "@/components/ui/input";
 import { Alert } from "@/components/ui/alert";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { AllowanceHint, BillingGateNotice } from "@/components/billing/gate-notice";
+import type { BillingBlock } from "@/lib/billing/core";
 
-export function InviteDialog({ templateId }: { templateId: string }) {
+/** `allowance`: invitations left on the plan this month, when billing is on and the plan has a limit. */
+export function InviteDialog({ templateId, allowance }: { templateId: string; allowance?: { remaining: number; allowance: number; trial: boolean } | null }) {
   const t = useTranslations("invite");
   const tc = useTranslations("common");
   const router = useRouter();
@@ -20,6 +23,7 @@ export function InviteDialog({ templateId }: { templateId: string }) {
   const [list, setList] = React.useState("");
   const [pending, setPending] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
+  const [blocked, setBlocked] = React.useState<BillingBlock | null>(null);
   const [links, setLinks] = React.useState<{ email: string; link: string }[] | null>(null);
   const [copied, setCopied] = React.useState<string | null>(null);
 
@@ -27,14 +31,16 @@ export function InviteDialog({ templateId }: { templateId: string }) {
     setList("");
     setLinks(null);
     setError(null);
+    setBlocked(null);
   };
 
   const submit = async () => {
     setPending(true);
     setError(null);
+    setBlocked(null);
     const res = await inviteCandidates({ templateId, list, send: mode !== "link" });
     setPending(false);
-    if (!res.ok) return setError(t(`errors.${res.error}`));
+    if (!res.ok) return res.error === "billing" ? setBlocked(res as BillingBlock) : setError(t(`errors.${res.error}`));
     if (mode === "link") setLinks(res.created);
     else {
       toast.success(t("sent", { count: res.created.length }));
@@ -112,6 +118,8 @@ export function InviteDialog({ templateId }: { templateId: string }) {
           </Tabs>
         )}
         {error ? <Alert tone="critical">{error}</Alert> : null}
+        {blocked ? <BillingGateNotice reason={blocked.reason} remaining={blocked.remaining} canManage={blocked.canManage} /> : null}
+        {!links && allowance ? <AllowanceHint allowance={allowance} /> : null}
         <DialogFooter>
           {links ? (
             <Button onClick={() => (setOpen(false), reset())}>{tc("close")}</Button>

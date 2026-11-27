@@ -21,7 +21,7 @@ test("a team of six shows a named heatmap, pipeline and pairings", async ({ page
   // A member who did not share answers: levels only, no quotes.
   const noShare = await withDb(async (c) => (await c.query(`SELECT id FROM team_member WHERE "teamId" = $1 AND "shareRawAnswers" = false AND status = 'ASSESSED' LIMIT 1`, [teamId])).rows[0].id as string);
   await page.goto(`/app/teams/${teamId}/members/${noShare}`);
-  await expect(page.getByText(/hasn't shared their answers/)).toBeVisible();
+  await expect(page.getByText(/hasn't shared their answers/).filter({ visible: true }).first()).toBeVisible();
   await expect(page.locator("blockquote")).toHaveCount(0);
   expect(errors).toEqual([]);
 });
@@ -42,7 +42,7 @@ test("a small team stays anonymous and nothing happens without consent", async (
   await page.getByLabel("Email addresses").fill(email);
   await page.getByRole("button", { name: "Send invitations" }).click();
   await expect(page.getByText(/Invited/).first()).toBeVisible();
-  await expect(page.getByText(/only anonymised team totals/)).toBeVisible();
+  await expect(page.getByText(/only anonymised team totals/).filter({ visible: true }).first()).toBeVisible();
 
   await expect.poll(async () => (await latestMail(email))?.text ?? "").toContain("/team-invite/");
   const link = (await latestMail(email))!.text.match(/https?:\/\/\S+\/team-invite\/\S+/)![0];

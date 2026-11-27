@@ -66,7 +66,6 @@ export default async function GrowHome() {
 
   // Every skill's estimate from the latest report, for the ranges below.
   const skills = new Map((report?.domains ?? []).flatMap((d) => d.subSkills.map((x) => [x.key, x] as const)));
-  const todaySkill = skills.get(today);
   const n1 = (v: number) => v.toFixed(1);
   const domainOf = (k: string) => DOMAINS.find((d) => d.subSkills.some((x) => x.key === k))?.key ?? "";
 
