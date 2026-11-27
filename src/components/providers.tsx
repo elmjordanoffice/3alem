@@ -1,5 +1,6 @@
 "use client";
 import * as React from "react";
+import { usePathname } from "next/navigation";
 import { ThemeProvider } from "next-themes";
 import { Direction } from "radix-ui";
 import type { AppLocale, NumeralSystem } from "@/i18n/config";
@@ -16,8 +17,10 @@ interface LocaleSettings {
 const LocaleSettingsContext = React.createContext<LocaleSettings>({ locale: "en", numerals: "latn", dir: "ltr" });
 
 export function Providers({ children, ...settings }: LocaleSettings & { children: React.ReactNode }) {
+  // Print layouts (PDF export) are always light, whatever the person's theme.
+  const forcedTheme = usePathname()?.startsWith("/print") ? "light" : undefined;
   return (
-    <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
+    <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange forcedTheme={forcedTheme}>
       <LocaleSettingsContext.Provider value={settings}>
         <Direction.Provider dir={settings.dir}>
           <TooltipProvider>

@@ -31,7 +31,7 @@ export function EvidenceCard({
   const t = useTranslations("components.evidence");
   const band = confidenceBand(confidence);
   return (
-    <figure className={cn("relative flex flex-col gap-3 overflow-hidden rounded-card bg-surface p-4 ps-6 shadow-card sm:p-5 sm:ps-7", className)}>
+    <figure className={cn("relative flex flex-col gap-3 overflow-hidden rounded-card bg-surface p-4 ps-6 shadow-card sm:p-5 sm:ps-7 print:break-inside-avoid", className)}>
       <span className="absolute inset-y-4 start-0 w-1 rounded-e-full bg-[linear-gradient(180deg,var(--chart-1),var(--teal))]" aria-hidden />
       {/* The candidate's own words, highlighted: this is what the score rests on. */}
       <blockquote className="text-[15px] font-medium leading-[1.75] text-text" dir="auto">

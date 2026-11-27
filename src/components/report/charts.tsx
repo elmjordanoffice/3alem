@@ -39,7 +39,7 @@ export function SkillRadar({
   const n = useNumbers();
   const rows = data.map((d) => ({ label: d.label, ...d.values }));
   return (
-    <figure className={cn("flex flex-col gap-3", className)} aria-label={label}>
+    <figure className={cn("flex flex-col gap-3 print:break-inside-avoid", className)} aria-label={label}>
       {series.length > 1 ? (
         <ul className="flex flex-wrap gap-4 text-xs text-secondary">
           {series.map((s, i) => (
@@ -137,7 +137,7 @@ export function SkillBars({
   // The axis runs from level 1 (start) to level 5 (end).
   const pct = (v: number) => ((Math.min(5, Math.max(1, v)) - 1) / 4) * 100;
   return (
-    <figure className={cn("flex flex-col", className)}>
+    <figure className={cn("flex flex-col print:break-inside-avoid", className)}>
       <figcaption className="sr-only">{label}</figcaption>
       <div className="mb-1 grid grid-cols-[minmax(7rem,12rem)_1fr] gap-3 text-[11px] text-tertiary sm:grid-cols-[12rem_1fr]" aria-hidden>
         <span />

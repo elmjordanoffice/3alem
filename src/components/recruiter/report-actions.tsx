@@ -46,6 +46,12 @@ export function ReportActions({
           setPdfPending(true);
           try {
             const res = await fetch(`/api/reports/${sessionId}/pdf`);
+            if (res.status === 503) {
+              // No PDF engine on this server: open the print layout and let the browser save it as a PDF.
+              const { print } = (await res.json()) as { print?: string };
+              if (print && window.open(print, "_blank")) return;
+              throw new Error();
+            }
             if (!res.ok) throw new Error();
             const blob = await res.blob();
             const url = URL.createObjectURL(blob);

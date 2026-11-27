@@ -1,0 +1,11 @@
+# HTTPS in front of the app. Caddy gets and renews the certificate for DOMAIN
+# and tells the app the request was HTTPS (X-Forwarded-Proto), which turns on
+# HSTS and secure cookies.
+{$DOMAIN} {
+	encode zstd gzip
+	reverse_proxy app:3000 {
+		# While the app restarts (an update), hold requests for up to 30 s instead of failing them.
+		lb_try_duration 30s
+		lb_try_interval 500ms
+	}
+}

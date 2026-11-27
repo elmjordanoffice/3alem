@@ -78,6 +78,7 @@ In a Claude Code cloud environment, add the key as an environment variable in th
 | `npm run screenshots` | Every Phase 0 screen × light/dark × English/Arabic × desktop/phone → `screenshots/out/` |
 | `npm run db:migrate` / `db:deploy` / `db:seed` / `db:seed:demo` | Prisma migrations, base seed, demo data |
 | `npm run brand:assets` | Regenerate the logo files, PNGs, social images and in-app wordmark paths from the brand fonts |
+| `npm run ai:smoke` | A few real AI calls with quality checks and cost per call (needs `ANTHROPIC_API_KEY`) |
 
 ## Mobile app
 
@@ -85,7 +86,7 @@ In a Claude Code cloud environment, add the key as an environment variable in th
 
 ## Going live
 
-See [docs/deploy.md](docs/deploy.md) for a step-by-step launch: hosting, database roles, environment, email, scheduled jobs, the first admin, the domain and the mobile app.
+See [docs/deploy.md](docs/deploy.md) for a step-by-step launch on a platform (Railway, Render, Fly.io) or your own server: the container image (`Dockerfile`), the one-server Docker Compose setup (`deploy/`), database roles, settings, email, payments, AI budgets, legal pages, monitoring, backups and the mobile app.
 
 ## Docs
 

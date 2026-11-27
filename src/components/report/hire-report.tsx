@@ -27,8 +27,9 @@ const STYLE_KEY: Record<string, string> = { "risk-appetite": "workstyle.risk", p
 
 function Section({ id, icon: Icon, title, children, note }: { id: string; icon?: typeof Info; title: string; children: React.ReactNode; note?: string }) {
   return (
-    <section id={id} aria-labelledby={`${id}-h`} className="scroll-mt-24 break-inside-avoid-page">
-      <div className="mb-4 flex flex-col gap-1">
+    <section id={id} aria-labelledby={`${id}-h`} className="scroll-mt-24">
+      {/* In print, keep a heading with what follows; long sections may run across pages. */}
+      <div className="mb-4 flex flex-col gap-1 print:break-after-avoid">
         <h2 id={`${id}-h`} className="flex items-center gap-2 text-lg font-semibold text-text">
           {Icon ? <Icon className="size-4 text-accent-text" strokeWidth={1.75} aria-hidden /> : null}
           {title}
@@ -63,7 +64,7 @@ function SkillRow({ s, content, skillNames, print }: { s: ReportSkill; content: 
   const n = useNumbers();
   return (
     <Collapsible.Root className="group border-t border-border first:border-t-0" defaultOpen={print}>
-      <div className="flex items-start gap-3 py-3">
+      <div className="flex items-start gap-3 py-3 print:break-inside-avoid print:break-after-avoid">
         <LevelMeter label={s.name} estimate={s.estimate} confidence={s.confidence} range={s.range} className="flex-1" />
         <Collapsible.Trigger
           disabled={s.evidenceIds.length === 0}
@@ -85,7 +86,7 @@ function DomainCard({ d, content, skillNames, print }: { d: ReportDomain; conten
   const editable = Boolean(useReview()?.editable) && !print;
   return (
     <Collapsible.Root className="group relative" defaultOpen={print}>
-      <Collapsible.Trigger className={cn("flex w-full items-center gap-4 px-4 py-3.5 text-start transition-colors hover:bg-surface-subtle focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus sm:px-5", editable && "pe-12 sm:pe-14")}>
+      <Collapsible.Trigger className={cn("flex w-full items-center gap-4 px-4 py-3.5 text-start print:break-inside-avoid print:break-after-avoid transition-colors hover:bg-surface-subtle focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus sm:px-5", editable && "pe-12 sm:pe-14")}>
         <LevelMeter label={d.name} estimate={d.estimate} confidence={d.confidence} range={d.range} className="flex-1" />
         {d.importance === "MUST_HAVE" ? <Badge tone="accent" className="hidden sm:inline-flex">{t("mustHave")}</Badge> : null}
         <ChevronDown className="size-4 shrink-0 text-tertiary transition-transform group-data-[state=open]:rotate-180 print:hidden" aria-hidden />
@@ -104,7 +105,7 @@ function ClaimList({ claims, content, skillNames, empty }: { claims: ReportConte
     <div className="flex flex-col gap-6">
       {claims.map((c) => (
         <article key={`${c.skillKey}-${c.headline}`} className="flex flex-col gap-3">
-          <div className="flex flex-col gap-1">
+          <div className="flex flex-col gap-1 print:break-inside-avoid print:break-after-avoid">
             <h3 className="text-base font-semibold text-text" dir="auto">{c.headline}</h3>
             <p className="reading text-[15px] leading-relaxed text-secondary" dir="auto">{c.explanation}</p>
           </div>

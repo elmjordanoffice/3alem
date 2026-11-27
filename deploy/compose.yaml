@@ -1,0 +1,132 @@
+# Aalim on one server: Postgres, the app, a scheduler, nightly backups and
+# Caddy for HTTPS (certificates are issued automatically).
+#
+#   cd deploy
+#   cp env.example .env        # fill it in
+#   docker compose up -d --build
+#   docker compose exec app npm run db:seed     # once: the competency framework
+#
+# Needs a server with Docker, ports 80 and 443 open, and a DNS record for
+# DOMAIN pointing at it. See docs/deploy.md ("Option B").
+name: aalim
+
+x-env: &env
+  DATABASE_URL: postgresql://aalim:${DB_OWNER_PASSWORD}@db:5432/aalim
+  DATABASE_APP_URL: postgresql://aalim_app:${DB_APP_PASSWORD}@db:5432/aalim
+  BETTER_AUTH_URL: https://${DOMAIN:?set DOMAIN in deploy/.env}
+  APP_URL: https://${DOMAIN}
+
+x-app: &app
+  image: aalim:latest
+  restart: unless-stopped
+  env_file: .env
+  environment: *env
+  depends_on:
+    db:
+      condition: service_healthy
+
+services:
+  db:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: aalim
+      POSTGRES_PASSWORD: ${DB_OWNER_PASSWORD:?set DB_OWNER_PASSWORD in deploy/.env}
+      POSTGRES_DB: aalim
+      APP_DB_PASSWORD: ${DB_APP_PASSWORD:?set DB_APP_PASSWORD in deploy/.env}
+    volumes:
+      - db:/var/lib/postgresql/data
+      - ./postgres-init.sh:/docker-entrypoint-initdb.d/10-app-role.sh:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U aalim -d aalim"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+
+  app:
+    <<: *app
+    build:
+      context: ..
+    environment:
+      <<: *env
+      MIGRATE_ON_START: "1"
+
+  scheduler:
+    <<: *app
+    entrypoint: []
+    command: ["node", "scripts/scheduler.mjs"]
+    environment:
+      <<: *env
+      SCHEDULER_TARGET: http://app:3000
+    healthcheck:
+      disable: true
+    depends_on:
+      app:
+        condition: service_started
+
+  backup:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      PGPASSWORD: ${DB_OWNER_PASSWORD}
+      KEEP_DAYS: ${BACKUP_KEEP_DAYS:-14}
+    volumes:
+      - ./backups:/backups
+    # A compressed dump every night at about 02:00 UTC; dumps older than KEEP_DAYS are removed.
+    # Copy ./backups off the server too (see docs/deploy.md).
+    entrypoint: ["sh", "-c"]
+    command:
+      - |
+        while true; do
+          now=$$(date -u +%H%M)
+          if [ "$$now" = "0200" ]; then
+            f=/backups/aalim-$$(date -u +%Y-%m-%d).sql.gz
+            pg_dump -h db -U aalim -d aalim --no-owner | gzip > "$$f.tmp" && mv "$$f.tmp" "$$f" && echo "backup $$f"
+            find /backups -name 'aalim-*.sql.gz' -mtime +"$$KEEP_DAYS" -delete
+            sleep 60
+          fi
+          sleep 30
+        done
+    depends_on:
+      db:
+        condition: service_healthy
+
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    environment:
+      DOMAIN: ${DOMAIN}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on:
+      app:
+        condition: service_healthy
+
+  # Optional, when you grow: durable background jobs. Start with
+  #   docker compose --profile scale up -d
+  # and add REDIS_URL=redis://redis:6379 to deploy/.env.
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    profiles: ["scale"]
+    volumes:
+      - redis:/data
+  worker:
+    <<: *app
+    profiles: ["scale"]
+    entrypoint: []
+    command: ["npm", "run", "worker"]
+    healthcheck:
+      disable: true
+
+volumes:
+  db:
+  redis:
+  caddy-data:
+  caddy-config:

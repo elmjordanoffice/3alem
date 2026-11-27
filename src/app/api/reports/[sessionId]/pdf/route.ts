@@ -1,5 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { chromium } from "playwright-core";
+import { chromium, type Browser } from "playwright-core";
 import { getViewer, viewerCan } from "@/lib/auth/session";
 import { reportForViewer } from "@/lib/hire/recruiter";
 import { reviewForViewer, reviewPending } from "@/lib/hire/review";
@@ -19,8 +19,17 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ sess
   if (!r?.report?.content) return NextResponse.json({ error: "not_found" }, { status: 404 });
   if (reviewPending((await reviewForViewer(viewer, sessionId))?.review)) return NextResponse.json({ error: "review_pending" }, { status: 409 });
 
-  const origin = req.nextUrl.origin;
-  const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined, args: ["--no-sandbox"] });
+  // The public URL, not the request's: behind a TLS proxy the request looks like plain http,
+  // and secure session cookies would then be refused by the browser.
+  const origin = (process.env.APP_URL || process.env.BETTER_AUTH_URL || req.nextUrl.origin).replace(/\/$/, "");
+  let browser: Browser;
+  try {
+    browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined, args: ["--no-sandbox"] });
+  } catch (e) {
+    // No browser on this host (see docs/deploy.md): the client opens the print page instead.
+    console.error("[pdf] Chromium unavailable", e instanceof Error ? e.message.split("\n")[0] : e);
+    return NextResponse.json({ error: "pdf_unavailable", print: `/print/reports/${sessionId}?print=1` }, { status: 503 });
+  }
   try {
     const context = await browser.newContext({ colorScheme: "light" });
     const cookies = req.cookies.getAll().map((c) => ({ name: c.name, value: c.value, url: origin }));
